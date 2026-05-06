@@ -2,9 +2,26 @@
 
 **The Credential Dojo** — a **credential management platform** (CRMS) focused on **W3C Verifiable Credentials**: web UI plus API for operating standards-aligned VCs across their lifecycle—credential definitions, issuance, holders, verification, and registry-style discovery—hosted at [credential.ninja](https://credential.ninja).
 
-### Wallet: Kinchaku
+## Product terminology
 
-**Kinchaku** (巾着) is the platform wallet: where holders keep, organize, and present **W3C Verifiable Credentials** issued and governed through the Dojo—pairing operator workflows with a first-class wallet experience.
+The Dojo uses a small set of **Japanese martial-arts–adjacent names** so product language stays memorable and consistent. These are **metaphors for documentation and UX**, not security claims.
+
+### Kinchaku (巾着) — the wallet
+
+**Kinchaku** (literally a drawstring pouch) is the **holder wallet** in this platform: where people **carry, organize, and present** **W3C Verifiable Credentials** issued through the CRMS. It pairs operator-side lifecycle tooling with a first-class wallet experience.
+
+### Kata (型) — cryptosuites
+
+**Kata** (型, “form”) in budō is a **fixed, repeatable pattern** everyone recognizes—the same shape, executed the same way, so skill and interoperability can be judged.
+
+In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (and closely related **proof / signature suites**): the **named, standardized recipe** of algorithms and options used when creating or checking proofs—e.g. Data Integrity cryptosuites, canonicalization rules, and key material expectations. The credential may live in **Kinchaku**; the **proof machinery** follows a **Kata**.
+
+**How to use the terms**
+
+| Concept | Dojo name | Notes |
+|--------|-----------|--------|
+| Holder wallet UI / experience | **Kinchaku** | Container and presentation for VCs |
+| Cryptosuite / proof suite selection | **Kata** | Which “form” signing and verification run |
 
 ## Structure
 
