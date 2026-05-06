@@ -33,14 +33,16 @@ app.get("/api/health", (_req, res) => {
     service: "credential-dojo-api",
     product: "The Credential Dojo",
     role: "crms",
+    wallet: "Kinchaku",
   });
 });
 
 app.get("/api/hello", (_req, res) => {
   res.json({
     message:
-      "The Credential Dojo platform API — credential management (CRMS) backend online.",
+      "The Credential Dojo platform API — CRMS backend online, with Kinchaku wallet flows.",
     site: publicSite,
+    wallet: "Kinchaku",
   });
 });
 
