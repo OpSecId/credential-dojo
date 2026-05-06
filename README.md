@@ -16,14 +16,29 @@ The Dojo uses a small set of **Japanese martial-arts–adjacent names** so produ
 
 In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (and closely related **proof / signature suites**): the **named, standardized recipe** of algorithms and options used when creating or checking proofs—e.g. Data Integrity cryptosuites, canonicalization rules, and key material expectations. The credential may live in **Kinchaku**; the **proof machinery** follows a **Kata**.
 
+### Tehon (手本) — credential templates
+
+**Tehon** (手本) is the **model or exemplar**—the copybook pattern issuers instantiate. In the CRMS, **Tehon** maps to **credential templates**: JSON shapes, credential definitions, and offer layouts that become live **Menkyo** when issued.
+
+### Menkyo (免許) — credentials
+
+**Menkyo** (免許) is a **license or formal transmission**—proof of standing. Here it names **issued W3C Verifiable Credentials**: the artifacts holders keep in **Kinchaku**, bound to issuer policy and **Kata** proofs.
+
+### Enbu (演武) — presentations
+
+**Enbu** (演武) is a **formal martial demonstration**—structured, visible, and bounded. It maps to **verifiable presentations**: what the holder **shows** a verifier (proof package, selective disclosure surface) assembled from **Menkyo** in **Kinchaku**.
+
 **How to use the terms**
 
 | Concept | Dojo name | Notes |
 |--------|-----------|--------|
-| Holder wallet UI / experience | **Kinchaku** | Container and presentation for VCs |
+| Credential template / definition | **Tehon** | Canonical “copybook” before issuance |
+| Issued verifiable credential | **Menkyo** | Holder-facing artifact / license record |
+| Verifiable presentation | **Enbu** | Demonstration package to a verifier |
+| Holder wallet UI / experience | **Kinchaku** | Where Menkyo live; Enbu are composed from here |
 | Cryptosuite / proof suite selection | **Kata** | Which “form” signing and verification run |
 
-**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
+**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `credentialMetaphor`, `presentationMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
 
 ## Structure
 

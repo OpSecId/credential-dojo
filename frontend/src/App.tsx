@@ -13,11 +13,38 @@ const KATA_SAMPLES = [
   'vc-jwt',
 ]
 
+const LEXICON_ENTRIES = [
+  {
+    key: 'template',
+    title: productTerminology.template.name,
+    glyph: productTerminology.template.glyph,
+    blurb:
+      'Credential templates—the exemplar “copybook” issuers stamp into live records.',
+  },
+  {
+    key: 'credential',
+    title: productTerminology.credential.name,
+    glyph: productTerminology.credential.glyph,
+    blurb:
+      'Issued W3C Verifiable Credentials—the license-like artifact a holder keeps.',
+  },
+  {
+    key: 'presentation',
+    title: productTerminology.presentation.name,
+    glyph: productTerminology.presentation.glyph,
+    blurb:
+      'Verifiable presentations—a structured demonstration shown to verifiers.',
+  },
+] as const
+
 type HelloPayload = {
   message: string
   site: string
   wallet?: string
   cryptosuitesMetaphor?: string
+  templateMetaphor?: string
+  credentialMetaphor?: string
+  presentationMetaphor?: string
   standardsFocus?: string
   terminology?: typeof productTerminology
 }
@@ -189,16 +216,35 @@ function App() {
           </h1>
           <p className="dojo__lede">
             Credential management platform centered on{' '}
-            <strong>W3C Verifiable Credentials</strong>: credential definitions, proofs,
-            issuance and revocation, tenant-aware operations, and verifier-facing
-            APIs. Proof machinery follows <strong>Kata</strong>—named cryptosuites and
-            proof suites. Holders use <strong>Kinchaku</strong>, the Dojo&apos;s
-            built-in wallet.
+            <strong>W3C Verifiable Credentials</strong>: operators shape{' '}
+            <strong>Tehon</strong> templates into <strong>Menkyo</strong> credentials;
+            holders stage <strong>Enbu</strong> presentations for verifiers; proof
+            machinery follows <strong>Kata</strong> cryptosuites. Everything lands in{' '}
+            <strong>Kinchaku</strong>, the Dojo&apos;s built-in wallet.
           </p>
           <a className="dojo__link" href={SITE}>
             {SITE.replace(/^https?:\/\//, '')}
           </a>
         </header>
+
+        <section className="dojo__lex" aria-labelledby="lexicon-heading">
+          <h2 id="lexicon-heading" className="dojo__lexTitle">
+            Dojo lexicon · artifacts
+          </h2>
+          <div className="dojo__lexGrid">
+            {LEXICON_ENTRIES.map((entry) => (
+              <article key={entry.key} className="dojo-lexCard">
+                <h3 className="dojo-lexCard__title">
+                  {entry.title}{' '}
+                  <span className="dojo-lexCard__glyph" lang="ja">
+                    {entry.glyph}
+                  </span>
+                </h3>
+                <p className="dojo-lexCard__body">{entry.blurb}</p>
+              </article>
+            ))}
+          </div>
+        </section>
 
         <div className="dojo__panels">
           <section
@@ -212,9 +258,11 @@ function App() {
               </span>
             </h2>
             <p className="dojo__panelBody">
-              The platform wallet: carry <strong>W3C Verifiable Credentials</strong>{' '}
-              issued through the Dojo, keep them organized, and present them when
-              proofs are requested—without leaving the CRMS story.
+              The platform wallet: hold <strong>Menkyo</strong> (issued credentials),
+              compose an <strong>Enbu</strong> (verifiable presentation) when a
+              verifier asks for proofs, and keep everything aligned with{' '}
+              <strong>Tehon</strong> templates and <strong>Kata</strong> suites—without
+              leaving the CRMS story.
             </p>
 
             <div className="dojo__kinchakuPlay">
