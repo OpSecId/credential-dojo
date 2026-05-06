@@ -78,6 +78,19 @@ Backend output: `backend/dist/`. Frontend output: `frontend/dist/`.
 
 Serve the SPA and reverse-proxy `/api` to the Node process, or host the API on the same origin behind your edge router.
 
+## Docker
+
+Multi-stage images live under `docker/`. **Compose** builds the API and an nginx front that proxies `/api` to the API service.
+
+```bash
+docker compose up --build
+```
+
+- UI: http://localhost:8080  
+- API (direct): http://localhost:3001  
+
+Set **`CORS_ORIGINS`** in `docker-compose.yml` (or override) to match the browser `Origin` you use (default includes `http://localhost:8080`). The API also reads **`CORS_ORIGINS`** as a comma-separated list from the environment.
+
 ## Environment
 
 - **Backend:** `PORT` (default `3001`)

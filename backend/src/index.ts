@@ -6,6 +6,8 @@ const app = express();
 const PORT = Number(process.env.PORT) || 3001;
 
 const publicSite = "https://credential.ninja";
+const extraOrigins =
+  process.env.CORS_ORIGINS?.split(",").map((s) => s.trim()).filter(Boolean) ?? [];
 const allowedOrigins = new Set([
   publicSite,
   "http://credential.ninja",
@@ -13,6 +15,7 @@ const allowedOrigins = new Set([
   "http://127.0.0.1:5173",
   "http://localhost:4173",
   "http://127.0.0.1:4173",
+  ...extraOrigins,
 ]);
 
 app.use(
