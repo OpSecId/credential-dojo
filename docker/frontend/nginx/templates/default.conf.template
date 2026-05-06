@@ -1,6 +1,7 @@
-# Placeholder __API_UPSTREAM__ replaced at container start (see docker-entrypoint.sh).
+# Placeholders replaced at container start (see docker-entrypoint.sh).
+# __LISTEN_PORT__ — Railway sets PORT; local Compose defaults to 80.
 server {
-    listen 80;
+    listen __LISTEN_PORT__;
     server_name _;
     root /usr/share/nginx/html;
     index index.html;

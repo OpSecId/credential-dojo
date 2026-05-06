@@ -123,10 +123,27 @@ Typical setup is **two services** from this repo (same GitHub project):
 | API | **`PORT`** | Usually **unset** — Railway sets it; the server listens on `process.env.PORT`. |
 | API | **`CORS_ORIGINS`** | Comma-separated browser origins allowed to call the API. Include your **public Web URL** (e.g. `https://your-web.up.railway.app`). Also add a **custom domain** once configured (e.g. `https://credential.ninja`). |
 | Web | **`API_UPSTREAM`** | Full base URL of the API **without** a trailing path — e.g. `https://your-api.up.railway.app` — so nginx can `proxy_pass` `/api/*` to that host. Must match what Railway exposes for the API service. |
+| Web | **`PORT`** | Set automatically by Railway — nginx **must** listen on this port inside the container (the frontend Dockerfile does). Do **not** override unless you know what you’re doing. |
 
 Leave **`VITE_API_BASE`** unset for the Web image build so the SPA keeps calling **same-origin** `/api/...` (nginx forwards to the API). Only set **`VITE_API_BASE`** at build time if the browser must talk to an API on another origin **without** nginx proxying.
 
 If you use **Railway private networking** between services, you may point **`API_UPSTREAM`** at the internal URL Railway documents for service-to-service calls instead of the public HTTPS URL.
+
+### Railway without Docker (Node / Vite only)
+
+Do **not** run **`npm run dev`** or rely on **port 5173** in production — Railway forwards HTTP to whatever **`PORT`** it assigns (often not 5173), which causes **502 / Bad Gateway** if nothing is listening there.
+
+Use **`vite preview`** via the frontend **`npm start`** script (listens on **`0.0.0.0`** and **`${PORT:-4173}`**).
+
+| Setting | Suggested value |
+|--------|-------------------|
+| **Root Directory** | Repo root (with workspaces) **or** `frontend/` if you only install there |
+| **Build Command** | From repo root: `npm ci && npm run build -w frontend`. From `frontend/`: `npm ci && npm run build` |
+| **Start Command** | From repo root: `npm run start -w frontend`. From `frontend/`: `npm start` |
+
+When the API is another Railway service, set **`API_PROXY_TARGET`** (or **`VITE_API_PROXY_TARGET`**) to that API’s **public HTTPS base URL** (no path), so **`vite preview`** can proxy **`/api`** the same way dev does. Keep **`CORS_ORIGINS`** on the API aligned with your frontend URL.
+
+Alternatively, bake **`VITE_API_BASE`** at build time to the API URL and call the API directly from the browser (then **`API_PROXY_TARGET`** is unnecessary).
 
 ## Environment
 
@@ -134,3 +151,4 @@ If you use **Railway private networking** between services, you may point **`API
 - **Backend:** `CORS_ORIGINS` — optional comma-separated extra origins (see above)
 - **Frontend (Docker nginx):** `API_UPSTREAM` — upstream URL for `/api` (default `http://api:3001` in the image)
 - **Frontend (Vite):** optional `VITE_API_BASE` if the API is not same-origin (see `frontend/.env.example`)
+- **Frontend (Railway preview):** `API_PROXY_TARGET` / `VITE_API_PROXY_TARGET` — backend URL for `/api` proxy when using `npm start` (see README Railway section)

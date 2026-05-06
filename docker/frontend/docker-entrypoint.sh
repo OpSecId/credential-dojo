@@ -1,8 +1,12 @@
 #!/bin/sh
 set -e
+# Railway injects PORT — the container must listen there or the proxy returns 502.
+LISTEN_PORT="${PORT:-80}"
 UPSTREAM="${API_UPSTREAM:-http://api:3001}"
-# Escape sed delimiter characters in URL if ever needed (Railway HTTPS URLs use ://).
 TEMPLATE=/etc/nginx/templates/default.conf.template
 OUT=/etc/nginx/conf.d/default.conf
-sed "s|__API_UPSTREAM__|${UPSTREAM}|g" "$TEMPLATE" >"$OUT"
+sed \
+  -e "s|__LISTEN_PORT__|${LISTEN_PORT}|g" \
+  -e "s|__API_UPSTREAM__|${UPSTREAM}|g" \
+  "$TEMPLATE" >"$OUT"
 exec nginx -g 'daemon off;'
