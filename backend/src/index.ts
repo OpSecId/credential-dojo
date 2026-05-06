@@ -1,5 +1,6 @@
 import cors from "cors";
 import express from "express";
+import { productTerminology } from "./terminology.js";
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3001;
@@ -35,18 +36,22 @@ app.get("/api/health", (_req, res) => {
     service: "credential-dojo-api",
     product: "The Credential Dojo",
     role: "crms",
-    wallet: "Kinchaku",
+    wallet: productTerminology.wallet.name,
+    cryptosuitesMetaphor: productTerminology.cryptosuites.name,
     standardsFocus,
+    terminology: productTerminology,
   });
 });
 
 app.get("/api/hello", (_req, res) => {
   res.json({
     message:
-      "The Credential Dojo platform API — CRMS backend online, Kinchaku wallet flows, W3C VC–aligned endpoints.",
+      "The Credential Dojo platform API — CRMS backend online, Kinchaku wallet flows, Kata cryptosuites, W3C VC–aligned endpoints.",
     site: publicSite,
-    wallet: "Kinchaku",
+    wallet: productTerminology.wallet.name,
+    cryptosuitesMetaphor: productTerminology.cryptosuites.name,
     standardsFocus,
+    terminology: productTerminology,
   });
 });
 

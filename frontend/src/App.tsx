@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import { productTerminology } from './terminology'
 
 const SITE = 'https://credential.ninja'
 
@@ -7,7 +8,9 @@ type HelloPayload = {
   message: string
   site: string
   wallet?: string
+  cryptosuitesMetaphor?: string
   standardsFocus?: string
+  terminology?: typeof productTerminology
 }
 
 function App() {
@@ -48,8 +51,9 @@ function App() {
           Credential management platform centered on{' '}
           <strong>W3C Verifiable Credentials</strong>: credential definitions, proofs,
           issuance and revocation, tenant-aware operations, and verifier-facing
-          APIs—plus <strong>Kinchaku</strong>, the Dojo&apos;s built-in wallet for
-          holders.
+          APIs. Proof machinery follows <strong>Kata</strong>—named cryptosuites and
+          proof suites. Holders use <strong>Kinchaku</strong>, the Dojo&apos;s
+          built-in wallet.
         </p>
         <a className="dojo__link" href={SITE}>
           {SITE.replace(/^https?:\/\//, '')}
@@ -62,7 +66,10 @@ function App() {
           aria-labelledby="kinchaku-heading"
         >
           <h2 id="kinchaku-heading" className="dojo__panelTitle">
-            Kinchaku <span className="dojo__panelJa" lang="ja">巾着</span>
+            {productTerminology.wallet.name}{' '}
+            <span className="dojo__panelJa" lang="ja">
+              {productTerminology.wallet.glyph}
+            </span>
           </h2>
           <p className="dojo__panelBody">
             The platform wallet: carry <strong>W3C Verifiable Credentials</strong>{' '}
@@ -71,7 +78,24 @@ function App() {
           </p>
         </section>
 
-        <section className="dojo__panel" aria-live="polite">
+        <section
+          className="dojo__panel dojo__panel--kata"
+          aria-labelledby="kata-heading"
+        >
+          <h2 id="kata-heading" className="dojo__panelTitle">
+            {productTerminology.cryptosuites.name}{' '}
+            <span className="dojo__panelJa" lang="ja">
+              {productTerminology.cryptosuites.glyph}
+            </span>
+          </h2>
+          <p className="dojo__panelBody">
+            The metaphor for <strong>cryptosuites</strong> (and related proof /
+            signature suites): a fixed <em>kata</em>—the standardized pattern issuers
+            and verifiers run when creating or checking proofs for W3C VCs.
+          </p>
+        </section>
+
+        <section className="dojo__panel dojo__panel--api" aria-live="polite">
           <h2 className="dojo__panelTitle">Platform API</h2>
           {apiMessage ? (
             <>

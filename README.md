@@ -23,6 +23,8 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 | Holder wallet UI / experience | **Kinchaku** | Container and presentation for VCs |
 | Cryptosuite / proof suite selection | **Kata** | Which “form” signing and verification run |
 
+**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
+
 ## Structure
 
 - `frontend/` — Vite + React + TypeScript (operator console for the CRMS; VC-centric UX)
