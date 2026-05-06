@@ -28,6 +28,14 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 
 **Enbu** (演武) is a **formal martial demonstration**—structured, visible, and bounded. It maps to **verifiable presentations**: what the holder **shows** a verifier (proof package, selective disclosure surface) assembled from **Menkyo** in **Kinchaku**.
 
+### Randori (乱取り) — protocol exchanges
+
+**Randori** (乱取り) is **free, adaptive practice**—partners move within rules in a **multi-step back-and-forth**, not a single scripted move. In the CRMS, **Randori** names **protocol exchanges**: DIDComm-style flows, OID4VCI/OID4VP chases, and other **stateful message dances** between agents.
+
+### Teawase (手合わせ) — handshakes / pairing
+
+**Teawase** (手合わせ) is **“matching hands”**—a **light, mutual test** before serious work. It maps to **connection or capability handshakes**: first contact, offer/answer alignment, polite pairing **before** a longer **Randori** or an **Enbu**.
+
 **How to use the terms**
 
 | Concept | Dojo name | Notes |
@@ -35,10 +43,12 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 | Credential template / definition | **Tehon** | Canonical “copybook” before issuance |
 | Issued verifiable credential | **Menkyo** | Holder-facing artifact / license record |
 | Verifiable presentation | **Enbu** | Demonstration package to a verifier |
+| Multi-step protocol exchange | **Randori** | Stateful back-and-forth between parties |
+| Handshake / first pairing | **Teawase** | Capability probe before deeper flows |
 | Holder wallet UI / experience | **Kinchaku** | Where Menkyo live; Enbu are composed from here |
 | Cryptosuite / proof suite selection | **Kata** | Which “form” signing and verification run |
 
-**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `credentialMetaphor`, `presentationMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
+**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `credentialMetaphor`, `presentationMetaphor`, `exchangeMetaphor`, `handshakeMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
 
 ## Structure
 

@@ -35,6 +35,20 @@ const LEXICON_ENTRIES = [
     blurb:
       'Verifiable presentations—a structured demonstration shown to verifiers.',
   },
+  {
+    key: 'exchange',
+    title: productTerminology.exchange.name,
+    glyph: productTerminology.exchange.glyph,
+    blurb:
+      'Protocol exchanges—multi-step, adaptive flows between agents (DIDComm, OID4*, …).',
+  },
+  {
+    key: 'handshake',
+    title: productTerminology.handshake.name,
+    glyph: productTerminology.handshake.glyph,
+    blurb:
+      'Handshakes and pairing—light mutual “matching hands” before a longer Randori.',
+  },
 ] as const
 
 type HelloPayload = {
@@ -45,6 +59,8 @@ type HelloPayload = {
   templateMetaphor?: string
   credentialMetaphor?: string
   presentationMetaphor?: string
+  exchangeMetaphor?: string
+  handshakeMetaphor?: string
   standardsFocus?: string
   terminology?: typeof productTerminology
 }
@@ -217,10 +233,11 @@ function App() {
           <p className="dojo__lede">
             Credential management platform centered on{' '}
             <strong>W3C Verifiable Credentials</strong>: operators shape{' '}
-            <strong>Tehon</strong> templates into <strong>Menkyo</strong> credentials;
-            holders stage <strong>Enbu</strong> presentations for verifiers; proof
-            machinery follows <strong>Kata</strong> cryptosuites. Everything lands in{' '}
-            <strong>Kinchaku</strong>, the Dojo&apos;s built-in wallet.
+            <strong>Tehon</strong> into <strong>Menkyo</strong>; agents open flows with{' '}
+            <strong>Teawase</strong> handshakes and run <strong>Randori</strong>{' '}
+            exchanges; holders stage <strong>Enbu</strong> for verifiers under{' '}
+            <strong>Kata</strong> suites. Artifacts live in <strong>Kinchaku</strong>, the
+            built-in wallet.
           </p>
           <a className="dojo__link" href={SITE}>
             {SITE.replace(/^https?:\/\//, '')}
@@ -229,7 +246,7 @@ function App() {
 
         <section className="dojo__lex" aria-labelledby="lexicon-heading">
           <h2 id="lexicon-heading" className="dojo__lexTitle">
-            Dojo lexicon · artifacts
+            Dojo lexicon · artifacts · flows
           </h2>
           <div className="dojo__lexGrid">
             {LEXICON_ENTRIES.map((entry) => (
