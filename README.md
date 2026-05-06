@@ -1,13 +1,11 @@
 # credential-dojo
 
-**The Credential Dojo** — React frontend and Node API for experiments around verifiable credentials.
-
-Public site: [credential.ninja](https://credential.ninja)
+**The Credential Dojo** — a **credential management platform** (CRMS): web UI plus API for operating verifiable credentials across their lifecycle—schemas, issuance, holders, verification hooks, and registry-style discovery—hosted at [credential.ninja](https://credential.ninja).
 
 ## Structure
 
-- `frontend/` — Vite + React + TypeScript (`credential.ninja` metadata and branding)
-- `backend/` — Express + TypeScript (`/api/*`, CORS allows the public site and local dev)
+- `frontend/` — Vite + React + TypeScript (operator console for the CRMS)
+- `backend/` — Express + TypeScript (platform `/api/*`, CORS for `credential.ninja` and local dev)
 
 ## Prerequisites
 

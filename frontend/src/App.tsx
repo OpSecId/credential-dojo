@@ -32,11 +32,15 @@ function App() {
   return (
     <div className="dojo">
       <header className="dojo__header">
-        <p className="dojo__eyebrow">credential.ninja</p>
+        <p className="dojo__eyebrow">
+          credential.ninja ·{' '}
+          <abbr title="Credential Management & Registry System">CRMS</abbr>
+        </p>
         <h1 className="dojo__title">The Credential Dojo</h1>
         <p className="dojo__lede">
-          A place to practice verifiable credentials, issuance flows, and wallet
-          interop—without breaking production.
+          Credential management platform for verifiable credentials: templates and
+          schemas, issuance and revocation, tenant-aware operations, and the API
+          surface your wallets and verifiers integrate with.
         </p>
         <a className="dojo__link" href={SITE}>
           {SITE.replace(/^https?:\/\//, '')}
@@ -44,7 +48,7 @@ function App() {
       </header>
 
       <section className="dojo__panel" aria-live="polite">
-        <h2 className="dojo__panelTitle">Backend</h2>
+        <h2 className="dojo__panelTitle">Platform API</h2>
         {apiMessage ? (
           <p className="dojo__panelBody">{apiMessage}</p>
         ) : apiError ? (

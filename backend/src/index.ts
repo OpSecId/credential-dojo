@@ -28,12 +28,18 @@ app.use(
 app.use(express.json());
 
 app.get("/api/health", (_req, res) => {
-  res.json({ ok: true, service: "credential-dojo-api" });
+  res.json({
+    ok: true,
+    service: "credential-dojo-api",
+    product: "The Credential Dojo",
+    role: "crms",
+  });
 });
 
 app.get("/api/hello", (_req, res) => {
   res.json({
-    message: "Welcome to The Credential Dojo API",
+    message:
+      "The Credential Dojo platform API — credential management (CRMS) backend online.",
     site: publicSite,
   });
 });
