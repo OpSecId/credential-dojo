@@ -25,7 +25,9 @@ COPY docker/frontend/healthcheck.sh /healthcheck.sh
 RUN chmod +x /docker-entrypoint.sh /healthcheck.sh && rm -f /etc/nginx/conf.d/default.conf
 COPY --from=build /app/frontend/dist /usr/share/nginx/html
 
-ENV API_UPSTREAM=http://api:3001
+# Default must resolve without Docker DNS (Railway has no hostname "api").
+# Docker Compose overrides to http://api:3001 in docker-compose.yml.
+ENV API_UPSTREAM=http://127.0.0.1:3001
 
 # Railway sets PORT at runtime; nginx listens on $PORT (defaults to 80 for Compose).
 EXPOSE 80

@@ -1,5 +1,10 @@
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+
+// Keep Vite cache out of node_modules (Railpack/npm ci can hit EBUSY on node_modules/.vite).
+const cacheDir = join(tmpdir(), 'vite-cache-credential-dojo')
 
 // Local dev: backend on 3001. Railway / preview: set API_PROXY_TARGET (or VITE_API_PROXY_TARGET)
 // to your API public URL so same-origin /api can be proxied when VITE_API_BASE is unset.
@@ -17,6 +22,7 @@ const apiProxy = {
 
 // https://vite.dev/config/
 export default defineConfig({
+  cacheDir,
   plugins: [react()],
   server: {
     proxy: apiProxy,

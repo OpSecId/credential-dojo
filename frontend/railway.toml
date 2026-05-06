@@ -1,0 +1,7 @@
+# Frontend-only service: set this folder as Railway **Root Directory**.
+# Install/build/start — no duplicate `npm ci` (avoids Railpack + .vite EBUSY).
+[build]
+buildCommand = "npm run build"
+
+[deploy]
+startCommand = "npm start"

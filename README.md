@@ -122,28 +122,28 @@ Typical setup is **two services** from this repo (same GitHub project):
 |-------|----------|---------|
 | API | **`PORT`** | Usually **unset** — Railway sets it; the server listens on `process.env.PORT`. |
 | API | **`CORS_ORIGINS`** | Comma-separated browser origins allowed to call the API. Include your **public Web URL** (e.g. `https://your-web.up.railway.app`). Also add a **custom domain** once configured (e.g. `https://credential.ninja`). |
-| Web | **`API_UPSTREAM`** | Full base URL of the API **without** a trailing path — e.g. `https://your-api.up.railway.app` — so nginx can `proxy_pass` `/api/*` to that host. Must match what Railway exposes for the API service. |
+| Web | **`API_UPSTREAM`** | **Required on Railway** (unless the API is colocated on loopback): full base URL of the API **without** a trailing path — e.g. `https://your-api.up.railway.app` — so nginx can `proxy_pass` `/api/*` there. The Docker image defaults to `http://127.0.0.1:3001` only so nginx can start when `api` DNS does not exist; **Compose** sets `http://api:3001` for the two-container stack. |
 | Web | **`PORT`** | Set automatically by Railway — nginx **must** listen on this port inside the container (the frontend Dockerfile does). Do **not** override unless you know what you’re doing. |
 
 Leave **`VITE_API_BASE`** unset for the Web image build so the SPA keeps calling **same-origin** `/api/...` (nginx forwards to the API). Only set **`VITE_API_BASE`** at build time if the browser must talk to an API on another origin **without** nginx proxying.
 
 If you use **Railway private networking** between services, you may point **`API_UPSTREAM`** at the internal URL Railway documents for service-to-service calls instead of the public HTTPS URL.
 
-### Railway without Docker (Node / Vite only)
+### Railway without Docker — frontend only (Railpack)
 
-Do **not** run **`npm run dev`** or rely on **port 5173** in production — Railway forwards HTTP to whatever **`PORT`** it assigns (often not 5173), which causes **502 / Bad Gateway** if nothing is listening there.
+Easiest path: create **one** Railway service, set **Root Directory** to **`frontend`**, connect the repo, redeploy. **`frontend/railway.toml`** tells Railpack:
 
-Use **`vite preview`** via the frontend **`npm start`** script (listens on **`0.0.0.0`** and **`${PORT:-4173}`**).
+- **Build:** `npm run build` (no extra `npm ci` — Railpack already installs deps; a second `npm ci` was blowing up on `node_modules/.vite`).
+- **Start:** `npm start` → static **`serve`** of **`dist/`** on **`PORT`** (defaults to listening where Railway expects).
 
-| Setting | Suggested value |
-|--------|-------------------|
-| **Root Directory** | Repo root (with workspaces) **or** `frontend/` if you only install there |
-| **Build Command** | From repo root: `npm ci && npm run build -w frontend`. From `frontend/`: `npm ci && npm run build` |
-| **Start Command** | From repo root: `npm run start -w frontend`. From `frontend/`: `npm start` |
+Do **not** use **`npm run dev`** or port **5173** in production.
 
-When the API is another Railway service, set **`API_PROXY_TARGET`** (or **`VITE_API_PROXY_TARGET`**) to that API’s **public HTTPS base URL** (no path), so **`vite preview`** can proxy **`/api`** the same way dev does. Keep **`CORS_ORIGINS`** on the API aligned with your frontend URL.
+| Step | What to do |
+|------|------------|
+| **API is on another Railway URL** | In the **frontend** service, add a **build** variable **`VITE_API_BASE`** = your API base (e.g. `https://your-api.up.railway.app`, no `/api` suffix). Rebuild. The app uses that for `fetch`. On the **API** service, set **`CORS_ORIGINS`** to your frontend URL. |
+| **Monorepo root** (Root Directory = `.`) | In the service settings, set **Build** to `npm run build -w frontend` and **Start** to `npm run start -w frontend` — still **no** `npm ci &&` in the build line. |
 
-Alternatively, bake **`VITE_API_BASE`** at build time to the API URL and call the API directly from the browser (then **`API_PROXY_TARGET`** is unnecessary).
+Vite’s cache is under **`$TMPDIR/vite-cache-credential-dojo`**, not `node_modules/.vite`, so Railpack/`npm ci` no longer hits **`EBUSY`** on `.vite`.
 
 ## Environment
 
@@ -151,4 +151,4 @@ Alternatively, bake **`VITE_API_BASE`** at build time to the API URL and call th
 - **Backend:** `CORS_ORIGINS` — optional comma-separated extra origins (see above)
 - **Frontend (Docker nginx):** `API_UPSTREAM` — upstream URL for `/api` (default `http://api:3001` in the image)
 - **Frontend (Vite):** optional `VITE_API_BASE` if the API is not same-origin (see `frontend/.env.example`)
-- **Frontend (Railway preview):** `API_PROXY_TARGET` / `VITE_API_PROXY_TARGET` — backend URL for `/api` proxy when using `npm start` (see README Railway section)
+- **Frontend (Railway):** build-time **`VITE_API_BASE`** when the API is on another host (see Railway section). Optional **`API_PROXY_TARGET`** only if you use **`vite preview`** locally (production uses **`serve`**).

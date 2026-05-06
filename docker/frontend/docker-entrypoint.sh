@@ -2,7 +2,7 @@
 set -e
 # Railway injects PORT — the container must listen there or the proxy returns 502.
 LISTEN_PORT="${PORT:-80}"
-UPSTREAM="${API_UPSTREAM:-http://api:3001}"
+UPSTREAM="${API_UPSTREAM:-http://127.0.0.1:3001}"
 TEMPLATE=/etc/nginx/templates/default.conf.template
 OUT=/etc/nginx/conf.d/default.conf
 sed \
