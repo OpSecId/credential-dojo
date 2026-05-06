@@ -1,0 +1,85 @@
+.dojo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 3rem 1.5rem 4rem;
+  text-align: center;
+}
+
+.dojo__header {
+  max-width: 36rem;
+}
+
+.dojo__eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.dojo__title {
+  margin: 0 0 1rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.dojo__lede {
+  margin: 0 0 1.25rem;
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
+.dojo__link {
+  display: inline-flex;
+  color: var(--text-h);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid var(--accent-border);
+  padding-bottom: 2px;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.dojo__link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.dojo__panel {
+  width: min(32rem, 100%);
+  text-align: left;
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--code-bg);
+  box-shadow: var(--shadow);
+}
+
+.dojo__panelTitle {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.dojo__panelBody {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-h);
+}
+
+.dojo__panelBody--warn {
+  color: var(--text);
+}
+
+.muted {
+  color: var(--text);
+}
