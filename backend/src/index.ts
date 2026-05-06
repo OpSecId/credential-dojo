@@ -27,6 +27,8 @@ app.use(
 );
 app.use(express.json());
 
+const standardsFocus = "W3C Verifiable Credentials";
+
 app.get("/api/health", (_req, res) => {
   res.json({
     ok: true,
@@ -34,15 +36,17 @@ app.get("/api/health", (_req, res) => {
     product: "The Credential Dojo",
     role: "crms",
     wallet: "Kinchaku",
+    standardsFocus,
   });
 });
 
 app.get("/api/hello", (_req, res) => {
   res.json({
     message:
-      "The Credential Dojo platform API — CRMS backend online, with Kinchaku wallet flows.",
+      "The Credential Dojo platform API — CRMS backend online, Kinchaku wallet flows, W3C VC–aligned endpoints.",
     site: publicSite,
     wallet: "Kinchaku",
+    standardsFocus,
   });
 });
 

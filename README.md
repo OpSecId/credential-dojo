@@ -1,15 +1,15 @@
 # credential-dojo
 
-**The Credential Dojo** — a **credential management platform** (CRMS): web UI plus API for operating verifiable credentials across their lifecycle—schemas, issuance, holders, verification hooks, and registry-style discovery—hosted at [credential.ninja](https://credential.ninja).
+**The Credential Dojo** — a **credential management platform** (CRMS) focused on **W3C Verifiable Credentials**: web UI plus API for operating standards-aligned VCs across their lifecycle—credential definitions, issuance, holders, verification, and registry-style discovery—hosted at [credential.ninja](https://credential.ninja).
 
 ### Wallet: Kinchaku
 
-**Kinchaku** (巾着) is the platform wallet: where holders keep, organize, and present credentials issued and governed through the Dojo—pairing operator workflows with a first-class wallet experience.
+**Kinchaku** (巾着) is the platform wallet: where holders keep, organize, and present **W3C Verifiable Credentials** issued and governed through the Dojo—pairing operator workflows with a first-class wallet experience.
 
 ## Structure
 
-- `frontend/` — Vite + React + TypeScript (operator console for the CRMS)
-- `backend/` — Express + TypeScript (platform `/api/*`, CORS for `credential.ninja` and local dev)
+- `frontend/` — Vite + React + TypeScript (operator console for the CRMS; VC-centric UX)
+- `backend/` — Express + TypeScript (platform `/api/*` for W3C VC flows; CORS for `credential.ninja` and local dev)
 
 ## Prerequisites
 
