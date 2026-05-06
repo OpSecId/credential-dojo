@@ -70,6 +70,10 @@ npm run dev
 
 - Web: http://localhost:5173 (proxies `/api` to the API)
 - API: http://localhost:3001
+- **Swagger UI:** http://localhost:3001/api/docs  
+- **OpenAPI JSON:** http://localhost:3001/api/openapi.json  
+
+Behind Docker/nginx, use the same paths on your web origin (e.g. `https://…/api/docs`).
 
 Or run each workspace separately:
 

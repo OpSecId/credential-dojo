@@ -1,5 +1,7 @@
 import cors from "cors";
 import express from "express";
+import swaggerUi from "swagger-ui-express";
+import { openApiDocument } from "./openapi.js";
 import { productTerminology } from "./terminology.js";
 
 const app = express();
@@ -30,6 +32,18 @@ app.use(
   }),
 );
 app.use(express.json());
+
+app.get("/api/openapi.json", (_req, res) => {
+  res.json(openApiDocument);
+});
+
+app.use(
+  "/api/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(openApiDocument, {
+    customSiteTitle: "The Credential Dojo API",
+  }),
+);
 
 const standardsFocus = "W3C Verifiable Credentials";
 
