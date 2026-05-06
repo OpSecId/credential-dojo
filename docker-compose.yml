@@ -16,6 +16,9 @@ services:
       dockerfile: docker/frontend/Dockerfile
       args:
         VITE_API_BASE: ""
+    environment:
+      # Used by nginx template (same Docker network as api).
+      API_UPSTREAM: http://api:3001
     ports:
       - "8080:80"
     depends_on:

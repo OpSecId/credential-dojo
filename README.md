@@ -101,7 +101,32 @@ docker compose up --build
 
 Set **`CORS_ORIGINS`** in `docker-compose.yml` (or override) to match the browser `Origin` you use (default includes `http://localhost:8080`). The API also reads **`CORS_ORIGINS`** as a comma-separated list from the environment.
 
+The **frontend image** (`docker/frontend/Dockerfile`) reads **`API_UPSTREAM`**: the URL nginx uses for `proxy_pass` to the API (Compose default: `http://api:3001`). Override when the API has another hostname.
+
+## Deploying on [Railway](https://railway.app/)
+
+Typical setup is **two services** from this repo (same GitHub project):
+
+| Service | Dockerfile | Role |
+|--------|------------|------|
+| **API** | `docker/backend/Dockerfile` | Express on **`PORT`** (Railway injects this — **don’t hard-code `3001`** in Railway unless it matches the assigned port). |
+| **Web** | `docker/frontend/Dockerfile` | nginx serving `frontend/dist`; proxies **`/api`** to **`API_UPSTREAM`**. |
+
+**Environment variables**
+
+| Where | Variable | Purpose |
+|-------|----------|---------|
+| API | **`PORT`** | Usually **unset** — Railway sets it; the server listens on `process.env.PORT`. |
+| API | **`CORS_ORIGINS`** | Comma-separated browser origins allowed to call the API. Include your **public Web URL** (e.g. `https://your-web.up.railway.app`). Also add a **custom domain** once configured (e.g. `https://credential.ninja`). |
+| Web | **`API_UPSTREAM`** | Full base URL of the API **without** a trailing path — e.g. `https://your-api.up.railway.app` — so nginx can `proxy_pass` `/api/*` to that host. Must match what Railway exposes for the API service. |
+
+Leave **`VITE_API_BASE`** unset for the Web image build so the SPA keeps calling **same-origin** `/api/...` (nginx forwards to the API). Only set **`VITE_API_BASE`** at build time if the browser must talk to an API on another origin **without** nginx proxying.
+
+If you use **Railway private networking** between services, you may point **`API_UPSTREAM`** at the internal URL Railway documents for service-to-service calls instead of the public HTTPS URL.
+
 ## Environment
 
-- **Backend:** `PORT` (default `3001`)
-- **Frontend:** optional `VITE_API_BASE` if the API is not same-origin (see `frontend/.env.example`)
+- **Backend:** `PORT` (default `3001` locally; **Railway sets `PORT`**)
+- **Backend:** `CORS_ORIGINS` — optional comma-separated extra origins (see above)
+- **Frontend (Docker nginx):** `API_UPSTREAM` — upstream URL for `/api` (default `http://api:3001` in the image)
+- **Frontend (Vite):** optional `VITE_API_BASE` if the API is not same-origin (see `frontend/.env.example`)
