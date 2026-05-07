@@ -6,7 +6,7 @@ export const openApiDocument = {
   info: {
     title: "The Credential Dojo API",
     description:
-      "CRMS platform API for W3C Verifiable Credentials. Product terminology: Tehon, Menkyo, Enbu, Randori, Teawase, Kinchaku, Kata — see `terminology` in responses and the project README.",
+      "CRMS platform API for W3C Verifiable Credentials. Product terminology: Tehon, Menkyo, Enbu, Enbu/Menkyo no Kensa, Randori, Teawase, Kinchaku, Kata — see `terminology` in responses and the project README.",
     version: "0.1.0",
     contact: {
       name: "credential.ninja",
@@ -115,6 +115,8 @@ export const openApiDocument = {
           template: { $ref: "#/components/schemas/TerminologyEntry" },
           credential: { $ref: "#/components/schemas/TerminologyEntry" },
           presentation: { $ref: "#/components/schemas/TerminologyEntry" },
+          presentationInspection: { $ref: "#/components/schemas/TerminologyEntry" },
+          credentialInspection: { $ref: "#/components/schemas/TerminologyEntry" },
           exchange: { $ref: "#/components/schemas/TerminologyEntry" },
           handshake: { $ref: "#/components/schemas/TerminologyEntry" },
         },
@@ -132,6 +134,8 @@ export const openApiDocument = {
           templateMetaphor: { type: "string" },
           credentialMetaphor: { type: "string" },
           presentationMetaphor: { type: "string" },
+          presentationInspectionMetaphor: { type: "string" },
+          credentialInspectionMetaphor: { type: "string" },
           exchangeMetaphor: { type: "string" },
           handshakeMetaphor: { type: "string" },
           standardsFocus: { type: "string", example: "W3C Verifiable Credentials" },
@@ -193,6 +197,8 @@ export const openApiDocument = {
           templateMetaphor: { type: "string" },
           credentialMetaphor: { type: "string" },
           presentationMetaphor: { type: "string" },
+          presentationInspectionMetaphor: { type: "string" },
+          credentialInspectionMetaphor: { type: "string" },
           exchangeMetaphor: { type: "string" },
           handshakeMetaphor: { type: "string" },
           standardsFocus: { type: "string" },

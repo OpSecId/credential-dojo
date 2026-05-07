@@ -30,6 +30,8 @@ type HelloPayload = {
   templateMetaphor?: string
   credentialMetaphor?: string
   presentationMetaphor?: string
+  presentationInspectionMetaphor?: string
+  credentialInspectionMetaphor?: string
   exchangeMetaphor?: string
   handshakeMetaphor?: string
   standardsFocus?: string
@@ -314,6 +316,9 @@ export default function HomePage() {
             </Link>
             <Link className="dojo__linkNav" to="/json-explorer">
               JSON explorer
+            </Link>
+            <Link className="dojo__linkNav" to="/kensa" title="Enbu no kensa · Menkyo no kensa">
+              Kensa
             </Link>
             <a className="dojo__link" href={SITE}>
               {SITE.replace(/^https?:\/\//, '')}

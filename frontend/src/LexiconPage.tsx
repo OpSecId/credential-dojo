@@ -45,6 +45,12 @@ export default function LexiconPage() {
             <Link className="lex__back" to="/create-ninja-profile">
               Create ninja profile
             </Link>
+            <Link className="lex__back" to="/json-explorer">
+              JSON explorer
+            </Link>
+            <Link className="lex__back" to="/kensa">
+              Kensa
+            </Link>
           </nav>
         </header>
 

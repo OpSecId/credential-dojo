@@ -5,6 +5,10 @@ export const productTerminology = {
   template: { name: 'Tehon', glyph: '手本' },
   credential: { name: 'Menkyo', glyph: '免許' },
   presentation: { name: 'Enbu', glyph: '演武' },
+  /** Inspection of a verifiable presentation (Enbu): hybrid UI title + proper Japanese phrase. */
+  presentationInspection: { name: 'Enbu の Kensa', glyph: '演武の検査' },
+  /** Inspection of a single verifiable credential (Menkyo). */
+  credentialInspection: { name: 'Menkyo の Kensa', glyph: '免許の検査' },
   /** Multi-step protocol back-and-forth (e.g. DIDComm, OID4* chases). */
   exchange: { name: 'Randori', glyph: '乱取り' },
   /** Initial pairing / capability handshake before deeper flows. */

@@ -28,6 +28,14 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 
 **Enbu** (演武) is a **formal martial demonstration**—structured, visible, and bounded. It maps to **verifiable presentations**: what the holder **shows** a verifier (proof package, selective disclosure surface) assembled from **Menkyo** in **Kinchaku**.
 
+### Enbu の Kensa (演武の検査) — presentation inspection
+
+**Kensa** (検査) is **inspection** or **examination**. **Enbu no kensa** (演武の検査) reads as **inspection of the demonstration**—the verifier-side pass over **Enbu**-shaped JSON. The SPA uses the hybrid title **Enbu の Kensa** with the proper Japanese phrase **演武の検査** as the subtitle pattern. The **`/kensa`** page includes this path for VP-shaped payloads (heuristics only; not a substitute for running proofs under the agreed **Kata**).
+
+### Menkyo の Kensa (免許の検査) — credential inspection
+
+**Menkyo no kensa** (免許の検査) is the parallel label for **inspection of a single Menkyo**—one VC-shaped object rather than a full presentation package. Product copy uses **Menkyo の Kensa** with **免許の検査** as the Japanese phrase on the same **`/kensa`** surface (second tab).
+
 ### Randori (乱取り) — protocol exchanges
 
 **Randori** (乱取り) is **free, adaptive practice**—partners move within rules in a **multi-step back-and-forth**, not a single scripted move. In the CRMS, **Randori** names **protocol exchanges**: DIDComm-style flows, OID4VCI/OID4VP chases, and other **stateful message dances** between agents.
@@ -43,12 +51,14 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 | Credential template / definition | **Tehon** | Canonical “copybook” before issuance |
 | Issued verifiable credential | **Menkyo** | Holder-facing artifact / license record |
 | Verifiable presentation | **Enbu** | Demonstration package to a verifier |
+| Presentation inspection (VP-shaped JSON) | **Enbu の Kensa** / **演武の検査** | Heuristic “kensa” path on `/kensa` |
+| Single-credential inspection (VC-shaped JSON) | **Menkyo の Kensa** / **免許の検査** | Heuristic “kensa” path on `/kensa` |
 | Multi-step protocol exchange | **Randori** | Stateful back-and-forth between parties |
 | Handshake / first pairing | **Teawase** | Capability probe before deeper flows |
 | Holder wallet UI / experience | **Kinchaku** | Where Menkyo live; Enbu are composed from here |
 | Cryptosuite / proof suite selection | **Kata** | Which “form” signing and verification run |
 
-**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `credentialMetaphor`, `presentationMetaphor`, `exchangeMetaphor`, `handshakeMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
+**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `credentialMetaphor`, `presentationMetaphor`, `presentationInspectionMetaphor`, `credentialInspectionMetaphor`, `exchangeMetaphor`, `handshakeMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
 
 ## Structure
 
@@ -76,6 +86,8 @@ npm run dev
 Behind Docker/nginx, use the same paths on your web origin (e.g. `https://…/api/docs`).
 
 - **Lexicon (SPA):** http://localhost:5173/lexicon — glossary of Dojo terms vs credential meanings.
+- **Kensa (SPA):** http://localhost:5173/kensa — Enbu の Kensa / Menkyo の Kensa inspection (structural heuristics).
+- **JSON explorer (SPA):** http://localhost:5173/json-explorer — interactive JSON tree with pointer blurbs.
 
 Or run each workspace separately:
 

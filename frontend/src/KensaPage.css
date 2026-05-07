@@ -1,0 +1,202 @@
+.kensa {
+  padding: clamp(1rem, 3vw, 2rem);
+  padding-bottom: 3rem;
+}
+
+.kensa__header {
+  max-width: 44rem;
+  margin-bottom: 1.25rem;
+}
+
+.kensa__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.kensa__title {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  color: var(--text-h);
+}
+
+.kensa__intro {
+  margin: 0 0 1rem;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.kensa__intro strong {
+  color: var(--cyber-cyan);
+  font-weight: 600;
+}
+
+.kensa__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+}
+
+.kensa__back {
+  color: var(--cyber-cyan);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+.kensa__back:hover {
+  text-decoration: underline;
+}
+
+.kensa__tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  max-width: 48rem;
+  margin: 0 auto 1rem;
+}
+
+@media (max-width: 520px) {
+  .kensa__tabs {
+    grid-template-columns: 1fr;
+  }
+}
+
+.kensa__tab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  padding: 0.65rem 0.85rem;
+  text-align: left;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--panel-bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.kensa__tab:hover {
+  border-color: var(--accent-border);
+}
+
+.kensa__tab--active {
+  border-color: var(--cyber-cyan-dim, rgba(90, 232, 255, 0.35));
+  background: var(--panel-bg-strong);
+  box-shadow: 0 0 0 1px rgba(90, 232, 255, 0.12);
+}
+
+.kensa__tabTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.kensa__tabGlyph {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.kensa__panel {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 1rem 1.15rem 1.25rem;
+}
+
+.kensa__panelHeading {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  color: var(--text-h);
+}
+
+.kensa__hint {
+  margin: 0 0 0.85rem;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.kensa__label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+
+.kensa__textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 0.65rem;
+  padding: 0.6rem 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text-h);
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  resize: vertical;
+  min-height: 8rem;
+}
+
+.kensa__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.kensa__btn {
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--accent-border);
+  background: var(--accent-soft);
+  color: var(--text-h);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.kensa__btn:hover {
+  background: rgba(90, 232, 255, 0.14);
+}
+
+.kensa__msg {
+  margin: 0.85rem 0 0;
+  padding: 0.65rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.kensa__msg p {
+  margin: 0.35rem 0 0;
+}
+
+.kensa__msg p:first-child {
+  margin-top: 0;
+}
+
+.kensa__msg--ok {
+  background: rgba(90, 232, 255, 0.08);
+  border: 1px solid rgba(90, 232, 255, 0.22);
+  color: var(--text);
+}
+
+.kensa__msg--warn {
+  background: rgba(232, 184, 74, 0.1);
+  border: 1px solid rgba(232, 184, 74, 0.28);
+  color: var(--text);
+}
+
+.kensa__msg--error {
+  background: rgba(255, 107, 74, 0.1);
+  border: 1px solid rgba(255, 107, 74, 0.25);
+  color: var(--accent-hot);
+}

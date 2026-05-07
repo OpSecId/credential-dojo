@@ -70,12 +70,15 @@ export default function JsonExplorerPage() {
           <Link className="json-ex__back" to="/">
             ← Home
           </Link>
-          <Link className="json-ex__back" to="/lexicon">
-            Lexicon
-          </Link>
-          <Link className="json-ex__back" to="/discover-kasa">
-            Discover Kasa
-          </Link>
+            <Link className="json-ex__back" to="/lexicon">
+              Lexicon
+            </Link>
+            <Link className="json-ex__back" to="/kensa">
+              Kensa
+            </Link>
+            <Link className="json-ex__back" to="/discover-kasa">
+              Discover Kasa
+            </Link>
         </nav>
       </header>
 

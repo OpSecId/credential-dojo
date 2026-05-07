@@ -31,6 +31,20 @@ export const LEXICON_ENTRIES: {
       'Verifiable presentations—a structured demonstration shown to verifiers.',
   },
   {
+    key: 'presentationInspection',
+    title: productTerminology.presentationInspection.name,
+    glyph: productTerminology.presentationInspection.glyph,
+    blurb:
+      'Inspection of an Enbu—checking the holder\'s demonstration package (VP-shaped JSON), not cryptographic proof yet.',
+  },
+  {
+    key: 'credentialInspection',
+    title: productTerminology.credentialInspection.name,
+    glyph: productTerminology.credentialInspection.glyph,
+    blurb:
+      'Inspection of a Menkyo—checking a single issued credential object (VC-shaped JSON).',
+  },
+  {
     key: 'exchange',
     title: productTerminology.exchange.name,
     glyph: productTerminology.exchange.glyph,
@@ -98,6 +112,26 @@ export const LEXICON_ARTICLES: LexiconArticle[] = [
     ],
     inPlatform: [
       '**Enbu** maps to **verifiable presentations**: the package a holder **shows** a verifier—proofs, selective disclosure, derived predicates—assembled from **Menkyo** and verified under the agreed **Kata**.',
+    ],
+  },
+  {
+    key: 'presentationInspection',
+    credentialTerm: 'Verifiable presentation inspection (Enbu)',
+    literal: [
+      '**Kensa** (検査) is **inspection** or **examination**—the same word used for audits, safety checks, and quality gates. **Enbu no kensa** (演武の検査) reads naturally as **“inspection of the demonstration.”**',
+    ],
+    inPlatform: [
+      'In the SPA we surface **Enbu の Kensa** as the hybrid product title and **演武の検査** as the proper Japanese phrase. The **Kensa** page runs **structural heuristics** on VP-shaped JSON (e.g. `VerifiablePresentation` or `verifiableCredential` arrays)—**not** full cryptographic verification, which belongs to a verifier running the agreed **Kata**.',
+    ],
+  },
+  {
+    key: 'credentialInspection',
+    credentialTerm: 'Single credential inspection (Menkyo)',
+    literal: [
+      '**Menkyo no kensa** (免許の検査) parallels **Enbu no kensa**: **inspection of the license-like record**—one **Menkyo** artifact rather than the whole presentation package.',
+    ],
+    inPlatform: [
+      '**Menkyo の Kensa** / **免許の検査** names the **credential-shaped** inspection path: paste a VC JSON object and get light structural hints (`VerifiableCredential`, `@context`, issuer / subject fields). Use **Enbu の Kensa** when the payload is a **presentation**.',
     ],
   },
   {
