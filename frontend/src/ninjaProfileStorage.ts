@@ -5,6 +5,17 @@ export const PERSONA_STORAGE_KEY = 'credential-dojo-persona'
 
 export const NINJA_PROFILE_STORAGE_KEY = 'credential-dojo-ninja-profile'
 
+/** Fired on same-tab profile writes so shell UI can refresh (e.g. after wizard save). */
+export const NINJA_PROFILE_CHANGED_EVENT = 'credential-dojo-ninja-profile-changed'
+
+function notifyNinjaProfileChanged(): void {
+  try {
+    window.dispatchEvent(new CustomEvent(NINJA_PROFILE_CHANGED_EVENT))
+  } catch {
+    /* ignore */
+  }
+}
+
 export type NinjaProfile = {
   codename: string
   schoolId: string
@@ -49,6 +60,7 @@ export function readNinjaProfile(): NinjaProfile | null {
       try {
         localStorage.setItem(NINJA_PROFILE_STORAGE_KEY, JSON.stringify(profile))
         localStorage.setItem(PERSONA_STORAGE_KEY, schoolId)
+        notifyNinjaProfileChanged()
       } catch {
         /* ignore */
       }
@@ -69,6 +81,7 @@ export function writeNinjaProfile(profile: NinjaProfile): void {
   try {
     localStorage.setItem(NINJA_PROFILE_STORAGE_KEY, JSON.stringify(normalized))
     localStorage.setItem(PERSONA_STORAGE_KEY, normalized.schoolId)
+    notifyNinjaProfileChanged()
   } catch {
     /* ignore */
   }
@@ -78,6 +91,7 @@ export function clearNinjaProfile(): void {
   try {
     localStorage.removeItem(NINJA_PROFILE_STORAGE_KEY)
     localStorage.setItem(PERSONA_STORAGE_KEY, 'ed-ryu')
+    notifyNinjaProfileChanged()
   } catch {
     /* ignore */
   }

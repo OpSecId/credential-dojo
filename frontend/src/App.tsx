@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
+import AppShell from './AppShell'
 import CreateNinjaProfilePage from './CreateNinjaProfilePage'
 import DiscoverKasaPage from './DiscoverKasaPage'
 import HomePage from './HomePage'
@@ -9,12 +10,14 @@ import LexiconPage from './LexiconPage'
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/create-ninja-profile" element={<CreateNinjaProfilePage />} />
-      <Route path="/discover-kasa" element={<DiscoverKasaPage />} />
-      <Route path="/json-explorer" element={<JsonExplorerPage />} />
-      <Route path="/kensa" element={<KensaPage />} />
-      <Route path="/lexicon" element={<LexiconPage />} />
+      <Route element={<AppShell />}>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/create-ninja-profile" element={<CreateNinjaProfilePage />} />
+        <Route path="/discover-kasa" element={<DiscoverKasaPage />} />
+        <Route path="/json-explorer" element={<JsonExplorerPage />} />
+        <Route path="/kensa" element={<KensaPage />} />
+        <Route path="/lexicon" element={<LexiconPage />} />
+      </Route>
     </Routes>
   )
 }

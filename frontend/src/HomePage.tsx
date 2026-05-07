@@ -388,7 +388,11 @@ export default function HomePage() {
           </Link>
         </nav>
 
-        <section className="dojo__lex dojo__lex--compact" aria-labelledby="lexicon-heading">
+        <section
+          id="dojo-lexicon"
+          className="dojo__lex dojo__lex--compact"
+          aria-labelledby="lexicon-heading"
+        >
           <div className="dojo__lexHead">
             <h2 id="lexicon-heading" className="dojo__lexTitle">
               Lexicon · artifacts · flows{' '}
@@ -400,31 +404,19 @@ export default function HomePage() {
                 Guide →
               </Link>
             </h2>
-            <nav className="dojo__lexQuick" aria-label="Lexicon shortcuts">
-              <Link className="dojo__lexQuickLink" to="/lexicon" title="Glossary: Dojo metaphors vs W3C VC concepts">
-                Full lexicon
-              </Link>
-              <span className="dojo__lexQuickSep" aria-hidden>
-                ·
-              </span>
-              {ninjaProfile ? (
-                <>
-                  <Link
-                    className="dojo__lexQuickLink"
-                    to="/create-ninja-profile"
-                    title="Codename and Kasa — stored in this browser only"
-                  >
-                    Ninja profile
-                  </Link>
-                  <span className="dojo__lexQuickSep" aria-hidden>
-                    ·
-                  </span>
-                </>
-              ) : null}
-              <a className="dojo__lexQuickLink dojo__lexQuickLink--mono" href={SITE} title={SITE}>
-                {SITE.replace(/^https?:\/\//, '')}
-              </a>
-            </nav>
+            {!ninjaProfile ? (
+              <nav className="dojo__lexQuick" aria-label="Lexicon shortcuts">
+                <Link className="dojo__lexQuickLink" to="/lexicon" title="Glossary: Dojo metaphors vs W3C VC concepts">
+                  Full lexicon
+                </Link>
+                <span className="dojo__lexQuickSep" aria-hidden>
+                  ·
+                </span>
+                <a className="dojo__lexQuickLink dojo__lexQuickLink--mono" href={SITE} title={SITE}>
+                  {SITE.replace(/^https?:\/\//, '')}
+                </a>
+              </nav>
+            ) : null}
           </div>
           <div className="dojo__lexGrid">
             {LEXICON_ENTRIES.map((entry) => (
@@ -446,7 +438,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="dojo__playground" aria-labelledby="playground-heading">
+        <section id="dojo-playground" className="dojo__playground" aria-labelledby="playground-heading">
           <h2 id="playground-heading" className="dojo__sectionLabel">
             Playground
           </h2>

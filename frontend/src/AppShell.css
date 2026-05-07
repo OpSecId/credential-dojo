@@ -1,0 +1,288 @@
+/* Logged-in chrome: sectioned rail (desktop) + drawer (mobile), PWA safe-area aware */
+
+.app-shell__skip {
+  position: absolute;
+  left: -9999px;
+  top: 0.5rem;
+  z-index: 10000;
+  padding: 0.4rem 0.75rem;
+  background: var(--shell-accent, #e8b84a);
+  color: #0a0d14;
+  font-weight: 700;
+  border-radius: 6px;
+}
+
+.app-shell__skip:focus {
+  left: 0.5rem;
+}
+
+.app-shell--authed {
+  --shell-bg: #070910;
+  --shell-rail: rgba(10, 14, 24, 0.97);
+  --shell-rail-border: rgba(90, 232, 255, 0.12);
+  --shell-text: #b8c0d4;
+  --shell-muted: #7a8498;
+  --shell-heading: #f0f4ff;
+  --shell-accent: #e8b84a;
+  --shell-cyan: #5ae8ff;
+
+  display: flex;
+  min-height: 100svh;
+  min-height: 100dvh;
+  width: 100%;
+  background: var(--shell-bg);
+  color: var(--shell-text);
+  font-family: var(--font-body, 'Zen Kaku Gothic New', system-ui, sans-serif);
+}
+
+.app-shell__rail {
+  display: none;
+}
+
+.app-shell__railInner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: calc(0.85rem + env(safe-area-inset-top, 0px)) 0.85rem
+    calc(0.85rem + env(safe-area-inset-bottom, 0px));
+  border-right: 1px solid var(--shell-rail-border);
+  background: var(--shell-rail);
+  width: 15.25rem;
+  box-sizing: border-box;
+}
+
+.app-shell__brand {
+  margin: 0 0 1rem;
+  font-family: var(--font-display, 'Shippori Mincho', serif);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--shell-heading);
+  line-height: 1.25;
+}
+
+.app-shell__brandSub {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--shell-muted);
+}
+
+.app-shell__section {
+  margin: 0.65rem 0 0.35rem;
+}
+
+.app-shell__section:first-of-type {
+  margin-top: 0;
+}
+
+.app-shell__sectionLabel {
+  margin: 0 0 0.35rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--shell-muted);
+}
+
+.app-shell__navList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.app-shell__navItem {
+  margin: 0.1rem 0;
+}
+
+.app-shell__navLink {
+  display: block;
+  padding: 0.38rem 0.5rem;
+  border-radius: 6px;
+  color: var(--shell-text);
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.app-shell__navLink:hover {
+  background: rgba(90, 232, 255, 0.08);
+  color: var(--shell-heading);
+}
+
+.app-shell__navLink--active {
+  background: rgba(90, 232, 255, 0.12);
+  color: var(--shell-cyan);
+  border: 1px solid rgba(90, 232, 255, 0.2);
+}
+
+.app-shell__railFoot {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--shell-rail-border);
+  font-size: 0.78rem;
+  color: var(--shell-muted);
+}
+
+.app-shell__railFoot strong {
+  display: block;
+  color: var(--shell-heading);
+  font-size: 0.85rem;
+  margin-bottom: 0.15rem;
+}
+
+.app-shell__main {
+  flex: 1;
+  min-width: 0;
+  min-height: 100svh;
+  min-height: 100dvh;
+}
+
+/* Mobile top bar — sticky (in flow) so PWA viewport isn’t covered by fixed chrome */
+.app-shell__topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  min-height: calc(2.85rem + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) 0.65rem 0.45rem 0.65rem;
+  margin: 0;
+  background: rgba(7, 9, 16, 0.92);
+  border-bottom: 1px solid var(--shell-rail-border);
+  backdrop-filter: blur(10px);
+}
+
+.app-shell__menuBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(90, 232, 255, 0.22);
+  background: rgba(12, 18, 32, 0.85);
+  color: var(--shell-heading);
+  cursor: pointer;
+}
+
+.app-shell__menuBtn:hover {
+  border-color: rgba(90, 232, 255, 0.45);
+}
+
+.app-shell__menuBtn:focus-visible {
+  outline: 2px solid var(--shell-accent);
+  outline-offset: 2px;
+}
+
+.app-shell__topbarTitle {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-display, 'Shippori Mincho', serif);
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--shell-heading);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-shell__topbarMeta {
+  font-size: 0.72rem;
+  color: var(--shell-muted);
+  max-width: 42vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-shell__mainInner {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+@media (min-width: 900px) {
+  .app-shell__topbar {
+    display: none;
+  }
+
+  .app-shell__rail {
+    display: block;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
+    height: 100dvh;
+    flex-shrink: 0;
+  }
+}
+
+/* Drawer (mobile / narrow) */
+.app-shell__backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 250;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.app-shell__backdrop--open {
+  display: block;
+}
+
+.app-shell__drawer {
+  position: fixed;
+  z-index: 300;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: min(18rem, 88vw);
+  max-width: 100%;
+  background: var(--shell-rail);
+  border-right: 1px solid var(--shell-rail-border);
+  transform: translateX(-102%);
+  transition: transform 0.22s ease;
+  padding-top: env(safe-area-inset-top, 0px);
+  box-shadow: 8px 0 32px rgba(0, 0, 0, 0.45);
+}
+
+.app-shell__drawer--open {
+  transform: translateX(0);
+}
+
+.app-shell__drawerInner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0.75rem 0.85rem calc(0.85rem + env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+}
+
+.app-shell__drawerClose {
+  align-self: flex-end;
+  margin-bottom: 0.35rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 8px;
+  border: 1px solid rgba(90, 232, 255, 0.22);
+  background: rgba(12, 18, 32, 0.85);
+  color: var(--shell-heading);
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+@media (min-width: 900px) {
+  .app-shell__backdrop,
+  .app-shell__drawer {
+    display: none !important;
+  }
+}
