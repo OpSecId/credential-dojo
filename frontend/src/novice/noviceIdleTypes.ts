@@ -158,6 +158,35 @@ export type TickEnv = {
   documentVisible: boolean
 }
 
+export type NovicePerkDef = {
+  id: 'validity_watch' | 'revocation_guard'
+  title: string
+  description: string
+  unlockHint: string
+}
+
+export const NOVICE_PERKS: readonly NovicePerkDef[] = [
+  {
+    id: 'validity_watch',
+    title: 'Validity Watch',
+    description:
+      'Your verifier and wallet routines tighten validity-window handling (validFrom/validUntil, issuanceDate/expirationDate).',
+    unlockHint: 'Unlock at Verifier Lv 4 or 500+ verified.',
+  },
+  {
+    id: 'revocation_guard',
+    title: 'Revocation Guard',
+    description:
+      'Status checks become second nature (credentialStatus / status lists), reducing stale-credential risk across issuer and verifier flows.',
+    unlockHint: 'Unlock at Issuer Lv 5 and Verifier Lv 5, or 1200+ verified.',
+  },
+] as const
+
+export type NovicePerkState = {
+  validityWatch: boolean
+  revocationGuard: boolean
+}
+
 export type RankProgress = {
   rankIndex: number
   rank: NoviceRankDef
@@ -199,6 +228,20 @@ export function computeTrackProgress(xp: number): TrackProgress {
     xpToNext: Math.max(0, next - safeXp),
     progress01: Math.min(1, xpInLevel / span),
   }
+}
+
+export function computePerkState(input: {
+  issuerXp: number
+  verifierXp: number
+  verifiedCount: number
+}): NovicePerkState {
+  const issuer = computeTrackProgress(input.issuerXp)
+  const verifier = computeTrackProgress(input.verifierXp)
+  const validityWatch =
+    verifier.level >= 4 || input.verifiedCount >= 500
+  const revocationGuard =
+    (issuer.level >= 5 && verifier.level >= 5) || input.verifiedCount >= 1200
+  return { validityWatch, revocationGuard }
 }
 
 export function computeRankProgress(totalInsight: number): RankProgress {

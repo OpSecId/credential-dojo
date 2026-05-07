@@ -10,6 +10,7 @@ import {
   isValidSchoolId,
   readNinjaProfile,
 } from './ninjaProfileStorage'
+import { markJourneyPendingStart } from './journey/journeyStorage'
 
 function schoolKataHeadline(p: PersonaPublic): string {
   if (p.kataSamples.length >= 2) return `${p.kataSamples[0]} · ${p.kataSamples[1]}`
@@ -85,6 +86,7 @@ export default function CreateNinjaProfilePage() {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
     if (!isValidSchoolId(schoolId)) return
+    if (!existing) markJourneyPendingStart()
     createOrUpdateNinjaProfile(codename, schoolId)
     navigate('/')
   }

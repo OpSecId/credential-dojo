@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { computeTrackProgress, NOVICE_LESSONS } from './noviceIdleTypes'
+import { computePerkState, computeTrackProgress, NOVICE_LESSONS, NOVICE_PERKS } from './noviceIdleTypes'
 import { useNoviceIdle } from './NoviceIdleContext'
 import './NoviceProgressPanel.css'
 
@@ -36,6 +36,11 @@ export default function NoviceProgressPanel() {
   const issuer = computeTrackProgress(state.issuerXp)
   const verifier = computeTrackProgress(state.verifierXp)
   const wallet = computeTrackProgress(state.walletXp)
+  const perks = computePerkState({
+    issuerXp: state.issuerXp,
+    verifierXp: state.verifierXp,
+    verifiedCount: state.verifiedCount,
+  })
 
   return (
     <div className="novice-dock" aria-live="polite">
@@ -183,6 +188,29 @@ export default function NoviceProgressPanel() {
                 Next level in ~{Math.ceil(wallet.xpToNext).toLocaleString()} wallet XP
               </p>
             </article>
+          </section>
+
+          <section className="novice-panel__perks" aria-label="Unlocked operational perks">
+            <h3 className="novice-panel__h3">Perks</h3>
+            <ul className="novice-panel__perkList">
+              {NOVICE_PERKS.map((perk) => {
+                const unlocked =
+                  perk.id === 'validity_watch' ? perks.validityWatch : perks.revocationGuard
+                return (
+                  <li
+                    key={perk.id}
+                    className={`novice-panel__perk${unlocked ? ' novice-panel__perk--on' : ''}`}
+                  >
+                    <p className="novice-panel__perkTitle">
+                      {unlocked ? '◆' : '◇'} {perk.title}
+                    </p>
+                    <p className="novice-panel__perkDesc">
+                      {unlocked ? perk.description : perk.unlockHint}
+                    </p>
+                  </li>
+                )
+              })}
+            </ul>
           </section>
 
           <section className="novice-panel__lessons" aria-label="Platform lessons">

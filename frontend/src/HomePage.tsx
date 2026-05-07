@@ -18,6 +18,7 @@ import {
   readNinjaProfile,
   type NinjaProfile,
 } from './ninjaProfileStorage'
+import { useJourney } from './journey/JourneyContext'
 import { useNoviceIdle } from './novice/NoviceIdleContext'
 import { productTerminology } from './terminology'
 
@@ -88,6 +89,7 @@ function prefersReducedMotion(): boolean {
 
 export default function HomePage() {
   const { reportFocusMeter, clearHomeFocus } = useNoviceIdle()
+  const { state: journeyState, pendingStart, startJourney, clearPendingStart, reportLearningFocus } = useJourney()
   const pouchGradId = useId().replace(/:/g, '')
   const sceneRef = useRef<HTMLDivElement>(null)
   const strikeTimerRef = useRef<number>(0)
@@ -132,8 +134,9 @@ export default function HomePage() {
 
   useEffect(() => {
     reportFocusMeter(focusMeter)
+    reportLearningFocus(focusMeter)
     return () => clearHomeFocus()
-  }, [focusMeter, reportFocusMeter, clearHomeFocus])
+  }, [focusMeter, reportFocusMeter, clearHomeFocus, reportLearningFocus])
 
   useEffect(() => {
     const base = import.meta.env.VITE_API_BASE ?? ''
@@ -364,35 +367,51 @@ export default function HomePage() {
               </p>
             ) : null}
             {ninjaProfile ? (
-              <p
-                className="dojo__ninjaBar dojo-augmented dojo-augmented--ninja"
-                data-augmented-ui="tl-clip br-clip border"
-              >
-                <span className="dojo__ninjaBar-label">Ninja profile</span>{' '}
-                <strong className="dojo__ninjaBar-name">{ninjaProfile.codename}</strong>
-                <span className="dojo__ninjaBar-sep"> · </span>
-                <span className="dojo__ninjaBar-school">
-                  {activePersonas.find((p) => p.id === ninjaProfile.schoolId)?.label ??
-                    ninjaProfile.schoolId}
-                </span>
-                <span className="dojo__ninjaBar-sep"> · </span>
-                <Link
-                  className="dojo__ninjaBar-edit"
-                  to="/create-ninja-profile"
-                  title="Change codename or proof school (Kasa) for your ninja profile"
+              <>
+                <p
+                  className="dojo__ninjaBar dojo-augmented dojo-augmented--ninja"
+                  data-augmented-ui="tl-clip br-clip border"
                 >
-                  Edit
-                </Link>
-                <span className="dojo__ninjaBar-sep"> · </span>
-                <button
-                  type="button"
-                  className="dojo__ninjaBar-clear"
-                  onClick={handleClearProfile}
-                  title="Remove ninja profile from this browser"
-                >
-                  Clear profile
-                </button>
-              </p>
+                  <span className="dojo__ninjaBar-label">Ninja profile</span>{' '}
+                  <strong className="dojo__ninjaBar-name">{ninjaProfile.codename}</strong>
+                  <span className="dojo__ninjaBar-sep"> · </span>
+                  <span className="dojo__ninjaBar-school">
+                    {activePersonas.find((p) => p.id === ninjaProfile.schoolId)?.label ??
+                      ninjaProfile.schoolId}
+                  </span>
+                  <span className="dojo__ninjaBar-sep"> · </span>
+                  <Link
+                    className="dojo__ninjaBar-edit"
+                    to="/create-ninja-profile"
+                    title="Change codename or proof school (Kasa) for your ninja profile"
+                  >
+                    Edit
+                  </Link>
+                  <span className="dojo__ninjaBar-sep"> · </span>
+                  <button
+                    type="button"
+                    className="dojo__ninjaBar-clear"
+                    onClick={handleClearProfile}
+                    title="Remove ninja profile from this browser"
+                  >
+                    Clear profile
+                  </button>
+                </p>
+                {!journeyState.started ? (
+                  <p className="dojo__journeyStart dojo-augmented dojo-augmented--inset" data-augmented-ui="tl-clip br-clip border">
+                    <span className="dojo__journeyStart-label">Learning Journey</span>{' '}
+                    {pendingStart ? 'Profile created — begin your resource journey now.' : 'Begin your parallel resource journey anytime.'}
+                    <button type="button" className="dojo__journeyStart-btn" onClick={startJourney}>
+                      Start journey
+                    </button>
+                    {pendingStart ? (
+                      <button type="button" className="dojo__journeyStart-dismiss" onClick={clearPendingStart}>
+                        Dismiss
+                      </button>
+                    ) : null}
+                  </p>
+                ) : null}
+              </>
             ) : null}
           </header>
         </div>

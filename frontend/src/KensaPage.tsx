@@ -1,10 +1,11 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './App.css'
 import './KensaPage.css'
 import { productTerminology } from './terminology'
 
 type InspectMode = 'enbu' | 'menkyo'
+type InspectLevel = 'ok' | 'warn' | 'error'
 
 function typeList(o: Record<string, unknown>): string[] {
   const t = o.type
@@ -30,8 +31,110 @@ function isVcShaped(o: Record<string, unknown>): boolean {
   return false
 }
 
-function inspectJson(parsed: unknown, mode: InspectMode): { level: 'ok' | 'warn' | 'error'; lines: string[] } {
-  const lines: string[] = []
+function asProofArray(v: unknown): Record<string, unknown>[] {
+  if (v && typeof v === 'object' && !Array.isArray(v)) return [v as Record<string, unknown>]
+  if (Array.isArray(v)) return v.filter((x): x is Record<string, unknown> => !!x && typeof x === 'object')
+  return []
+}
+
+function isJwtLike(v: unknown): boolean {
+  if (typeof v !== 'string') return false
+  const parts = v.split('.')
+  return parts.length === 3 && parts.every((p) => p.length > 0)
+}
+
+function pushIssue(
+  bucket: { errors: string[]; warnings: string[]; passes: string[] },
+  level: InspectLevel,
+  line: string,
+) {
+  if (level === 'error') bucket.errors.push(line)
+  else if (level === 'warn') bucket.warnings.push(line)
+  else bucket.passes.push(line)
+}
+
+function checkValidityWindows(
+  o: Record<string, unknown>,
+  bucket: { errors: string[]; warnings: string[]; passes: string[] },
+) {
+  const now = Date.now()
+  const parse = (v: unknown) => (typeof v === 'string' ? Date.parse(v) : NaN)
+  const validFrom = parse(o.validFrom ?? o.issuanceDate)
+  const validUntil = parse(o.validUntil ?? o.expirationDate)
+  if (o.validFrom !== undefined || o.issuanceDate !== undefined) {
+    if (Number.isNaN(validFrom)) pushIssue(bucket, 'error', 'Invalid validity start timestamp.')
+    else if (validFrom > now) pushIssue(bucket, 'warn', 'Credential validity start is in the future.')
+    else pushIssue(bucket, 'ok', 'Validity start timestamp parses correctly.')
+  }
+  if (o.validUntil !== undefined || o.expirationDate !== undefined) {
+    if (Number.isNaN(validUntil)) pushIssue(bucket, 'error', 'Invalid validity end timestamp.')
+    else if (validUntil < now) pushIssue(bucket, 'warn', 'Credential appears expired by validity end timestamp.')
+    else pushIssue(bucket, 'ok', 'Validity end timestamp parses correctly.')
+  }
+}
+
+function checkCredentialSchema(
+  o: Record<string, unknown>,
+  bucket: { errors: string[]; warnings: string[]; passes: string[] },
+) {
+  const schema = o.credentialSchema
+  if (schema === undefined) {
+    pushIssue(bucket, 'warn', 'No credentialSchema property found (optional but recommended for shape contracts).')
+    return
+  }
+  const schemas = Array.isArray(schema) ? schema : [schema]
+  let anyInvalid = false
+  for (const s of schemas) {
+    if (!s || typeof s !== 'object' || Array.isArray(s)) {
+      anyInvalid = true
+      continue
+    }
+    const so = s as Record<string, unknown>
+    if (typeof so.id !== 'string' || typeof so.type !== 'string') {
+      anyInvalid = true
+    }
+  }
+  if (anyInvalid) {
+    pushIssue(bucket, 'error', 'credentialSchema exists but does not match expected object shape (`id` + `type` strings).')
+  } else {
+    pushIssue(bucket, 'ok', 'credentialSchema shape looks valid (`id` and `type` present).')
+  }
+}
+
+function checkProofs(
+  label: string,
+  value: unknown,
+  bucket: { errors: string[]; warnings: string[]; passes: string[] },
+) {
+  const proofs = asProofArray(value)
+  if (proofs.length === 0) {
+    pushIssue(bucket, 'warn', `${label}: no object proof found.`)
+    return
+  }
+  proofs.forEach((p, i) => {
+    const idx = proofs.length > 1 ? ` #${i + 1}` : ''
+    const hasType = typeof p.type === 'string'
+    const hasVm = typeof p.verificationMethod === 'string'
+    const hasPurpose = typeof p.proofPurpose === 'string'
+    const hasSig =
+      typeof p.proofValue === 'string' ||
+      typeof p.jws === 'string' ||
+      typeof p.signatureValue === 'string'
+    if (!hasType) pushIssue(bucket, 'error', `${label}${idx}: missing proof.type.`)
+    if (!hasVm) pushIssue(bucket, 'warn', `${label}${idx}: missing verificationMethod.`)
+    if (!hasPurpose) pushIssue(bucket, 'warn', `${label}${idx}: missing proofPurpose.`)
+    if (!hasSig) pushIssue(bucket, 'error', `${label}${idx}: missing signature payload (proofValue / jws / signatureValue).`)
+    if (typeof p.created === 'string') {
+      const t = Date.parse(p.created)
+      if (Number.isNaN(t)) pushIssue(bucket, 'warn', `${label}${idx}: invalid created timestamp.`)
+      else pushIssue(bucket, 'ok', `${label}${idx}: created timestamp parses.`)
+    }
+    if (hasType && hasSig) pushIssue(bucket, 'ok', `${label}${idx}: proof carries type + signature material.`)
+  })
+}
+
+function inspectJson(parsed: unknown, mode: InspectMode): { level: InspectLevel; lines: string[] } {
+  const bucket = { errors: [] as string[], warnings: [] as string[], passes: [] as string[] }
   if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) {
     return { level: 'error', lines: ['Expected a single JSON object (not an array or primitive).'] }
   }
@@ -41,36 +144,71 @@ function inspectJson(parsed: unknown, mode: InspectMode): { level: 'ok' | 'warn'
 
   if (mode === 'menkyo') {
     if (vp && !vc) {
-      lines.push(
+      bucket.warnings.push(
         'This looks like a verifiable presentation (Enbu): switch to Enbu の Kensa, or paste one object from verifiableCredential.',
       )
-      return { level: 'warn', lines }
+      return { level: 'warn', lines: bucket.warnings }
     }
     if (vc) {
-      lines.push('Structural cues match a VC-shaped object (e.g. VerifiableCredential type or @context with issuer / credentialSubject).')
-      return { level: 'ok', lines }
+      pushIssue(
+        bucket,
+        'ok',
+        'Structural cues match a VC-shaped object (VerifiableCredential type or @context + issuer/credentialSubject).',
+      )
+      checkCredentialSchema(o, bucket)
+      checkValidityWindows(o, bucket)
+      if (isJwtLike(o.proof)) {
+        pushIssue(bucket, 'ok', 'Proof appears JWT-like (compact JWS).')
+      } else {
+        checkProofs('Credential proof', o.proof, bucket)
+      }
+    } else {
+      pushIssue(bucket, 'warn', 'No strong VC heuristics — JSON is still valid for manual review.')
     }
-    lines.push('No strong VC heuristics — JSON is still valid for manual review.')
-    return { level: 'warn', lines }
+    const level: InspectLevel = bucket.errors.length ? 'error' : bucket.warnings.length ? 'warn' : 'ok'
+    return { level, lines: [...bucket.errors, ...bucket.warnings, ...bucket.passes] }
   }
 
   /* enbu */
   if (vc && !vp) {
-    lines.push(
+    bucket.warnings.push(
       'This looks like a lone credential (Menkyo). Presentation (Enbu) payloads usually declare VerifiablePresentation or include `verifiableCredential`.',
     )
-    return { level: 'warn', lines }
+    return { level: 'warn', lines: bucket.warnings }
   }
   if (vp) {
-    lines.push('Structural cues match a VP-shaped object (VerifiablePresentation or verifiableCredential array).')
-    return { level: 'ok', lines }
+    pushIssue(
+      bucket,
+      'ok',
+      'Structural cues match a VP-shaped object (VerifiablePresentation or verifiableCredential array).',
+    )
+    checkProofs('Presentation proof', o.proof, bucket)
+    const vcArray = Array.isArray(o.verifiableCredential) ? o.verifiableCredential : []
+    vcArray.forEach((item, i) => {
+      const name = `Embedded credential #${i + 1}`
+      if (typeof item === 'string') {
+        if (isJwtLike(item)) pushIssue(bucket, 'ok', `${name}: JWT-like VC token.`)
+        else pushIssue(bucket, 'warn', `${name}: string VC is not JWT-like compact format.`)
+        return
+      }
+      if (item && typeof item === 'object' && !Array.isArray(item)) {
+        const c = item as Record<string, unknown>
+        checkCredentialSchema(c, bucket)
+        checkValidityWindows(c, bucket)
+        checkProofs(`${name} proof`, c.proof, bucket)
+      } else {
+        pushIssue(bucket, 'warn', `${name}: unexpected entry type in verifiableCredential array.`)
+      }
+    })
+  } else {
+    pushIssue(bucket, 'warn', 'No strong VP heuristics — JSON is still valid for manual review.')
   }
-  lines.push('No strong VP heuristics — JSON is still valid for manual review.')
-  return { level: 'warn', lines }
+  const level: InspectLevel = bucket.errors.length ? 'error' : bucket.warnings.length ? 'warn' : 'ok'
+  return { level, lines: [...bucket.errors, ...bucket.warnings, ...bucket.passes] }
 }
 
-export default function KensaPage() {
-  const [mode, setMode] = useState<InspectMode>('enbu')
+export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: InspectMode }) {
+  const [mode, setMode] = useState<InspectMode>(initialMode)
   const [raw, setRaw] = useState('')
   const [applied, setApplied] = useState('')
   const [parseError, setParseError] = useState<string | null>(null)
@@ -102,6 +240,10 @@ export default function KensaPage() {
 
   const tEnbu = productTerminology.presentationInspection
   const tMenkyo = productTerminology.credentialInspection
+
+  useEffect(() => {
+    setMode(initialMode)
+  }, [initialMode])
 
   return (
     <div className="dojo-scene dojo-scene--night kensa">

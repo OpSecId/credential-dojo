@@ -1,4 +1,10 @@
-import { NOVICE_LESSONS, type NoviceIdlePersisted, type TickEnv, routeInsightBonus } from './noviceIdleTypes'
+import {
+  computePerkState,
+  NOVICE_LESSONS,
+  type NoviceIdlePersisted,
+  type TickEnv,
+  routeInsightBonus,
+} from './noviceIdleTypes'
 
 const MAX_DELTA_MS = 8 * 60 * 60 * 1000
 
@@ -83,7 +89,6 @@ export function applyIdleTick(prev: NoviceIdlePersisted, nowMs: number, env: Tic
   const gain =
     (delta / 1000) * basePerSec * routeMult * profileMult * lessonBonus * rankMult * focusMult * visMult
 
-  const totalInsight = prev.totalInsight + gain
   const levelIssuer = Math.floor(prev.issuerXp / 140)
   const levelVerifier = Math.floor(prev.verifierXp / 140)
   const levelWallet = Math.floor(prev.walletXp / 140)
@@ -98,20 +103,41 @@ export function applyIdleTick(prev: NoviceIdlePersisted, nowMs: number, env: Tic
   const verifierXp = prev.verifierXp + verifierGain
   const walletXp = prev.walletXp + walletGain
 
-  // Action output scales with rising mastery in each path.
+  const perk = computePerkState({
+    issuerXp: prev.issuerXp,
+    verifierXp: prev.verifierXp,
+    verifiedCount: prev.verifiedCount,
+  })
+  const verifierPerkMult = perk.validityWatch ? 1.1 : 1
+  const issuerPerkMult = perk.revocationGuard ? 1.08 : 1
+  const walletPerkMult = perk.validityWatch ? 1.06 : 1
+  const insightPerkMult =
+    (perk.validityWatch ? 1.04 : 1) * (perk.revocationGuard ? 1.05 : 1)
+
+  // Action output scales with rising mastery and unlocked perks.
   const issuedCount =
     prev.issuedCount +
-    issuerGain * (1.7 + levelIssuer * 0.22) * (env.hasNinjaProfile ? 1.08 : 1)
-  const verifiedCount = prev.verifiedCount + verifierGain * (1.45 + levelVerifier * 0.2)
-  const receivedCount = prev.receivedCount + walletGain * (1.35 + levelWallet * 0.18)
+    issuerGain *
+      issuerPerkMult *
+      (1.7 + levelIssuer * 0.22) *
+      (env.hasNinjaProfile ? 1.08 : 1)
+  const verifiedCount =
+    prev.verifiedCount +
+    verifierGain * verifierPerkMult * (1.45 + levelVerifier * 0.2)
+  const receivedCount =
+    prev.receivedCount +
+    walletGain * walletPerkMult * (1.35 + levelWallet * 0.18)
   const presentedCount =
     prev.presentedCount +
-    walletGain * (0.95 + levelWallet * 0.15) * (env.onHome ? 1 + env.homeFocus01 * 0.2 : 1)
+    walletGain *
+      walletPerkMult *
+      (0.95 + levelWallet * 0.15) *
+      (env.onHome ? 1 + env.homeFocus01 * 0.2 : 1)
 
   return {
     ...prev,
     lastTickMs: nowMs,
-    totalInsight,
+    totalInsight: prev.totalInsight + gain * insightPerkMult,
     lessonsDone,
     everFocusPeak,
     issuerXp,

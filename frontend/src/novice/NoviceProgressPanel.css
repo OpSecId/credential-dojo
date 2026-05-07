@@ -296,6 +296,46 @@
   color: var(--text-h, #f0f4ff);
 }
 
+.novice-panel__perks {
+  margin-bottom: 1rem;
+}
+
+.novice-panel__perkList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.novice-panel__perk {
+  padding: 0.48rem 0.55rem;
+  border-radius: 8px;
+  border: 1px dashed rgba(120, 140, 180, 0.32);
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.novice-panel__perk--on {
+  border-style: solid;
+  border-color: rgba(102, 212, 126, 0.4);
+  background: rgba(102, 212, 126, 0.1);
+}
+
+.novice-panel__perkTitle {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-h, #f0f4ff);
+}
+
+.novice-panel__perkDesc {
+  margin: 0.2rem 0 0;
+  font-size: 0.73rem;
+  line-height: 1.4;
+  color: var(--muted, #8a92a8);
+}
+
 .novice-panel__lessonsMeta {
   margin: 0 0 0.55rem;
   font-size: 0.76rem;
