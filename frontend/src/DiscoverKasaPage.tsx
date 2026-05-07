@@ -13,6 +13,7 @@ export default function DiscoverKasaPage() {
   const [note, setNote] = useState<string | null>(null)
   const [fromApi, setFromApi] = useState(false)
   const [apiAttemptDone, setApiAttemptDone] = useState(false)
+  const [copiedDid, setCopiedDid] = useState<string | null>(null)
 
   useEffect(() => {
     const base = import.meta.env.VITE_API_BASE ?? ''
@@ -44,6 +45,16 @@ export default function DiscoverKasaPage() {
       window.clearTimeout(tid)
     }
   }, [])
+
+  const copyDidKey = async (didKey: string) => {
+    try {
+      await navigator.clipboard.writeText(didKey)
+      setCopiedDid(didKey)
+      window.setTimeout(() => setCopiedDid((cur) => (cur === didKey ? null : cur)), 1200)
+    } catch {
+      setCopiedDid(null)
+    }
+  }
 
   return (
     <div className="dojo-scene dojo-scene--night">
@@ -124,6 +135,30 @@ export default function DiscoverKasaPage() {
                       <span className="kasa-card__idLabel">id</span> {p.id}
                     </p>
                     <p className="kasa-card__desc">{p.description}</p>
+                    {p.didKey ? (
+                      <p className="kasa-card__did">
+                        <span className="kasa-card__didTop">
+                          <span className="kasa-card__didLabel">Issuer</span>
+                          <button
+                            type="button"
+                            className={`kasa-card__copyDid${copiedDid === p.didKey ? ' kasa-card__copyDid--ok' : ''}`}
+                            onClick={() => copyDidKey(p.didKey)}
+                            title={copiedDid === p.didKey ? 'Copied' : 'Copy did:key'}
+                            aria-label={copiedDid === p.didKey ? 'did:key copied' : 'Copy did:key'}
+                          >
+                            {copiedDid === p.didKey ? '✓' : '⧉'}
+                          </button>
+                        </span>
+                        <code className="kasa-card__didCode" title={p.didKey}>
+                          {p.didKey}
+                        </code>
+                      </p>
+                    ) : (
+                      <p className="kasa-card__did kasa-card__did--muted">
+                        <code className="kasa__inline">did:key</code> loads from the API when the
+                        backend is running.
+                      </p>
+                    )}
                     <div className="kasa-card__kata">
                       <h3 className="kasa-card__kataTitle">Kata (suites)</h3>
                       <ul className="kasa-card__kataList">
@@ -134,17 +169,6 @@ export default function DiscoverKasaPage() {
                         ))}
                       </ul>
                     </div>
-                    {p.didKey ? (
-                      <p className="kasa-card__did">
-                        <span className="kasa-card__didLabel">Issuer</span>
-                        <code className="kasa-card__didCode">{p.didKey}</code>
-                      </p>
-                    ) : (
-                      <p className="kasa-card__did kasa-card__did--muted">
-                        <code className="kasa__inline">did:key</code> loads from the API when the
-                        backend is running.
-                      </p>
-                    )}
                   </article>
                 </li>
               ))}

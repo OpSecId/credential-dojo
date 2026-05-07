@@ -112,30 +112,9 @@ export default function JsonExplorerPage() {
           <strong>Verifiable Credentials</strong>, the top-level keys follow a stable envelope—use
           the rail to jump between slots instantly.
         </p>
-        <nav className="json-ex__nav">
+        <nav className="json-ex__nav" aria-label="Back navigation">
           <Link className="json-ex__back" to="/" title="Credential Dojo home">
             ← Home
-          </Link>
-          <Link
-            className="json-ex__back"
-            to="/lexicon"
-            title="Glossary: Dojo metaphors vs W3C Verifiable Credentials"
-          >
-            Lexicon
-          </Link>
-          <Link
-            className="json-ex__back"
-            to="/kensa"
-            title="Enbu の Kensa / Menkyo の Kensa — structural VP vs VC inspection"
-          >
-            Kensa
-          </Link>
-          <Link
-            className="json-ex__back"
-            to="/discover-kasa"
-            title="Proof schools (Kasa) with did:key and Kata samples"
-          >
-            Discover Kasa
           </Link>
         </nav>
       </header>

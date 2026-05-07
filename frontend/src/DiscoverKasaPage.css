@@ -174,14 +174,49 @@
 
 .kasa-card__didLabel {
   display: block;
-  margin-bottom: 0.2rem;
   font-size: 0.65rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
+.kasa-card__didTop {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.2rem;
+}
+
+.kasa-card__copyDid {
+  margin: 0;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--cyber-cyan, #5ae8ff);
+  font-size: 0.82rem;
+  line-height: 1;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.kasa-card__copyDid:hover {
+  border-color: rgba(90, 232, 255, 0.35);
+  background: rgba(90, 232, 255, 0.08);
+}
+
+.kasa-card__copyDid--ok {
+  color: #7ff0a2;
+  border-color: rgba(127, 240, 162, 0.45);
+}
+
 .kasa-card__didCode {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--accent);
