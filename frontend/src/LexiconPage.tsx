@@ -39,6 +39,9 @@ export default function LexiconPage() {
             <Link className="lex__back" to="/">
               ← Home
             </Link>
+            <Link className="lex__back" to="/discover-kasa">
+              Discover Kasa
+            </Link>
           </nav>
         </header>
 

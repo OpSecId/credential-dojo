@@ -1,0 +1,120 @@
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import './App.css'
+import './DiscoverKasaPage.css'
+import { DEMO_PERSONAS_OFFLINE, type PersonaPublic, type PersonasPayload } from './demoPersonas'
+
+export default function DiscoverKasaPage() {
+  const [personas, setPersonas] = useState<readonly PersonaPublic[] | null>(null)
+  const [note, setNote] = useState<string | null>(null)
+  const [fromApi, setFromApi] = useState(false)
+
+  useEffect(() => {
+    const base = import.meta.env.VITE_API_BASE ?? ''
+    fetch(`${base}/api/personas`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
+        return res.json() as Promise<PersonasPayload>
+      })
+      .then((data) => {
+        setPersonas(data.personas)
+        setNote(data.note ?? null)
+        setFromApi(true)
+      })
+      .catch(() => {
+        setPersonas(DEMO_PERSONAS_OFFLINE)
+        setNote(null)
+        setFromApi(false)
+      })
+  }, [])
+
+  return (
+    <div className="dojo-scene dojo-scene--night">
+      <div className="dojo-scene__moon" aria-hidden />
+      <div className="dojo-scene__bg" aria-hidden />
+      <div className="dojo-scene__grid" aria-hidden />
+
+      <div className="kasa">
+        <header className="kasa__header">
+          <p className="kasa__eyebrow">The Credential Dojo</p>
+          <h1 className="kasa__title">Discover Kasa</h1>
+          <p className="kasa__intro">
+            <strong>Kasa</strong> (笠) is a woven travel hat—here, the shaded porch where we line up
+            the demo <strong>proof schools</strong>. Each school is a persona with its own issuer{' '}
+            <code className="kasa__inline">did:key</code> and preferred <strong>Kata</strong>{' '}
+            (cryptosuites). Keys are deterministic demo material, not production secrets.
+          </p>
+          <nav className="kasa__nav" aria-label="Section">
+            <Link className="kasa__back" to="/">
+              ← Home
+            </Link>
+            <Link className="kasa__back" to="/lexicon">
+              Lexicon
+            </Link>
+          </nav>
+          {personas !== null && !fromApi ? (
+            <p className="kasa__banner" role="status">
+              API unreachable — showing offline copy. Start the backend for live{' '}
+              <code className="kasa__inline">did:key</code> values.
+            </p>
+          ) : null}
+        </header>
+
+        {personas === null ? (
+          <p className="kasa__loading muted">Loading schools…</p>
+        ) : (
+          <>
+            <ul className="kasa__grid" aria-label="Demo proof schools">
+              {personas.map((p) => (
+                <li key={p.id}>
+                  <article className="kasa-card">
+                    <header className="kasa-card__head">
+                      <h2 className="kasa-card__title">
+                        {p.label}{' '}
+                        <span className="kasa-card__ja" lang="ja">
+                          {p.labelJa}
+                        </span>
+                      </h2>
+                      <span className="kasa-card__badge">{p.proofSchool}</span>
+                    </header>
+                    <p className="kasa-card__id">
+                      <span className="kasa-card__idLabel">id</span> {p.id}
+                    </p>
+                    <p className="kasa-card__desc">{p.description}</p>
+                    {p.didKey ? (
+                      <p className="kasa-card__did">
+                        <span className="kasa-card__didLabel">Issuer</span>
+                        <code className="kasa-card__didCode">{p.didKey}</code>
+                      </p>
+                    ) : (
+                      <p className="kasa-card__did kasa-card__did--muted">
+                        <code className="kasa__inline">did:key</code> loads from the API when the
+                        backend is running.
+                      </p>
+                    )}
+                    <div className="kasa-card__kata">
+                      <h3 className="kasa-card__kataTitle">Kata (suites)</h3>
+                      <ul className="kasa-card__kataList">
+                        {p.kataSamples.map((k) => (
+                          <li key={k}>
+                            <code>{k}</code>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </article>
+                </li>
+              ))}
+            </ul>
+            {note ? <p className="kasa__note">{note}</p> : null}
+            <p className="kasa__cta">
+              <Link className="kasa__back" to="/">
+                ← Practice kata on the home dojo
+              </Link>
+            </p>
+          </>
+        )}
+      </div>
+    </div>
+  )
+}
