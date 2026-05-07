@@ -16,15 +16,15 @@ The Dojo uses a small set of **Japanese martial-arts–adjacent names** so produ
 
 In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (and closely related **proof / signature suites**): the **named, standardized recipe** of algorithms and options used when creating or checking proofs—e.g. Data Integrity cryptosuites, canonicalization rules, and key material expectations. The credential may live in **Kinchaku**; the **proof machinery** follows a **Kata**.
 
-### Tehon (手本) — templates & definitions
+### Tehon (手本) — issuer definitions & exemplars
 
-**Tehon** (手本) is the **model or exemplar**—the copybook. In the CRMS, **Tehon** maps to **credential templates and definitions** on the issuer side: JSON shapes, credential definitions, offer layouts, and blueprints. **Tehon is not an issued credential**; issuance produces **Menkyo**.
+**Tehon** (手本) is the **model or exemplar**—the copybook. In the CRMS, **Tehon** maps to **issuer-side definitions and shapes**: JSON-LD profiles, **credential definitions** (the VC *type* you issue from), offer layouts, and blueprints. **Tehon is not an issued credential**; issuance produces **Menkyo** (**Tehon の Menkyo**).
 
 ### Menkyo (免許) — issued credentials
 
 **Menkyo** (免許) is a **license or formal transmission**—proof of standing. Here it names **issued W3C Verifiable Credentials**: the artifacts holders keep in **Kinchaku**, bound to issuer policy and **Kata** proofs.
 
-### Tehon の Menkyo (手本の免許) — issued from a template
+### Tehon の Menkyo (手本の免許) — Menkyo from a Tehon
 
 **Tehon no menkyo** (手本の免許) reads as **the Menkyo from the Tehon**—the concrete issued credential **instantiated from** a given definition. Use this phrase when copy must show **lineage** from **Tehon** (definition) to **Menkyo** (issued VC), e.g. issuance previews or offers.
 
@@ -50,13 +50,13 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 
 ### Tejun (手順) — workflows
 
-**Tejun** (手順) is **procedure**—the **ordered steps** of a task. In the CRMS it names **operator-side workflows**: orchestrated runs (issuance, verification, approvals) as **step sequences** you define and execute. This is **not** **Randori**, which is adaptive **protocol exchange** between agents on the wire. A workflow **template** can be described as **Tejun の Tehon** (手順の手本)—the exemplar for the procedure—alongside **Tehon** (credential definitions) and **Enbu** (presentations).
+**Tejun** (手順) is **procedure**—the **ordered steps** of a task. In the CRMS it names **operator-side workflows**: orchestrated runs (issuance, verification, approvals) as **step sequences** you define and execute. This is **not** **Randori**, which is adaptive **protocol exchange** between agents on the wire. A workflow **template** can be described as **Tejun の Tehon** (手順の手本)—the exemplar for the procedure—alongside **Tehon** (issuer definitions for **Menkyo**) and **Enbu** (presentations).
 
 **How to use the terms**
 
 | Concept | Dojo name | Notes |
 |--------|-----------|--------|
-| Credential template / definition | **Tehon** | Canonical “copybook” — definitions only, not issued VC |
+| Issuer definitions & exemplar (Tehon) | **Tehon** | Copybook for shapes and offers—not issued **Menkyo** |
 | Issued verifiable credential | **Menkyo** | Holder-facing artifact / license record |
 | Credential issued from a Tehon | **Tehon の Menkyo** / **手本の免許** | Lineage: definition → issued Menkyo |
 | Verifiable presentation | **Enbu** | Demonstration package to a verifier |
@@ -64,7 +64,7 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 | Single-credential inspection (VC-shaped JSON) | **Menkyo の Kensa** / **免許の検査** | Heuristic “kensa” path on `/kensa` |
 | Multi-step protocol exchange | **Randori** | Stateful back-and-forth between parties |
 | Orchestrated workflow (operator runbook / pipeline) | **Tejun** | Ordered steps in the platform—not wire-level Randori |
-| Workflow template (procedure blueprint) | **Tejun の Tehon** / **手順の手本** | Parallel to credential **Tehon**; defines the Tejun |
+| Workflow template (procedure blueprint) | **Tejun の Tehon** / **手順の手本** | Parallel to **Tehon** for credentials; defines the Tejun |
 | Handshake / first pairing | **Teawase** | Capability probe before deeper flows |
 | Holder wallet UI / experience | **Kinchaku** | Where Menkyo live; Enbu are composed from here |
 | Cryptosuite / proof suite selection | **Kata** | Which “form” signing and verification run |

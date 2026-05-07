@@ -417,7 +417,7 @@ export default function HomePage() {
                 The platform wallet: hold <strong>Menkyo</strong> (issued credentials),
                 compose an <strong>Enbu</strong> (verifiable presentation) when a
                 verifier asks for proofs, and keep everything aligned with{' '}
-                <strong>Tehon</strong> templates and <strong>Kata</strong> suites—without
+                issuer <strong>Tehon</strong> and <strong>Kata</strong> suites—without
                 leaving the CRMS story.
               </p>
 

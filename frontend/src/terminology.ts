@@ -2,7 +2,7 @@
 export const productTerminology = {
   wallet: { name: 'Kinchaku', glyph: '巾着' },
   cryptosuites: { name: 'Kata', glyph: '型' },
-  /** Credential templates, definitions, and issuer-side blueprints — not an issued artifact. */
+  /** Issuer-side definitions, JSON-LD shapes, offers, and blueprints — not an issued Menkyo. */
   template: { name: 'Tehon', glyph: '手本' },
   /** Issued W3C Verifiable Credential (the holder-facing license-like record). */
   credential: { name: 'Menkyo', glyph: '免許' },
