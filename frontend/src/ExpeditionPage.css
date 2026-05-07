@@ -4,7 +4,7 @@
 }
 
 .expedition__header,
-.expedition__panel {
+.expedition__layout {
   max-width: 52rem;
   margin-left: auto;
   margin-right: auto;
@@ -53,8 +53,99 @@
   text-decoration: underline;
 }
 
+.expedition__layout {
+  display: grid;
+  grid-template-columns: minmax(14rem, 17rem) minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.expedition__visual,
 .expedition__panel {
   padding: 1rem 1.1rem 1.2rem;
+}
+
+.expedition__visual {
+  position: sticky;
+  top: 0.85rem;
+  align-self: start;
+  min-height: 20rem;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(90, 232, 255, 0.18), transparent 44%),
+    linear-gradient(165deg, rgba(14, 20, 36, 0.96), rgba(8, 10, 18, 0.92));
+}
+
+.expedition__visual--define {
+  border-color: rgba(90, 232, 255, 0.35);
+}
+
+.expedition__visual--issue {
+  border-color: rgba(232, 184, 74, 0.35);
+}
+
+.expedition__visual--present {
+  border-color: rgba(179, 136, 255, 0.38);
+}
+
+.expedition__visual--inspect {
+  border-color: rgba(255, 107, 74, 0.35);
+}
+
+.expedition__visual--operate {
+  border-color: rgba(120, 214, 117, 0.34);
+}
+
+.expedition__visualLabel {
+  margin: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.expedition__visualIcon {
+  margin: 0.55rem 0 0;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.expedition__visualTitle {
+  margin: 0.55rem 0 0;
+  font-size: 1rem;
+  color: var(--text-h);
+  font-weight: 700;
+}
+
+.expedition__visualTerm {
+  margin: 0.35rem 0 0;
+  color: var(--cyber-cyan);
+  font-weight: 600;
+}
+
+.expedition__visualAction {
+  margin: 0.4rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.expedition__stepRail {
+  margin-top: 0.9rem;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.35rem;
+}
+
+.expedition__stepDot {
+  width: 100%;
+  min-height: 0.65rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.expedition__stepDot--active {
+  border-color: rgba(90, 232, 255, 0.7);
+  background: rgba(90, 232, 255, 0.35);
 }
 
 .expedition__progress {
@@ -78,20 +169,8 @@
   background: linear-gradient(90deg, rgba(90, 232, 255, 0.85), rgba(232, 184, 74, 0.85));
 }
 
-.expedition__term {
-  margin: 0;
-  font-size: 0.95rem;
-  color: var(--cyber-cyan);
-}
-
-.expedition__unionAction {
-  margin: 0.3rem 0 0;
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
 .expedition__stepTitle {
-  margin: 0.3rem 0 0.55rem;
+  margin: 0.1rem 0 0.55rem;
   font-size: 1.2rem;
   color: var(--text-h);
 }
@@ -132,5 +211,16 @@
   border-color: var(--accent-border);
   background: var(--accent-soft);
   color: var(--text-h);
+}
+
+@media (max-width: 840px) {
+  .expedition__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .expedition__visual {
+    position: static;
+    min-height: 0;
+  }
 }
 

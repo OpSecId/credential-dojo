@@ -54,9 +54,84 @@
 }
 
 .tejun-viewer__canvas {
-  height: min(70vh, 42rem);
+  height: min(72vh, 46rem);
   padding: 0;
   overflow: hidden;
+}
+
+.tejun-viewer__layout {
+  max-width: 72rem;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(16rem, 21rem) minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.tejun-viewer__details {
+  padding: 0.85rem 0.9rem 0.95rem;
+}
+
+.tejun-viewer__detailsLabel {
+  margin: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.tejun-viewer__detailsTitle {
+  margin: 0.45rem 0 0.4rem;
+  font-size: 1.08rem;
+  color: var(--text-h);
+}
+
+.tejun-viewer__detailsTerm {
+  margin: 0;
+  color: var(--cyber-cyan);
+  font-weight: 600;
+}
+
+.tejun-viewer__detailsAction {
+  margin: 0.4rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.tejun-viewer__detailsText {
+  margin: 0.58rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--text);
+}
+
+.tejun-viewer__detailsText--muted {
+  color: var(--muted);
+}
+
+.tejun-viewer__detailsHint {
+  margin: 0.75rem 0 0;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.tejun-viewer__lanes {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.tejun-viewer__laneChip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.45rem;
+  padding: 0 0.52rem;
+  border-radius: 999px;
+  border: 1px solid rgba(90, 232, 255, 0.28);
+  background: rgba(90, 232, 255, 0.08);
+  color: var(--text-h);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .tejun-viewer__canvas .react-flow {
@@ -66,5 +141,21 @@
   --xy-node-background-color-default: rgba(9, 14, 27, 0.95);
   --xy-node-border-default: 1px solid rgba(90, 232, 255, 0.28);
   --xy-node-color-default: var(--text-h);
+}
+
+.tejun-viewer__canvas .react-flow__node-default.selected {
+  box-shadow:
+    0 0 0 1px rgba(232, 184, 74, 0.55),
+    0 0 18px rgba(232, 184, 74, 0.25);
+}
+
+@media (max-width: 960px) {
+  .tejun-viewer__layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tejun-viewer__canvas {
+    height: min(68vh, 34rem);
+  }
 }
 
