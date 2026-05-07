@@ -3,19 +3,31 @@ import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 import './App.css'
 import './LexiconPage.css'
-import { LEXICON_ARTICLES } from './lexiconData'
+import { LEXICON_ARTICLES, lexiconAnchorForBoldSegment } from './lexiconData'
 import { productTerminology } from './terminology'
 
-/** Renders `**segments**` as bold; leaves other text plain. */
-function formatBold(text: string): ReactNode {
+/** Renders `**segments**` as bold; known Dojo terms link to `#article-id` on this page. */
+function formatLexiconRichText(text: string): ReactNode {
   const parts = text.split(/\*\*/)
-  return parts.map((chunk, i) =>
-    i % 2 === 1 ? (
-      <strong key={i}>{chunk}</strong>
-    ) : (
-      <Fragment key={i}>{chunk}</Fragment>
-    ),
-  )
+  return parts.map((chunk, i) => {
+    if (i % 2 === 0) {
+      return <Fragment key={i}>{chunk}</Fragment>
+    }
+    const anchorKey = lexiconAnchorForBoldSegment(chunk)
+    if (anchorKey) {
+      return (
+        <a
+          key={i}
+          href={`#${anchorKey}`}
+          className="lex-term-link"
+          title={`Jump to ${chunk.trim()} in glossary`}
+        >
+          {chunk}
+        </a>
+      )
+    }
+    return <strong key={i}>{chunk}</strong>
+  })
 }
 
 export default function LexiconPage() {
@@ -92,14 +104,14 @@ export default function LexiconPage() {
                 <h3 className="lex-article__sub">Original meaning</h3>
                 {article.literal.map((p, i) => (
                   <p key={i} className="lex-article__p">
-                    {formatBold(p)}
+                    {formatLexiconRichText(p)}
                   </p>
                 ))}
 
                 <h3 className="lex-article__sub">How we use it here</h3>
                 {article.inPlatform.map((p, i) => (
                   <p key={i} className="lex-article__p">
-                    {formatBold(p)}
+                    {formatLexiconRichText(p)}
                   </p>
                 ))}
               </article>
