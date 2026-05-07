@@ -186,6 +186,87 @@
   color: var(--muted);
 }
 
+.expedition__interact {
+  margin: 0.65rem 0 0.5rem;
+}
+
+.expedition__choiceLabel {
+  margin: 0;
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.expedition__choiceRow {
+  margin-top: 0.4rem;
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.expedition__choiceBtn {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 0.28rem 0.62rem;
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+
+.expedition__choiceBtn--active {
+  border-color: rgba(90, 232, 255, 0.55);
+  background: rgba(90, 232, 255, 0.14);
+  color: var(--text-h);
+}
+
+.expedition__choiceHint {
+  margin: 0.45rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.expedition__telemetry {
+  margin-top: 0.7rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+@media (min-width: 980px) {
+  .expedition__telemetry {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.expedition__logCard {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.16);
+  padding: 0.55rem 0.58rem;
+}
+
+.expedition__logTitle {
+  margin: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.expedition__logItem {
+  margin: 0.38rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: var(--text);
+}
+
+.expedition__logEmpty {
+  margin: 0.38rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
 .expedition__actions {
   margin-top: 0.8rem;
   display: flex;
