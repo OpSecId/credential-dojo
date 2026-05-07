@@ -252,7 +252,7 @@ export default function AppShell() {
             <Link className="app-shell__topbarAction" to="/kensa" title="Kensa">
               検
             </Link>
-            <Link className="app-shell__topbarAction" to="/json-explorer" title="Shinbi (JSON explorer)">
+            <Link className="app-shell__topbarAction" to="/json-explorer" title="Shinbi">
               審
             </Link>
             <Link className="app-shell__topbarAction" to="/lexicon" title="Lexicon">

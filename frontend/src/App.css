@@ -1522,7 +1522,6 @@
   font-size: 0.78rem;
   line-height: 1.45;
   color: var(--muted);
-  word-break: break-word;
 }
 
 .dojo-persona__did--muted {
@@ -1543,6 +1542,11 @@
 }
 
 .dojo-persona__didCode {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-family: var(--font-mono);
   font-size: 0.72rem;
   color: var(--accent);

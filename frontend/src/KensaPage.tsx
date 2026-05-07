@@ -280,7 +280,7 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
             to="/json-explorer"
             title="Shinbi render view: interactive JSON tree with RFC 6901 pointer tooltips"
           >
-            Shinbi (JSON explorer)
+            Shinbi
           </Link>
         </nav>
       </header>
