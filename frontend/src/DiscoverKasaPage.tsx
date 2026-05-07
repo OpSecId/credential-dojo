@@ -4,14 +4,22 @@ import './App.css'
 import './DiscoverKasaPage.css'
 import { DEMO_PERSONAS_OFFLINE, type PersonaPublic, type PersonasPayload } from './demoPersonas'
 
+const PERSONAS_FETCH_MS = 8000
+
 export default function DiscoverKasaPage() {
-  const [personas, setPersonas] = useState<readonly PersonaPublic[] | null>(null)
+  /** Offline-first: static hosts without `/api` proxy never resolve fetch — avoid a stuck spinner. */
+  const [personas, setPersonas] =
+    useState<readonly PersonaPublic[]>(DEMO_PERSONAS_OFFLINE)
   const [note, setNote] = useState<string | null>(null)
   const [fromApi, setFromApi] = useState(false)
+  const [apiAttemptDone, setApiAttemptDone] = useState(false)
 
   useEffect(() => {
     const base = import.meta.env.VITE_API_BASE ?? ''
-    fetch(`${base}/api/personas`)
+    const ac = new AbortController()
+    const tid = window.setTimeout(() => ac.abort(), PERSONAS_FETCH_MS)
+
+    fetch(`${base}/api/personas`, { signal: ac.signal })
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
         return res.json() as Promise<PersonasPayload>
@@ -22,10 +30,19 @@ export default function DiscoverKasaPage() {
         setFromApi(true)
       })
       .catch(() => {
+        setFromApi(false)
         setPersonas(DEMO_PERSONAS_OFFLINE)
         setNote(null)
-        setFromApi(false)
       })
+      .finally(() => {
+        window.clearTimeout(tid)
+        setApiAttemptDone(true)
+      })
+
+    return () => {
+      ac.abort()
+      window.clearTimeout(tid)
+    }
   }, [])
 
   return (
@@ -77,19 +94,17 @@ export default function DiscoverKasaPage() {
               Kensa
             </Link>
           </nav>
-          {personas !== null && !fromApi ? (
+          {apiAttemptDone && !fromApi ? (
             <p className="kasa__banner" role="status">
-              API unreachable — showing offline copy. Start the backend for live{' '}
+              API unreachable or timed out — showing offline copy. Use same-origin{' '}
+              <code className="kasa__inline">/api</code> proxy to the backend, or set build-time{' '}
+              <code className="kasa__inline">VITE_API_BASE</code>, for live{' '}
               <code className="kasa__inline">did:key</code> values.
             </p>
           ) : null}
         </header>
 
-        {personas === null ? (
-          <p className="kasa__loading muted">Loading schools…</p>
-        ) : (
-          <>
-            <ul className="kasa__grid" aria-label="Demo proof schools">
+        <ul className="kasa__grid" aria-label="Demo proof schools">
               {personas.map((p) => (
                 <li key={p.id}>
                   <article
@@ -133,19 +148,17 @@ export default function DiscoverKasaPage() {
                   </article>
                 </li>
               ))}
-            </ul>
-            {note ? <p className="kasa__note">{note}</p> : null}
-            <p className="kasa__cta">
-              <Link
-                className="kasa__back"
-                to="/"
-                title="Home: Kata carousel, Kinchaku pouch, and lexicon cards"
-              >
-                ← Practice kata on the home dojo
-              </Link>
-            </p>
-          </>
-        )}
+        </ul>
+        {note ? <p className="kasa__note">{note}</p> : null}
+        <p className="kasa__cta">
+          <Link
+            className="kasa__back"
+            to="/"
+            title="Home: Kata carousel, Kinchaku pouch, and lexicon cards"
+          >
+            ← Practice kata on the home dojo
+          </Link>
+        </p>
       </div>
     </div>
   )
