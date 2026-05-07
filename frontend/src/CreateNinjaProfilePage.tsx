@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './App.css'
 import './CreateNinjaProfilePage.css'
 import { DEMO_PERSONAS_OFFLINE, type PersonaPublic, type PersonasPayload } from './demoPersonas'
@@ -122,6 +122,11 @@ export default function CreateNinjaProfilePage() {
             confirm. Everything stays in this browser only. Use <strong>Cancel</strong> on any step to
             leave without saving (you’ll be asked if you changed anything).
           </p>
+          <nav className="ninjaProfile__nav" aria-label="Back navigation">
+            <Link className="ninjaProfile__back" to="/" title="Back Home">
+              ← Back Home
+            </Link>
+          </nav>
         </header>
 
         <div

@@ -113,8 +113,8 @@ export default function JsonExplorerPage() {
           the rail to jump between slots instantly.
         </p>
         <nav className="json-ex__nav" aria-label="Back navigation">
-          <Link className="json-ex__back" to="/" title="Credential Dojo home">
-            ← Home
+          <Link className="json-ex__back" to="/" title="Back Home">
+            ← Back Home
           </Link>
         </nav>
       </header>

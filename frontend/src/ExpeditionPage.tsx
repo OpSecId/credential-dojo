@@ -21,8 +21,8 @@ export default function ExpeditionPage() {
           Follow a narrative mission through the full credential flow, one term at a time.
         </p>
         <nav className="expedition__nav">
-          <Link className="expedition__back" to="/">
-            ← Home
+          <Link className="expedition__back" to="/" title="Back Home">
+            ← Back Home
           </Link>
           <Link className="expedition__back" to="/lexicon">
             Lexicon

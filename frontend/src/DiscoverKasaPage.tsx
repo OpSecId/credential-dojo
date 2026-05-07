@@ -73,8 +73,8 @@ export default function DiscoverKasaPage() {
             (cryptosuites). Keys are deterministic demo material, not production secrets.
           </p>
           <nav className="kasa__nav" aria-label="Section">
-            <Link className="kasa__back" to="/" title="Credential Dojo home">
-              ← Home
+            <Link className="kasa__back" to="/" title="Back Home">
+              ← Back Home
             </Link>
             <Link
               className="kasa__back"

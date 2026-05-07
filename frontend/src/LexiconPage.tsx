@@ -42,8 +42,8 @@ export default function LexiconPage() {
           <Link
             className="lex__home"
             to="/"
-            title="Back to home"
-            aria-label="Back to home"
+            title="Back Home"
+            aria-label="Back Home"
           >
             <span className="lex__homeIcon" aria-hidden>
               <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
@@ -52,6 +52,7 @@ export default function LexiconPage() {
                 <path d="M9.5 20v-6h5v6" />
               </svg>
             </span>
+            <span className="lex__homeText">Back Home</span>
           </Link>
           <div className="lex__headerBody">
             <p className="lex__eyebrow">The Credential Dojo</p>

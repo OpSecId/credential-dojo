@@ -56,8 +56,8 @@ export default function TejunViewerPage() {
           Interactive runbook view of the expedition narrative, from Tehon through Tejun.
         </p>
         <nav className="tejun-viewer__nav">
-          <Link className="tejun-viewer__back" to="/">
-            ← Home
+          <Link className="tejun-viewer__back" to="/" title="Back Home">
+            ← Back Home
           </Link>
           <Link className="tejun-viewer__back" to="/expedition">
             Expedition

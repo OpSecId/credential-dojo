@@ -397,8 +397,8 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
           <span lang="ja">{tMenkyo.glyph}</span>). Heuristics only—no cryptographic verification on this page.
         </p>
         <nav className="kensa__nav">
-          <Link className="kensa__back" to="/" title="Credential Dojo home">
-            ← Home
+          <Link className="kensa__back" to="/" title="Back Home">
+            ← Back Home
           </Link>
           <Link
             className="kensa__back"
