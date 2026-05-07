@@ -1,6 +1,6 @@
 /** Shared demo persona types and offline mirror of GET /api/personas (Home + Discover Kasa). */
 
-export type ProofSchool = 'ed25519' | 'ecdsa' | 'bbs' | 'mldsa'
+export type ProofSchool = 'ed25519' | 'ecdsa' | 'bbs' | 'mldsa' | 'anoncreds'
 
 export type PersonaPublic = {
   id: string
@@ -28,6 +28,7 @@ export const DEFAULT_KATA_SAMPLES = [
   'bbs-2023',
   'mldsa44-rdfc-2024',
   'mldsa44-jcs-2024',
+  'anoncreds-2023',
 ] as const
 
 /**
@@ -76,6 +77,16 @@ export const DEMO_PERSONAS_OFFLINE: readonly PersonaPublic[] = [
     didKey:
       'did:key:zUC7F4WWHiN9M95MmvRG5kYLbigioPXXiVCDMX16eeiibmJMuqNpeW4R7Y6rgqpzUmyepMVGE1AvSBe8RieJ22XVofZmi9GCVmhoNvELpmpsjwJ74xg8f6jQyz9pSYDZqk8XB9h',
     kataSamples: ['bbs-2023'],
+  },
+  {
+    id: 'anoncreds-ryu',
+    label: 'AnonCreds-ryū',
+    labelJa: 'アノンクレッズ流',
+    description:
+      'Demo school for the AnonCreds Data Integrity cryptosuite (anoncreds-2023): issuer material uses Ed25519 in did:key, aligned with common Hyperledger AnonCreds stacks.',
+    proofSchool: 'anoncreds',
+    didKey: 'did:key:z6Mkg9Ju4xrGZ6T1mNjQnNSHicdQqKzBaCFyzTYKH6dHFKaj',
+    kataSamples: ['anoncreds-2023'],
   },
   {
     id: 'ml-ryu',

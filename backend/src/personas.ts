@@ -20,7 +20,7 @@ function deriveSeed48(personaId: string, label: string): Uint8Array {
   return sha512(input).subarray(0, 48);
 }
 
-export type ProofSchool = "ed25519" | "ecdsa" | "bbs" | "mldsa";
+export type ProofSchool = "ed25519" | "ecdsa" | "bbs" | "mldsa" | "anoncreds";
 
 export type PersonaPublic = {
   id: string;
@@ -44,6 +44,7 @@ const ALL_KATA = [
   "vc-jwt",
   "mldsa44-rdfc-2024",
   "mldsa44-jcs-2024",
+  "anoncreds-2023",
 ] as const;
 
 function buildPersona(persona: {
@@ -89,6 +90,7 @@ function edPersona(): PersonaPublic {
       ALL_KATA[5],
       ALL_KATA[7],
       ALL_KATA[8],
+      ALL_KATA[9],
     ],
   });
 }
@@ -160,11 +162,35 @@ function mlDsaPersona(): PersonaPublic {
   });
 }
 
+function anoncredsPersona(): PersonaPublic {
+  const id = "anoncreds-ryu";
+  const secretKey = deriveDigest("ed25519-sk", id);
+  const publicKey = ed.getPublicKey(secretKey);
+  const didKey = encodeDidKey(MULTICODEC.ED25519_PUB, publicKey);
+  return buildPersona({
+    id,
+    label: "AnonCreds-ryū",
+    labelJa: "アノンクレッズ流",
+    description:
+      "Demo school for the AnonCreds Data Integrity cryptosuite (anoncreds-2023): issuer material uses Ed25519 in did:key, aligned with common Hyperledger AnonCreds stacks.",
+    proofSchool: "anoncreds",
+    didKey,
+    kataSamples: [ALL_KATA[9]],
+  });
+}
+
 let cached: readonly PersonaPublic[] | undefined;
 
 export function listDemoPersonas(): readonly PersonaPublic[] {
   if (!cached) {
-    cached = [edPersona(), ecPersona(), sdPersona(), bbsPersona(), mlDsaPersona()];
+    cached = [
+      edPersona(),
+      ecPersona(),
+      sdPersona(),
+      bbsPersona(),
+      anoncredsPersona(),
+      mlDsaPersona(),
+    ];
   }
   return cached;
 }

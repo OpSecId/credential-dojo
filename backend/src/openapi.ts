@@ -43,7 +43,7 @@ export const openApiDocument = {
         tags: ["Demo"],
         summary: "Demo issuer personas (deterministic keys)",
         description:
-          "Five demo proof schools (Ed-ryū, Ec-ryū, Ec-ryū (SD), BBS-ryū, ML-ryū) with `did:key` identifiers. Keys are derived from stable demo labels — suitable for repeatable demos only.",
+          "Six demo proof schools (Ed-ryū, Ec-ryū, Ec-ryū (SD), BBS-ryū, AnonCreds-ryū, ML-ryū) with `did:key` identifiers. Keys are derived from stable demo labels — suitable for repeatable demos only.",
         operationId: "getPersonas",
         responses: {
           "200": {
@@ -165,7 +165,7 @@ export const openApiDocument = {
           description: { type: "string" },
           proofSchool: {
             type: "string",
-            enum: ["ed25519", "ecdsa", "bbs", "mldsa"],
+            enum: ["ed25519", "ecdsa", "bbs", "mldsa", "anoncreds"],
             example: "ed25519",
           },
           didKey: {
