@@ -58,13 +58,13 @@ export const DEMO_PERSONAS_OFFLINE: readonly PersonaPublic[] = [
     kataSamples: ['ecdsa-rdfc-2019', 'ecdsa-jcs-2019'],
   },
   {
-    id: 'sd-ryu',
-    label: 'Ec-ryū (SD)',
-    labelJa: 'エック流（SD）',
+    id: 'ec-sd-ryu',
+    label: 'Ec-sd-ryū',
+    labelJa: 'エックSD流',
     description:
       'Ec-ryū selective-disclosure track (ecdsa-sd-2023): same P-256 family as classic Ec-ryū, separate deterministic issuer key for SD-focused flows.',
     proofSchool: 'ecdsa',
-    didKey: 'did:key:zDnaepAwC6i8pBuwTDt91zrhNRAa972E68i6rnHAua25dsT4C',
+    didKey: 'did:key:zDnaeph83bpFMikC9uhDHKfoQXFdghzjBf9zWVZkdJEoNwZ2T',
     kataSamples: ['ecdsa-sd-2023'],
   },
   {

@@ -111,14 +111,14 @@ function ecPersona(): PersonaPublic {
   });
 }
 
-function sdPersona(): PersonaPublic {
-  const id = "sd-ryu";
+function ecSdPersona(): PersonaPublic {
+  const id = "ec-sd-ryu";
   const { publicKey } = p256.keygen(deriveSeed48(id, "p256-seed"));
   const didKey = encodeDidKey(MULTICODEC.P256_PUB, publicKey);
   return buildPersona({
     id,
-    label: "Ec-ryū (SD)",
-    labelJa: "エック流（SD）",
+    label: "Ec-sd-ryū",
+    labelJa: "エックSD流",
     description:
       "Ec-ryū selective-disclosure track (ecdsa-sd-2023): same P-256 family as classic Ec-ryū, separate deterministic issuer key for SD-focused flows.",
     proofSchool: "ecdsa",
@@ -186,7 +186,7 @@ export function listDemoPersonas(): readonly PersonaPublic[] {
     cached = [
       edPersona(),
       ecPersona(),
-      sdPersona(),
+      ecSdPersona(),
       bbsPersona(),
       anoncredsPersona(),
       mlDsaPersona(),

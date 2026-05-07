@@ -10,6 +10,7 @@ import {
 import { LEXICON_ENTRIES } from './lexiconData'
 import {
   isValidSchoolId,
+  migrateLegacySchoolId,
   patchNinjaProfileSchool,
   PERSONA_STORAGE_KEY,
   readNinjaProfile,
@@ -60,7 +61,15 @@ function readStoredPersonaId(): string {
       return n.schoolId
     }
     const v = localStorage.getItem(PERSONA_STORAGE_KEY)
-    if (v && isValidSchoolId(v)) return v
+    const personaId = v ? migrateLegacySchoolId(v) : ''
+    if (v && personaId !== v) {
+      try {
+        localStorage.setItem(PERSONA_STORAGE_KEY, personaId)
+      } catch {
+        /* ignore */
+      }
+    }
+    if (personaId && isValidSchoolId(personaId)) return personaId
   } catch {
     /* ignore */
   }
