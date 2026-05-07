@@ -43,7 +43,7 @@ export const openApiDocument = {
         tags: ["Demo"],
         summary: "Demo issuer personas (deterministic keys)",
         description:
-          "Six demo proof schools (Ed-ryū, Ec-ryū, Ec-sd-ryū, BBS-ryū, AnonCreds-ryū, ML-ryū) with `did:key` identifiers. Keys are derived from stable demo labels — suitable for repeatable demos only.",
+          "Six demo proof schools (Ed-ryū, Ec-ryū, Ec-sd-ryū, BBS-ryū, CL-ryū, ML-ryū) with `did:key` identifiers. Keys are derived from stable demo labels — suitable for repeatable demos only.",
         operationId: "getPersonas",
         responses: {
           "200": {

@@ -162,17 +162,17 @@ function mlDsaPersona(): PersonaPublic {
   });
 }
 
-function anoncredsPersona(): PersonaPublic {
-  const id = "anoncreds-ryu";
+function clPersona(): PersonaPublic {
+  const id = "cl-ryu";
   const secretKey = deriveDigest("ed25519-sk", id);
   const publicKey = ed.getPublicKey(secretKey);
   const didKey = encodeDidKey(MULTICODEC.ED25519_PUB, publicKey);
   return buildPersona({
     id,
-    label: "AnonCreds-ryū",
-    labelJa: "アノンクレッズ流",
+    label: "CL-ryū",
+    labelJa: "シーエル流",
     description:
-      "Demo school for the AnonCreds Data Integrity cryptosuite (anoncreds-2023): issuer material uses Ed25519 in did:key, aligned with common Hyperledger AnonCreds stacks.",
+      "Demo school for AnonCreds-style CL credentials via the anoncreds-2023 Data Integrity suite: issuer did:key uses Ed25519, matching common Hyperledger AnonCreds / ACA-Py stacks.",
     proofSchool: "anoncreds",
     didKey,
     kataSamples: [ALL_KATA[9]],
@@ -188,7 +188,7 @@ export function listDemoPersonas(): readonly PersonaPublic[] {
       ecPersona(),
       ecSdPersona(),
       bbsPersona(),
-      anoncredsPersona(),
+      clPersona(),
       mlDsaPersona(),
     ];
   }

@@ -13,7 +13,9 @@ export type NinjaProfile = {
 
 /** Map retired persona ids so stored profiles keep working after renames. */
 export function migrateLegacySchoolId(id: string): string {
-  return id === 'sd-ryu' ? 'ec-sd-ryu' : id
+  if (id === 'sd-ryu') return 'ec-sd-ryu'
+  if (id === 'anoncreds-ryu') return 'cl-ryu'
+  return id
 }
 
 export function isValidSchoolId(id: string): boolean {

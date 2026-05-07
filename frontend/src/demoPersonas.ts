@@ -79,13 +79,13 @@ export const DEMO_PERSONAS_OFFLINE: readonly PersonaPublic[] = [
     kataSamples: ['bbs-2023'],
   },
   {
-    id: 'anoncreds-ryu',
-    label: 'AnonCreds-ryū',
-    labelJa: 'アノンクレッズ流',
+    id: 'cl-ryu',
+    label: 'CL-ryū',
+    labelJa: 'シーエル流',
     description:
-      'Demo school for the AnonCreds Data Integrity cryptosuite (anoncreds-2023): issuer material uses Ed25519 in did:key, aligned with common Hyperledger AnonCreds stacks.',
+      'Demo school for AnonCreds-style CL credentials via the anoncreds-2023 Data Integrity suite: issuer did:key uses Ed25519, matching common Hyperledger AnonCreds / ACA-Py stacks.',
     proofSchool: 'anoncreds',
-    didKey: 'did:key:z6Mkg9Ju4xrGZ6T1mNjQnNSHicdQqKzBaCFyzTYKH6dHFKaj',
+    didKey: 'did:key:z6Mkf8qftdETUv6rssaPJWEHX7EqVdk9zfFB7eVmWfbxvq1M',
     kataSamples: ['anoncreds-2023'],
   },
   {
