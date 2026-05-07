@@ -251,108 +251,118 @@ export default function HomePage() {
       </button>
 
       <div className="dojo">
-        <div
-          className="dojo__focusMeter dojo-augmented dojo-augmented--meter"
-          data-augmented-ui="tl-clip br-clip border"
-        >
-          <div className="dojo__focusMeter-track" role="presentation">
+        <div className="dojo__introBand">
+          <aside className="dojo__meterAside">
             <div
-              className="dojo__focusMeter-fill"
-              style={{ width: `${Math.round(focusMeter)}%` }}
-            />
-          </div>
-          <span className="dojo__focusMeter-caption">
-            修業 · training focus — practice kata or cinch Kinchaku to build it
-          </span>
-        </div>
-
-        <header className="dojo__header">
-          <p className="dojo__eyebrow">
-            credential.ninja ·{' '}
-            <abbr title="Credential Management & Registry System">CRMS</abbr>
-            {' · '}
-            <abbr title="World Wide Web Consortium">W3C</abbr> Verifiable Credentials
-          </p>
-          <h1 className="dojo__title">
-            <span className="dojo__titleLine">The Credential</span>
-            <span className="dojo__titleLine dojo__titleLine--accent">Dojo</span>
-          </h1>
-          <p className="dojo__lede">
-            Credential management platform centered on{' '}
-            <strong>W3C Verifiable Credentials</strong>: operators shape{' '}
-            <strong>Tehon</strong> into <strong>Menkyo</strong>; agents open flows with{' '}
-            <strong>Teawase</strong> handshakes and run <strong>Randori</strong>{' '}
-            exchanges; holders stage <strong>Enbu</strong> for verifiers under{' '}
-            <strong>Kata</strong> suites. Artifacts live in <strong>Kinchaku</strong>, the
-            built-in wallet.
-          </p>
-          {ninjaProfile ? (
-            <p
-              className="dojo__ninjaBar dojo-augmented dojo-augmented--ninja"
+              className="dojo__focusMeter dojo-augmented dojo-augmented--meter"
               data-augmented-ui="tl-clip br-clip border"
             >
-              <span className="dojo__ninjaBar-label">Ninja profile</span>{' '}
-              <strong className="dojo__ninjaBar-name">{ninjaProfile.codename}</strong>
-              <span className="dojo__ninjaBar-sep"> · </span>
-              <span className="dojo__ninjaBar-school">
-                {activePersonas.find((p) => p.id === ninjaProfile.schoolId)?.label ??
-                  ninjaProfile.schoolId}
+              <div className="dojo__focusMeter-track" role="presentation">
+                <div
+                  className="dojo__focusMeter-fill"
+                  style={{ width: `${Math.round(focusMeter)}%` }}
+                />
+              </div>
+              <span className="dojo__focusMeter-caption">
+                修業 · training focus — practice kata or cinch Kinchaku to build it
               </span>
-              <span className="dojo__ninjaBar-sep"> · </span>
-              <Link
-                className="dojo__ninjaBar-edit"
-                to="/create-ninja-profile"
-                title="Change codename or proof school (Kasa) for your ninja profile"
-              >
-                Edit
-              </Link>
+            </div>
+          </aside>
+
+          <header className="dojo__header">
+            <p className="dojo__eyebrow">
+              credential.ninja ·{' '}
+              <abbr title="Credential Management & Registry System">CRMS</abbr>
+              {' · '}
+              <abbr title="World Wide Web Consortium">W3C</abbr> Verifiable Credentials
             </p>
-          ) : null}
-          <p className="dojo__headerActions">
-            <Link
-              className="dojo__linkNav"
-              to="/create-ninja-profile"
-              title="Codename and Kasa (proof school); stored in this browser only"
-            >
-              {ninjaProfile ? 'Ninja profile' : 'Create ninja profile'}
-            </Link>
-            <Link
-              className="dojo__linkNav"
-              to="/discover-kasa"
-              title="Demo issuer personas: did:key and preferred Kata (cryptosuites) per school"
-            >
-              Discover Kasa
-            </Link>
-            <Link
-              className="dojo__linkNav"
-              to="/lexicon"
-              title="Glossary: Tehon, Menkyo, Enbu, Kensa, Randori, Teawase, Kinchaku, Kata vs W3C VC concepts"
-            >
-              Full lexicon
-            </Link>
-            <Link
-              className="dojo__linkNav"
-              to="/json-explorer"
-              title="Paste JSON and explore with RFC 6901 pointers, fold/unfold, and custom explainByPointer blurbs"
-            >
-              JSON explorer
-            </Link>
-            <Link
-              className="dojo__linkNav"
-              to="/kensa"
-              title="Enbu の Kensa (演武の検査): VP-shaped inspection · Menkyo の Kensa (免許の検査): VC-shaped inspection — structural heuristics only"
-            >
-              Kensa
-            </Link>
-            <a
-              className="dojo__link"
-              href={SITE}
-              title="Public Credential Dojo / credential.ninja site"
-            >
-              {SITE.replace(/^https?:\/\//, '')}
-            </a>
-          </p>
-        </header>
+            <h1 className="dojo__title">
+              <span className="dojo__titleLine">The Credential</span>
+              <span className="dojo__titleLine dojo__titleLine--accent">Dojo</span>
+            </h1>
+            <p className="dojo__lede">
+              Credential management platform centered on{' '}
+              <strong>W3C Verifiable Credentials</strong>: operators shape{' '}
+              <strong>Tehon</strong> into <strong>Menkyo</strong>; agents open flows with{' '}
+              <strong>Teawase</strong> handshakes and run <strong>Randori</strong>{' '}
+              exchanges; holders stage <strong>Enbu</strong> for verifiers under{' '}
+              <strong>Kata</strong> suites. Artifacts live in <strong>Kinchaku</strong>, the
+              built-in wallet.
+            </p>
+            {ninjaProfile ? (
+              <p
+                className="dojo__ninjaBar dojo-augmented dojo-augmented--ninja"
+                data-augmented-ui="tl-clip br-clip border"
+              >
+                <span className="dojo__ninjaBar-label">Ninja profile</span>{' '}
+                <strong className="dojo__ninjaBar-name">{ninjaProfile.codename}</strong>
+                <span className="dojo__ninjaBar-sep"> · </span>
+                <span className="dojo__ninjaBar-school">
+                  {activePersonas.find((p) => p.id === ninjaProfile.schoolId)?.label ??
+                    ninjaProfile.schoolId}
+                </span>
+                <span className="dojo__ninjaBar-sep"> · </span>
+                <Link
+                  className="dojo__ninjaBar-edit"
+                  to="/create-ninja-profile"
+                  title="Change codename or proof school (Kasa) for your ninja profile"
+                >
+                  Edit
+                </Link>
+              </p>
+            ) : null}
+          </header>
+        </div>
+
+        <nav className="dojo__ctaBand" aria-label="Quick tools">
+          <Link
+            className="dojo__ctaTile"
+            to="/kensa"
+            title="Enbu の Kensa / Menkyo の Kensa — structural VP vs VC inspection"
+          >
+            <span className="dojo__ctaTile-kicker">Inspect JSON</span>
+            <span className="dojo__ctaTile-title">Kensa</span>
+            <span className="dojo__ctaTile-desc">Presentation vs credential checks</span>
+          </Link>
+          <Link
+            className="dojo__ctaTile"
+            to="/json-explorer"
+            title="RFC 6901 pointers, fold/unfold, explainByPointer blurbs"
+          >
+            <span className="dojo__ctaTile-kicker">Explore</span>
+            <span className="dojo__ctaTile-title">JSON explorer</span>
+            <span className="dojo__ctaTile-desc">Pointers &amp; nested drill-down</span>
+          </Link>
+          <Link
+            className="dojo__ctaTile"
+            to="/discover-kasa"
+            title="Demo issuer personas: did:key and Kata per proof school"
+          >
+            <span className="dojo__ctaTile-kicker">Issuers</span>
+            <span className="dojo__ctaTile-title">Discover Kasa</span>
+            <span className="dojo__ctaTile-desc">Schools · suites · did:key</span>
+          </Link>
+        </nav>
+
+        <p className="dojo__ctaMeta">
+          <Link
+            className="dojo__ctaChip"
+            to="/lexicon"
+            title="Glossary: Dojo metaphors vs W3C VC concepts"
+          >
+            Full lexicon
+          </Link>
+          <Link
+            className="dojo__ctaChip"
+            to="/create-ninja-profile"
+            title="Codename and Kasa — stored in this browser only"
+          >
+            {ninjaProfile ? 'Ninja profile' : 'Create ninja profile'}
+          </Link>
+          <a className="dojo__ctaChip dojo__ctaChip--external" href={SITE} title={SITE}>
+            {SITE.replace(/^https?:\/\//, '')}
+          </a>
+        </p>
 
         <section className="dojo__lex" aria-labelledby="lexicon-heading">
           <h2 id="lexicon-heading" className="dojo__lexTitle">
@@ -385,84 +395,88 @@ export default function HomePage() {
           </div>
         </section>
 
-        <div className="dojo__panels">
-          <section
-            className="dojo__panel dojo__panel--kinchaku dojo-augmented dojo-augmented--panel"
-            data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
-            aria-labelledby="kinchaku-heading"
-          >
-            <h2 id="kinchaku-heading" className="dojo__panelTitle">
-              {productTerminology.wallet.name}{' '}
-              <span className="dojo__panelJa" lang="ja">
-                {productTerminology.wallet.glyph}
-              </span>
-            </h2>
-            <p className="dojo__panelBody">
-              The platform wallet: hold <strong>Menkyo</strong> (issued credentials),
-              compose an <strong>Enbu</strong> (verifiable presentation) when a
-              verifier asks for proofs, and keep everything aligned with{' '}
-              <strong>Tehon</strong> templates and <strong>Kata</strong> suites—without
-              leaving the CRMS story.
-            </p>
-
-            <div className="dojo__kinchakuPlay">
-              <button
-                type="button"
-                className={`dojo-pouch${kinchakuCinched ? ' dojo-pouch--cinched' : ''}`}
-                onClick={toggleKinchaku}
-                aria-pressed={kinchakuCinched}
-                aria-label={
-                  kinchakuCinched
-                    ? 'Loosen Kinchaku drawstrings'
-                    : 'Cinch Kinchaku drawstrings'
-                }
-              >
-                <svg
-                  className="dojo-pouch__svg"
-                  viewBox="0 0 88 108"
-                  width="88"
-                  height="108"
-                  aria-hidden
-                >
-                  <defs>
-                    <linearGradient
-                      id={pouchGradId}
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="100%"
-                    >
-                      <stop offset="0%" stopColor="var(--pouch-highlight)" />
-                      <stop offset="100%" stopColor="var(--pouch-shadow)" />
-                    </linearGradient>
-                  </defs>
-                  <path
-                    fill={`url(#${pouchGradId})`}
-                    d="M44 8 C20 8 8 28 8 48 C8 78 22 98 44 100 C66 98 80 78 80 48 C80 28 68 8 44 8Z"
-                  />
-                  <path
-                    fill="none"
-                    stroke="var(--pouch-rim)"
-                    strokeWidth="2"
-                    d="M44 8 C20 8 8 28 8 48 C8 78 22 98 44 100 C66 98 80 78 80 48 C80 28 68 8 44 8Z"
-                  />
-                  <ellipse cx="44" cy="22" rx="28" ry="10" fill="var(--pouch-mouth)" />
-                </svg>
-                <span className="dojo-pouch__cord dojo-pouch__cord--l" aria-hidden />
-                <span className="dojo-pouch__cord dojo-pouch__cord--r" aria-hidden />
-              </button>
-              <p className="dojo__hint">
-                {kinchakuCinched
-                  ? 'Cinched tight — tap to loosen.'
-                  : 'Tap the pouch to cinch the drawstrings.'}
+        <section className="dojo__playground" aria-labelledby="playground-heading">
+          <h2 id="playground-heading" className="dojo__sectionLabel">
+            Playground
+          </h2>
+          <div className="dojo__panels">
+            <section
+              className="dojo__panel dojo__panel--kinchaku dojo-augmented dojo-augmented--panel"
+              data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
+              aria-labelledby="kinchaku-heading"
+            >
+              <h2 id="kinchaku-heading" className="dojo__panelTitle">
+                {productTerminology.wallet.name}{' '}
+                <span className="dojo__panelJa" lang="ja">
+                  {productTerminology.wallet.glyph}
+                </span>
+              </h2>
+              <p className="dojo__panelBody">
+                The platform wallet: hold <strong>Menkyo</strong> (issued credentials),
+                compose an <strong>Enbu</strong> (verifiable presentation) when a
+                verifier asks for proofs, and keep everything aligned with{' '}
+                <strong>Tehon</strong> templates and <strong>Kata</strong> suites—without
+                leaving the CRMS story.
               </p>
-            </div>
-          </section>
 
-          <section
-            className="dojo__panel dojo__panel--kata"
-            aria-labelledby="kata-heading"
-          >
+              <div className="dojo__kinchakuPlay">
+                <button
+                  type="button"
+                  className={`dojo-pouch${kinchakuCinched ? ' dojo-pouch--cinched' : ''}`}
+                  onClick={toggleKinchaku}
+                  aria-pressed={kinchakuCinched}
+                  aria-label={
+                    kinchakuCinched
+                      ? 'Loosen Kinchaku drawstrings'
+                      : 'Cinch Kinchaku drawstrings'
+                  }
+                >
+                  <svg
+                    className="dojo-pouch__svg"
+                    viewBox="0 0 88 108"
+                    width="88"
+                    height="108"
+                    aria-hidden
+                  >
+                    <defs>
+                      <linearGradient
+                        id={pouchGradId}
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%"
+                      >
+                        <stop offset="0%" stopColor="var(--pouch-highlight)" />
+                        <stop offset="100%" stopColor="var(--pouch-shadow)" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      fill={`url(#${pouchGradId})`}
+                      d="M44 8 C20 8 8 28 8 48 C8 78 22 98 44 100 C66 98 80 78 80 48 C80 28 68 8 44 8Z"
+                    />
+                    <path
+                      fill="none"
+                      stroke="var(--pouch-rim)"
+                      strokeWidth="2"
+                      d="M44 8 C20 8 8 28 8 48 C8 78 22 98 44 100 C66 98 80 78 80 48 C80 28 68 8 44 8Z"
+                    />
+                    <ellipse cx="44" cy="22" rx="28" ry="10" fill="var(--pouch-mouth)" />
+                  </svg>
+                  <span className="dojo-pouch__cord dojo-pouch__cord--l" aria-hidden />
+                  <span className="dojo-pouch__cord dojo-pouch__cord--r" aria-hidden />
+                </button>
+                <p className="dojo__hint">
+                  {kinchakuCinched
+                    ? 'Cinched tight — tap to loosen.'
+                    : 'Tap the pouch to cinch the drawstrings.'}
+                </p>
+              </div>
+            </section>
+
+            <section
+              className="dojo__panel dojo__panel--kata"
+              aria-labelledby="kata-heading"
+            >
             <h2 id="kata-heading" className="dojo__panelTitle">
               {productTerminology.cryptosuites.name}{' '}
               <span className="dojo__panelJa" lang="ja">
@@ -551,7 +565,8 @@ export default function HomePage() {
               <p className="dojo__panelBody muted">Loading…</p>
             )}
           </section>
-        </div>
+          </div>
+        </section>
       </div>
     </div>
   )
