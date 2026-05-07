@@ -124,6 +124,16 @@ export default function DiscoverKasaPage() {
                       <span className="kasa-card__idLabel">id</span> {p.id}
                     </p>
                     <p className="kasa-card__desc">{p.description}</p>
+                    <div className="kasa-card__kata">
+                      <h3 className="kasa-card__kataTitle">Kata (suites)</h3>
+                      <ul className="kasa-card__kataList">
+                        {p.kataSamples.map((k) => (
+                          <li key={k}>
+                            <code>{k}</code>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                     {p.didKey ? (
                       <p className="kasa-card__did">
                         <span className="kasa-card__didLabel">Issuer</span>
@@ -135,16 +145,6 @@ export default function DiscoverKasaPage() {
                         backend is running.
                       </p>
                     )}
-                    <div className="kasa-card__kata">
-                      <h3 className="kasa-card__kataTitle">Kata (suites)</h3>
-                      <ul className="kasa-card__kataList">
-                        {p.kataSamples.map((k) => (
-                          <li key={k}>
-                            <code>{k}</code>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
                   </article>
                 </li>
               ))}
