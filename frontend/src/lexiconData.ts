@@ -232,39 +232,18 @@ export const LEXICON_ARTICLES: LexiconArticle[] = [
 ]
 
 /**
- * Bold spans (`**…**`) that exactly match link to `#${key}` on the lexicon page.
- * Longest phrase wins (e.g. `Tehon の Menkyo` before `Tehon`).
+ * Bold spans (`**…**`) link only when they exactly match a canonical product title
+ * (`productTerminology.*.name`). Longest title wins (e.g. `Tehon の Menkyo` before `Tehon`).
  */
-export const LEXICON_TERM_ANCHOR_PHRASES: readonly { phrase: string; key: LexiconKey }[] = [
-  { phrase: 'Tehon の Menkyo', key: 'credentialFromTemplate' },
-  { phrase: 'Menkyo の Kensa', key: 'credentialInspection' },
-  { phrase: 'Enbu の Kensa', key: 'presentationInspection' },
-  { phrase: 'Tejun の Tehon', key: 'workflow' },
-  { phrase: 'which Tehon', key: 'template' },
-  { phrase: 'Tehon no menkyo', key: 'credentialFromTemplate' },
-  { phrase: 'Menkyo no kensa', key: 'credentialInspection' },
-  { phrase: 'Enbu no kensa', key: 'presentationInspection' },
-  { phrase: '演武の検査', key: 'presentationInspection' },
-  { phrase: '免許の検査', key: 'credentialInspection' },
-  { phrase: 'Tehon', key: 'template' },
-  { phrase: 'Menkyo', key: 'credential' },
-  { phrase: 'Enbu', key: 'presentation' },
-  { phrase: 'Shinbi', key: 'render' },
-  { phrase: 'Randori', key: 'exchange' },
-  { phrase: 'Teawase', key: 'handshake' },
-  { phrase: 'Tejun', key: 'workflow' },
-  { phrase: 'Kinchaku', key: 'wallet' },
-  { phrase: 'Kata', key: 'cryptosuites' },
-  { phrase: 'Kasa', key: 'kasa' },
-] as const
-
 export function lexiconAnchorForBoldSegment(segment: string): LexiconKey | null {
   const t = segment.trim()
-  const sorted = [...LEXICON_TERM_ANCHOR_PHRASES].sort(
-    (a, b) => b.phrase.length - a.phrase.length || a.phrase.localeCompare(b.phrase),
+  const entries = Object.entries(productTerminology) as [LexiconKey, { name: string }][]
+  const sorted = entries.sort(
+    (a, b) =>
+      b[1].name.length - a[1].name.length || a[1].name.localeCompare(b[1].name),
   )
-  for (const { phrase, key } of sorted) {
-    if (t === phrase) return key
+  for (const [key, { name }] of sorted) {
+    if (t === name) return key
   }
   return null
 }
