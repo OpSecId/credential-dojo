@@ -11,6 +11,12 @@ import {
   readNinjaProfile,
 } from './ninjaProfileStorage'
 
+function schoolKataHeadline(p: PersonaPublic): string {
+  if (p.kataSamples.length >= 2) return `${p.kataSamples[0]} · ${p.kataSamples[1]}`
+  if (p.kataSamples.length === 1) return p.kataSamples[0]
+  return p.proofSchool
+}
+
 export default function CreateNinjaProfilePage() {
   const navigate = useNavigate()
   const [personas, setPersonas] = useState<readonly PersonaPublic[] | null>(null)
@@ -138,7 +144,9 @@ export default function CreateNinjaProfilePage() {
                   <span className="ninjaProfile__schoolJa" lang="ja">
                     {p.labelJa}
                   </span>
-                  <span className="ninjaProfile__schoolProof">{p.proofSchool}</span>
+                  <span className="ninjaProfile__schoolProof" title={`Primary kata: ${schoolKataHeadline(p)}`}>
+                    {schoolKataHeadline(p)}
+                  </span>
                 </label>
               ))}
             </div>

@@ -168,9 +168,12 @@
 }
 
 .ninjaProfile__schoolProof {
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.68rem;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  word-break: break-word;
   color: var(--muted);
   margin-top: 0.15rem;
 }
