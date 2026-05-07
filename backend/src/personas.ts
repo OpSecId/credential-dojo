@@ -77,7 +77,7 @@ function edPersona(): PersonaPublic {
     label: "Ed-ryū",
     labelJa: "エド流",
     description:
-      "Ed25519 issuer. Kata: eddsa-rdfc-2022, eddsa-jcs-2022, vc-jwt.",
+      "Ed25519 baseline issuer for core Data Integrity and JWT-style credential demos.",
     proofSchool: "ed25519",
     didKey,
     kataSamples: [ALL_KATA[0], ALL_KATA[1], ALL_KATA[6]],
@@ -92,8 +92,7 @@ function ecPersona(): PersonaPublic {
     id,
     label: "Ec-ryū",
     labelJa: "エック流",
-    description:
-      "NIST P-256 / ECDSA issuer (classic Data Integrity). Kata: ecdsa-rdfc-2019, ecdsa-jcs-2019.",
+    description: "NIST P-256 issuer focused on classic ECDSA Data Integrity flows.",
     proofSchool: "ecdsa",
     didKey,
     kataSamples: [ALL_KATA[2], ALL_KATA[3]],
@@ -109,7 +108,7 @@ function ecSdPersona(): PersonaPublic {
     label: "Ec-sd-ryū",
     labelJa: "エックSD流",
     description:
-      "NIST P-256 / ECDSA issuer (selective disclosure; key distinct from Ec-ryū). Kata: ecdsa-sd-2023.",
+      "NIST P-256 issuer for selective-disclosure scenarios; key isolated from Ec-ryū.",
     proofSchool: "ecdsa",
     didKey,
     kataSamples: [ALL_KATA[4]],
@@ -127,7 +126,7 @@ function bbsPersona(): PersonaPublic {
     label: "BBS-ryū",
     labelJa: "ビービーエス流",
     description:
-      "BLS12-381 BBS issuer (public key on G2 per did:key). Kata: bbs-2023.",
+      "BLS12-381 issuer for unlinkable/selective-disclosure proof style (BBS family).",
     proofSchool: "bbs",
     didKey,
     kataSamples: [ALL_KATA[5]],
@@ -144,7 +143,7 @@ function mlDsaPersona(): PersonaPublic {
     label: "ML-ryū",
     labelJa: "エムエル流",
     description:
-      "ML-DSA-44 issuer (FIPS 204 Data Integrity). Kata: mldsa44-rdfc-2024, mldsa44-jcs-2024.",
+      "Post-quantum ML-DSA-44 issuer aligned with FIPS 204 Data Integrity exploration.",
     proofSchool: "mldsa",
     didKey,
     kataSamples: [ALL_KATA[7], ALL_KATA[8]],
@@ -161,7 +160,7 @@ function clPersona(): PersonaPublic {
     label: "CL-ryū",
     labelJa: "シーエル流",
     description:
-      "Ed25519 issuer (AnonCreds-style CL / Data Integrity). Kata: anoncreds-2023.",
+      "Ed25519 issuer tuned for AnonCreds-style CL credential interoperability.",
     proofSchool: "anoncreds",
     didKey,
     kataSamples: [ALL_KATA[9]],
