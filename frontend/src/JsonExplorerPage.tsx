@@ -28,7 +28,7 @@ const SAMPLE_JSON = `{
 }`
 
 const SAMPLE_EXPLAIN: Record<string, string> = {
-  '': 'Verifiable Credential envelope: fixed top-level slots (see rail) plus nested subject and proof.',
+  '': 'Verifiable Credential structure: fixed top-level slots (see rail) plus nested subject and proof.',
   '/issuer': 'Issuer DID or URI: who vouched for this credential.',
   '/credentialSubject': 'Claims about the subject—the holder or entity this credential describes.',
   '/credentialSubject/degree': 'Nested object: structured claim (here, an academic degree).',
@@ -109,7 +109,7 @@ export default function JsonExplorerPage() {
         <h1 className="json-ex__title">JSON explorer</h1>
         <p className="json-ex__lede">
           Parse JSON, skim the augmented tree, and read RFC 6901 pointers with context. For{' '}
-          <strong>Verifiable Credentials</strong>, the top-level keys follow a stable envelope—use
+          <strong>Verifiable Credentials</strong>, the top-level keys follow a stable structure—use
           the rail to jump between slots instantly.
         </p>
         <nav className="json-ex__nav" aria-label="Back navigation">
@@ -191,7 +191,7 @@ export default function JsonExplorerPage() {
                 />
               ) : (
                 <p className="json-ex__genericNote">
-                  Generic JSON — no VC envelope rail. Add{' '}
+                  Generic JSON — no VC structure rail. Add{' '}
                   <code className="json-ex__code">@context</code>,{' '}
                   <code className="json-ex__code">credentialSubject</code>, and{' '}
                   <code className="json-ex__code">type</code> / <code className="json-ex__code">issuer</code> /{' '}

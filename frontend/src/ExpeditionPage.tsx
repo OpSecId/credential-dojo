@@ -47,6 +47,7 @@ export default function ExpeditionPage() {
         <p className="expedition__term">
           <strong>{step.term.name}</strong> <span lang="ja">{step.term.glyph}</span>
         </p>
+        {step.unionAction ? <p className="expedition__unionAction">Action: {step.unionAction}</p> : null}
         <h2 className="expedition__stepTitle">{step.title}</h2>
         <p className="expedition__scene">{step.scene}</p>
         <p className="expedition__action">{step.action}</p>

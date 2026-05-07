@@ -2,6 +2,7 @@ import { productTerminology } from './terminology'
 
 export type ExpeditionStep = {
   term: { name: string; glyph: string }
+  unionAction?: string
   title: string
   scene: string
   action: string
@@ -37,11 +38,12 @@ export const EXPEDITION_STEPS: readonly ExpeditionStep[] = [
     action: 'You choose the suite pattern to sign and verify with.',
   },
   {
-    term: productTerminology.credentialFromTemplate,
+    term: productTerminology.credential,
+    unionAction: productTerminology.credentialFromTemplate.name,
     title: 'Forge of Lineage',
     scene:
       'At the forge, the copybook becomes a live artifact. Definition lineage is preserved in every strike.',
-    action: 'Tehon becomes Tehon no Menkyo.',
+    action: 'Issuance creates a Menkyo from the Tehon definition lineage.',
   },
   {
     term: productTerminology.credential,
@@ -66,20 +68,23 @@ export const EXPEDITION_STEPS: readonly ExpeditionStep[] = [
   },
   {
     term: productTerminology.presentation,
+    unionAction: 'Shōkan の Enbu',
     title: 'Demonstration Circle',
     scene:
       'Under torchlight, the holder performs the response package shaped by the summons.',
-    action: 'Shōkan no Enbu is assembled and presented.',
+    action: 'The holder assembles Enbu as the response to the active Shōkan.',
   },
   {
-    term: productTerminology.presentationInspection,
+    term: productTerminology.presentation,
+    unionAction: productTerminology.presentationInspection.name,
     title: 'Presentation Checkpoint',
     scene:
       'At the checkpoint, inspectors evaluate presentation structure and embedded credential cues.',
     action: 'Enbu no Kensa runs heuristic VP checks.',
   },
   {
-    term: productTerminology.credentialInspection,
+    term: productTerminology.credential,
+    unionAction: productTerminology.credentialInspection.name,
     title: 'Credential Checkpoint',
     scene:
       'A second checkpoint focuses on one credential at a time for cleaner structural review.',

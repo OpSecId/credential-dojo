@@ -15,7 +15,9 @@ export default function TejunViewerPage() {
       id: `s${i}`,
       position: { x: START_X + i * GAP_X, y: START_Y + (i % 2 ? 120 : 0) },
       data: {
-        label: `${i + 1}. ${step.term.name} (${step.term.glyph})`,
+        label: step.unionAction
+          ? `${i + 1}. ${step.term.name} (${step.term.glyph}) | Action: ${step.unionAction}`
+          : `${i + 1}. ${step.term.name} (${step.term.glyph})`,
       },
       type: 'default',
       sourcePosition: 'right',

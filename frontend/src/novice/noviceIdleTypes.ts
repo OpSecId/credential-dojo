@@ -64,7 +64,7 @@ export const NOVICE_RANKS: readonly NoviceRankDef[] = [
     titleEn: 'Scholar',
     titleJa: '学士',
     minTotal: 2100,
-    blurb: 'Proof schools, envelopes, and VC inspection paths feel like one continuous practice.',
+    blurb: 'Proof schools, credential structures, and VC inspection paths feel like one continuous practice.',
   },
   {
     id: 'mentor',
@@ -110,7 +110,7 @@ export const NOVICE_LESSONS: readonly NoviceLessonDef[] = [
     id: 'visit_shinbi',
     pathPrefix: '/json-explorer',
     label: 'Explore with Shinbi',
-    tip: 'JSON tree, pointers, and VC envelope rail.',
+    tip: 'JSON tree, pointers, and VC structure rail.',
   },
   {
     id: 'visit_kasa',

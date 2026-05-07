@@ -25,7 +25,7 @@ export default function VcEnvelopeRail({
       aria-label="Verifiable Credential top-level properties"
     >
       <div className="vc-rail__head">
-        <p className="vc-rail__title">Menkyo envelope</p>
+        <p className="vc-rail__title">Menkyo shape</p>
         <p className="vc-rail__meta">
           {presentCount} / {VC_ROOT_SLOTS.length} slots in this document
         </p>

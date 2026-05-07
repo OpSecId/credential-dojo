@@ -112,7 +112,7 @@ export function vcRootPointer(key: string): string {
   return appendPointer('', key)
 }
 
-/** True when the JSON object looks like a VC-shaped document (envelope rail + blurbs). */
+/** True when the JSON object looks like a VC-shaped document (structure rail + blurbs). */
 export function looksLikeVerifiableCredential(v: unknown): v is Record<string, unknown> {
   if (v === null || typeof v !== 'object' || Array.isArray(v)) return false
   const o = v as Record<string, unknown>

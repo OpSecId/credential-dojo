@@ -242,6 +242,10 @@ export default function HomePage() {
   }
 
   const selectedPersona = activePersonas.find((p) => p.id === selectedPersonaId)
+  const kinchakuMenkyoCount = Math.max(1, (ninjaProfile ? 2 : 1) + (selectedPersona ? 1 : 0))
+  const kinchakuState = kinchakuCinched ? 'Locked' : 'Ready'
+  const kinchakuEnbuState = focusMeter >= 50 ? 'Ready to present' : 'Charging focus'
+  const kinchakuShokanQueue = focusMeter >= 65 ? 2 : 1
 
   const handleClearProfile = useCallback(() => {
     const ok = window.confirm(
@@ -450,7 +454,7 @@ export default function HomePage() {
             to="/kensa"
             title="Enbu の Kensa / Menkyo の Kensa — structural VP vs VC inspection"
           >
-            <span className="dojo__ctaTile-kicker">Inspect JSON</span>
+            <span className="dojo__ctaTile-kicker">Inspect</span>
             <span className="dojo__ctaTile-title">Kensa</span>
             <span className="dojo__ctaTile-desc">Presentation vs credential checks</span>
           </Link>
@@ -468,8 +472,8 @@ export default function HomePage() {
             to="/discover-kasa"
             title="Issuer personas: did:key and Kata per proof school"
           >
-            <span className="dojo__ctaTile-kicker">Issuers</span>
-            <span className="dojo__ctaTile-title">Discover Kasa</span>
+            <span className="dojo__ctaTile-kicker">Discover</span>
+            <span className="dojo__ctaTile-title">Kasa</span>
             <span className="dojo__ctaTile-desc">Schools · suites · did:key</span>
           </Link>
           <Link
@@ -566,57 +570,95 @@ export default function HomePage() {
                 leaving the CRMS story.
               </p>
 
-              <div className="dojo__kinchakuPlay">
-                <button
-                  type="button"
-                  className={`dojo-pouch${kinchakuCinched ? ' dojo-pouch--cinched' : ''}`}
-                  onClick={toggleKinchaku}
-                  aria-pressed={kinchakuCinched}
-                  aria-label={
-                    kinchakuCinched
-                      ? 'Loosen Kinchaku drawstrings'
-                      : 'Cinch Kinchaku drawstrings'
-                  }
-                >
-                  <svg
-                    className="dojo-pouch__svg"
-                    viewBox="0 0 88 108"
-                    width="88"
-                    height="108"
-                    aria-hidden
+              <div className="kinchaku-widget dojo-augmented dojo-augmented--inset" data-augmented-ui="tl-clip br-clip border">
+                <div className="kinchaku-widget__top">
+                  <p className="kinchaku-widget__label">Wallet status</p>
+                  <span className={`kinchaku-widget__badge${kinchakuCinched ? '' : ' kinchaku-widget__badge--ok'}`}>
+                    {kinchakuState}
+                  </span>
+                </div>
+
+                <div className="kinchaku-widget__stats">
+                  <article className="kinchaku-widget__stat">
+                    <p className="kinchaku-widget__statLabel">Menkyo stored</p>
+                    <p className="kinchaku-widget__statValue">{kinchakuMenkyoCount}</p>
+                  </article>
+                  <article className="kinchaku-widget__stat">
+                    <p className="kinchaku-widget__statLabel">Shōkan queue</p>
+                    <p className="kinchaku-widget__statValue">{kinchakuShokanQueue}</p>
+                  </article>
+                  <article className="kinchaku-widget__stat">
+                    <p className="kinchaku-widget__statLabel">Enbu readiness</p>
+                    <p className="kinchaku-widget__statValue kinchaku-widget__statValue--small">
+                      {kinchakuEnbuState}
+                    </p>
+                  </article>
+                </div>
+
+                <div className="dojo__kinchakuPlay">
+                  <button
+                    type="button"
+                    className={`dojo-pouch${kinchakuCinched ? ' dojo-pouch--cinched' : ''}`}
+                    onClick={toggleKinchaku}
+                    aria-pressed={kinchakuCinched}
+                    aria-label={
+                      kinchakuCinched
+                        ? 'Loosen Kinchaku drawstrings'
+                        : 'Cinch Kinchaku drawstrings'
+                    }
                   >
-                    <defs>
-                      <linearGradient
-                        id={pouchGradId}
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop offset="0%" stopColor="var(--pouch-highlight)" />
-                        <stop offset="100%" stopColor="var(--pouch-shadow)" />
-                      </linearGradient>
-                    </defs>
-                    <path
-                      fill={`url(#${pouchGradId})`}
-                      d="M44 8 C20 8 8 28 8 48 C8 78 22 98 44 100 C66 98 80 78 80 48 C80 28 68 8 44 8Z"
-                    />
-                    <path
-                      fill="none"
-                      stroke="var(--pouch-rim)"
-                      strokeWidth="2"
-                      d="M44 8 C20 8 8 28 8 48 C8 78 22 98 44 100 C66 98 80 78 80 48 C80 28 68 8 44 8Z"
-                    />
-                    <ellipse cx="44" cy="22" rx="28" ry="10" fill="var(--pouch-mouth)" />
-                  </svg>
-                  <span className="dojo-pouch__cord dojo-pouch__cord--l" aria-hidden />
-                  <span className="dojo-pouch__cord dojo-pouch__cord--r" aria-hidden />
-                </button>
-                <p className="dojo__hint">
-                  {kinchakuCinched
-                    ? 'Cinched tight — tap to loosen.'
-                    : 'Tap the pouch to cinch the drawstrings.'}
-                </p>
+                    <svg
+                      className="dojo-pouch__svg"
+                      viewBox="0 0 88 108"
+                      width="88"
+                      height="108"
+                      aria-hidden
+                    >
+                      <defs>
+                        <linearGradient
+                          id={pouchGradId}
+                          x1="0%"
+                          y1="0%"
+                          x2="100%"
+                          y2="100%"
+                        >
+                          <stop offset="0%" stopColor="var(--pouch-highlight)" />
+                          <stop offset="100%" stopColor="var(--pouch-shadow)" />
+                        </linearGradient>
+                      </defs>
+                      <path
+                        fill={`url(#${pouchGradId})`}
+                        d="M44 8 C20 8 8 28 8 48 C8 78 22 98 44 100 C66 98 80 78 80 48 C80 28 68 8 44 8Z"
+                      />
+                      <path
+                        fill="none"
+                        stroke="var(--pouch-rim)"
+                        strokeWidth="2"
+                        d="M44 8 C20 8 8 28 8 48 C8 78 22 98 44 100 C66 98 80 78 80 48 C80 28 68 8 44 8Z"
+                      />
+                      <ellipse cx="44" cy="22" rx="28" ry="10" fill="var(--pouch-mouth)" />
+                    </svg>
+                    <span className="dojo-pouch__cord dojo-pouch__cord--l" aria-hidden />
+                    <span className="dojo-pouch__cord dojo-pouch__cord--r" aria-hidden />
+                  </button>
+                  <p className="dojo__hint">
+                    {kinchakuCinched
+                      ? 'Cinched tight — tap to loosen.'
+                      : 'Tap the pouch to cinch the drawstrings.'}
+                  </p>
+                </div>
+
+                <div className="kinchaku-widget__actions" aria-label="Wallet quick actions">
+                  <Link className="kinchaku-widget__action" to="/kensa">
+                    Inspect
+                  </Link>
+                  <Link className="kinchaku-widget__action" to="/json-explorer">
+                    Shinbi
+                  </Link>
+                  <Link className="kinchaku-widget__action" to="/expedition">
+                    Expedition
+                  </Link>
+                </div>
               </div>
             </section>
 

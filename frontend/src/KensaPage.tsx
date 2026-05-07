@@ -213,6 +213,8 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
   const [applied, setApplied] = useState('')
   const [parseError, setParseError] = useState<string | null>(null)
   const [isDragOver, setIsDragOver] = useState(false)
+  const [uploadMode, setUploadMode] = useState<'replace' | 'append'>('replace')
+  const [lastUploadNote, setLastUploadNote] = useState<string | null>(null)
 
   const parsed = useMemo(() => {
     if (!applied) return null
@@ -239,40 +241,53 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
     }
   }, [raw])
 
-  const loadJsonFile = useCallback(async (file: File) => {
-    const text = await file.text()
-    setRaw(text)
-    setParseError(null)
-  }, [])
+  const loadJsonFiles = useCallback(
+    async (files: readonly File[], modeForLoad: 'replace' | 'append') => {
+      if (!files.length) return
+      const chunks = await Promise.all(files.map((f) => f.text()))
+      const merged = chunks.join('\n\n')
+      setRaw((prev) => (modeForLoad === 'append' && prev.trim() ? `${prev}\n\n${merged}` : merged))
+      setParseError(null)
+      setLastUploadNote(
+        `${modeForLoad === 'append' ? 'Appended' : 'Loaded'} ${files.length} file${
+          files.length === 1 ? '' : 's'
+        }: ${files
+          .slice(0, 3)
+          .map((f) => f.name)
+          .join(', ')}${files.length > 3 ? ' …' : ''}`,
+      )
+    },
+    [],
+  )
 
   const onPickFile = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0]
-      if (!file) return
+      const files = e.target.files ? Array.from(e.target.files) : []
+      if (!files.length) return
       try {
-        await loadJsonFile(file)
+        await loadJsonFiles(files, uploadMode)
       } catch {
         setParseError('Unable to read file content.')
       } finally {
         e.currentTarget.value = ''
       }
     },
-    [loadJsonFile],
+    [loadJsonFiles, uploadMode],
   )
 
   const onDropFile = useCallback(
     async (e: React.DragEvent<HTMLDivElement>) => {
       e.preventDefault()
       setIsDragOver(false)
-      const file = e.dataTransfer.files?.[0]
-      if (!file) return
+      const files = e.dataTransfer.files ? Array.from(e.dataTransfer.files) : []
+      if (!files.length) return
       try {
-        await loadJsonFile(file)
+        await loadJsonFiles(files, uploadMode)
       } catch {
         setParseError('Unable to read dropped file content.')
       }
     },
-    [loadJsonFile],
+    [loadJsonFiles, uploadMode],
   )
 
   const tEnbu = productTerminology.presentationInspection
@@ -410,7 +425,31 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
                 : 'Paste one verifiable credential (VC) JSON object for heuristic checks'
             }
           />
-          <p className="kensa__dropHint">Drop a `.json` file here, or use Upload JSON.</p>
+          <p className="kensa__dropHint">
+            Drop one or many `.json` files here ({uploadMode} mode), or use Upload JSON.
+          </p>
+        </div>
+        <div className="kensa__uploadMode" role="radiogroup" aria-label="Upload mode">
+          <button
+            type="button"
+            role="radio"
+            aria-checked={uploadMode === 'replace'}
+            className={`kensa__modeBtn${uploadMode === 'replace' ? ' kensa__modeBtn--active' : ''}`}
+            onClick={() => setUploadMode('replace')}
+            title="Replace editor content with uploaded file contents"
+          >
+            Replace
+          </button>
+          <button
+            type="button"
+            role="radio"
+            aria-checked={uploadMode === 'append'}
+            className={`kensa__modeBtn${uploadMode === 'append' ? ' kensa__modeBtn--active' : ''}`}
+            onClick={() => setUploadMode('append')}
+            title="Append uploaded file contents under current editor content"
+          >
+            Append
+          </button>
         </div>
         <div className="kensa__actions">
           <label className="kensa__btn kensa__btn--upload" title="Upload a local JSON file into the editor">
@@ -419,9 +458,23 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
               type="file"
               accept="application/json,.json"
               className="kensa__fileInput"
+              multiple
               onChange={onPickFile}
             />
           </label>
+          <button
+            type="button"
+            className="kensa__btn"
+            onClick={() => {
+              setRaw('')
+              setApplied('')
+              setParseError(null)
+              setLastUploadNote(null)
+            }}
+            title="Clear editor and inspection result"
+          >
+            Clear
+          </button>
           <button
             type="button"
             className="kensa__btn"
@@ -431,6 +484,7 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
             Run inspection
           </button>
         </div>
+        {lastUploadNote ? <p className="kensa__uploadNote">{lastUploadNote}</p> : null}
         {parseError ? <p className="kensa__msg kensa__msg--error">{parseError}</p> : null}
         {result && !parseError ? (
           <div

@@ -84,6 +84,12 @@
   color: var(--cyber-cyan);
 }
 
+.expedition__unionAction {
+  margin: 0.3rem 0 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
 .expedition__stepTitle {
   margin: 0.3rem 0 0.55rem;
   font-size: 1.2rem;

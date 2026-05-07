@@ -1328,11 +1328,113 @@
 
 /* --- Kinchaku pouch --- */
 .dojo__kinchakuPlay {
-  margin-top: 1.15rem;
+  margin-top: 0.6rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.65rem;
+}
+
+.kinchaku-widget {
+  margin-top: 1rem;
+  padding: 0.8rem;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 184, 74, 0.26);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.kinchaku-widget__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.kinchaku-widget__label {
+  margin: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.kinchaku-widget__badge {
+  padding: 0.2rem 0.48rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 107, 74, 0.36);
+  color: var(--accent-hot);
+  background: rgba(255, 107, 74, 0.1);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.kinchaku-widget__badge--ok {
+  border-color: rgba(90, 232, 255, 0.35);
+  color: var(--cyber-cyan);
+  background: rgba(90, 232, 255, 0.1);
+}
+
+.kinchaku-widget__stats {
+  margin-top: 0.65rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.kinchaku-widget__stat {
+  padding: 0.5rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(9, 14, 27, 0.42);
+}
+
+.kinchaku-widget__statLabel {
+  margin: 0;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.kinchaku-widget__statValue {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  color: var(--text-h);
+  font-weight: 700;
+}
+
+.kinchaku-widget__statValue--small {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.kinchaku-widget__actions {
+  margin-top: 0.7rem;
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.kinchaku-widget__action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.9rem;
+  padding: 0 0.62rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.77rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border: 1px solid rgba(90, 232, 255, 0.3);
+  color: var(--text-h);
+  background: rgba(90, 232, 255, 0.08);
+}
+
+.kinchaku-widget__action:hover {
+  background: rgba(90, 232, 255, 0.16);
 }
 
 .dojo-pouch {
@@ -1408,6 +1510,12 @@
   font-size: 0.82rem;
   color: var(--muted);
   text-align: center;
+}
+
+@media (max-width: 640px) {
+  .kinchaku-widget__stats {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* --- Demo persona (proof school) --- */

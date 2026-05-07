@@ -25,7 +25,7 @@ export type JsonAugWidgetProps = {
   /** Initial expand depth for nested objects/arrays (0 = root shell only). */
   defaultExpandDepth?: number
   /**
-   * Programmatic focus (e.g. VC envelope chips). Pair with `focusTick` so the same path can
+   * Programmatic focus (e.g. VC structure chips). Pair with `focusTick` so the same path can
    * be re-focused. Expands ancestors and scrolls the segment into view.
    */
   focusPointer?: string | null

@@ -183,6 +183,28 @@
   color: var(--muted);
 }
 
+.kensa__uploadMode {
+  display: inline-flex;
+  gap: 0.35rem;
+  margin: 0 0 0.55rem;
+}
+
+.kensa__modeBtn {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--muted);
+  border-radius: 6px;
+  padding: 0.28rem 0.62rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.kensa__modeBtn--active {
+  border-color: var(--cyber-cyan-dim, rgba(90, 232, 255, 0.35));
+  color: var(--text-h);
+  background: rgba(90, 232, 255, 0.08);
+}
+
 .kensa__actions {
   display: flex;
   flex-wrap: wrap;
@@ -216,6 +238,12 @@
 
 .kensa__btn:hover {
   background: rgba(90, 232, 255, 0.14);
+}
+
+.kensa__uploadNote {
+  margin: 0.55rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
 }
 
 .kensa__msg {
