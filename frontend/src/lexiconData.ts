@@ -91,7 +91,7 @@ export const LEXICON_ENTRIES: {
     key: 'kasa',
     title: productTerminology.kasa.name,
     glyph: productTerminology.kasa.glyph,
-    blurb: 'Demo proof schools—did:key + Kata per persona.',
+    blurb: 'Proof schools—did:key + Kata per persona.',
   },
 ]
 
@@ -237,12 +237,12 @@ export const LEXICON_ARTICLES: LexiconArticle[] = [
   },
   {
     key: 'kasa',
-    credentialTerm: 'Demo proof schools (issuer personas)',
+    credentialTerm: 'Proof schools (issuer personas)',
     literal: [
       '**Kasa** (笠) is a **woven straw hat**—travel gear that shades the face on the road. It suggests a **portable identity** and a little shelter while you move between places.',
     ],
     inPlatform: [
-      '**Kasa** names the **proof school porch**: the lineup of **demo issuer personas** (Ed-ryū, Ec-ryū, …) on **Discover Kasa**, each with a stable **`did:key`** and preferred **Kata** samples. In the SPA, your **ninja profile** picks one **Kasa** so the home **Kata** carousel and persona context match that school.',
+      '**Kasa** names the **proof school porch**: the lineup of **issuer personas** (Ed-ryū, Ec-ryū, …) on **Discover Kasa**, each with a stable **`did:key`** and preferred **Kata** samples. In the SPA, your **ninja profile** picks one **Kasa** so the home **Kata** carousel and persona context match that school.',
     ],
   },
 ]

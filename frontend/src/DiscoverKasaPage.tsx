@@ -57,7 +57,7 @@ export default function DiscoverKasaPage() {
           <h1 className="kasa__title">Discover Kasa</h1>
           <p className="kasa__intro">
             <strong>Kasa</strong> (笠) is a woven travel hat—here, the shaded porch where we line up
-            the demo <strong>proof schools</strong>. Each school is a persona with its own issuer{' '}
+            the <strong>proof schools</strong>. Each school is a persona with its own issuer{' '}
             <code className="kasa__inline">did:key</code> and preferred <strong>Kata</strong>{' '}
             (cryptosuites). Keys are deterministic demo material, not production secrets.
           </p>
@@ -104,7 +104,7 @@ export default function DiscoverKasaPage() {
           ) : null}
         </header>
 
-        <ul className="kasa__grid" aria-label="Demo proof schools">
+        <ul className="kasa__grid" aria-label="Proof schools">
               {personas.map((p) => (
                 <li key={p.id}>
                   <article

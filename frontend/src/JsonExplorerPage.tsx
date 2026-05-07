@@ -97,7 +97,7 @@ export default function JsonExplorerPage() {
           <Link
             className="json-ex__back"
             to="/discover-kasa"
-            title="Demo proof schools (Kasa) with did:key and Kata samples"
+            title="Proof schools (Kasa) with did:key and Kata samples"
           >
             Discover Kasa
           </Link>

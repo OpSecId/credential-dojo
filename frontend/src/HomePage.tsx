@@ -411,7 +411,7 @@ export default function HomePage() {
           <Link
             className="dojo__ctaTile"
             to="/discover-kasa"
-            title="Demo issuer personas: did:key and Kata per proof school"
+            title="Issuer personas: did:key and Kata per proof school"
           >
             <span className="dojo__ctaTile-kicker">Issuers</span>
             <span className="dojo__ctaTile-title">Discover Kasa</span>
@@ -567,9 +567,9 @@ export default function HomePage() {
               className="dojo-persona dojo-augmented dojo-augmented--inset"
               data-augmented-ui="tl-clip br-clip border"
               role="group"
-              aria-label="Demo proof school"
+              aria-label="Proof school"
             >
-              <p className="dojo-persona__label">Demo school (persona)</p>
+              <p className="dojo-persona__label">Proof school (persona)</p>
               <div className="dojo-persona__tabs">
                 {activePersonas.map((p) => (
                   <button
