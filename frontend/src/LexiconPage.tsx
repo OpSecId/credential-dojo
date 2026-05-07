@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react'
-import { Fragment } from 'react'
-import { Link } from 'react-router-dom'
+import { Fragment, useMemo, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import './App.css'
 import './LexiconPage.css'
 import { LEXICON_ARTICLES, lexiconAnchorForBoldSegment } from './lexiconData'
 import { productTerminology } from './terminology'
+import type { LexiconKey } from './lexiconData'
 
 /** Renders `**segments**` as bold; known Dojo terms link to `#article-id` on this page. */
 function formatLexiconRichText(text: string): ReactNode {
@@ -30,9 +31,79 @@ function formatLexiconRichText(text: string): ReactNode {
   })
 }
 
+const FLOW_STEPS: readonly { label: string; anchor: LexiconKey }[] = [
+  { label: 'Tehon', anchor: 'template' },
+  { label: 'Tehon の Menkyo', anchor: 'credentialFromTemplate' },
+  { label: 'Menkyo', anchor: 'credential' },
+  { label: 'Shōkan', anchor: 'presentationRequest' },
+  { label: 'Enbu', anchor: 'presentation' },
+  { label: 'Kensa', anchor: 'presentationInspection' },
+]
+
+const SAMPLE_SNIPPETS: readonly { title: string; code: string }[] = [
+  {
+    title: 'Katachi: structure cues',
+    code: `{
+  "@context": ["https://www.w3.org/ns/credentials/v2"],
+  "type": ["VerifiableCredential", "UniversityDegreeCredential"],
+  "credentialSchema": {
+    "id": "https://credential.ninja/schemas/degree-v1",
+    "type": "JsonSchema"
+  }
+}`,
+  },
+  {
+    title: 'Menkyo: issuer + subject',
+    code: `{
+  "issuer": "did:key:z6Mk...",
+  "credentialSubject": {
+    "id": "did:key:z6MkHolder...",
+    "name": "Aiko"
+  },
+  "validFrom": "2026-05-01T00:00:00Z"
+}`,
+  },
+  {
+    title: 'Enbu: holder response package',
+    code: `{
+  "type": ["VerifiablePresentation"],
+  "holder": "did:key:z6MkHolder...",
+  "verifiableCredential": [
+    "eyJhbGciOiJFZERTQSJ9...<vc-jwt>..."
+  ],
+  "proof": {
+    "type": "DataIntegrityProof",
+    "proofPurpose": "authentication"
+  }
+}`,
+  },
+]
+
+function tryLinkForKey(key: LexiconKey): { to: string; label: string } {
+  if (key === 'presentationInspection' || key === 'credentialInspection') return { to: '/kensa', label: 'Try in Kensa' }
+  if (key === 'render' || key === 'katachi') return { to: '/json-explorer', label: 'Try in Shinbi' }
+  if (key === 'kasa' || key === 'cryptosuites') return { to: '/discover-kasa', label: 'Try in Discover Kasa' }
+  if (key === 'workflow' || key === 'exchange' || key === 'handshake') return { to: '/tejun-viewer', label: 'Try in Tejun viewer' }
+  return { to: '/expedition', label: 'Try in Expedition' }
+}
+
 export default function LexiconPage() {
+  const location = useLocation()
+  const [copied, setCopied] = useState<string | null>(null)
+  const printMode = useMemo(() => new URLSearchParams(location.search).get('print') === '1', [location.search])
+
+  const copySnippet = async (title: string, code: string) => {
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopied(title)
+      window.setTimeout(() => setCopied((current) => (current === title ? null : current)), 1200)
+    } catch {
+      /* ignore clipboard errors */
+    }
+  }
+
   return (
-    <div className="dojo-scene dojo-scene--night">
+    <div className={`dojo-scene dojo-scene--night${printMode ? ' lex-print' : ''}`}>
       <div className="dojo-scene__moon" aria-hidden />
       <div className="dojo-scene__bg" aria-hidden />
       <div className="dojo-scene__grid" aria-hidden />
@@ -83,9 +154,67 @@ export default function LexiconPage() {
           })}
         </ol>
 
+        <section className="lex-flow dojo-augmented dojo-augmented--panel" data-augmented-ui="tl-clip tr-clip bl-clip br-clip border">
+          <h2 className="lex-flow__title">Credential Journey Map</h2>
+          <p className="lex-flow__desc">
+            Quick orientation for the full line: definition, issuance, request, response, inspection.
+          </p>
+          <div className="lex-flow__rail" aria-label="Flow map">
+            {FLOW_STEPS.map((step, i) => (
+              <Fragment key={step.anchor}>
+                <a className="lex-flow__chip" href={`#${step.anchor}`}>
+                  {step.label}
+                </a>
+                {i < FLOW_STEPS.length - 1 ? <span className="lex-flow__arrow">→</span> : null}
+              </Fragment>
+            ))}
+          </div>
+        </section>
+
+        <section className="lex-contrast dojo-augmented dojo-augmented--panel" data-augmented-ui="tl-clip tr-clip bl-clip br-clip border">
+          <h2 className="lex-contrast__title">Katachi vs Kata</h2>
+          <div className="lex-contrast__grid">
+            <article className="lex-contrast__card">
+              <p className="lex-contrast__label">
+                {productTerminology.katachi.name} <span lang="ja">{productTerminology.katachi.glyph}</span>
+              </p>
+              <p className="lex-contrast__body">Data form: schema, context, and claim structure constraints.</p>
+            </article>
+            <article className="lex-contrast__card">
+              <p className="lex-contrast__label">
+                {productTerminology.cryptosuites.name} <span lang="ja">{productTerminology.cryptosuites.glyph}</span>
+              </p>
+              <p className="lex-contrast__body">Proof form: cryptosuite, canonicalization, and signature rules.</p>
+            </article>
+          </div>
+        </section>
+
+        <section className="lex-snips dojo-augmented dojo-augmented--panel" data-augmented-ui="tl-clip tr-clip bl-clip br-clip border">
+          <h2 className="lex-snips__title">Copyable VC Snippets</h2>
+          <div className="lex-snips__grid">
+            {SAMPLE_SNIPPETS.map((snippet) => (
+              <article key={snippet.title} className="lex-snips__card">
+                <p className="lex-snips__cardTitle">{snippet.title}</p>
+                <pre className="lex-snips__code">
+                  <code>{snippet.code}</code>
+                </pre>
+                <button
+                  type="button"
+                  className="lex-snips__copyBtn"
+                  onClick={() => copySnippet(snippet.title, snippet.code)}
+                >
+                  {copied === snippet.title ? 'Copied' : 'Copy JSON'}
+                </button>
+              </article>
+            ))}
+          </div>
+          <p className="lex-snips__printHint">For documentation/offline use, open this page with <code>?print=1</code>.</p>
+        </section>
+
         <div className="lex__articles">
           {LEXICON_ARTICLES.map((article) => {
             const t = productTerminology[article.key]
+            const tryLink = tryLinkForKey(article.key)
             return (
               <article
                 key={article.key}
@@ -101,6 +230,11 @@ export default function LexiconPage() {
                 </h2>
                 <p className="lex-article__credentialLabel">Credential platform meaning</p>
                 <p className="lex-article__credential">{article.credentialTerm}</p>
+                <p className="lex-article__try">
+                  <Link className="lex-article__tryLink" to={tryLink.to}>
+                    {tryLink.label}
+                  </Link>
+                </p>
 
                 <h3 className="lex-article__sub">Original meaning</h3>
                 {article.literal.map((p, i) => (

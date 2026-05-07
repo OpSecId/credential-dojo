@@ -58,6 +58,14 @@
   font-size: 0.92rem;
 }
 
+.kensa__homeCta {
+  padding: 0.28rem 0.6rem;
+  border: 1px solid rgba(90, 232, 255, 0.35);
+  border-radius: 6px;
+  background: rgba(90, 232, 255, 0.08);
+  font-weight: 700;
+}
+
 .kensa__back:hover {
   text-decoration: underline;
 }
@@ -125,6 +133,26 @@
 .kensa__panel {
   margin: 0 auto;
   padding: 1rem 1.15rem 1.25rem;
+}
+
+.kensa__workspace {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 980px) {
+  .kensa__workspace {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    align-items: start;
+  }
+}
+
+.kensa__editorCard,
+.kensa__resultCard {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem 0.8rem 0.8rem;
+  background: rgba(0, 0, 0, 0.16);
 }
 
 .kensa__panelHeading {
@@ -262,10 +290,17 @@
 }
 
 .kensa__msg {
-  margin: 0.85rem 0 0;
+  margin: 0.35rem 0 0;
   padding: 0.65rem 0.75rem;
   border-radius: 6px;
   font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.kensa__emptyResult {
+  margin: 0.35rem 0 0;
+  font-size: 0.86rem;
+  color: var(--muted);
   line-height: 1.45;
 }
 

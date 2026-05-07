@@ -397,8 +397,8 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
           <span lang="ja">{tMenkyo.glyph}</span>). Heuristics only—no cryptographic verification on this page.
         </p>
         <nav className="kensa__nav">
-          <Link className="kensa__back" to="/" title="Back Home">
-            ← Back Home
+          <Link className="kensa__back kensa__homeCta" to="/" title="Back Home">
+            🏠 Back Home
           </Link>
           <Link
             className="kensa__back"
@@ -520,117 +520,129 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
           </>
         ) : null}
 
-        <label className="kensa__label" htmlFor="kensa-json">
-          JSON
-        </label>
-        <div
-          className={`kensa__dropzone${isDragOver ? ' kensa__dropzone--active' : ''}`}
-          onDragEnter={(e) => {
-            e.preventDefault()
-            setIsDragOver(true)
-          }}
-          onDragOver={(e) => {
-            e.preventDefault()
-            if (!isDragOver) setIsDragOver(true)
-          }}
-          onDragLeave={(e) => {
-            e.preventDefault()
-            setIsDragOver(false)
-          }}
-          onDrop={onDropFile}
-        >
-          <textarea
-            id="kensa-json"
-            className="kensa__textarea"
-            value={raw}
-            onChange={(e) => setRaw(e.target.value)}
-            spellCheck={false}
-            rows={12}
-            placeholder={
-              mode === 'enbu' && enbuArtifact === 'request'
-                ? '{ "client_id": "https://verifier.example", "nonce": "...", "presentation_definition": { ... } }'
-                : '{ "type": ["VerifiablePresentation"], ... }'
-            }
-            title={
-              mode === 'enbu'
-                ? enbuArtifact === 'request'
-                  ? 'Paste a presentation request payload (Shōkan) for protocol-aware structural checks'
-                  : 'Paste a verifiable presentation (VP) JSON object for heuristic checks'
-                : 'Paste one verifiable credential (VC) JSON object for heuristic checks'
-            }
-          />
-          <p className="kensa__dropHint">
-            Drop one or many `.json` files here ({uploadMode} mode), or use Upload JSON.
-          </p>
+        <div className="kensa__workspace">
+          <section className="kensa__editorCard">
+            <label className="kensa__label" htmlFor="kensa-json">
+              JSON
+            </label>
+            <div
+              className={`kensa__dropzone${isDragOver ? ' kensa__dropzone--active' : ''}`}
+              onDragEnter={(e) => {
+                e.preventDefault()
+                setIsDragOver(true)
+              }}
+              onDragOver={(e) => {
+                e.preventDefault()
+                if (!isDragOver) setIsDragOver(true)
+              }}
+              onDragLeave={(e) => {
+                e.preventDefault()
+                setIsDragOver(false)
+              }}
+              onDrop={onDropFile}
+            >
+              <textarea
+                id="kensa-json"
+                className="kensa__textarea"
+                value={raw}
+                onChange={(e) => setRaw(e.target.value)}
+                spellCheck={false}
+                rows={12}
+                placeholder={
+                  mode === 'enbu' && enbuArtifact === 'request'
+                    ? '{ "client_id": "https://verifier.example", "nonce": "...", "presentation_definition": { ... } }'
+                    : '{ "type": ["VerifiablePresentation"], ... }'
+                }
+                title={
+                  mode === 'enbu'
+                    ? enbuArtifact === 'request'
+                      ? 'Paste a presentation request payload (Shōkan) for protocol-aware structural checks'
+                      : 'Paste a verifiable presentation (VP) JSON object for heuristic checks'
+                    : 'Paste one verifiable credential (VC) JSON object for heuristic checks'
+                }
+              />
+              <p className="kensa__dropHint">
+                Drop one or many `.json` files here ({uploadMode} mode), or use Upload JSON.
+              </p>
+            </div>
+            <div className="kensa__uploadMode" role="radiogroup" aria-label="Upload mode">
+              <button
+                type="button"
+                role="radio"
+                aria-checked={uploadMode === 'replace'}
+                className={`kensa__modeBtn${uploadMode === 'replace' ? ' kensa__modeBtn--active' : ''}`}
+                onClick={() => setUploadMode('replace')}
+                title="Replace editor content with uploaded file contents"
+              >
+                Replace
+              </button>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={uploadMode === 'append'}
+                className={`kensa__modeBtn${uploadMode === 'append' ? ' kensa__modeBtn--active' : ''}`}
+                onClick={() => setUploadMode('append')}
+                title="Append uploaded file contents under current editor content"
+              >
+                Append
+              </button>
+            </div>
+            <div className="kensa__actions">
+              <label className="kensa__btn kensa__btn--upload" title="Upload a local JSON file into the editor">
+                Upload JSON
+                <input
+                  type="file"
+                  accept="application/json,.json"
+                  className="kensa__fileInput"
+                  multiple
+                  onChange={onPickFile}
+                />
+              </label>
+              <button
+                type="button"
+                className="kensa__btn"
+                onClick={() => {
+                  setRaw('')
+                  setApplied('')
+                  setParseError(null)
+                  setLastUploadNote(null)
+                }}
+                title="Clear editor and inspection result"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                className="kensa__btn"
+                onClick={apply}
+                title="Parse JSON and run VP vs VC shape heuristics for the selected tab (no signature verification)"
+              >
+                Run inspection
+              </button>
+            </div>
+            {lastUploadNote ? <p className="kensa__uploadNote">{lastUploadNote}</p> : null}
+            {parseError ? <p className="kensa__msg kensa__msg--error">{parseError}</p> : null}
+          </section>
+
+          <section className="kensa__resultCard" aria-live="polite">
+            <p className="kensa__label">Inspection output</p>
+            {result && !parseError ? (
+              <div
+                className={`kensa__msg kensa__msg--${result.level}`}
+                role="status"
+                aria-live="polite"
+              >
+                {result.lines.map((line, i) => (
+                  <p key={i}>{line}</p>
+                ))}
+              </div>
+            ) : (
+              <p className="kensa__emptyResult">
+                Run inspection to populate structured findings for the selected path.
+              </p>
+            )}
+          </section>
         </div>
-        <div className="kensa__uploadMode" role="radiogroup" aria-label="Upload mode">
-          <button
-            type="button"
-            role="radio"
-            aria-checked={uploadMode === 'replace'}
-            className={`kensa__modeBtn${uploadMode === 'replace' ? ' kensa__modeBtn--active' : ''}`}
-            onClick={() => setUploadMode('replace')}
-            title="Replace editor content with uploaded file contents"
-          >
-            Replace
-          </button>
-          <button
-            type="button"
-            role="radio"
-            aria-checked={uploadMode === 'append'}
-            className={`kensa__modeBtn${uploadMode === 'append' ? ' kensa__modeBtn--active' : ''}`}
-            onClick={() => setUploadMode('append')}
-            title="Append uploaded file contents under current editor content"
-          >
-            Append
-          </button>
-        </div>
-        <div className="kensa__actions">
-          <label className="kensa__btn kensa__btn--upload" title="Upload a local JSON file into the editor">
-            Upload JSON
-            <input
-              type="file"
-              accept="application/json,.json"
-              className="kensa__fileInput"
-              multiple
-              onChange={onPickFile}
-            />
-          </label>
-          <button
-            type="button"
-            className="kensa__btn"
-            onClick={() => {
-              setRaw('')
-              setApplied('')
-              setParseError(null)
-              setLastUploadNote(null)
-            }}
-            title="Clear editor and inspection result"
-          >
-            Clear
-          </button>
-          <button
-            type="button"
-            className="kensa__btn"
-            onClick={apply}
-            title="Parse JSON and run VP vs VC shape heuristics for the selected tab (no signature verification)"
-          >
-            Run inspection
-          </button>
-        </div>
-        {lastUploadNote ? <p className="kensa__uploadNote">{lastUploadNote}</p> : null}
-        {parseError ? <p className="kensa__msg kensa__msg--error">{parseError}</p> : null}
-        {result && !parseError ? (
-          <div
-            className={`kensa__msg kensa__msg--${result.level}`}
-            role="status"
-            aria-live="polite"
-          >
-            {result.lines.map((line, i) => (
-              <p key={i}>{line}</p>
-            ))}
-          </div>
-        ) : null}
       </section>
     </div>
   )
