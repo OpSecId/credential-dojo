@@ -77,7 +77,7 @@ function edPersona(): PersonaPublic {
     label: "Ed-ryū",
     labelJa: "エド流",
     description:
-      "Ed25519 issuer; kata lists only EdDSA Data Integrity suites and vc-jwt—aligned with this key. Other Kasa list suites matched to their issuer cryptography.",
+      "Ed25519 issuer. Kata: eddsa-rdfc-2022, eddsa-jcs-2022, vc-jwt.",
     proofSchool: "ed25519",
     didKey,
     kataSamples: [ALL_KATA[0], ALL_KATA[1], ALL_KATA[6]],
@@ -93,7 +93,7 @@ function ecPersona(): PersonaPublic {
     label: "Ec-ryū",
     labelJa: "エック流",
     description:
-      "Demo school for NIST P-256 / ECDSA classic Data Integrity: RFC canonicalization (ecdsa-rdfc-2019) and JSON canonicalization (ecdsa-jcs-2019).",
+      "NIST P-256 / ECDSA issuer (classic Data Integrity). Kata: ecdsa-rdfc-2019, ecdsa-jcs-2019.",
     proofSchool: "ecdsa",
     didKey,
     kataSamples: [ALL_KATA[2], ALL_KATA[3]],
@@ -109,7 +109,7 @@ function ecSdPersona(): PersonaPublic {
     label: "Ec-sd-ryū",
     labelJa: "エックSD流",
     description:
-      "Ec-ryū selective-disclosure track (ecdsa-sd-2023): same P-256 family as classic Ec-ryū, separate deterministic issuer key for SD-focused flows.",
+      "NIST P-256 / ECDSA issuer (selective disclosure; key distinct from Ec-ryū). Kata: ecdsa-sd-2023.",
     proofSchool: "ecdsa",
     didKey,
     kataSamples: [ALL_KATA[4]],
@@ -127,7 +127,7 @@ function bbsPersona(): PersonaPublic {
     label: "BBS-ryū",
     labelJa: "ビービーエス流",
     description:
-      "Demo school for BLS12-381 / BBS unlinkable proofs — kata locked to bbs-2023. Issuer key is encoded on G2 per did:key conventions.",
+      "BLS12-381 BBS issuer (public key on G2 per did:key). Kata: bbs-2023.",
     proofSchool: "bbs",
     didKey,
     kataSamples: [ALL_KATA[5]],
@@ -144,7 +144,7 @@ function mlDsaPersona(): PersonaPublic {
     label: "ML-ryū",
     labelJa: "エムエル流",
     description:
-      "Demo school for FIPS 204 ML-DSA-44 Data Integrity (mldsa44-rdfc-2024, mldsa44-jcs-2024). Issuer public key uses multicodec mldsa-44-pub in did:key.",
+      "ML-DSA-44 issuer (FIPS 204 Data Integrity). Kata: mldsa44-rdfc-2024, mldsa44-jcs-2024.",
     proofSchool: "mldsa",
     didKey,
     kataSamples: [ALL_KATA[7], ALL_KATA[8]],
@@ -161,7 +161,7 @@ function clPersona(): PersonaPublic {
     label: "CL-ryū",
     labelJa: "シーエル流",
     description:
-      "Demo school for AnonCreds-style CL credentials via the anoncreds-2023 Data Integrity suite: issuer did:key uses Ed25519, matching common Hyperledger AnonCreds / ACA-Py stacks.",
+      "Ed25519 issuer (AnonCreds-style CL / Data Integrity). Kata: anoncreds-2023.",
     proofSchool: "anoncreds",
     didKey,
     kataSamples: [ALL_KATA[9]],
