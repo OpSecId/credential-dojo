@@ -20,6 +20,7 @@ import { productTerminology } from './terminology'
 
 const SITE = 'https://credential.ninja'
 const THEME_KEY = 'credential-dojo-theme'
+const HELLO_FETCH_MS = 8000
 
 const OFFLINE_PERSONAS = DEMO_PERSONAS_OFFLINE
 
@@ -143,7 +144,10 @@ export default function HomePage() {
 
   useEffect(() => {
     const base = import.meta.env.VITE_API_BASE ?? ''
-    fetch(`${base}/api/hello`)
+    const ac = new AbortController()
+    const tid = window.setTimeout(() => ac.abort(), HELLO_FETCH_MS)
+
+    fetch(`${base}/api/hello`, { signal: ac.signal })
       .then((res) => {
         if (!res.ok) throw new Error(`${res.status} ${res.statusText}`)
         return res.json() as Promise<HelloPayload>
@@ -156,8 +160,18 @@ export default function HomePage() {
       .catch(() => {
         setApiMessage(null)
         setApiStandardsFocus(null)
-        setApiError('API unreachable. Run the backend (npm run dev -w backend).')
+        setApiError(
+          'API unreachable or timed out. Use same-origin `/api` proxy to the backend, run `npm run dev -w backend` locally, or set build-time `VITE_API_BASE` if the API is on another host.',
+        )
       })
+      .finally(() => {
+        window.clearTimeout(tid)
+      })
+
+    return () => {
+      ac.abort()
+      window.clearTimeout(tid)
+    }
   }, [])
 
   useEffect(() => {
