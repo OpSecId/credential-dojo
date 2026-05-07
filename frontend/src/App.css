@@ -1227,6 +1227,124 @@
   }
 }
 
+/*
+ * augmented-ui — clipped corners + gradient border frame
+ * https://augmented-ui.com/ (BSD-2-Clause)
+ * Scoped to @supports so native borders remain if core does not apply.
+ */
+@supports (--foo: , 0 0) and ((clip-path: polygon(0 0, 100% 0, 50% 50%)) or (-webkit-clip-path: polygon(0 0, 100% 0, 50% 50%))) {
+  .dojo-augmented--panel[data-augmented-ui] {
+    --aug-tl: 11px;
+    --aug-tr: 11px;
+    --aug-bl: 11px;
+    --aug-br: 11px;
+    --aug-border: 1px;
+    --aug-border-bg: linear-gradient(
+      152deg,
+      rgba(90, 232, 255, 0.55) 0%,
+      rgba(179, 136, 255, 0.35) 38%,
+      rgba(232, 184, 74, 0.45) 100%
+    );
+    border: none;
+    border-radius: 0;
+  }
+
+  .dojo-scene--day .dojo-augmented--panel[data-augmented-ui] {
+    --aug-border-bg: linear-gradient(
+      152deg,
+      rgba(139, 69, 20, 0.55) 0%,
+      rgba(196, 92, 38, 0.35) 100%
+    );
+  }
+
+  .dojo-augmented--meter[data-augmented-ui] {
+    --aug-tl: 7px;
+    --aug-br: 7px;
+    --aug-border: 1px;
+    --aug-border-bg: linear-gradient(
+      95deg,
+      rgba(90, 232, 255, 0.45),
+      rgba(232, 184, 74, 0.35)
+    );
+    padding: 0.65rem 0.8rem 0.45rem;
+  }
+
+  .dojo-scene--day .dojo-augmented--meter[data-augmented-ui] {
+    --aug-border-bg: linear-gradient(95deg, rgba(139, 69, 20, 0.5), rgba(196, 92, 38, 0.35));
+  }
+
+  .dojo-augmented--ninja[data-augmented-ui] {
+    --aug-tl: 8px;
+    --aug-br: 8px;
+    --aug-border: 1px;
+    --aug-border-bg: linear-gradient(130deg, rgba(90, 232, 255, 0.4), rgba(179, 136, 255, 0.28));
+    border: none;
+    border-radius: 0;
+  }
+
+  .dojo-scene--day .dojo-augmented--ninja[data-augmented-ui] {
+    --aug-border-bg: linear-gradient(130deg, rgba(139, 69, 20, 0.45), rgba(196, 92, 38, 0.25));
+  }
+
+  .dojo-augmented--lex[data-augmented-ui] {
+    --aug-tl: 9px;
+    --aug-br: 9px;
+    --aug-border: 1px;
+    --aug-border-bg: linear-gradient(125deg, rgba(90, 232, 255, 0.4), rgba(232, 184, 74, 0.3));
+    border: none;
+    border-radius: 0;
+  }
+
+  .dojo-scene--day .dojo-augmented--lex[data-augmented-ui] {
+    --aug-border-bg: linear-gradient(125deg, rgba(139, 69, 20, 0.45), rgba(196, 92, 38, 0.28));
+  }
+
+  .dojo-augmented--inset[data-augmented-ui] {
+    --aug-tl: 8px;
+    --aug-br: 8px;
+    --aug-border: 1px;
+    --aug-border-bg: linear-gradient(160deg, rgba(90, 232, 255, 0.35), rgba(179, 136, 255, 0.22));
+    border: none;
+    border-radius: 0;
+  }
+
+  .dojo-scene--day .dojo-augmented--inset[data-augmented-ui] {
+    --aug-border-bg: linear-gradient(160deg, rgba(139, 69, 20, 0.38), rgba(196, 92, 38, 0.2));
+  }
+
+  .dojo-augmented--kata[data-augmented-ui] {
+    --aug-tl: 6px;
+    --aug-br: 6px;
+    --aug-border: 1px;
+    --aug-border-bg: linear-gradient(110deg, rgba(90, 232, 255, 0.5), rgba(255, 107, 74, 0.25));
+    border: none;
+    border-radius: 0;
+  }
+
+  .dojo-scene--day .dojo-augmented--kata[data-augmented-ui] {
+    --aug-border-bg: linear-gradient(110deg, rgba(139, 69, 20, 0.45), rgba(196, 92, 38, 0.3));
+  }
+
+  .dojo-augmented--toc[data-augmented-ui] {
+    --aug-tl: 10px;
+    --aug-br: 10px;
+    --aug-border: 1px;
+    --aug-border-bg: linear-gradient(140deg, rgba(90, 232, 255, 0.45), rgba(179, 136, 255, 0.3));
+    border: none;
+    border-radius: 0;
+  }
+
+  .dojo-augmented--form[data-augmented-ui] {
+    --aug-tl: 12px;
+    --aug-br: 12px;
+    --aug-border: 1px;
+    --aug-border-bg: linear-gradient(145deg, rgba(90, 232, 255, 0.42), rgba(232, 184, 74, 0.25));
+    padding: 1.35rem 1.2rem 1.45rem;
+    border: none;
+    border-radius: 0;
+  }
+}
+
 /* --- Reduced motion --- */
 .dojo-scene[data-reduce-motion='true'] .dojo-scene__moon,
 .dojo-scene[data-reduce-motion='true'] .dojo-scene__embers,

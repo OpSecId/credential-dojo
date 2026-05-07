@@ -249,7 +249,10 @@ export default function HomePage() {
       </button>
 
       <div className="dojo">
-        <div className="dojo__focusMeter">
+        <div
+          className="dojo__focusMeter dojo-augmented dojo-augmented--meter"
+          data-augmented-ui="tl-clip br-clip border"
+        >
           <div className="dojo__focusMeter-track" role="presentation">
             <div
               className="dojo__focusMeter-fill"
@@ -282,7 +285,10 @@ export default function HomePage() {
             built-in wallet.
           </p>
           {ninjaProfile ? (
-            <p className="dojo__ninjaBar">
+            <p
+              className="dojo__ninjaBar dojo-augmented dojo-augmented--ninja"
+              data-augmented-ui="tl-clip br-clip border"
+            >
               <span className="dojo__ninjaBar-label">Ninja profile</span>{' '}
               <strong className="dojo__ninjaBar-name">{ninjaProfile.codename}</strong>
               <span className="dojo__ninjaBar-sep"> · </span>
@@ -321,7 +327,11 @@ export default function HomePage() {
           </h2>
           <div className="dojo__lexGrid">
             {LEXICON_ENTRIES.map((entry) => (
-              <article key={entry.key} className="dojo-lexCard">
+              <article
+                key={entry.key}
+                className="dojo-lexCard dojo-augmented dojo-augmented--lex"
+                data-augmented-ui="tl-clip br-clip border"
+              >
                 <h3 className="dojo-lexCard__title">
                   {entry.title}{' '}
                   <span className="dojo-lexCard__glyph" lang="ja">
@@ -336,7 +346,8 @@ export default function HomePage() {
 
         <div className="dojo__panels">
           <section
-            className="dojo__panel dojo__panel--kinchaku"
+            className="dojo__panel dojo__panel--kinchaku dojo-augmented dojo-augmented--panel"
+            data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
             aria-labelledby="kinchaku-heading"
           >
             <h2 id="kinchaku-heading" className="dojo__panelTitle">
@@ -423,7 +434,12 @@ export default function HomePage() {
               and verifiers run when creating or checking proofs for W3C VCs.
             </p>
 
-            <div className="dojo-persona" role="group" aria-label="Demo proof school">
+            <div
+              className="dojo-persona dojo-augmented dojo-augmented--inset"
+              data-augmented-ui="tl-clip br-clip border"
+              role="group"
+              aria-label="Demo proof school"
+            >
               <p className="dojo-persona__label">Demo school (persona)</p>
               <div className="dojo-persona__tabs">
                 {activePersonas.map((p) => (
@@ -461,7 +477,8 @@ export default function HomePage() {
 
             <div className="dojo__kataPlay">
               <div
-                className={`dojo-kata-display${kataStrike ? ' dojo-kata-display--strike' : ''}`}
+                className={`dojo-kata-display dojo-augmented dojo-augmented--kata${kataStrike ? ' dojo-kata-display--strike' : ''}`}
+                data-augmented-ui="tl-clip br-clip border"
               >
                 <code className="dojo-kata-display__code">{kataSamples[kataIndex]}</code>
               </div>
@@ -474,7 +491,11 @@ export default function HomePage() {
             </div>
           </section>
 
-          <section className="dojo__panel dojo__panel--api" aria-live="polite">
+          <section
+            className="dojo__panel dojo__panel--api dojo-augmented dojo-augmented--panel"
+            data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
+            aria-live="polite"
+          >
             <h2 className="dojo__panelTitle">Platform API</h2>
             {apiMessage ? (
               <>

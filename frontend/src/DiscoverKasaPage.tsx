@@ -70,7 +70,10 @@ export default function DiscoverKasaPage() {
             <ul className="kasa__grid" aria-label="Demo proof schools">
               {personas.map((p) => (
                 <li key={p.id}>
-                  <article className="kasa-card">
+                  <article
+                    className="kasa-card dojo-augmented dojo-augmented--panel"
+                    data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
+                  >
                     <header className="kasa-card__head">
                       <h2 className="kasa-card__title">
                         {p.label}{' '}

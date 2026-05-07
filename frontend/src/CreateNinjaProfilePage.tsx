@@ -76,7 +76,11 @@ export default function CreateNinjaProfilePage() {
           </nav>
         </header>
 
-        <form className="ninjaProfile__form" onSubmit={onSubmit}>
+        <form
+          className="ninjaProfile__form dojo-augmented dojo-augmented--form"
+          data-augmented-ui="tl-clip br-clip border"
+          onSubmit={onSubmit}
+        >
           <label className="ninjaProfile__field">
             <span className="ninjaProfile__label">Codename</span>
             <input

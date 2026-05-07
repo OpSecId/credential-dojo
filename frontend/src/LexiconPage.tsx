@@ -48,7 +48,11 @@ export default function LexiconPage() {
           </nav>
         </header>
 
-        <ol className="lex__toc" aria-label="On this page">
+        <ol
+          className="lex__toc dojo-augmented dojo-augmented--toc"
+          data-augmented-ui="tl-clip br-clip border"
+          aria-label="On this page"
+        >
           {LEXICON_ARTICLES.map((article) => {
             const t = productTerminology[article.key]
             return (
@@ -65,7 +69,12 @@ export default function LexiconPage() {
           {LEXICON_ARTICLES.map((article) => {
             const t = productTerminology[article.key]
             return (
-              <article key={article.key} id={article.key} className="lex-article">
+              <article
+                key={article.key}
+                id={article.key}
+                className="lex-article dojo-augmented dojo-augmented--panel"
+                data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
+              >
                 <h2 className="lex-article__heading">
                   <span className="lex-article__name">{t.name}</span>{' '}
                   <span className="lex-article__glyph" lang="ja">
