@@ -6,6 +6,35 @@ import { productTerminology } from './terminology'
 
 type InspectMode = 'enbu' | 'menkyo'
 type InspectLevel = 'ok' | 'warn' | 'error'
+type RequestProtocol = 'oid4vp' | 'didcomm' | 'chapi' | 'custom'
+type EnbuArtifact = 'response' | 'request'
+
+const REQUEST_PROTOCOLS: readonly {
+  id: RequestProtocol
+  label: string
+  hint: string
+}[] = [
+  {
+    id: 'oid4vp',
+    label: 'OID4VP',
+    hint: 'Expect client_id / nonce plus presentation_definition or dcql_query.',
+  },
+  {
+    id: 'didcomm',
+    label: 'DIDComm',
+    hint: 'Expect DIDComm type/body with request-presentation style semantics.',
+  },
+  {
+    id: 'chapi',
+    label: 'CHAPI',
+    hint: 'Expect browser-wallet request style fields like query / challenge / domain.',
+  },
+  {
+    id: 'custom',
+    label: 'Custom',
+    hint: 'Project-specific request shape; at minimum include challenge and intent.',
+  },
+]
 
 function typeList(o: Record<string, unknown>): string[] {
   const t = o.type
@@ -207,8 +236,55 @@ function inspectJson(parsed: unknown, mode: InspectMode): { level: InspectLevel;
   return { level, lines: [...bucket.errors, ...bucket.warnings, ...bucket.passes] }
 }
 
+function inspectPresentationRequest(
+  parsed: unknown,
+  protocol: RequestProtocol,
+): { level: InspectLevel; lines: string[] } {
+  const bucket = { errors: [] as string[], warnings: [] as string[], passes: [] as string[] }
+  if (parsed === null || typeof parsed !== 'object' || Array.isArray(parsed)) {
+    return { level: 'error', lines: ['Expected a request JSON object (not an array or primitive).'] }
+  }
+  const o = parsed as Record<string, unknown>
+  const hasChallenge = typeof o.challenge === 'string' || typeof o.nonce === 'string'
+  const hasDomain = typeof o.domain === 'string' || typeof o.audience === 'string' || typeof o.client_id === 'string'
+
+  if (hasChallenge) pushIssue(bucket, 'ok', 'Request has challenge/nonce material.')
+  else pushIssue(bucket, 'warn', 'No challenge/nonce found in request payload.')
+  if (hasDomain) pushIssue(bucket, 'ok', 'Request includes verifier domain/audience/client context.')
+  else pushIssue(bucket, 'warn', 'No verifier domain/audience/client context found.')
+
+  if (protocol === 'oid4vp') {
+    const hasDef = o.presentation_definition !== undefined || o.dcql_query !== undefined
+    if (hasDef) pushIssue(bucket, 'ok', 'OID4VP request definition found (presentation_definition or dcql_query).')
+    else pushIssue(bucket, 'error', 'OID4VP request missing presentation_definition / dcql_query.')
+  } else if (protocol === 'didcomm') {
+    const type = typeof o.type === 'string' ? o.type.toLowerCase() : ''
+    const hasBody = o.body && typeof o.body === 'object' && !Array.isArray(o.body)
+    if (type.includes('request-presentation') || type.includes('present-proof')) {
+      pushIssue(bucket, 'ok', 'DIDComm request type indicates presentation request flow.')
+    } else {
+      pushIssue(bucket, 'warn', 'DIDComm type does not clearly indicate request-presentation.')
+    }
+    if (hasBody) pushIssue(bucket, 'ok', 'DIDComm message body present.')
+    else pushIssue(bucket, 'warn', 'DIDComm request body missing or invalid.')
+  } else if (protocol === 'chapi') {
+    const hasQuery = Array.isArray(o.query) || Array.isArray(o.acceptedQuery)
+    if (hasQuery) pushIssue(bucket, 'ok', 'CHAPI-style query array detected.')
+    else pushIssue(bucket, 'warn', 'CHAPI request usually includes query/acceptedQuery arrays.')
+  } else {
+    const hasIntent = typeof o.purpose === 'string' || typeof o.intent === 'string'
+    if (hasIntent) pushIssue(bucket, 'ok', 'Custom request includes intent/purpose.')
+    else pushIssue(bucket, 'warn', 'Custom request has no explicit intent/purpose field.')
+  }
+
+  const level: InspectLevel = bucket.errors.length ? 'error' : bucket.warnings.length ? 'warn' : 'ok'
+  return { level, lines: [...bucket.errors, ...bucket.warnings, ...bucket.passes] }
+}
+
 export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: InspectMode }) {
   const [mode, setMode] = useState<InspectMode>(initialMode)
+  const [enbuArtifact, setEnbuArtifact] = useState<EnbuArtifact>('response')
+  const [requestProtocol, setRequestProtocol] = useState<RequestProtocol>('oid4vp')
   const [raw, setRaw] = useState('')
   const [applied, setApplied] = useState('')
   const [parseError, setParseError] = useState<string | null>(null)
@@ -228,8 +304,11 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
   const result = useMemo(() => {
     if (!applied || parseError) return null
     if (parsed === null) return null
+    if (mode === 'enbu' && enbuArtifact === 'request') {
+      return inspectPresentationRequest(parsed, requestProtocol)
+    }
     return inspectJson(parsed, mode)
-  }, [applied, parsed, parseError, mode])
+  }, [applied, parsed, parseError, mode, enbuArtifact, requestProtocol])
 
   const apply = useCallback(() => {
     try {
@@ -292,6 +371,7 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
 
   const tEnbu = productTerminology.presentationInspection
   const tMenkyo = productTerminology.credentialInspection
+  const selectedProtocol = REQUEST_PROTOCOLS.find((p) => p.id === requestProtocol) ?? REQUEST_PROTOCOLS[0]
 
   useEffect(() => {
     setMode(initialMode)
@@ -388,9 +468,57 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
         </h2>
         <p className="kensa__hint">
           {mode === 'enbu'
-            ? 'Paste a verifiable presentation JSON (holder → verifier package).'
+            ? enbuArtifact === 'request'
+              ? `Paste a Shōkan (presentation request) payload. Protocol: ${selectedProtocol.label}.`
+              : 'Paste a verifiable presentation JSON (holder → verifier package).'
             : 'Paste a single verifiable credential JSON object.'}
         </p>
+        {mode === 'enbu' ? (
+          <>
+            <div className="kensa__toggles" role="radiogroup" aria-label="Enbu artifact type">
+              <button
+                type="button"
+                role="radio"
+                aria-checked={enbuArtifact === 'response'}
+                className={`kensa__modeBtn${enbuArtifact === 'response' ? ' kensa__modeBtn--active' : ''}`}
+                onClick={() => setEnbuArtifact('response')}
+                title="Inspect a holder response presentation"
+              >
+                Enbu response
+              </button>
+              <button
+                type="button"
+                role="radio"
+                aria-checked={enbuArtifact === 'request'}
+                className={`kensa__modeBtn${enbuArtifact === 'request' ? ' kensa__modeBtn--active' : ''}`}
+                onClick={() => setEnbuArtifact('request')}
+                title="Inspect a verifier presentation request"
+              >
+                Shōkan request
+              </button>
+            </div>
+            {enbuArtifact === 'request' ? (
+              <>
+                <div className="kensa__protocols" role="radiogroup" aria-label="Presentation request protocol">
+                  {REQUEST_PROTOCOLS.map((protocol) => (
+                    <button
+                      key={protocol.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={requestProtocol === protocol.id}
+                      className={`kensa__modeBtn${requestProtocol === protocol.id ? ' kensa__modeBtn--active' : ''}`}
+                      onClick={() => setRequestProtocol(protocol.id)}
+                      title={protocol.hint}
+                    >
+                      {protocol.label}
+                    </button>
+                  ))}
+                </div>
+                <p className="kensa__protocolHint">{selectedProtocol.hint}</p>
+              </>
+            ) : null}
+          </>
+        ) : null}
 
         <label className="kensa__label" htmlFor="kensa-json">
           JSON
@@ -418,10 +546,16 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
             onChange={(e) => setRaw(e.target.value)}
             spellCheck={false}
             rows={12}
-            placeholder='{ "type": ["VerifiablePresentation"], ... }'
+            placeholder={
+              mode === 'enbu' && enbuArtifact === 'request'
+                ? '{ "client_id": "https://verifier.example", "nonce": "...", "presentation_definition": { ... } }'
+                : '{ "type": ["VerifiablePresentation"], ... }'
+            }
             title={
               mode === 'enbu'
-                ? 'Paste a verifiable presentation (VP) JSON object for heuristic checks'
+                ? enbuArtifact === 'request'
+                  ? 'Paste a presentation request payload (Shōkan) for protocol-aware structural checks'
+                  : 'Paste a verifiable presentation (VP) JSON object for heuristic checks'
                 : 'Paste one verifiable credential (VC) JSON object for heuristic checks'
             }
           />

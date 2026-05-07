@@ -139,6 +139,20 @@
   color: var(--muted);
 }
 
+.kensa__toggles,
+.kensa__protocols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 0.55rem;
+}
+
+.kensa__protocolHint {
+  margin: -0.2rem 0 0.65rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
 .kensa__label {
   display: block;
   font-size: 0.72rem;
@@ -194,7 +208,7 @@
   background: rgba(255, 255, 255, 0.02);
   color: var(--muted);
   border-radius: 6px;
-  padding: 0.28rem 0.62rem;
+  padding: 0.34rem 0.68rem;
   font-size: 0.75rem;
   cursor: pointer;
 }
@@ -209,6 +223,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  margin-top: 0.2rem;
 }
 
 .kensa__btn {

@@ -1,6 +1,14 @@
 import { Link } from 'react-router-dom'
 import { useMemo } from 'react'
-import ReactFlow, { Background, Controls, MarkerType, MiniMap, type Edge, type Node } from 'reactflow'
+import ReactFlow, {
+  Background,
+  Controls,
+  MarkerType,
+  MiniMap,
+  Position,
+  type Edge,
+  type Node,
+} from 'reactflow'
 import 'reactflow/dist/style.css'
 import './TejunViewerPage.css'
 import { EXPEDITION_STEPS } from './expeditionSteps'
@@ -20,8 +28,8 @@ export default function TejunViewerPage() {
           : `${i + 1}. ${step.term.name} (${step.term.glyph})`,
       },
       type: 'default',
-      sourcePosition: 'right',
-      targetPosition: 'left',
+      sourcePosition: Position.Right,
+      targetPosition: Position.Left,
     }))
 
     const e: Edge[] = EXPEDITION_STEPS.slice(1).map((_, i) => ({
