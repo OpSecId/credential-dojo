@@ -41,7 +41,6 @@ const ALL_KATA = [
   "ecdsa-jcs-2019",
   "ecdsa-sd-2023",
   "bbs-2023",
-  "vc-jwt",
   "mldsa44-rdfc-2024",
   "mldsa44-jcs-2024",
   "anoncreds-2023",
@@ -76,11 +75,10 @@ function edPersona(): PersonaPublic {
     id,
     label: "Ed-ryū",
     labelJa: "エド流",
-    description:
-      "Ed25519 baseline issuer for core Data Integrity and JWT-style credential demos.",
+    description: "Ed25519 baseline issuer for core Data Integrity credential demos.",
     proofSchool: "ed25519",
     didKey,
-    kataSamples: [ALL_KATA[0], ALL_KATA[1], ALL_KATA[6]],
+    kataSamples: [ALL_KATA[0], ALL_KATA[1]],
   });
 }
 
@@ -146,7 +144,7 @@ function mlDsaPersona(): PersonaPublic {
       "Post-quantum ML-DSA-44 issuer aligned with FIPS 204 Data Integrity exploration.",
     proofSchool: "mldsa",
     didKey,
-    kataSamples: [ALL_KATA[7], ALL_KATA[8]],
+    kataSamples: [ALL_KATA[6], ALL_KATA[7]],
   });
 }
 
@@ -163,7 +161,7 @@ function clPersona(): PersonaPublic {
       "Ed25519 issuer tuned for AnonCreds-style CL credential interoperability.",
     proofSchool: "anoncreds",
     didKey,
-    kataSamples: [ALL_KATA[9]],
+    kataSamples: [ALL_KATA[8]],
   });
 }
 

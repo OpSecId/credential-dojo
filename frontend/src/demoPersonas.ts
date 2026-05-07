@@ -21,7 +21,6 @@ export type PersonasPayload = {
 export const ED_RYU_KATA_SAMPLES = [
   'eddsa-rdfc-2022',
   'eddsa-jcs-2022',
-  'vc-jwt',
 ] as const
 
 /** Full demo suite vocabulary when a persona omits `kataSamples` (fallback). */
@@ -46,7 +45,7 @@ export const DEMO_PERSONAS_OFFLINE: readonly PersonaPublic[] = [
     id: 'ed-ryu',
     label: 'Ed-ryū',
     labelJa: 'エド流',
-    description: 'Ed25519 baseline issuer for core Data Integrity and JWT-style credential demos.',
+    description: 'Ed25519 baseline issuer for core Data Integrity credential demos.',
     proofSchool: 'ed25519',
     didKey: 'did:key:z6Mkjv9qpuroLvWybHc9yppTwTjZjid5EWSpRPfo7wXaKE4e',
     kataSamples: [...ED_RYU_KATA_SAMPLES],
