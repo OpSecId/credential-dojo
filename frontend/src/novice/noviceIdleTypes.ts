@@ -1,7 +1,7 @@
 /** Browser-only idle progression — ties to routes, ninja profile, and home focus meter. */
 
 export const NOVICE_IDLE_STORAGE_KEY = 'credential-dojo-novice-idle'
-export const NOVICE_IDLE_VERSION = 1 as const
+export const NOVICE_IDLE_VERSION = 2 as const
 
 export type NoviceIdlePersisted = {
   v: typeof NOVICE_IDLE_VERSION
@@ -10,6 +10,13 @@ export type NoviceIdlePersisted = {
   lessonsDone: Record<string, boolean>
   /** Training focus on home hit 100% at least once */
   everFocusPeak: boolean
+  issuerXp: number
+  verifierXp: number
+  walletXp: number
+  issuedCount: number
+  verifiedCount: number
+  receivedCount: number
+  presentedCount: number
 }
 
 export type NoviceRankDef = {
@@ -157,6 +164,41 @@ export type RankProgress = {
   progress01: number
   insightInRank: number
   insightToNext: number | null
+}
+
+export type NoviceTrackKey = 'issuer' | 'verifier' | 'wallet'
+
+export type TrackProgress = {
+  level: number
+  xp: number
+  xpInLevel: number
+  xpToNext: number
+  progress01: number
+}
+
+/** Increasing XP thresholds per level; reused for issuer/verifier/wallet tracks. */
+export function trackLevelThreshold(level: number): number {
+  if (level <= 1) return 0
+  return Math.floor(70 * Math.pow(level - 1, 1.45))
+}
+
+export function computeTrackProgress(xp: number): TrackProgress {
+  const safeXp = Math.max(0, xp)
+  let level = 1
+  while (level < 999 && safeXp >= trackLevelThreshold(level + 1)) {
+    level += 1
+  }
+  const floor = trackLevelThreshold(level)
+  const next = trackLevelThreshold(level + 1)
+  const span = Math.max(1, next - floor)
+  const xpInLevel = safeXp - floor
+  return {
+    level,
+    xp: safeXp,
+    xpInLevel,
+    xpToNext: Math.max(0, next - safeXp),
+    progress01: Math.min(1, xpInLevel / span),
+  }
 }
 
 export function computeRankProgress(totalInsight: number): RankProgress {

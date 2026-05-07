@@ -227,6 +227,75 @@
   color: var(--muted, #7a8498);
 }
 
+.novice-panel__tracks {
+  margin-bottom: 1rem;
+}
+
+.novice-track {
+  margin: 0.55rem 0 0;
+  padding: 0.55rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid rgba(120, 200, 255, 0.14);
+  background: rgba(0, 0, 0, 0.17);
+}
+
+.novice-track__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.45rem 0.8rem;
+}
+
+.novice-track__title {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-h, #f0f4ff);
+}
+
+.novice-track__level {
+  margin: 0;
+  font-size: 0.72rem;
+  font-family: var(--font-mono, monospace);
+  color: #9ee8ff;
+}
+
+.novice-track__bar {
+  margin: 0.45rem 0 0.4rem;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.novice-track__barFill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.novice-track__barFill--issuer {
+  background: linear-gradient(90deg, #5ae8ff, #7ec8ff);
+}
+
+.novice-track__barFill--verifier {
+  background: linear-gradient(90deg, #e8b84a, #f7d67a);
+}
+
+.novice-track__barFill--wallet {
+  background: linear-gradient(90deg, #66d47e, #7ff0a2);
+}
+
+.novice-track__meta {
+  margin: 0.18rem 0 0;
+  font-size: 0.74rem;
+  line-height: 1.35;
+  color: var(--muted, #8a92a8);
+}
+
+.novice-track__meta strong {
+  color: var(--text-h, #f0f4ff);
+}
+
 .novice-panel__lessonsMeta {
   margin: 0 0 0.55rem;
   font-size: 0.76rem;

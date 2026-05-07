@@ -22,6 +22,15 @@ export function previewInsightPerSec(
   return basePerSec * routeMult * profileMult * lessonBonus * rankMult * focusMult * visMult
 }
 
+function routeTrackWeights(pathname: string): { issuer: number; verifier: number; wallet: number } {
+  if (pathname.startsWith('/kensa')) return { issuer: 0.45, verifier: 1.55, wallet: 0.85 }
+  if (pathname.startsWith('/json-explorer')) return { issuer: 0.9, verifier: 1.1, wallet: 1.2 }
+  if (pathname.startsWith('/discover-kasa')) return { issuer: 1.35, verifier: 0.8, wallet: 0.95 }
+  if (pathname.startsWith('/lexicon')) return { issuer: 1.05, verifier: 1.05, wallet: 1.05 }
+  if (pathname.startsWith('/create-ninja-profile')) return { issuer: 0.95, verifier: 0.7, wallet: 1.35 }
+  return { issuer: 1.15, verifier: 0.95, wallet: 1.15 }
+}
+
 function applyLessonFlags(
   lessons: Record<string, boolean>,
   env: TickEnv,
@@ -75,6 +84,29 @@ export function applyIdleTick(prev: NoviceIdlePersisted, nowMs: number, env: Tic
     (delta / 1000) * basePerSec * routeMult * profileMult * lessonBonus * rankMult * focusMult * visMult
 
   const totalInsight = prev.totalInsight + gain
+  const levelIssuer = Math.floor(prev.issuerXp / 140)
+  const levelVerifier = Math.floor(prev.verifierXp / 140)
+  const levelWallet = Math.floor(prev.walletXp / 140)
+
+  const trackGainBase = gain * 0.95
+  const weights = routeTrackWeights(env.pathname)
+  const issuerGain = trackGainBase * weights.issuer
+  const verifierGain = trackGainBase * weights.verifier
+  const walletGain = trackGainBase * weights.wallet
+
+  const issuerXp = prev.issuerXp + issuerGain
+  const verifierXp = prev.verifierXp + verifierGain
+  const walletXp = prev.walletXp + walletGain
+
+  // Action output scales with rising mastery in each path.
+  const issuedCount =
+    prev.issuedCount +
+    issuerGain * (1.7 + levelIssuer * 0.22) * (env.hasNinjaProfile ? 1.08 : 1)
+  const verifiedCount = prev.verifiedCount + verifierGain * (1.45 + levelVerifier * 0.2)
+  const receivedCount = prev.receivedCount + walletGain * (1.35 + levelWallet * 0.18)
+  const presentedCount =
+    prev.presentedCount +
+    walletGain * (0.95 + levelWallet * 0.15) * (env.onHome ? 1 + env.homeFocus01 * 0.2 : 1)
 
   return {
     ...prev,
@@ -82,5 +114,12 @@ export function applyIdleTick(prev: NoviceIdlePersisted, nowMs: number, env: Tic
     totalInsight,
     lessonsDone,
     everFocusPeak,
+    issuerXp,
+    verifierXp,
+    walletXp,
+    issuedCount,
+    verifiedCount,
+    receivedCount,
+    presentedCount,
   }
 }

@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { NOVICE_LESSONS } from './noviceIdleTypes'
+import { computeTrackProgress, NOVICE_LESSONS } from './noviceIdleTypes'
 import { useNoviceIdle } from './NoviceIdleContext'
 import './NoviceProgressPanel.css'
 
@@ -33,6 +33,9 @@ export default function NoviceProgressPanel() {
   }, [panelOpen, setPanelOpen])
 
   const doneCount = NOVICE_LESSONS.filter((L) => state.lessonsDone[L.id]).length
+  const issuer = computeTrackProgress(state.issuerXp)
+  const verifier = computeTrackProgress(state.verifierXp)
+  const wallet = computeTrackProgress(state.walletXp)
 
   return (
     <div className="novice-dock" aria-live="polite">
@@ -42,12 +45,12 @@ export default function NoviceProgressPanel() {
         aria-expanded={panelOpen}
         aria-controls={panelOpen ? 'novice-progress-panel' : undefined}
         onClick={togglePanel}
-        title="Dojo novice path — idle insight & lessons"
+        title="Dojo progression — issuer, verifier, and cloud wallet paths"
       >
         <span className="novice-fab__glyph" aria-hidden>
           修
         </span>
-        <span className="novice-fab__label">Novice path</span>
+        <span className="novice-fab__label">Dojo progress</span>
         <span className="novice-fab__rank" aria-hidden>
           {rank.rank.titleJa}
         </span>
@@ -66,9 +69,11 @@ export default function NoviceProgressPanel() {
           <header className="novice-panel__head">
             <div>
               <h2 id={titleId} className="novice-panel__title">
-                Dojo novice path
+                Dojo operations path
               </h2>
-              <p className="novice-panel__sub">Idle insight while you learn the platform</p>
+              <p className="novice-panel__sub">
+                Idle progression: become an issuer, a verifier, and a cloud wallet operator
+              </p>
             </div>
             <button
               type="button"
@@ -115,6 +120,71 @@ export default function NoviceProgressPanel() {
             </p>
           </section>
 
+          <section className="novice-panel__tracks" aria-label="Operational progression tracks">
+            <h3 className="novice-panel__h3">Progression tracks</h3>
+
+            <article className="novice-track">
+              <header className="novice-track__head">
+                <p className="novice-track__title">Issuer progression</p>
+                <p className="novice-track__level">Lv {issuer.level}</p>
+              </header>
+              <div className="novice-track__bar" role="presentation">
+                <div
+                  className="novice-track__barFill novice-track__barFill--issuer"
+                  style={{ width: `${Math.round(issuer.progress01 * 100)}%` }}
+                />
+              </div>
+              <p className="novice-track__meta">
+                Issued credentials: <strong>{Math.floor(state.issuedCount).toLocaleString()}</strong>
+              </p>
+              <p className="novice-track__meta">
+                Next level in ~{Math.ceil(issuer.xpToNext).toLocaleString()} issuer XP
+              </p>
+            </article>
+
+            <article className="novice-track">
+              <header className="novice-track__head">
+                <p className="novice-track__title">Verifier progression</p>
+                <p className="novice-track__level">Lv {verifier.level}</p>
+              </header>
+              <div className="novice-track__bar" role="presentation">
+                <div
+                  className="novice-track__barFill novice-track__barFill--verifier"
+                  style={{ width: `${Math.round(verifier.progress01 * 100)}%` }}
+                />
+              </div>
+              <p className="novice-track__meta">
+                Verified credentials/presentations:{' '}
+                <strong>{Math.floor(state.verifiedCount).toLocaleString()}</strong>
+              </p>
+              <p className="novice-track__meta">
+                Next level in ~{Math.ceil(verifier.xpToNext).toLocaleString()} verifier XP
+              </p>
+            </article>
+
+            <article className="novice-track">
+              <header className="novice-track__head">
+                <p className="novice-track__title">Cloud wallet services</p>
+                <p className="novice-track__level">Lv {wallet.level}</p>
+              </header>
+              <div className="novice-track__bar" role="presentation">
+                <div
+                  className="novice-track__barFill novice-track__barFill--wallet"
+                  style={{ width: `${Math.round(wallet.progress01 * 100)}%` }}
+                />
+              </div>
+              <p className="novice-track__meta">
+                Received credentials: <strong>{Math.floor(state.receivedCount).toLocaleString()}</strong>
+              </p>
+              <p className="novice-track__meta">
+                Presented credentials: <strong>{Math.floor(state.presentedCount).toLocaleString()}</strong>
+              </p>
+              <p className="novice-track__meta">
+                Next level in ~{Math.ceil(wallet.xpToNext).toLocaleString()} wallet XP
+              </p>
+            </article>
+          </section>
+
           <section className="novice-panel__lessons" aria-label="Platform lessons">
             <h3 className="novice-panel__h3">Lessons</h3>
             <p className="novice-panel__lessonsMeta">
@@ -144,7 +214,8 @@ export default function NoviceProgressPanel() {
           <footer className="novice-panel__foot">
             <p>
               On the <Link to="/">home dojo</Link>, the <strong>training focus</strong> meter boosts
-              passive insight while you stay sharp — kata, Kinchaku, and school switches feed it.
+              passive insight while you stay sharp — kata, Kinchaku, and school switches feed issuer,
+              verifier, and wallet growth.
             </p>
             <p className="novice-panel__footNote">
               Progress saves in this browser only. Hidden tabs earn insight slower.
