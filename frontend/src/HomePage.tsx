@@ -32,6 +32,7 @@ type HelloPayload = {
   wallet?: string
   cryptosuitesMetaphor?: string
   templateMetaphor?: string
+  katachiMetaphor?: string
   credentialMetaphor?: string
   credentialFromTemplateMetaphor?: string
   presentationMetaphor?: string
@@ -330,7 +331,7 @@ export default function HomePage() {
             <p className="dojo__lede">
               Credential management platform centered on{' '}
               <strong>W3C Verifiable Credentials</strong>: operators shape{' '}
-              <strong>Tehon</strong> into <strong>Menkyo</strong>; agents open flows with{' '}
+              <strong>Tehon</strong> and <strong>Katachi</strong> into <strong>Menkyo</strong>; agents open flows with{' '}
               <strong>Teawase</strong> handshakes and run <strong>Randori</strong>{' '}
               exchanges; holders stage <strong>Enbu</strong> for verifiers under{' '}
               <strong>Kata</strong> suites. Artifacts live in <strong>Kinchaku</strong>, the
@@ -488,7 +489,7 @@ export default function HomePage() {
                 The platform wallet: hold <strong>Menkyo</strong> (issued credentials),
                 compose an <strong>Enbu</strong> (verifiable presentation) when a
                 verifier asks for proofs, and keep everything aligned with{' '}
-                issuer <strong>Tehon</strong> and <strong>Kata</strong> suites—without
+                issuer <strong>Tehon</strong>, <strong>Katachi</strong>, and <strong>Kata</strong>—without
                 leaving the CRMS story.
               </p>
 

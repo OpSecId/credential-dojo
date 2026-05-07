@@ -13,7 +13,13 @@ export const LEXICON_ENTRIES: {
     key: 'template',
     title: productTerminology.template.name,
     glyph: productTerminology.template.glyph,
-    blurb: 'Issuer definitions & shapes—not Menkyo until issued.',
+    blurb: 'Issuer copybook—definitions & offers; not Menkyo until issued.',
+  },
+  {
+    key: 'katachi',
+    title: productTerminology.katachi.name,
+    glyph: productTerminology.katachi.glyph,
+    blurb: 'Claim & type structure—schemas & contexts; not proof Kata.',
   },
   {
     key: 'credential',
@@ -101,12 +107,22 @@ export type LexiconArticle = {
 export const LEXICON_ARTICLES: LexiconArticle[] = [
   {
     key: 'template',
-    credentialTerm: 'Issuer-side definitions, shapes, and offers (Tehon)',
+    credentialTerm: 'Issuer-side definitions, offers, and exemplars (Tehon)',
     literal: [
       '**Tehon** (手本) literally means a model, pattern, or copybook—the example you copy when learning brushwork, craft, or procedure. It is the authoritative “this is how it should look.”',
     ],
     inPlatform: [
-      '**Tehon** names **issuer-side definitions and exemplars only**: JSON-LD `@context` / type shapes, **credential definitions** (the VC *kind* you will issue), offer layouts, and issuer blueprints. None of that is a holder artifact yet—that role is **Menkyo**. When issuance runs, the platform produces **Tehon の Menkyo**: a concrete **Menkyo** instantiated from that **Tehon**.',
+      '**Tehon** names **issuer-side definitions and exemplars**: **credential definitions** (the VC *kind* you will issue), offer layouts, and issuer blueprints—the **copybook**, not the holder artifact. Structural **shape** of claims and types is **Katachi** (形). None of this is **Menkyo** yet. When issuance runs, the platform produces **Tehon の Menkyo**: a concrete **Menkyo** instantiated from that **Tehon**.',
+    ],
+  },
+  {
+    key: 'katachi',
+    credentialTerm: 'Credential & claim structure (schemas, contexts)',
+    literal: [
+      '**Katachi** (形) means **form** or **figure**—the shape something is meant to take. It is not the same character as **Kata** (型), the **fixed pattern** of a budō form or, in this product, a cryptosuite recipe.',
+    ],
+    inPlatform: [
+      '**Katachi** names **schemas and structural constraints** for credentials and claims: JSON Schema, JSON-LD `@context` and type rules, and similar “what shape must this data have?” artifacts. **Tehon** is the issuer **copybook** (definitions, offers, blueprints); **Katachi** is the **form** those pieces conform to. **Kata** stays the **proof machinery**—algorithms and suites—not the claim skeleton.',
     ],
   },
   {

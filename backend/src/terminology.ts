@@ -4,6 +4,8 @@ export const productTerminology = {
   cryptosuites: { name: "Kata", glyph: "型" },
   kasa: { name: "Kasa", glyph: "笠" },
   template: { name: "Tehon", glyph: "手本" },
+  /** Claim / credential structure (schemas, contexts)—形 vs Kata 型 (cryptosuites). */
+  katachi: { name: "Katachi", glyph: "形" },
   credential: { name: "Menkyo", glyph: "免許" },
   credentialFromTemplate: { name: "Tehon の Menkyo", glyph: "手本の免許" },
   presentation: { name: "Enbu", glyph: "演武" },

@@ -57,6 +57,7 @@ app.get("/api/health", (_req, res) => {
     wallet: productTerminology.wallet.name,
     cryptosuitesMetaphor: productTerminology.cryptosuites.name,
     templateMetaphor: productTerminology.template.name,
+    katachiMetaphor: productTerminology.katachi.name,
     credentialMetaphor: productTerminology.credential.name,
     credentialFromTemplateMetaphor: productTerminology.credentialFromTemplate.name,
     presentationMetaphor: productTerminology.presentation.name,
@@ -82,11 +83,12 @@ app.get("/api/personas", (_req, res) => {
 app.get("/api/hello", (_req, res) => {
   res.json({
     message:
-      "The Credential Dojo platform API — Tehon (definitions), Menkyo, Tehon の Menkyo, Enbu, Shinbi (render), Kensa, Randori, Teawase, Tejun (workflows), Kinchaku, Kata, Kasa (proof schools) — W3C VC–aligned endpoints.",
+      "The Credential Dojo platform API — Tehon (definitions), Katachi (schemas), Menkyo, Tehon の Menkyo, Enbu, Shinbi (render), Kensa, Randori, Teawase, Tejun (workflows), Kinchaku, Kata, Kasa (proof schools) — W3C VC–aligned endpoints.",
     site: publicSite,
     wallet: productTerminology.wallet.name,
     cryptosuitesMetaphor: productTerminology.cryptosuites.name,
     templateMetaphor: productTerminology.template.name,
+    katachiMetaphor: productTerminology.katachi.name,
     credentialMetaphor: productTerminology.credential.name,
     credentialFromTemplateMetaphor: productTerminology.credentialFromTemplate.name,
     presentationMetaphor: productTerminology.presentation.name,

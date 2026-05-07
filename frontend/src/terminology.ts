@@ -4,8 +4,13 @@ export const productTerminology = {
   cryptosuites: { name: 'Kata', glyph: '型' },
   /** Demo proof school / issuer persona bucket (Discover Kasa, ninja profile school). */
   kasa: { name: 'Kasa', glyph: '笠' },
-  /** Issuer-side definitions, JSON-LD shapes, offers, and blueprints — not an issued Menkyo. */
+  /** Issuer-side definitions, offers, and blueprints — not an issued Menkyo. */
   template: { name: 'Tehon', glyph: '手本' },
+  /**
+   * Claim / credential structure (schemas, JSON-LD constraints)—the form data must take.
+   * Glyph 形 (katachi) is “shape”; distinct from Kata (型), the cryptosuite pattern.
+   */
+  katachi: { name: 'Katachi', glyph: '形' },
   /** Issued W3C Verifiable Credential (the holder-facing license-like record). */
   credential: { name: 'Menkyo', glyph: '免許' },
   /** Menkyo produced from a Tehon: issuance / instantiated credential from a definition. */

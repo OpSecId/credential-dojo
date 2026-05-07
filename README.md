@@ -22,7 +22,11 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 
 ### Tehon (手本) — issuer definitions & exemplars
 
-**Tehon** (手本) is the **model or exemplar**—the copybook. In the CRMS, **Tehon** maps to **issuer-side definitions and shapes**: JSON-LD profiles, **credential definitions** (the VC *type* you issue from), offer layouts, and blueprints. **Tehon is not an issued credential**; issuance produces **Menkyo** (**Tehon の Menkyo**).
+**Tehon** (手本) is the **model or exemplar**—the copybook. In the CRMS, **Tehon** maps to **issuer-side definitions**: **credential definitions** (the VC *type* you issue from), offer layouts, and blueprints. **Structural shape** of claims and types—schemas, JSON-LD contexts—is **Katachi** (形), not **Tehon** itself. **Tehon is not an issued credential**; issuance produces **Menkyo** (**Tehon の Menkyo**).
+
+### Katachi (形) — credential & claim structure
+
+**Katachi** (形) is **form** or **figure**—the shape data is supposed to take. It is **not** **Kata** (型), the fixed **pattern** of a cryptosuite (proof recipe) in this product. **Katachi** names **schemas and constraints**: JSON Schema, JSON-LD `@context` / typing rules, and other artifacts that define **what shape** claims and credentials must have. **Tehon** is the issuer copybook; **Katachi** is the **form** those definitions align with.
 
 ### Menkyo (免許) — issued credentials
 
@@ -79,7 +83,7 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 | Cryptosuite / proof suite selection | **Kata** | Which “form” signing and verification run |
 | Demo proof school / issuer persona | **Kasa** / **笠** | Discover Kasa + ninja profile school; ties **did:key** and default **Kata** |
 
-**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `credentialMetaphor`, `credentialFromTemplateMetaphor`, `presentationMetaphor`, `presentationInspectionMetaphor`, `credentialInspectionMetaphor`, `exchangeMetaphor`, `handshakeMetaphor`, `workflowMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
+**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `katachiMetaphor`, `credentialMetaphor`, `credentialFromTemplateMetaphor`, `presentationMetaphor`, `presentationInspectionMetaphor`, `credentialInspectionMetaphor`, `exchangeMetaphor`, `handshakeMetaphor`, `workflowMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
 
 ## Structure
 
