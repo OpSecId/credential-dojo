@@ -17,4 +17,6 @@ export const productTerminology = {
   exchange: { name: 'Randori', glyph: '乱取り' },
   /** Initial pairing / capability handshake before deeper flows. */
   handshake: { name: 'Teawase', glyph: '手合わせ' },
+  /** Orchestrated operational workflows — ordered steps in the platform (not protocol Randori). */
+  workflow: { name: 'Tejun', glyph: '手順' },
 } as const;

@@ -48,6 +48,10 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 
 **Teawase** (手合わせ) is **“matching hands”**—a **light, mutual test** before serious work. It maps to **connection or capability handshakes**: first contact, offer/answer alignment, polite pairing **before** a longer **Randori** or an **Enbu**.
 
+### Tejun (手順) — workflows
+
+**Tejun** (手順) is **procedure**—the **ordered steps** of a task. In the CRMS it names **operator-side workflows**: orchestrated runs (issuance, verification, approvals) as **step sequences** you define and execute. This is **not** **Randori**, which is adaptive **protocol exchange** between agents on the wire. A workflow **template** can be described as **Tejun の Tehon** (手順の手本)—the exemplar for the procedure—alongside **Tehon** (credential definitions) and **Enbu** (presentations).
+
 **How to use the terms**
 
 | Concept | Dojo name | Notes |
@@ -59,11 +63,13 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 | Presentation inspection (VP-shaped JSON) | **Enbu の Kensa** / **演武の検査** | Heuristic “kensa” path on `/kensa` |
 | Single-credential inspection (VC-shaped JSON) | **Menkyo の Kensa** / **免許の検査** | Heuristic “kensa” path on `/kensa` |
 | Multi-step protocol exchange | **Randori** | Stateful back-and-forth between parties |
+| Orchestrated workflow (operator runbook / pipeline) | **Tejun** | Ordered steps in the platform—not wire-level Randori |
+| Workflow template (procedure blueprint) | **Tejun の Tehon** / **手順の手本** | Parallel to credential **Tehon**; defines the Tejun |
 | Handshake / first pairing | **Teawase** | Capability probe before deeper flows |
 | Holder wallet UI / experience | **Kinchaku** | Where Menkyo live; Enbu are composed from here |
 | Cryptosuite / proof suite selection | **Kata** | Which “form” signing and verification run |
 
-**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `credentialMetaphor`, `credentialFromTemplateMetaphor`, `presentationMetaphor`, `presentationInspectionMetaphor`, `credentialInspectionMetaphor`, `exchangeMetaphor`, `handshakeMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
+**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `credentialMetaphor`, `credentialFromTemplateMetaphor`, `presentationMetaphor`, `presentationInspectionMetaphor`, `credentialInspectionMetaphor`, `exchangeMetaphor`, `handshakeMetaphor`, `workflowMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
 
 ## Structure
 

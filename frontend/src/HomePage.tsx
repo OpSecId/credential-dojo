@@ -35,6 +35,7 @@ type HelloPayload = {
   credentialInspectionMetaphor?: string
   exchangeMetaphor?: string
   handshakeMetaphor?: string
+  workflowMetaphor?: string
   standardsFocus?: string
   terminology?: typeof productTerminology
 }

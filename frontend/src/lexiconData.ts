@@ -66,6 +66,13 @@ export const LEXICON_ENTRIES: {
       'Handshakes and pairing—light mutual “matching hands” before a longer Randori.',
   },
   {
+    key: 'workflow',
+    title: productTerminology.workflow.name,
+    glyph: productTerminology.workflow.glyph,
+    blurb:
+      'Operational workflows—ordered steps you orchestrate in the CRMS (distinct from Randori protocol exchanges).',
+  },
+  {
     key: 'wallet',
     title: productTerminology.wallet.name,
     glyph: productTerminology.wallet.glyph,
@@ -169,6 +176,16 @@ export const LEXICON_ARTICLES: LexiconArticle[] = [
     ],
     inPlatform: [
       '**Teawase** is the metaphor for **first contact and pairing**: DID exchange intros, capability lists, offer/answer alignment—before a longer **Randori** or a full **Enbu**.',
+    ],
+  },
+  {
+    key: 'workflow',
+    credentialTerm: 'Orchestrated workflows & runbooks (operator-side)',
+    literal: [
+      '**Tejun** (手順) means **procedure** or **sequence of steps**—the ordered hand movements of a task. It is the checklist shape of work, not the improvisational sparring of randori.',
+    ],
+    inPlatform: [
+      '**Tejun** names **workflows** in the platform: issuance pipelines, verification runbooks, approvals—**authored step graphs** you operate inside the CRMS. Contrast **Randori**: adaptive **protocol** messaging between parties across the wire. A reusable workflow definition can be glossed **Tejun の Tehon** (手順の手本)—the copybook for the procedure—parallel to **Tehon の Menkyo** for credentials.',
     ],
   },
   {
