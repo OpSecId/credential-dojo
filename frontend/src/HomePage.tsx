@@ -18,6 +18,7 @@ import {
   readNinjaProfile,
   type NinjaProfile,
 } from './ninjaProfileStorage'
+import { useNoviceIdle } from './novice/NoviceIdleContext'
 import { productTerminology } from './terminology'
 
 const SITE = 'https://credential.ninja'
@@ -86,6 +87,7 @@ function prefersReducedMotion(): boolean {
 }
 
 export default function HomePage() {
+  const { reportFocusMeter, clearHomeFocus } = useNoviceIdle()
   const pouchGradId = useId().replace(/:/g, '')
   const sceneRef = useRef<HTMLDivElement>(null)
   const strikeTimerRef = useRef<number>(0)
@@ -127,6 +129,11 @@ export default function HomePage() {
     }, 700)
     return () => clearInterval(id)
   }, [reduceMotion])
+
+  useEffect(() => {
+    reportFocusMeter(focusMeter)
+    return () => clearHomeFocus()
+  }, [focusMeter, reportFocusMeter, clearHomeFocus])
 
   useEffect(() => {
     const base = import.meta.env.VITE_API_BASE ?? ''
@@ -312,7 +319,8 @@ export default function HomePage() {
                 />
               </div>
               <span className="dojo__focusMeter-caption">
-                修業 · training focus — practice kata or cinch Kinchaku to build it
+                修業 · training focus — kata, Kinchaku, and school switches feed it; high focus speeds
+                novice-path insight (修 · Novice path)
               </span>
             </div>
           </aside>
