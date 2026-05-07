@@ -122,6 +122,43 @@
   border: 1px solid rgba(90, 232, 255, 0.2);
 }
 
+.app-shell__navBtn {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0.38rem 0.5rem;
+  border-radius: 6px;
+  border: 1px dashed transparent;
+  background: transparent;
+  color: var(--shell-text);
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+}
+
+.app-shell__navBtn:hover {
+  background: rgba(90, 232, 255, 0.08);
+  color: var(--shell-heading);
+}
+
+.app-shell__navBtn:focus-visible {
+  outline: 2px solid var(--shell-accent);
+  outline-offset: 2px;
+}
+
+.app-shell__navBtn--danger {
+  color: #f59b85;
+  border-color: rgba(255, 107, 74, 0.35);
+}
+
+.app-shell__navBtn--danger:hover {
+  background: rgba(255, 107, 74, 0.1);
+  color: #ffc9bd;
+}
+
 .app-shell__railFoot {
   margin-top: auto;
   padding-top: 1rem;

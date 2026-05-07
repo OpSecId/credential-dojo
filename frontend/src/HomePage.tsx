@@ -9,8 +9,10 @@ import {
 } from './demoPersonas'
 import { LEXICON_ENTRIES } from './lexiconData'
 import {
+  clearNinjaProfile,
   isValidSchoolId,
   migrateLegacySchoolId,
+  NINJA_PROFILE_CHANGED_EVENT,
   patchNinjaProfileSchool,
   PERSONA_STORAGE_KEY,
   readNinjaProfile,
@@ -229,10 +231,29 @@ export default function HomePage() {
 
   const selectedPersona = activePersonas.find((p) => p.id === selectedPersonaId)
 
+  const handleClearProfile = useCallback(() => {
+    const ok = window.confirm(
+      'Remove your ninja profile from this browser? This cannot be undone here.',
+    )
+    if (!ok) return
+    clearNinjaProfile()
+    setNinjaProfile(readNinjaProfile())
+    setSelectedPersonaId(readStoredPersonaId())
+  }, [])
+
   useEffect(() => {
-    const onVis = () => setNinjaProfile(readNinjaProfile())
-    document.addEventListener('visibilitychange', onVis)
-    return () => document.removeEventListener('visibilitychange', onVis)
+    const sync = () => {
+      setNinjaProfile(readNinjaProfile())
+      setSelectedPersonaId(readStoredPersonaId())
+    }
+    document.addEventListener('visibilitychange', sync)
+    window.addEventListener(NINJA_PROFILE_CHANGED_EVENT, sync)
+    window.addEventListener('storage', sync)
+    return () => {
+      document.removeEventListener('visibilitychange', sync)
+      window.removeEventListener(NINJA_PROFILE_CHANGED_EVENT, sync)
+      window.removeEventListener('storage', sync)
+    }
   }, [])
 
   const toggleKinchaku = () => {
@@ -353,6 +374,15 @@ export default function HomePage() {
                 >
                   Edit
                 </Link>
+                <span className="dojo__ninjaBar-sep"> · </span>
+                <button
+                  type="button"
+                  className="dojo__ninjaBar-clear"
+                  onClick={handleClearProfile}
+                  title="Remove ninja profile from this browser"
+                >
+                  Clear profile
+                </button>
               </p>
             ) : null}
           </header>

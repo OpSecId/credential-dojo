@@ -1,6 +1,7 @@
 import { useEffect, useId, useState } from 'react'
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import './AppShell.css'
+import { clearNinjaProfile } from './ninjaProfileStorage'
 import { useNinjaProfileSnapshot } from './useNinjaProfileSnapshot'
 
 function ShellNavLink({
@@ -45,6 +46,18 @@ function ShellNavLink({
 }
 
 function NavBlocks({ onPick }: { onPick?: () => void }) {
+  const navigate = useNavigate()
+
+  const handleClearProfile = () => {
+    const ok = window.confirm(
+      'Remove your ninja profile from this browser? This cannot be undone here.',
+    )
+    if (!ok) return
+    clearNinjaProfile()
+    onPick?.()
+    navigate('/')
+  }
+
   return (
     <>
       <section className="app-shell__section" aria-label="Dojo home">
@@ -107,6 +120,15 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
             <ShellNavLink to="/create-ninja-profile" onPick={onPick}>
               Ninja profile
             </ShellNavLink>
+          </li>
+          <li className="app-shell__navItem">
+            <button
+              type="button"
+              className="app-shell__navBtn app-shell__navBtn--danger"
+              onClick={handleClearProfile}
+            >
+              Clear profile
+            </button>
           </li>
         </ul>
       </section>
