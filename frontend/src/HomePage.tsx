@@ -29,6 +29,7 @@ type HelloPayload = {
   cryptosuitesMetaphor?: string
   templateMetaphor?: string
   credentialMetaphor?: string
+  credentialFromTemplateMetaphor?: string
   presentationMetaphor?: string
   presentationInspectionMetaphor?: string
   credentialInspectionMetaphor?: string

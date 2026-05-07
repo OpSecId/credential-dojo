@@ -2,8 +2,12 @@
 export const productTerminology = {
   wallet: { name: 'Kinchaku', glyph: '巾着' },
   cryptosuites: { name: 'Kata', glyph: '型' },
+  /** Credential templates, definitions, and issuer-side blueprints — not an issued artifact. */
   template: { name: 'Tehon', glyph: '手本' },
+  /** Issued W3C Verifiable Credential (the holder-facing license-like record). */
   credential: { name: 'Menkyo', glyph: '免許' },
+  /** Menkyo produced from a Tehon: issuance / instantiated credential from a definition. */
+  credentialFromTemplate: { name: 'Tehon の Menkyo', glyph: '手本の免許' },
   presentation: { name: 'Enbu', glyph: '演武' },
   /** Inspection of a verifiable presentation (Enbu): hybrid UI title + proper Japanese phrase. */
   presentationInspection: { name: 'Enbu の Kensa', glyph: '演武の検査' },

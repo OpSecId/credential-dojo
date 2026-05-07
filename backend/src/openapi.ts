@@ -6,7 +6,7 @@ export const openApiDocument = {
   info: {
     title: "The Credential Dojo API",
     description:
-      "CRMS platform API for W3C Verifiable Credentials. Product terminology: Tehon, Menkyo, Enbu, Enbu/Menkyo no Kensa, Randori, Teawase, Kinchaku, Kata — see `terminology` in responses and the project README.",
+      "CRMS platform API for W3C Verifiable Credentials. Product terminology: Tehon (definitions), Menkyo, Tehon の Menkyo, Enbu, Kensa, Randori, Teawase, Kinchaku, Kata — see `terminology` in responses and the project README.",
     version: "0.1.0",
     contact: {
       name: "credential.ninja",
@@ -133,6 +133,7 @@ export const openApiDocument = {
           cryptosuitesMetaphor: { type: "string" },
           templateMetaphor: { type: "string" },
           credentialMetaphor: { type: "string" },
+          credentialFromTemplateMetaphor: { type: "string" },
           presentationMetaphor: { type: "string" },
           presentationInspectionMetaphor: { type: "string" },
           credentialInspectionMetaphor: { type: "string" },
@@ -196,6 +197,7 @@ export const openApiDocument = {
           cryptosuitesMetaphor: { type: "string" },
           templateMetaphor: { type: "string" },
           credentialMetaphor: { type: "string" },
+          credentialFromTemplateMetaphor: { type: "string" },
           presentationMetaphor: { type: "string" },
           presentationInspectionMetaphor: { type: "string" },
           credentialInspectionMetaphor: { type: "string" },

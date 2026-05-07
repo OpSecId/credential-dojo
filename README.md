@@ -16,13 +16,17 @@ The Dojo uses a small set of **Japanese martial-arts–adjacent names** so produ
 
 In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (and closely related **proof / signature suites**): the **named, standardized recipe** of algorithms and options used when creating or checking proofs—e.g. Data Integrity cryptosuites, canonicalization rules, and key material expectations. The credential may live in **Kinchaku**; the **proof machinery** follows a **Kata**.
 
-### Tehon (手本) — credential templates
+### Tehon (手本) — templates & definitions
 
-**Tehon** (手本) is the **model or exemplar**—the copybook pattern issuers instantiate. In the CRMS, **Tehon** maps to **credential templates**: JSON shapes, credential definitions, and offer layouts that become live **Menkyo** when issued.
+**Tehon** (手本) is the **model or exemplar**—the copybook. In the CRMS, **Tehon** maps to **credential templates and definitions** on the issuer side: JSON shapes, credential definitions, offer layouts, and blueprints. **Tehon is not an issued credential**; issuance produces **Menkyo**.
 
-### Menkyo (免許) — credentials
+### Menkyo (免許) — issued credentials
 
 **Menkyo** (免許) is a **license or formal transmission**—proof of standing. Here it names **issued W3C Verifiable Credentials**: the artifacts holders keep in **Kinchaku**, bound to issuer policy and **Kata** proofs.
+
+### Tehon の Menkyo (手本の免許) — issued from a template
+
+**Tehon no menkyo** (手本の免許) reads as **the Menkyo from the Tehon**—the concrete issued credential **instantiated from** a given definition. Use this phrase when copy must show **lineage** from **Tehon** (definition) to **Menkyo** (issued VC), e.g. issuance previews or offers.
 
 ### Enbu (演武) — presentations
 
@@ -48,8 +52,9 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 
 | Concept | Dojo name | Notes |
 |--------|-----------|--------|
-| Credential template / definition | **Tehon** | Canonical “copybook” before issuance |
+| Credential template / definition | **Tehon** | Canonical “copybook” — definitions only, not issued VC |
 | Issued verifiable credential | **Menkyo** | Holder-facing artifact / license record |
+| Credential issued from a Tehon | **Tehon の Menkyo** / **手本の免許** | Lineage: definition → issued Menkyo |
 | Verifiable presentation | **Enbu** | Demonstration package to a verifier |
 | Presentation inspection (VP-shaped JSON) | **Enbu の Kensa** / **演武の検査** | Heuristic “kensa” path on `/kensa` |
 | Single-credential inspection (VC-shaped JSON) | **Menkyo の Kensa** / **免許の検査** | Heuristic “kensa” path on `/kensa` |
@@ -58,7 +63,7 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 | Holder wallet UI / experience | **Kinchaku** | Where Menkyo live; Enbu are composed from here |
 | Cryptosuite / proof suite selection | **Kata** | Which “form” signing and verification run |
 
-**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `credentialMetaphor`, `presentationMetaphor`, `presentationInspectionMetaphor`, `credentialInspectionMetaphor`, `exchangeMetaphor`, `handshakeMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
+**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `credentialMetaphor`, `credentialFromTemplateMetaphor`, `presentationMetaphor`, `presentationInspectionMetaphor`, `credentialInspectionMetaphor`, `exchangeMetaphor`, `handshakeMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
 
 ## Structure
 

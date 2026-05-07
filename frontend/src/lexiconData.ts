@@ -14,7 +14,7 @@ export const LEXICON_ENTRIES: {
     title: productTerminology.template.name,
     glyph: productTerminology.template.glyph,
     blurb:
-      'Credential templates—the exemplar “copybook” issuers stamp into live records.',
+      'Templates & definitions—the exemplar “copybook.” Not an issued credential until issuance.',
   },
   {
     key: 'credential',
@@ -22,6 +22,13 @@ export const LEXICON_ENTRIES: {
     glyph: productTerminology.credential.glyph,
     blurb:
       'Issued W3C Verifiable Credentials—the license-like artifact a holder keeps.',
+  },
+  {
+    key: 'credentialFromTemplate',
+    title: productTerminology.credentialFromTemplate.name,
+    glyph: productTerminology.credentialFromTemplate.glyph,
+    blurb:
+      'Issued Menkyo tied to a Tehon—instantiation / lineage from definition to credential.',
   },
   {
     key: 'presentation',
@@ -86,12 +93,12 @@ export type LexiconArticle = {
 export const LEXICON_ARTICLES: LexiconArticle[] = [
   {
     key: 'template',
-    credentialTerm: 'Credential templates & definitions',
+    credentialTerm: 'Credential templates & definitions (issuer-side)',
     literal: [
       '**Tehon** (手本) literally means a model, pattern, or copybook—the example you copy when learning brushwork, craft, or procedure. It is the authoritative “this is how it should look.”',
     ],
     inPlatform: [
-      'In the Dojo, **Tehon** names **credential templates**: JSON-LD shapes, credential definitions, offer layouts, and issuer-side blueprints that become concrete **Menkyo** (issued credentials) when you run issuance.',
+      '**Tehon** names **templates and definitions only**: JSON-LD shapes, credential definitions, offer layouts, and issuer blueprints. It is **not** an issued credential—that role is **Menkyo**. When issuance runs, the platform produces **Tehon の Menkyo**: a concrete **Menkyo** instantiated from that **Tehon**.',
     ],
   },
   {
@@ -101,7 +108,17 @@ export const LEXICON_ARTICLES: LexiconArticle[] = [
       '**Menkyo** (免許) combines “exempt” and “permit.” In everyday Japanese it is a **license** (driving, etc.). In classical arts it can mean a **scroll or record** certifying transmission or rank.',
     ],
     inPlatform: [
-      'Here **Menkyo** is the metaphor for **issued verifiable credentials**: signed artifacts that attest claims, bound to issuer policy and proof **Kata**. Holders carry them in **Kinchaku**.',
+      '**Menkyo** means **issued** verifiable credentials: signed artifacts that attest claims, bound to issuer policy and proof **Kata**. Holders carry them in **Kinchaku**. When a credential is minted from a template, call that lineage **Tehon の Menkyo**—the Menkyo **of** (from) the Tehon.',
+    ],
+  },
+  {
+    key: 'credentialFromTemplate',
+    credentialTerm: 'Issued credential from a definition / template',
+    literal: [
+      '**Tehon no menkyo** (手本の免許) reads as **the Menkyo from the Tehon**—the licensed record that follows the exemplar. Grammatically **の** ties **definition → issued artifact**, like **Enbu no kensa** ties **demonstration → inspection**.',
+    ],
+    inPlatform: [
+      'Use **Tehon の Menkyo** when copy must stress **issuance lineage**: preview of what will be issued, credential-offer flows, or “live Menkyo bound to this Tehon.” It is still **Menkyo** (same holder artifact); the phrase clarifies **which Tehon** it came from.',
     ],
   },
   {
