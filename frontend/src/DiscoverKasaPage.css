@@ -225,3 +225,25 @@
 .kasa__cta {
   margin: 1.25rem 0 0;
 }
+
+.dojo-scene--night .kasa__title {
+  text-shadow:
+    0 0 42px rgba(90, 232, 255, 0.14),
+    0 2px 20px rgba(0, 0, 0, 0.35);
+}
+
+.dojo-scene--night .kasa-card {
+  border-color: rgba(90, 232, 255, 0.14);
+  box-shadow:
+    var(--shadow),
+    0 0 0 1px rgba(179, 136, 255, 0.06);
+}
+
+.dojo-scene--night .kasa-card__didCode {
+  color: var(--cyber-cyan, #5ae8ff);
+  text-shadow: 0 0 12px rgba(90, 232, 255, 0.22);
+}
+
+.dojo-scene--night .kasa-card__kataList li code {
+  text-shadow: 0 0 10px rgba(255, 107, 74, 0.15);
+}

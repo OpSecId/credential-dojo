@@ -175,3 +175,26 @@
 .lex__footer a:hover {
   text-decoration: underline;
 }
+
+/* Night: light cyber HUD on lexicon (inherits dojo-scene--night variables from App.css) */
+.dojo-scene--night .lex__title {
+  text-shadow:
+    0 0 48px rgba(90, 232, 255, 0.12),
+    0 2px 24px rgba(0, 0, 0, 0.35);
+}
+
+.dojo-scene--night .lex__toc {
+  border-color: rgba(90, 232, 255, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(179, 136, 255, 0.05);
+}
+
+.dojo-scene--night .lex-article {
+  border-color: rgba(90, 232, 255, 0.14);
+  box-shadow:
+    var(--shadow),
+    0 0 0 1px rgba(179, 136, 255, 0.06);
+}
+
+.dojo-scene--night .lex-article__glyph {
+  text-shadow: 0 0 18px rgba(90, 232, 255, 0.2);
+}
