@@ -292,6 +292,24 @@ export default function HomePage() {
               <strong>Kata</strong> suites. Artifacts live in <strong>Kinchaku</strong>, the
               built-in wallet.
             </p>
+            {!ninjaProfile ? (
+              <p className="dojo__heroCtas" aria-label="Get started">
+                <Link
+                  className="dojo__heroLexicon"
+                  to="/lexicon"
+                  title="Glossary: Dojo metaphors vs W3C VC concepts"
+                >
+                  Lexicon
+                </Link>
+                <Link
+                  className="dojo__heroPrimary"
+                  to="/create-ninja-profile"
+                  title="Codename and Kasa — stored in this browser only"
+                >
+                  Create ninja profile
+                </Link>
+              </p>
+            ) : null}
             {ninjaProfile ? (
               <p
                 className="dojo__ninjaBar dojo-augmented dojo-augmented--ninja"
@@ -355,13 +373,15 @@ export default function HomePage() {
           >
             Full lexicon
           </Link>
-          <Link
-            className="dojo__ctaChip"
-            to="/create-ninja-profile"
-            title="Codename and Kasa — stored in this browser only"
-          >
-            {ninjaProfile ? 'Ninja profile' : 'Create ninja profile'}
-          </Link>
+          {ninjaProfile ? (
+            <Link
+              className="dojo__ctaChip"
+              to="/create-ninja-profile"
+              title="Codename and Kasa — stored in this browser only"
+            >
+              Ninja profile
+            </Link>
+          ) : null}
           <a className="dojo__ctaChip dojo__ctaChip--external" href={SITE} title={SITE}>
             {SITE.replace(/^https?:\/\//, '')}
           </a>
