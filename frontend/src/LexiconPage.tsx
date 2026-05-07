@@ -27,47 +27,30 @@ export default function LexiconPage() {
 
       <div className="lex">
         <header className="lex__header">
-          <p className="lex__eyebrow">The Credential Dojo</p>
-          <h1 className="lex__title">Lexicon</h1>
-          <p className="lex__intro">
-            Japanese names used in product copy are <strong>metaphors</strong> for documentation
-            and UX—they are not security claims. Each entry below gives the word&apos;s
-            everyday or martial-arts sense, then how we map it to{' '}
-            <strong>W3C Verifiable Credentials</strong> and CRMS concepts.
-          </p>
-          <nav className="lex__nav">
-            <Link className="lex__back" to="/" title="Credential Dojo home">
-              ← Home
-            </Link>
-            <Link
-              className="lex__back"
-              to="/discover-kasa"
-              title="Demo proof schools (Kasa) with did:key and Kata samples"
-            >
-              Discover Kasa
-            </Link>
-            <Link
-              className="lex__back"
-              to="/create-ninja-profile"
-              title="Codename and Kasa (proof school) for the in-browser ninja profile"
-            >
-              Create ninja profile
-            </Link>
-            <Link
-              className="lex__back"
-              to="/json-explorer"
-              title="Shinbi render view: interactive JSON tree with RFC 6901 pointer tooltips"
-            >
-              Shinbi (JSON explorer)
-            </Link>
-            <Link
-              className="lex__back"
-              to="/kensa"
-              title="Enbu の Kensa / Menkyo の Kensa — structural inspection modes"
-            >
-              Kensa
-            </Link>
-          </nav>
+          <Link
+            className="lex__home"
+            to="/"
+            title="Back to home"
+            aria-label="Back to home"
+          >
+            <span className="lex__homeIcon" aria-hidden>
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M3 10.5 12 3l9 7.5" />
+                <path d="M5.5 9.5V20h13V9.5" />
+                <path d="M9.5 20v-6h5v6" />
+              </svg>
+            </span>
+          </Link>
+          <div className="lex__headerBody">
+            <p className="lex__eyebrow">The Credential Dojo</p>
+            <h1 className="lex__title">Lexicon</h1>
+            <p className="lex__intro">
+              <strong>What this is.</strong> Japanese terms in the product are <strong>metaphors for copy and navigation</strong>—a shared vocabulary, not a security model. They are <strong>not</strong> claims about cryptographic strength, compliance, or threat models.
+            </p>
+            <p className="lex__intro lex__intro--second">
+              <strong>What each entry does.</strong> We give the word in its everyday or dōjō sense, then how we use it for <strong>W3C Verifiable Credentials</strong>, holder/issuer language, and this CRMS.
+            </p>
+          </div>
         </header>
 
         <ol
@@ -124,11 +107,6 @@ export default function LexiconPage() {
           })}
         </div>
 
-        <footer className="lex__footer">
-          <Link to="/" title="Credential Dojo home">
-            Return home
-          </Link>
-        </footer>
       </div>
     </div>
   )

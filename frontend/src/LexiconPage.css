@@ -9,6 +9,58 @@
 
 .lex__header {
   margin-bottom: 2rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.lex__home {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.65rem;
+  height: 2.65rem;
+  margin-top: 0.15rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--panel-bg);
+  color: var(--text-h);
+  text-decoration: none;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.lex__home:hover {
+  border-color: rgba(232, 184, 74, 0.45);
+  color: var(--accent);
+}
+
+.lex__home:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.lex__homeIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dojo-scene--night .lex__home {
+  border-color: rgba(90, 232, 255, 0.22);
+  background: rgba(12, 18, 32, 0.55);
+}
+
+.dojo-scene--night .lex__home:hover {
+  border-color: rgba(90, 232, 255, 0.42);
+}
+
+.lex__headerBody {
+  flex: 1;
+  min-width: 0;
 }
 
 .lex__eyebrow {
@@ -30,29 +82,25 @@
 }
 
 .lex__intro {
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.65rem;
   font-size: 1.02rem;
   line-height: 1.65;
   color: var(--text);
 }
 
-.lex__nav {
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem 1.25rem;
+.lex__intro:last-child {
+  margin-bottom: 0;
 }
 
-.lex__back {
-  display: inline-flex;
-  color: var(--accent);
-  font-weight: 700;
-  text-decoration: none;
-  letter-spacing: 0.04em;
+.lex__intro--second {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 0.96rem;
+  color: var(--muted);
 }
 
-.lex__back:hover {
-  text-decoration: underline;
+.lex__intro strong:first-child {
+  color: var(--text-h);
 }
 
 .lex__toc {
@@ -157,23 +205,6 @@
 
 .lex-article__p:last-child {
   margin-bottom: 0;
-}
-
-.lex__footer {
-  margin-top: 3rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-  text-align: center;
-}
-
-.lex__footer a {
-  color: var(--accent);
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.lex__footer a:hover {
-  text-decoration: underline;
 }
 
 /* Night: light cyber HUD on lexicon (inherits dojo-scene--night variables from App.css) */
