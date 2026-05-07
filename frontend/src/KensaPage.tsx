@@ -136,9 +136,9 @@ export default function KensaPage() {
           <Link
             className="kensa__back"
             to="/json-explorer"
-            title="Interactive JSON tree with RFC 6901 pointer tooltips"
+            title="Shinbi render view: interactive JSON tree with RFC 6901 pointer tooltips"
           >
-            JSON explorer
+            Shinbi (JSON explorer)
           </Link>
         </nav>
       </header>

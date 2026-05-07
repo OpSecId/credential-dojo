@@ -65,9 +65,9 @@ export default function DiscoverKasaPage() {
             <Link
               className="kasa__back"
               to="/json-explorer"
-              title="Interactive JSON tree with RFC 6901 pointer tooltips"
+              title="Shinbi render view: interactive JSON tree with RFC 6901 pointer tooltips"
             >
-              JSON explorer
+              Shinbi (JSON explorer)
             </Link>
             <Link
               className="kasa__back"

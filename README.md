@@ -32,6 +32,10 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 
 **Enbu** (演武) is a **formal martial demonstration**—structured, visible, and bounded. It maps to **verifiable presentations**: what the holder **shows** a verifier (proof package, selective disclosure surface) assembled from **Menkyo** in **Kinchaku**.
 
+### Shinbi (審美) — rendering and display
+
+**Shinbi** (審美) is the lens of **how something is presented and perceived**. In the product, it names the **render/display layer** for credential data: readable JSON views, visual framing, and formatting for humans. **Shinbi is not verification**—that role is **Kensa**.
+
 ### Enbu の Kensa (演武の検査) — presentation inspection
 
 **Kensa** (検査) is **inspection** or **examination**. **Enbu no kensa** (演武の検査) reads as **inspection of the demonstration**—the verifier-side pass over **Enbu**-shaped JSON. The SPA uses the hybrid title **Enbu の Kensa** with the proper Japanese phrase **演武の検査** as the subtitle pattern. The **`/kensa`** page includes this path for VP-shaped payloads (heuristics only; not a substitute for running proofs under the agreed **Kata**).
@@ -60,6 +64,7 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 | Issued verifiable credential | **Menkyo** | Holder-facing artifact / license record |
 | Credential issued from a Tehon | **Tehon の Menkyo** / **手本の免許** | Lineage: definition → issued Menkyo |
 | Verifiable presentation | **Enbu** | Demonstration package to a verifier |
+| Credential render/display layer | **Shinbi** / **審美** | How Menkyo/Enbu data is shown to people |
 | Presentation inspection (VP-shaped JSON) | **Enbu の Kensa** / **演武の検査** | Heuristic “kensa” path on `/kensa` |
 | Single-credential inspection (VC-shaped JSON) | **Menkyo の Kensa** / **免許の検査** | Heuristic “kensa” path on `/kensa` |
 | Multi-step protocol exchange | **Randori** | Stateful back-and-forth between parties |

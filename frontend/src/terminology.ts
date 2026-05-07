@@ -9,6 +9,8 @@ export const productTerminology = {
   /** Menkyo produced from a Tehon: issuance / instantiated credential from a definition. */
   credentialFromTemplate: { name: 'Tehon の Menkyo', glyph: '手本の免許' },
   presentation: { name: 'Enbu', glyph: '演武' },
+  /** Credential rendering/display experience (visual presentation layer). */
+  render: { name: 'Shinbi', glyph: '審美' },
   /** Inspection of a verifiable presentation (Enbu): hybrid UI title + proper Japanese phrase. */
   presentationInspection: { name: 'Enbu の Kensa', glyph: '演武の検査' },
   /** Inspection of a single verifiable credential (Menkyo). */

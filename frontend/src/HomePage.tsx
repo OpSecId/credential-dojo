@@ -31,6 +31,7 @@ type HelloPayload = {
   credentialMetaphor?: string
   credentialFromTemplateMetaphor?: string
   presentationMetaphor?: string
+  renderMetaphor?: string
   presentationInspectionMetaphor?: string
   credentialInspectionMetaphor?: string
   exchangeMetaphor?: string
@@ -329,10 +330,10 @@ export default function HomePage() {
           <Link
             className="dojo__ctaTile"
             to="/json-explorer"
-            title="RFC 6901 pointers, fold/unfold, explainByPointer blurbs"
+            title="Shinbi render view with RFC 6901 pointers and explainByPointer blurbs"
           >
             <span className="dojo__ctaTile-kicker">Explore</span>
-            <span className="dojo__ctaTile-title">JSON explorer</span>
+            <span className="dojo__ctaTile-title">Shinbi (JSON explorer)</span>
             <span className="dojo__ctaTile-desc">Pointers &amp; nested drill-down</span>
           </Link>
           <Link

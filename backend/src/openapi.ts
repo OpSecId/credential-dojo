@@ -6,7 +6,7 @@ export const openApiDocument = {
   info: {
     title: "The Credential Dojo API",
     description:
-      "CRMS platform API for W3C Verifiable Credentials. Product terminology: Tehon, Menkyo, Tehon の Menkyo, Enbu, Kensa, Randori, Teawase, Tejun (workflows), Kinchaku, Kata — see `terminology` in responses and the project README.",
+      "CRMS platform API for W3C Verifiable Credentials. Product terminology: Tehon, Menkyo, Tehon の Menkyo, Enbu, Shinbi (render), Kensa, Randori, Teawase, Tejun (workflows), Kinchaku, Kata — see `terminology` in responses and the project README.",
     version: "0.1.0",
     contact: {
       name: "credential.ninja",
@@ -115,6 +115,7 @@ export const openApiDocument = {
           template: { $ref: "#/components/schemas/TerminologyEntry" },
           credential: { $ref: "#/components/schemas/TerminologyEntry" },
           presentation: { $ref: "#/components/schemas/TerminologyEntry" },
+          render: { $ref: "#/components/schemas/TerminologyEntry" },
           presentationInspection: { $ref: "#/components/schemas/TerminologyEntry" },
           credentialInspection: { $ref: "#/components/schemas/TerminologyEntry" },
           exchange: { $ref: "#/components/schemas/TerminologyEntry" },
@@ -136,6 +137,7 @@ export const openApiDocument = {
           credentialMetaphor: { type: "string" },
           credentialFromTemplateMetaphor: { type: "string" },
           presentationMetaphor: { type: "string" },
+          renderMetaphor: { type: "string" },
           presentationInspectionMetaphor: { type: "string" },
           credentialInspectionMetaphor: { type: "string" },
           exchangeMetaphor: { type: "string" },
@@ -201,6 +203,7 @@ export const openApiDocument = {
           credentialMetaphor: { type: "string" },
           credentialFromTemplateMetaphor: { type: "string" },
           presentationMetaphor: { type: "string" },
+          renderMetaphor: { type: "string" },
           presentationInspectionMetaphor: { type: "string" },
           credentialInspectionMetaphor: { type: "string" },
           exchangeMetaphor: { type: "string" },

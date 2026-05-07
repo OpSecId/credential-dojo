@@ -38,6 +38,13 @@ export const LEXICON_ENTRIES: {
       'Verifiable presentations—a structured demonstration shown to verifiers.',
   },
   {
+    key: 'render',
+    title: productTerminology.render.name,
+    glyph: productTerminology.render.glyph,
+    blurb:
+      'Rendering and display of Menkyo/Enbu JSON—visual interpretation layer, distinct from Kensa checks.',
+  },
+  {
     key: 'presentationInspection',
     title: productTerminology.presentationInspection.name,
     glyph: productTerminology.presentationInspection.glyph,
@@ -146,6 +153,16 @@ export const LEXICON_ARTICLES: LexiconArticle[] = [
     ],
     inPlatform: [
       'In the SPA we surface **Enbu の Kensa** as the hybrid product title and **演武の検査** as the proper Japanese phrase. The **Kensa** page runs **structural heuristics** on VP-shaped JSON (e.g. `VerifiablePresentation` or `verifiableCredential` arrays)—**not** full cryptographic verification, which belongs to a verifier running the agreed **Kata**.',
+    ],
+  },
+  {
+    key: 'render',
+    credentialTerm: 'Credential rendering and display layer',
+    literal: [
+      '**Shinbi** (審美) concerns appreciation, appearance, and how something is perceived when presented.',
+    ],
+    inPlatform: [
+      '**Shinbi** names the **render/display experience**: formatting, visual framing, and readable presentation of Menkyo/Enbu JSON. It is about how credential data is shown to people, not whether it cryptographically passes checks.',
     ],
   },
   {
