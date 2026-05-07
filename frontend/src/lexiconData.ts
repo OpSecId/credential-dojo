@@ -13,92 +13,79 @@ export const LEXICON_ENTRIES: {
     key: 'template',
     title: productTerminology.template.name,
     glyph: productTerminology.template.glyph,
-    blurb:
-      'Issuer copybook—definitions and shapes. Not Menkyo until issuance (Tehon の Menkyo).',
+    blurb: 'Issuer definitions & shapes—not Menkyo until issued.',
   },
   {
     key: 'credential',
     title: productTerminology.credential.name,
     glyph: productTerminology.credential.glyph,
-    blurb:
-      'Issued W3C Verifiable Credentials—the license-like artifact a holder keeps.',
+    blurb: 'Issued VCs—holder “license” record.',
   },
   {
     key: 'credentialFromTemplate',
     title: productTerminology.credentialFromTemplate.name,
     glyph: productTerminology.credentialFromTemplate.glyph,
-    blurb:
-      'Issued Menkyo tied to a Tehon—instantiation / lineage from definition to credential.',
+    blurb: 'Menkyo from a Tehon—definition → issued credential lineage.',
   },
   {
     key: 'presentation',
     title: productTerminology.presentation.name,
     glyph: productTerminology.presentation.glyph,
-    blurb:
-      'Verifiable presentations—a structured demonstration shown to verifiers.',
+    blurb: 'Verifiable presentations shown to verifiers.',
   },
   {
     key: 'render',
     title: productTerminology.render.name,
     glyph: productTerminology.render.glyph,
-    blurb:
-      'Rendering and display of Menkyo/Enbu JSON—visual interpretation layer, distinct from Kensa checks.',
+    blurb: 'Render Menkyo/Enbu JSON for people—not cryptographic Kensa.',
   },
   {
     key: 'presentationInspection',
     title: productTerminology.presentationInspection.name,
     glyph: productTerminology.presentationInspection.glyph,
-    blurb:
-      'Inspection of an Enbu—checking the holder\'s demonstration package (VP-shaped JSON), not cryptographic proof yet.',
+    blurb: 'VP-shaped JSON checks (heuristics only).',
   },
   {
     key: 'credentialInspection',
     title: productTerminology.credentialInspection.name,
     glyph: productTerminology.credentialInspection.glyph,
-    blurb:
-      'Inspection of a Menkyo—checking a single issued credential object (VC-shaped JSON).',
+    blurb: 'Single VC-shaped JSON checks (heuristics only).',
   },
   {
     key: 'exchange',
     title: productTerminology.exchange.name,
     glyph: productTerminology.exchange.glyph,
-    blurb:
-      'Protocol exchanges—multi-step, adaptive flows between agents (DIDComm, OID4*, …).',
+    blurb: 'Stateful protocol chases—DIDComm, OID4*, …',
   },
   {
     key: 'handshake',
     title: productTerminology.handshake.name,
     glyph: productTerminology.handshake.glyph,
-    blurb:
-      'Handshakes and pairing—light mutual “matching hands” before a longer Randori.',
+    blurb: 'Light pairing before a longer Randori.',
   },
   {
     key: 'workflow',
     title: productTerminology.workflow.name,
     glyph: productTerminology.workflow.glyph,
-    blurb:
-      'Operational workflows—ordered steps you orchestrate in the CRMS (distinct from Randori protocol exchanges).',
+    blurb: 'Operator runbooks—ordered steps, not wire Randori.',
   },
   {
     key: 'wallet',
     title: productTerminology.wallet.name,
     glyph: productTerminology.wallet.glyph,
-    blurb:
-      'The holder wallet—where Menkyo live and Enbu are composed.',
+    blurb: 'Holder wallet—store Menkyo, compose Enbu.',
   },
   {
     key: 'cryptosuites',
     title: productTerminology.cryptosuites.name,
     glyph: productTerminology.cryptosuites.glyph,
-    blurb:
-      'Cryptosuites and proof suites—the fixed “form” for signing and verifying proofs.',
+    blurb: 'Named proof “forms”—suites & canonicalization.',
   },
   {
     key: 'kasa',
     title: productTerminology.kasa.name,
     glyph: productTerminology.kasa.glyph,
-    blurb:
-      'Proof school lineup—demo issuer personas, each with did:key and preferred Kata carousel.',
+    blurb: 'Demo proof schools—did:key + Kata per persona.',
   },
 ]
 

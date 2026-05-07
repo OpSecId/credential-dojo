@@ -388,39 +388,44 @@ export default function HomePage() {
           </Link>
         </nav>
 
-        <p className="dojo__ctaMeta">
-          <Link
-            className="dojo__ctaChip"
-            to="/lexicon"
-            title="Glossary: Dojo metaphors vs W3C VC concepts"
-          >
-            Full lexicon
-          </Link>
-          {ninjaProfile ? (
-            <Link
-              className="dojo__ctaChip"
-              to="/create-ninja-profile"
-              title="Codename and Kasa — stored in this browser only"
-            >
-              Ninja profile
-            </Link>
-          ) : null}
-          <a className="dojo__ctaChip dojo__ctaChip--external" href={SITE} title={SITE}>
-            {SITE.replace(/^https?:\/\//, '')}
-          </a>
-        </p>
-
-        <section className="dojo__lex" aria-labelledby="lexicon-heading">
-          <h2 id="lexicon-heading" className="dojo__lexTitle">
-            Dojo lexicon · artifacts · flows{' '}
-            <Link
-              className="dojo__lexMore"
-              to="/lexicon"
-              title="Long-form articles for each Dojo metaphor vs credentials and flows"
-            >
-              (full guide)
-            </Link>
-          </h2>
+        <section className="dojo__lex dojo__lex--compact" aria-labelledby="lexicon-heading">
+          <div className="dojo__lexHead">
+            <h2 id="lexicon-heading" className="dojo__lexTitle">
+              Lexicon · artifacts · flows{' '}
+              <Link
+                className="dojo__lexMore"
+                to="/lexicon"
+                title="Long-form articles for each Dojo metaphor vs credentials and flows"
+              >
+                Guide →
+              </Link>
+            </h2>
+            <nav className="dojo__lexQuick" aria-label="Lexicon shortcuts">
+              <Link className="dojo__lexQuickLink" to="/lexicon" title="Glossary: Dojo metaphors vs W3C VC concepts">
+                Full lexicon
+              </Link>
+              <span className="dojo__lexQuickSep" aria-hidden>
+                ·
+              </span>
+              {ninjaProfile ? (
+                <>
+                  <Link
+                    className="dojo__lexQuickLink"
+                    to="/create-ninja-profile"
+                    title="Codename and Kasa — stored in this browser only"
+                  >
+                    Ninja profile
+                  </Link>
+                  <span className="dojo__lexQuickSep" aria-hidden>
+                    ·
+                  </span>
+                </>
+              ) : null}
+              <a className="dojo__lexQuickLink dojo__lexQuickLink--mono" href={SITE} title={SITE}>
+                {SITE.replace(/^https?:\/\//, '')}
+              </a>
+            </nav>
+          </div>
           <div className="dojo__lexGrid">
             {LEXICON_ENTRIES.map((entry) => (
               <article

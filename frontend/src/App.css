@@ -571,8 +571,50 @@
   animation: dojo-rise 0.85s cubic-bezier(0.22, 1, 0.36, 1) 0.06s both;
 }
 
+.dojo__lex--compact {
+  margin-top: -0.35rem;
+}
+
+.dojo__lexHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.dojo__lexQuick {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.2rem 0.35rem;
+  font-size: 0.78rem;
+}
+
+.dojo__lexQuickLink {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.dojo__lexQuickLink:hover {
+  text-decoration: underline;
+}
+
+.dojo__lexQuickLink--mono {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.74rem;
+}
+
+.dojo__lexQuickSep {
+  color: var(--muted);
+  user-select: none;
+}
+
 .dojo__lexTitle {
-  margin: 0 0 0.75rem;
+  margin: 0;
   font-family: var(--font-display);
   font-size: 0.82rem;
   font-weight: 700;
@@ -606,6 +648,23 @@
   }
 }
 
+.dojo__lex--compact .dojo__lexGrid {
+  gap: 0.45rem;
+  grid-template-columns: repeat(auto-fill, minmax(9.75rem, 1fr));
+}
+
+@media (min-width: 880px) {
+  .dojo__lex--compact .dojo__lexGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .dojo__lex--compact .dojo__lexGrid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
 .dojo-lexCard {
   padding: 1rem 1.1rem 1.15rem;
   border-radius: 12px;
@@ -616,6 +675,18 @@
   transition:
     transform 0.2s ease,
     border-color 0.2s ease;
+}
+
+.dojo__lex--compact .dojo-lexCard {
+  padding: 0.5rem 0.6rem 0.55rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+}
+
+.dojo-scene--night .dojo__lex--compact .dojo-lexCard {
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.28),
+    0 0 0 1px rgba(179, 136, 255, 0.04);
 }
 
 .dojo-scene--day .dojo-lexCard {
@@ -650,6 +721,12 @@
   color: var(--text-h);
 }
 
+.dojo__lex--compact .dojo-lexCard__title {
+  margin: 0 0 0.2rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+}
+
 .dojo-lexCard__glyph {
   font-family: var(--font-display);
   font-weight: 600;
@@ -659,11 +736,25 @@
   text-transform: none;
 }
 
+.dojo__lex--compact .dojo-lexCard__glyph {
+  font-size: 0.82rem;
+}
+
 .dojo-lexCard__body {
   margin: 0;
   font-size: 0.88rem;
   line-height: 1.5;
   color: var(--text);
+}
+
+.dojo__lex--compact .dojo-lexCard__body {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.dojo__lex--compact .dojo-lexCard:hover {
+  transform: translateY(-1px);
 }
 
 .dojo__eyebrow {
