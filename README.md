@@ -16,6 +16,10 @@ The Dojo uses a small set of **Japanese martial-arts–adjacent names** so produ
 
 In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (and closely related **proof / signature suites**): the **named, standardized recipe** of algorithms and options used when creating or checking proofs—e.g. Data Integrity cryptosuites, canonicalization rules, and key material expectations. The credential may live in **Kinchaku**; the **proof machinery** follows a **Kata**.
 
+### Kasa (笠) — proof schools
+
+**Kasa** (笠) is a **woven travel hat**—shade on the road. Here it names the **proof school porch**: the lineup of **demo issuer personas** on **Discover Kasa**, each with a **`did:key`** and preferred **Kata** samples. The in-browser **ninja profile** picks one **Kasa** so the home **Kata** carousel matches that school.
+
 ### Tehon (手本) — issuer definitions & exemplars
 
 **Tehon** (手本) is the **model or exemplar**—the copybook. In the CRMS, **Tehon** maps to **issuer-side definitions and shapes**: JSON-LD profiles, **credential definitions** (the VC *type* you issue from), offer layouts, and blueprints. **Tehon is not an issued credential**; issuance produces **Menkyo** (**Tehon の Menkyo**).
@@ -73,6 +77,7 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 | Handshake / first pairing | **Teawase** | Capability probe before deeper flows |
 | Holder wallet UI / experience | **Kinchaku** | Where Menkyo live; Enbu are composed from here |
 | Cryptosuite / proof suite selection | **Kata** | Which “form” signing and verification run |
+| Demo proof school / issuer persona | **Kasa** / **笠** | Discover Kasa + ninja profile school; ties **did:key** and default **Kata** |
 
 **In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `credentialMetaphor`, `credentialFromTemplateMetaphor`, `presentationMetaphor`, `presentationInspectionMetaphor`, `credentialInspectionMetaphor`, `exchangeMetaphor`, `handshakeMetaphor`, `workflowMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
 

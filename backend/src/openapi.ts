@@ -6,7 +6,7 @@ export const openApiDocument = {
   info: {
     title: "The Credential Dojo API",
     description:
-      "CRMS platform API for W3C Verifiable Credentials. Product terminology: Tehon, Menkyo, Tehon の Menkyo, Enbu, Shinbi (render), Kensa, Randori, Teawase, Tejun (workflows), Kinchaku, Kata — see `terminology` in responses and the project README.",
+      "CRMS platform API for W3C Verifiable Credentials. Product terminology: Tehon, Menkyo, Tehon の Menkyo, Enbu, Shinbi (render), Kensa, Randori, Teawase, Tejun (workflows), Kinchaku, Kata, Kasa — see `terminology` in responses and the project README.",
     version: "0.1.0",
     contact: {
       name: "credential.ninja",
@@ -112,6 +112,7 @@ export const openApiDocument = {
         properties: {
           wallet: { $ref: "#/components/schemas/TerminologyEntry" },
           cryptosuites: { $ref: "#/components/schemas/TerminologyEntry" },
+          kasa: { $ref: "#/components/schemas/TerminologyEntry" },
           template: { $ref: "#/components/schemas/TerminologyEntry" },
           credential: { $ref: "#/components/schemas/TerminologyEntry" },
           presentation: { $ref: "#/components/schemas/TerminologyEntry" },

@@ -93,6 +93,13 @@ export const LEXICON_ENTRIES: {
     blurb:
       'Cryptosuites and proof suites—the fixed “form” for signing and verifying proofs.',
   },
+  {
+    key: 'kasa',
+    title: productTerminology.kasa.name,
+    glyph: productTerminology.kasa.glyph,
+    blurb:
+      'Proof school lineup—demo issuer personas, each with did:key and preferred Kata carousel.',
+  },
 ]
 
 export type LexiconArticle = {
@@ -223,6 +230,16 @@ export const LEXICON_ARTICLES: LexiconArticle[] = [
     ],
     inPlatform: [
       '**Kata** names **cryptosuites** (and related proof suites): the **named, standardized recipe**—algorithms, canonicalization, key expectations—used when minting or checking proofs for W3C VCs (e.g. Data Integrity suite strings).',
+    ],
+  },
+  {
+    key: 'kasa',
+    credentialTerm: 'Demo proof schools (issuer personas)',
+    literal: [
+      '**Kasa** (笠) is a **woven straw hat**—travel gear that shades the face on the road. It suggests a **portable identity** and a little shelter while you move between places.',
+    ],
+    inPlatform: [
+      '**Kasa** names the **proof school porch**: the lineup of **demo issuer personas** (Ed-ryū, Ec-ryū, …) on **Discover Kasa**, each with a stable **`did:key`** and preferred **Kata** samples. In the SPA, your **ninja profile** picks one **Kasa** so the home **Kata** carousel and persona context match that school.',
     ],
   },
 ]
