@@ -42,7 +42,7 @@ export const DEMO_PERSONAS_OFFLINE: readonly PersonaPublic[] = [
     label: 'Ed-ryū',
     labelJa: 'エド流',
     description:
-      'Demo school for Ed25519-based Data Integrity suites (e.g. eddsa-rdfc-2022, eddsa-jcs-2022).',
+      'Ed25519 issuer; kataSamples is the full dojo carousel (every demo suite string). Other Kasa list only suites aligned with their issuer key.',
     proofSchool: 'ed25519',
     didKey: 'did:key:z6Mkjv9qpuroLvWybHc9yppTwTjZjid5EWSpRPfo7wXaKE4e',
     kataSamples: [...DEFAULT_KATA_SAMPLES],
