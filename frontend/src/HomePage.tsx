@@ -55,7 +55,7 @@ function readStoredPersonaId(): string {
       return n.schoolId
     }
     const v = localStorage.getItem(PERSONA_STORAGE_KEY)
-    if (v === 'ed-ryu' || v === 'ec-ryu' || v === 'sd-ryu' || v === 'bbs-ryu') return v
+    if (v && isValidSchoolId(v)) return v
   } catch {
     /* ignore */
   }

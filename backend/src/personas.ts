@@ -1,4 +1,5 @@
 import * as ed from "@noble/ed25519";
+import { ml_dsa44 } from "@noble/post-quantum/ml-dsa.js";
 import { bls12_381 } from "@noble/curves/bls12-381.js";
 import { p256 } from "@noble/curves/nist.js";
 import { sha256, sha512 } from "@noble/hashes/sha2.js";
@@ -19,7 +20,7 @@ function deriveSeed48(personaId: string, label: string): Uint8Array {
   return sha512(input).subarray(0, 48);
 }
 
-export type ProofSchool = "ed25519" | "ecdsa" | "bbs";
+export type ProofSchool = "ed25519" | "ecdsa" | "bbs" | "mldsa";
 
 export type PersonaPublic = {
   id: string;
@@ -41,6 +42,8 @@ const ALL_KATA = [
   "ecdsa-sd-2023",
   "bbs-2023",
   "vc-jwt",
+  "mldsa44-rdfc-2024",
+  "mldsa44-jcs-2024",
 ] as const;
 
 function buildPersona(persona: {
@@ -84,6 +87,8 @@ function edPersona(): PersonaPublic {
       ALL_KATA[3],
       ALL_KATA[4],
       ALL_KATA[5],
+      ALL_KATA[7],
+      ALL_KATA[8],
     ],
   });
 }
@@ -138,11 +143,28 @@ function bbsPersona(): PersonaPublic {
   });
 }
 
+function mlDsaPersona(): PersonaPublic {
+  const id = "ml-ryu";
+  const seed = deriveDigest("mldsa44-seed", id);
+  const { publicKey } = ml_dsa44.keygen(seed);
+  const didKey = encodeDidKey(MULTICODEC.ML_DSA_44_PUB, publicKey);
+  return buildPersona({
+    id,
+    label: "ML-ryū",
+    labelJa: "エムエル流",
+    description:
+      "Demo school for FIPS 204 ML-DSA-44 Data Integrity (mldsa44-rdfc-2024, mldsa44-jcs-2024). Issuer public key uses multicodec mldsa-44-pub in did:key.",
+    proofSchool: "mldsa",
+    didKey,
+    kataSamples: [ALL_KATA[7], ALL_KATA[8]],
+  });
+}
+
 let cached: readonly PersonaPublic[] | undefined;
 
 export function listDemoPersonas(): readonly PersonaPublic[] {
   if (!cached) {
-    cached = [edPersona(), ecPersona(), sdPersona(), bbsPersona()];
+    cached = [edPersona(), ecPersona(), sdPersona(), bbsPersona(), mlDsaPersona()];
   }
   return cached;
 }

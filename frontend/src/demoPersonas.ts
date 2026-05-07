@@ -1,6 +1,6 @@
 /** Shared demo persona types and offline mirror of GET /api/personas (Home + Discover Kasa). */
 
-export type ProofSchool = 'ed25519' | 'ecdsa' | 'bbs'
+export type ProofSchool = 'ed25519' | 'ecdsa' | 'bbs' | 'mldsa'
 
 export type PersonaPublic = {
   id: string
@@ -26,6 +26,8 @@ export const DEFAULT_KATA_SAMPLES = [
   'ecdsa-jcs-2019',
   'ecdsa-sd-2023',
   'bbs-2023',
+  'mldsa44-rdfc-2024',
+  'mldsa44-jcs-2024',
 ] as const
 
 /** Mirrors backend `listDemoPersonas` for offline UI. */
@@ -69,5 +71,15 @@ export const DEMO_PERSONAS_OFFLINE: readonly PersonaPublic[] = [
     proofSchool: 'bbs',
     didKey: '',
     kataSamples: ['bbs-2023'],
+  },
+  {
+    id: 'ml-ryu',
+    label: 'ML-ryū',
+    labelJa: 'エムエル流',
+    description:
+      'Demo school for FIPS 204 ML-DSA-44 Data Integrity (mldsa44-rdfc-2024, mldsa44-jcs-2024). Issuer public key uses multicodec mldsa-44-pub in did:key.',
+    proofSchool: 'mldsa',
+    didKey: '',
+    kataSamples: ['mldsa44-rdfc-2024', 'mldsa44-jcs-2024'],
   },
 ]
