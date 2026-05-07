@@ -151,8 +151,7 @@
 }
 
 .lex-flow,
-.lex-contrast,
-.lex-snips {
+.lex-contrast {
   margin: 0 0 1rem;
   padding: 0.9rem 1rem;
   border-radius: 12px;
@@ -161,8 +160,7 @@
 }
 
 .lex-flow__title,
-.lex-contrast__title,
-.lex-snips__title {
+.lex-contrast__title {
   margin: 0 0 0.45rem;
   font-size: 0.95rem;
   letter-spacing: 0.08em;
@@ -198,8 +196,7 @@
   font-size: 0.78rem;
 }
 
-.lex-contrast__grid,
-.lex-snips__grid {
+.lex-contrast__grid {
   display: grid;
   gap: 0.6rem;
 }
@@ -209,13 +206,9 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .lex-snips__grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 
-.lex-contrast__card,
-.lex-snips__card {
+.lex-contrast__card {
   border: 1px solid var(--border);
   border-radius: 10px;
   background: rgba(0, 0, 0, 0.15);
@@ -234,35 +227,7 @@
   font-size: 0.86rem;
 }
 
-.lex-snips__cardTitle {
-  margin: 0;
-  font-size: 0.8rem;
-  color: var(--text-h);
-}
-
-.lex-snips__code {
-  margin: 0.45rem 0 0;
-  max-height: 11rem;
-  overflow: auto;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  padding: 0.52rem;
-  font-size: 0.72rem;
-}
-
-.lex-snips__copyBtn {
-  margin-top: 0.5rem;
-  border: 1px solid rgba(90, 232, 255, 0.3);
-  background: rgba(90, 232, 255, 0.08);
-  color: var(--text-h);
-  border-radius: 6px;
-  padding: 0.3rem 0.55rem;
-  font-size: 0.72rem;
-  cursor: pointer;
-}
-
-.lex-snips__printHint {
+.lex__printHint {
   margin: 0.5rem 0 0;
   color: var(--muted);
   font-size: 0.78rem;
@@ -286,8 +251,7 @@
 
 .lex-print .lex__toc,
 .lex-print .lex-flow,
-.lex-print .lex-contrast,
-.lex-print .lex-snips {
+.lex-print .lex-contrast {
   break-inside: avoid;
 }
 

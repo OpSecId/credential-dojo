@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import './App.css'
 import './LexiconPage.css'
@@ -40,45 +40,6 @@ const FLOW_STEPS: readonly { label: string; anchor: LexiconKey }[] = [
   { label: 'Kensa', anchor: 'presentationInspection' },
 ]
 
-const SAMPLE_SNIPPETS: readonly { title: string; code: string }[] = [
-  {
-    title: 'Katachi: structure cues',
-    code: `{
-  "@context": ["https://www.w3.org/ns/credentials/v2"],
-  "type": ["VerifiableCredential", "UniversityDegreeCredential"],
-  "credentialSchema": {
-    "id": "https://credential.ninja/schemas/degree-v1",
-    "type": "JsonSchema"
-  }
-}`,
-  },
-  {
-    title: 'Menkyo: issuer + subject',
-    code: `{
-  "issuer": "did:key:z6Mk...",
-  "credentialSubject": {
-    "id": "did:key:z6MkHolder...",
-    "name": "Aiko"
-  },
-  "validFrom": "2026-05-01T00:00:00Z"
-}`,
-  },
-  {
-    title: 'Enbu: holder response package',
-    code: `{
-  "type": ["VerifiablePresentation"],
-  "holder": "did:key:z6MkHolder...",
-  "verifiableCredential": [
-    "eyJhbGciOiJFZERTQSJ9...<vc-jwt>..."
-  ],
-  "proof": {
-    "type": "DataIntegrityProof",
-    "proofPurpose": "authentication"
-  }
-}`,
-  },
-]
-
 function tryLinkForKey(key: LexiconKey): { to: string; label: string } {
   if (key === 'presentationInspection' || key === 'credentialInspection') return { to: '/kensa', label: 'Try in Kensa' }
   if (key === 'render' || key === 'katachi') return { to: '/json-explorer', label: 'Try in Shinbi' }
@@ -89,18 +50,7 @@ function tryLinkForKey(key: LexiconKey): { to: string; label: string } {
 
 export default function LexiconPage() {
   const location = useLocation()
-  const [copied, setCopied] = useState<string | null>(null)
   const printMode = useMemo(() => new URLSearchParams(location.search).get('print') === '1', [location.search])
-
-  const copySnippet = async (title: string, code: string) => {
-    try {
-      await navigator.clipboard.writeText(code)
-      setCopied(title)
-      window.setTimeout(() => setCopied((current) => (current === title ? null : current)), 1200)
-    } catch {
-      /* ignore clipboard errors */
-    }
-  }
 
   return (
     <div className={`dojo-scene dojo-scene--night${printMode ? ' lex-print' : ''}`}>
@@ -189,27 +139,7 @@ export default function LexiconPage() {
           </div>
         </section>
 
-        <section className="lex-snips dojo-augmented dojo-augmented--panel" data-augmented-ui="tl-clip tr-clip bl-clip br-clip border">
-          <h2 className="lex-snips__title">Copyable VC Snippets</h2>
-          <div className="lex-snips__grid">
-            {SAMPLE_SNIPPETS.map((snippet) => (
-              <article key={snippet.title} className="lex-snips__card">
-                <p className="lex-snips__cardTitle">{snippet.title}</p>
-                <pre className="lex-snips__code">
-                  <code>{snippet.code}</code>
-                </pre>
-                <button
-                  type="button"
-                  className="lex-snips__copyBtn"
-                  onClick={() => copySnippet(snippet.title, snippet.code)}
-                >
-                  {copied === snippet.title ? 'Copied' : 'Copy JSON'}
-                </button>
-              </article>
-            ))}
-          </div>
-          <p className="lex-snips__printHint">For documentation/offline use, open this page with <code>?print=1</code>.</p>
-        </section>
+        <p className="lex__printHint">For documentation/offline use, open this page with <code>?print=1</code>.</p>
 
         <div className="lex__articles">
           {LEXICON_ARTICLES.map((article) => {
