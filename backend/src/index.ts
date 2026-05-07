@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import swaggerUi from "swagger-ui-express";
 import { openApiDocument } from "./openapi.js";
+import { listDemoPersonas } from "./personas.js";
 import { productTerminology } from "./terminology.js";
 
 const app = express();
@@ -62,6 +63,14 @@ app.get("/api/health", (_req, res) => {
     handshakeMetaphor: productTerminology.handshake.name,
     standardsFocus,
     terminology: productTerminology,
+  });
+});
+
+app.get("/api/personas", (_req, res) => {
+  res.json({
+    personas: listDemoPersonas(),
+    note:
+      "Demo-only issuer personas: public keys are deterministically derived from fixed labels for repeatable demos — not for production secrets.",
   });
 });
 

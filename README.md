@@ -75,6 +75,8 @@ npm run dev
 
 Behind Docker/nginx, use the same paths on your web origin (e.g. `https://…/api/docs`).
 
+- **Lexicon (SPA):** http://localhost:5173/lexicon — glossary of Dojo terms vs credential meanings.
+
 Or run each workspace separately:
 
 ```bash

@@ -311,6 +311,19 @@
   color: var(--muted);
 }
 
+.dojo__lexMore {
+  text-transform: none;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.dojo__lexMore:hover {
+  text-decoration: underline;
+}
+
 .dojo__lexGrid {
   display: grid;
   gap: 0.75rem;
@@ -440,6 +453,40 @@
 }
 
 .dojo__link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.dojo__headerActions {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1rem;
+}
+
+.dojo__linkNav {
+  display: inline-flex;
+  align-items: center;
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent-border);
+  background: var(--accent-soft);
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.dojo__linkNav:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.dojo__linkNav:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
 }
@@ -630,6 +677,124 @@
   font-size: 0.82rem;
   color: var(--muted);
   text-align: center;
+}
+
+/* --- Demo persona (proof school) --- */
+.dojo-persona {
+  margin-top: 1rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 107, 74, 0.22);
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.dojo-scene--day .dojo-persona {
+  background: rgba(255, 255, 255, 0.45);
+  border-color: rgba(200, 90, 60, 0.22);
+}
+
+.dojo-persona__label {
+  margin: 0 0 0.5rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.dojo-persona__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.dojo-persona__tab {
+  flex: 1 1 5.5rem;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.08rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-h);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.dojo-scene--day .dojo-persona__tab {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.dojo-persona__tab:hover {
+  border-color: rgba(255, 107, 74, 0.45);
+}
+
+.dojo-persona__tab[aria-pressed='true'] {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(255, 107, 74, 0.35);
+  background: var(--accent-soft);
+}
+
+.dojo-persona__tabName {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.dojo-persona__tabJa {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.dojo-persona__desc {
+  margin: 0.65rem 0 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--text-h);
+}
+
+.dojo-persona__did {
+  margin: 0.5rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--muted);
+  word-break: break-word;
+}
+
+.dojo-persona__did--muted {
+  font-size: 0.8rem;
+}
+
+.dojo-persona__did--muted code {
+  font-size: 0.78rem;
+}
+
+.dojo-persona__didLabel {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.dojo-persona__didCode {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--accent);
+}
+
+.dojo-persona__note {
+  margin: 0.55rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--muted);
 }
 
 /* --- Kata practice --- */

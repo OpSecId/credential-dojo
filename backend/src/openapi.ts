@@ -14,7 +14,10 @@ export const openApiDocument = {
     },
   },
   servers: [{ url: "/", description: "Current host (same origin as this request)" }],
-  tags: [{ name: "Platform", description: "Health and introspection" }],
+  tags: [
+    { name: "Platform", description: "Health and introspection" },
+    { name: "Demo", description: "Deterministic demo data (not production)" },
+  ],
   paths: {
     "/api/health": {
       get: {
@@ -29,6 +32,25 @@ export const openApiDocument = {
             content: {
               "application/json": {
                 schema: { $ref: "#/components/schemas/HealthResponse" },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/api/personas": {
+      get: {
+        tags: ["Demo"],
+        summary: "Demo issuer personas (deterministic keys)",
+        description:
+          "Four demo proof schools (Ed-ryū, Ec-ryū, Sd-ryū, BBS-ryū) with `did:key` identifiers. Keys are derived from stable demo labels — suitable for repeatable demos only.",
+        operationId: "getPersonas",
+        responses: {
+          "200": {
+            description: "Persona list with public DIDs and ordered kata samples",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/PersonasResponse" },
               },
             },
           },
@@ -114,6 +136,50 @@ export const openApiDocument = {
           handshakeMetaphor: { type: "string" },
           standardsFocus: { type: "string", example: "W3C Verifiable Credentials" },
           terminology: { $ref: "#/components/schemas/ProductTerminology" },
+        },
+      },
+      PersonaPublic: {
+        type: "object",
+        required: [
+          "id",
+          "label",
+          "labelJa",
+          "description",
+          "proofSchool",
+          "didKey",
+          "kataSamples",
+        ],
+        properties: {
+          id: { type: "string", example: "ed-ryu" },
+          label: { type: "string", example: "Ed-ryū" },
+          labelJa: { type: "string", example: "エド流" },
+          description: { type: "string" },
+          proofSchool: {
+            type: "string",
+            enum: ["ed25519", "ecdsa", "bbs"],
+            example: "ed25519",
+          },
+          didKey: {
+            type: "string",
+            description: "Public `did:key` for the demo issuer (multicodec + multibase).",
+            example: "did:key:z6MkhaXgBZDvotDkL5257faiztiGiC2QtKLGpbnnEGta2doK",
+          },
+          kataSamples: {
+            type: "array",
+            items: { type: "string" },
+            description: "Preferred kata (cryptosuite) strings for this school.",
+          },
+        },
+      },
+      PersonasResponse: {
+        type: "object",
+        required: ["personas", "note"],
+        properties: {
+          personas: {
+            type: "array",
+            items: { $ref: "#/components/schemas/PersonaPublic" },
+          },
+          note: { type: "string" },
         },
       },
       HelloResponse: {
