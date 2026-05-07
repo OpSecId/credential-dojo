@@ -351,20 +351,47 @@ export default function HomePage() {
             {!ninjaProfile ? (
               <p className="dojo__heroCtas" aria-label="Get started">
                 <Link
-                  className="dojo__heroLexicon"
+                  className="dojo__heroPrimary dojo__heroPrimary--lexicon"
                   to="/lexicon"
-                  title="Glossary: Dojo metaphors vs W3C VC concepts"
+                  title="Start here if the Dojo metaphors are new"
                 >
-                  Lexicon
+                  Start with Lexicon
                 </Link>
                 <Link
-                  className="dojo__heroPrimary"
+                  className="dojo__heroLexicon"
                   to="/create-ninja-profile"
                   title="Codename and Kasa — stored in this browser only"
                 >
                   Create ninja profile
                 </Link>
               </p>
+            ) : null}
+            {!ninjaProfile ? (
+              <section
+                className="dojo__lexPrimer dojo-augmented dojo-augmented--inset"
+                data-augmented-ui="tl-clip br-clip border"
+                aria-label="Lexicon primer"
+              >
+                <p className="dojo__lexPrimer-title">New to the Dojo terms?</p>
+                <p className="dojo__lexPrimer-body">
+                  The platform uses a small set of metaphors. The Lexicon maps them to W3C VC concepts so
+                  the rest of the UI reads clearly.
+                </p>
+                <ul className="dojo__lexPrimer-list">
+                  <li>
+                    <strong>Tehon</strong> — issuer definitions (copybook)
+                  </li>
+                  <li>
+                    <strong>Katachi</strong> — schema/shape of claims &amp; types
+                  </li>
+                  <li>
+                    <strong>Menkyo</strong> — issued credentials
+                  </li>
+                </ul>
+                <Link className="dojo__lexPrimer-cta" to="/lexicon" title="Open the full lexicon">
+                  Open Lexicon →
+                </Link>
+              </section>
             ) : null}
             {ninjaProfile ? (
               <>
