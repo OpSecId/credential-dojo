@@ -36,6 +36,128 @@ const REQUEST_PROTOCOLS: readonly {
   },
 ]
 
+const SAMPLE_VP = `{
+  "@context": ["https://www.w3.org/ns/credentials/v2"],
+  "type": ["VerifiablePresentation"],
+  "holder": "did:key:z6MkHolderExample",
+  "verifiableCredential": [
+    {
+      "@context": ["https://www.w3.org/ns/credentials/v2"],
+      "type": ["VerifiableCredential", "UniversityDegreeCredential"],
+      "issuer": "did:key:z6MkIssuerExample",
+      "credentialSubject": {
+        "id": "did:key:z6MkHolderExample",
+        "name": "Aiko"
+      },
+      "proof": {
+        "type": "DataIntegrityProof",
+        "verificationMethod": "did:key:z6MkIssuerExample#z6MkIssuerExample",
+        "proofPurpose": "assertionMethod",
+        "created": "2026-05-07T00:00:00Z",
+        "proofValue": "z58SampleProofValue"
+      }
+    }
+  ],
+  "proof": {
+    "type": "DataIntegrityProof",
+    "verificationMethod": "did:key:z6MkHolderExample#z6MkHolderExample",
+    "proofPurpose": "authentication",
+    "created": "2026-05-07T00:00:10Z",
+    "proofValue": "z58SamplePresentationProof"
+  }
+}`
+
+const SAMPLE_VC = `{
+  "@context": ["https://www.w3.org/ns/credentials/v2"],
+  "id": "urn:uuid:7fd22f56-ec2a-4de8-9d9b-0f6aabf9f67b",
+  "type": ["VerifiableCredential", "UniversityDegreeCredential"],
+  "issuer": "did:key:z6MkIssuerExample",
+  "validFrom": "2026-05-01T00:00:00Z",
+  "credentialSchema": {
+    "id": "https://credential.ninja/schemas/degree-v1",
+    "type": "JsonSchema"
+  },
+  "credentialSubject": {
+    "id": "did:key:z6MkHolderExample",
+    "name": "Aiko",
+    "degree": {
+      "name": "Bachelor of Science"
+    }
+  },
+  "proof": {
+    "type": "DataIntegrityProof",
+    "verificationMethod": "did:key:z6MkIssuerExample#z6MkIssuerExample",
+    "proofPurpose": "assertionMethod",
+    "created": "2026-05-01T10:15:00Z",
+    "proofValue": "z58SampleCredentialProof"
+  }
+}`
+
+const SAMPLE_REQ_OID4VP = `{
+  "client_id": "https://verifier.example",
+  "response_uri": "https://verifier.example/callback",
+  "nonce": "n-0S6_WzA2Mj",
+  "presentation_definition": {
+    "id": "pd-degree",
+    "input_descriptors": [
+      {
+        "id": "degree-input",
+        "constraints": {
+          "fields": [
+            {
+              "path": ["$.type"],
+              "filter": { "type": "array", "contains": { "const": "UniversityDegreeCredential" } }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}`
+
+const SAMPLE_REQ_DIDCOMM = `{
+  "id": "5f7a",
+  "type": "https://didcomm.org/present-proof/3.0/request-presentation",
+  "from": "did:example:verifier",
+  "to": ["did:example:holder"],
+  "body": {
+    "goal_code": "request-vp",
+    "comment": "Please share your degree credential",
+    "challenge": "a4fbe6d2"
+  }
+}`
+
+const SAMPLE_REQ_CHAPI = `{
+  "web": {
+    "VerifiablePresentation": {
+      "query": [
+        {
+          "type": "QueryByExample",
+          "credentialQuery": {
+            "reason": "Proof of degree",
+            "example": {
+              "@context": ["https://www.w3.org/ns/credentials/v2"],
+              "type": ["UniversityDegreeCredential"]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "challenge": "9f8f9c3a",
+  "domain": "credential.ninja"
+}`
+
+const SAMPLE_REQ_CUSTOM = `{
+  "intent": "employment-screening",
+  "challenge": "c-42",
+  "audience": "did:example:verifier",
+  "requirements": {
+    "credentialTypes": ["UniversityDegreeCredential"],
+    "proofPurpose": "authentication"
+  }
+}`
+
 function typeList(o: Record<string, unknown>): string[] {
   const t = o.type
   if (Array.isArray(t)) return t.filter((x): x is string => typeof x === 'string')
@@ -373,6 +495,21 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
   const tMenkyo = productTerminology.credentialInspection
   const selectedProtocol = REQUEST_PROTOCOLS.find((p) => p.id === requestProtocol) ?? REQUEST_PROTOCOLS[0]
 
+  const loadSample = useCallback(() => {
+    let sample = SAMPLE_VC
+    if (mode === 'enbu' && enbuArtifact === 'response') sample = SAMPLE_VP
+    if (mode === 'enbu' && enbuArtifact === 'request') {
+      if (requestProtocol === 'oid4vp') sample = SAMPLE_REQ_OID4VP
+      else if (requestProtocol === 'didcomm') sample = SAMPLE_REQ_DIDCOMM
+      else if (requestProtocol === 'chapi') sample = SAMPLE_REQ_CHAPI
+      else sample = SAMPLE_REQ_CUSTOM
+    }
+    setRaw(sample)
+    setApplied(sample)
+    setParseError(null)
+    setLastUploadNote('Sample loaded')
+  }, [mode, enbuArtifact, requestProtocol])
+
   useEffect(() => {
     setMode(initialMode)
   }, [initialMode])
@@ -610,6 +747,14 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
                 title="Clear editor and inspection result"
               >
                 Clear
+              </button>
+              <button
+                type="button"
+                className="kensa__btn"
+                onClick={loadSample}
+                title="Load a sample payload for the current path"
+              >
+                Load sample
               </button>
               <button
                 type="button"

@@ -15,8 +15,8 @@
   margin-bottom: 0.75rem;
   padding: 0.85rem 0.95rem 0.9rem;
   border-radius: 12px;
-  border: 1px solid var(--border);
-  background: linear-gradient(165deg, rgba(14, 20, 36, 0.92), rgba(8, 10, 18, 0.9));
+  border: 1px solid rgba(90, 232, 255, 0.28);
+  background: linear-gradient(165deg, rgba(14, 20, 36, 0.98), rgba(8, 10, 18, 0.96));
   box-shadow: 0 14px 44px rgba(0, 0, 0, 0.22);
 }
 
@@ -25,19 +25,19 @@
   font-size: 0.75rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: #94a3bd;
 }
 
 .kensa__title {
   margin: 0 0 0.35rem;
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 3.6vw, 2.25rem);
-  color: var(--text-h);
+  color: #f4f7ff;
 }
 
 .kensa__intro {
   margin: 0 0 0.75rem;
-  color: var(--text);
+  color: #d6deef;
   line-height: 1.55;
 }
 
@@ -91,9 +91,9 @@
   padding: 0.55rem 0.75rem;
   text-align: left;
   border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--panel-bg);
-  color: var(--text);
+  border: 1px solid rgba(90, 232, 255, 0.2);
+  background: rgba(10, 16, 30, 0.8);
+  color: #d6deef;
   font-family: var(--font-body);
   cursor: pointer;
   transition:
@@ -114,7 +114,7 @@
 .kensa__tabTitle {
   font-size: 0.95rem;
   font-weight: 600;
-  color: var(--text-h);
+  color: #f4f7ff;
 }
 
 .kensa__tabMode {
@@ -127,7 +127,7 @@
 
 .kensa__tabGlyph {
   font-size: 0.88rem;
-  color: var(--muted);
+  color: #94a3bd;
 }
 
 .kensa__panel {
@@ -158,7 +158,7 @@
 .kensa__panelHeading {
   margin: 0 0 0.35rem;
   font-size: 1.05rem;
-  color: var(--text-h);
+  color: #f4f7ff;
 }
 
 .kensa__hint {
