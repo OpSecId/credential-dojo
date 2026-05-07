@@ -64,14 +64,36 @@ export default function CreateNinjaProfilePage() {
             everything stays in this browser only.
           </p>
           <nav className="ninjaProfile__nav" aria-label="Section">
-            <Link className="ninjaProfile__back" to="/">
+            <Link className="ninjaProfile__back" to="/" title="Credential Dojo home">
               ← Home
             </Link>
-            <Link className="ninjaProfile__back" to="/discover-kasa">
+            <Link
+              className="ninjaProfile__back"
+              to="/discover-kasa"
+              title="Demo proof schools (Kasa) with did:key and Kata samples"
+            >
               Discover Kasa
             </Link>
-            <Link className="ninjaProfile__back" to="/lexicon">
+            <Link
+              className="ninjaProfile__back"
+              to="/lexicon"
+              title="Glossary: Dojo metaphors vs W3C Verifiable Credentials"
+            >
               Lexicon
+            </Link>
+            <Link
+              className="ninjaProfile__back"
+              to="/json-explorer"
+              title="Interactive JSON tree with RFC 6901 pointer tooltips"
+            >
+              JSON explorer
+            </Link>
+            <Link
+              className="ninjaProfile__back"
+              to="/kensa"
+              title="Enbu の Kensa / Menkyo の Kensa — structural inspection"
+            >
+              Kensa
             </Link>
           </nav>
         </header>
@@ -102,6 +124,7 @@ export default function CreateNinjaProfilePage() {
                 <label
                   key={p.id}
                   className={`ninjaProfile__school${p.id === schoolId ? ' ninjaProfile__school--selected' : ''}`}
+                  title={p.description}
                 >
                   <input
                     type="radio"
@@ -122,11 +145,20 @@ export default function CreateNinjaProfilePage() {
           </fieldset>
 
           <div className="ninjaProfile__actions">
-            <button type="submit" className="ninjaProfile__submit">
+            <button
+              type="submit"
+              className="ninjaProfile__submit"
+              title="Store codename and school in localStorage and return home"
+            >
               {existing ? 'Save profile' : 'Create profile'}
             </button>
             {existing ? (
-              <button type="button" className="ninjaProfile__clear" onClick={onClear}>
+              <button
+                type="button"
+                className="ninjaProfile__clear"
+                title="Remove ninja profile from this browser and return home"
+                onClick={onClear}
+              >
                 Clear profile
               </button>
             ) : null}

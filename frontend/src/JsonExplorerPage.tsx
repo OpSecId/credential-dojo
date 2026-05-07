@@ -61,24 +61,38 @@ export default function JsonExplorerPage() {
 
       <header className="json-ex__header">
         <p className="json-ex__eyebrow">The Credential Dojo</p>
-        <h1 className="json-ex__title">JSON explorer</h1>
+        <h1 className="json-ex__title" title="Parse JSON, then hover the tree for pointers and explanations">
+          JSON explorer
+        </h1>
         <p className="json-ex__intro">
           Paste JSON, apply, then hover the augmented tree to see RFC 6901 pointers and notes.
           Custom explanations use the same pointer strings as keys.
         </p>
         <nav className="json-ex__nav">
-          <Link className="json-ex__back" to="/">
+          <Link className="json-ex__back" to="/" title="Credential Dojo home">
             ← Home
           </Link>
-            <Link className="json-ex__back" to="/lexicon">
-              Lexicon
-            </Link>
-            <Link className="json-ex__back" to="/kensa">
-              Kensa
-            </Link>
-            <Link className="json-ex__back" to="/discover-kasa">
-              Discover Kasa
-            </Link>
+          <Link
+            className="json-ex__back"
+            to="/lexicon"
+            title="Glossary: Dojo metaphors vs W3C Verifiable Credentials"
+          >
+            Lexicon
+          </Link>
+          <Link
+            className="json-ex__back"
+            to="/kensa"
+            title="Enbu の Kensa / Menkyo の Kensa — structural VP vs VC inspection"
+          >
+            Kensa
+          </Link>
+          <Link
+            className="json-ex__back"
+            to="/discover-kasa"
+            title="Demo proof schools (Kasa) with did:key and Kata samples"
+          >
+            Discover Kasa
+          </Link>
         </nav>
       </header>
 
@@ -93,14 +107,21 @@ export default function JsonExplorerPage() {
           onChange={(e) => setRaw(e.target.value)}
           spellCheck={false}
           rows={14}
+          title="Paste JSON here, then Apply to send it to the explorer below"
         />
         <div className="json-ex__actions">
-          <button type="button" className="json-ex__btn" onClick={apply}>
+          <button
+            type="button"
+            className="json-ex__btn"
+            onClick={apply}
+            title="Parse textarea JSON and refresh the tree when valid"
+          >
             Apply
           </button>
           <button
             type="button"
             className="json-ex__btn json-ex__btn--ghost"
+            title="Restore the built-in VerifiableCredential-shaped sample and explanations"
             onClick={() => {
               setRaw(SAMPLE_JSON)
               setApplied(SAMPLE_JSON)

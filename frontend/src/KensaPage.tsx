@@ -111,20 +111,33 @@ export default function KensaPage() {
 
       <header className="kensa__header">
         <p className="kensa__eyebrow">The Credential Dojo</p>
-        <h1 className="kensa__title">Kensa</h1>
+        <h1
+          className="kensa__title"
+          title="Inspection (検査): choose Enbu (presentation) or Menkyo (credential) structural checks"
+        >
+          Kensa
+        </h1>
         <p className="kensa__intro">
           Two inspection paths: presentation-shaped JSON (<strong>{tEnbu.name}</strong>,{' '}
           <span lang="ja">{tEnbu.glyph}</span>) versus a single credential (<strong>{tMenkyo.name}</strong>,{' '}
           <span lang="ja">{tMenkyo.glyph}</span>). Heuristics only—no cryptographic verification on this page.
         </p>
         <nav className="kensa__nav">
-          <Link className="kensa__back" to="/">
+          <Link className="kensa__back" to="/" title="Credential Dojo home">
             ← Home
           </Link>
-          <Link className="kensa__back" to="/lexicon">
+          <Link
+            className="kensa__back"
+            to="/lexicon"
+            title="Glossary including Enbu の Kensa and Menkyo の Kensa articles"
+          >
             Lexicon
           </Link>
-          <Link className="kensa__back" to="/json-explorer">
+          <Link
+            className="kensa__back"
+            to="/json-explorer"
+            title="Interactive JSON tree with RFC 6901 pointer tooltips"
+          >
             JSON explorer
           </Link>
         </nav>
@@ -137,6 +150,7 @@ export default function KensaPage() {
           id="kensa-tab-enbu"
           aria-selected={mode === 'enbu'}
           className={`kensa__tab${mode === 'enbu' ? ' kensa__tab--active' : ''}`}
+          title="Enbu (演武): verifiable presentation — inspect VP-shaped JSON (not crypto verification)"
           onClick={() => setMode('enbu')}
         >
           <span className="kensa__tabTitle">{tEnbu.name}</span>
@@ -150,6 +164,7 @@ export default function KensaPage() {
           id="kensa-tab-menkyo"
           aria-selected={mode === 'menkyo'}
           className={`kensa__tab${mode === 'menkyo' ? ' kensa__tab--active' : ''}`}
+          title="Menkyo (免許): issued credential — inspect a single VC-shaped JSON object"
           onClick={() => setMode('menkyo')}
         >
           <span className="kensa__tabTitle">{tMenkyo.name}</span>
@@ -192,9 +207,19 @@ export default function KensaPage() {
           spellCheck={false}
           rows={12}
           placeholder='{ "type": ["VerifiablePresentation"], ... }'
+          title={
+            mode === 'enbu'
+              ? 'Paste a verifiable presentation (VP) JSON object for heuristic checks'
+              : 'Paste one verifiable credential (VC) JSON object for heuristic checks'
+          }
         />
         <div className="kensa__actions">
-          <button type="button" className="kensa__btn" onClick={apply}>
+          <button
+            type="button"
+            className="kensa__btn"
+            onClick={apply}
+            title="Parse JSON and run VP vs VC shape heuristics for the selected tab (no signature verification)"
+          >
             Run inspection
           </button>
         </div>

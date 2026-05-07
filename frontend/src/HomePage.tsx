@@ -299,28 +299,56 @@ export default function HomePage() {
                   ninjaProfile.schoolId}
               </span>
               <span className="dojo__ninjaBar-sep"> · </span>
-              <Link className="dojo__ninjaBar-edit" to="/create-ninja-profile">
+              <Link
+                className="dojo__ninjaBar-edit"
+                to="/create-ninja-profile"
+                title="Change codename or proof school (Kasa) for your ninja profile"
+              >
                 Edit
               </Link>
             </p>
           ) : null}
           <p className="dojo__headerActions">
-            <Link className="dojo__linkNav" to="/create-ninja-profile">
+            <Link
+              className="dojo__linkNav"
+              to="/create-ninja-profile"
+              title="Codename and Kasa (proof school); stored in this browser only"
+            >
               {ninjaProfile ? 'Ninja profile' : 'Create ninja profile'}
             </Link>
-            <Link className="dojo__linkNav" to="/discover-kasa">
+            <Link
+              className="dojo__linkNav"
+              to="/discover-kasa"
+              title="Demo issuer personas: did:key and preferred Kata (cryptosuites) per school"
+            >
               Discover Kasa
             </Link>
-            <Link className="dojo__linkNav" to="/lexicon">
+            <Link
+              className="dojo__linkNav"
+              to="/lexicon"
+              title="Glossary: Tehon, Menkyo, Enbu, Kensa, Randori, Teawase, Kinchaku, Kata vs W3C VC concepts"
+            >
               Full lexicon
             </Link>
-            <Link className="dojo__linkNav" to="/json-explorer">
+            <Link
+              className="dojo__linkNav"
+              to="/json-explorer"
+              title="Paste JSON and explore with RFC 6901 pointers, fold/unfold, and custom explainByPointer blurbs"
+            >
               JSON explorer
             </Link>
-            <Link className="dojo__linkNav" to="/kensa" title="Enbu no kensa · Menkyo no kensa">
+            <Link
+              className="dojo__linkNav"
+              to="/kensa"
+              title="Enbu の Kensa (演武の検査): VP-shaped inspection · Menkyo の Kensa (免許の検査): VC-shaped inspection — structural heuristics only"
+            >
               Kensa
             </Link>
-            <a className="dojo__link" href={SITE}>
+            <a
+              className="dojo__link"
+              href={SITE}
+              title="Public Credential Dojo / credential.ninja site"
+            >
               {SITE.replace(/^https?:\/\//, '')}
             </a>
           </p>
@@ -329,7 +357,11 @@ export default function HomePage() {
         <section className="dojo__lex" aria-labelledby="lexicon-heading">
           <h2 id="lexicon-heading" className="dojo__lexTitle">
             Dojo lexicon · artifacts · flows{' '}
-            <Link className="dojo__lexMore" to="/lexicon">
+            <Link
+              className="dojo__lexMore"
+              to="/lexicon"
+              title="Long-form articles for each Dojo metaphor vs credentials and flows"
+            >
               (full guide)
             </Link>
           </h2>
@@ -339,6 +371,7 @@ export default function HomePage() {
                 key={entry.key}
                 className="dojo-lexCard dojo-augmented dojo-augmented--lex"
                 data-augmented-ui="tl-clip br-clip border"
+                title={entry.blurb}
               >
                 <h3 className="dojo-lexCard__title">
                   {entry.title}{' '}

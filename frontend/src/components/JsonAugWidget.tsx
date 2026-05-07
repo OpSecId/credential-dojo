@@ -88,9 +88,19 @@ type TreeProps = {
   expanded: Set<string>
   toggle: (path: string) => void
   onSegEnter: (path: string, kind: JsonHighlightKind) => void
+  getTooltip: (path: string, kind: JsonHighlightKind) => string
+  expandTooltip: (path: string, nextActionIsExpand: boolean) => string
 }
 
-function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): ReactNode {
+function JsonTree({
+  value,
+  path,
+  expanded,
+  toggle,
+  onSegEnter,
+  getTooltip,
+  expandTooltip,
+}: TreeProps): ReactNode {
   const isExp = expanded.has(path)
 
   if (value === null) {
@@ -99,6 +109,7 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
         className="json-aug__seg json-aug__seg--null"
         data-json-path={path}
         data-json-kind="json-null"
+        title={getTooltip(path, 'json-null')}
         onPointerEnter={() => onSegEnter(path, 'json-null')}
       >
         null
@@ -112,6 +123,7 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
         className="json-aug__seg json-aug__seg--bool"
         data-json-path={path}
         data-json-kind="json-boolean"
+        title={getTooltip(path, 'json-boolean')}
         onPointerEnter={() => onSegEnter(path, 'json-boolean')}
       >
         {value ? 'true' : 'false'}
@@ -125,6 +137,7 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
         className="json-aug__seg json-aug__seg--num"
         data-json-path={path}
         data-json-kind="json-number"
+        title={getTooltip(path, 'json-number')}
         onPointerEnter={() => onSegEnter(path, 'json-number')}
       >
         {String(value)}
@@ -138,6 +151,7 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
         className="json-aug__seg json-aug__seg--str"
         data-json-path={path}
         data-json-kind="json-string"
+        title={getTooltip(path, 'json-string')}
         onPointerEnter={() => onSegEnter(path, 'json-string')}
       >
         {JSON.stringify(value)}
@@ -153,6 +167,7 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
             type="button"
             className="json-aug__toggle"
             aria-expanded={false}
+            title={expandTooltip(path, true)}
             onClick={() => toggle(path)}
           >
             +
@@ -161,6 +176,7 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
             className="json-aug__seg json-aug__seg--array json-aug__ellipsis"
             data-json-path={path}
             data-json-kind="json-array"
+            title={getTooltip(path, 'json-array')}
             onPointerEnter={() => onSegEnter(path, 'json-array')}
           >
             [{value.length} {value.length === 1 ? 'item' : 'items'}]
@@ -175,6 +191,7 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
             type="button"
             className="json-aug__toggle"
             aria-expanded
+            title={expandTooltip(path, false)}
             onClick={() => toggle(path)}
           >
             −
@@ -183,6 +200,7 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
             className="json-aug__seg json-aug__seg--array"
             data-json-path={path}
             data-json-kind="json-array"
+            title={getTooltip(path, 'json-array')}
             onPointerEnter={() => onSegEnter(path, 'json-array')}
           >
             [
@@ -199,6 +217,8 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
                   expanded={expanded}
                   toggle={toggle}
                   onSegEnter={onSegEnter}
+                  getTooltip={getTooltip}
+                  expandTooltip={expandTooltip}
                 />
                 {i < value.length - 1 ? <span className="json-aug__comma">,</span> : null}
               </span>
@@ -219,6 +239,7 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
             type="button"
             className="json-aug__toggle"
             aria-expanded={false}
+            title={expandTooltip(path, true)}
             onClick={() => toggle(path)}
           >
             +
@@ -227,6 +248,7 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
             className="json-aug__seg json-aug__seg--obj json-aug__ellipsis"
             data-json-path={path}
             data-json-kind="json-object"
+            title={getTooltip(path, 'json-object')}
             onPointerEnter={() => onSegEnter(path, 'json-object')}
           >
             {'{'}
@@ -243,6 +265,7 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
             type="button"
             className="json-aug__toggle"
             aria-expanded
+            title={expandTooltip(path, false)}
             onClick={() => toggle(path)}
           >
             −
@@ -251,6 +274,7 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
             className="json-aug__seg json-aug__seg--obj"
             data-json-path={path}
             data-json-kind="json-object"
+            title={getTooltip(path, 'json-object')}
             onPointerEnter={() => onSegEnter(path, 'json-object')}
           >
             {'{'}
@@ -266,6 +290,7 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
                   className="json-aug__seg json-aug__seg--key"
                   data-json-path={p}
                   data-json-kind="json-key"
+                  title={getTooltip(p, 'json-key')}
                   onPointerEnter={() => onSegEnter(p, 'json-key')}
                 >
                   {JSON.stringify(k)}
@@ -277,6 +302,8 @@ function JsonTree({ value, path, expanded, toggle, onSegEnter }: TreeProps): Rea
                   expanded={expanded}
                   toggle={toggle}
                   onSegEnter={onSegEnter}
+                  getTooltip={getTooltip}
+                  expandTooltip={expandTooltip}
                 />
                 {i < keys.length - 1 ? <span className="json-aug__comma">,</span> : null}
               </span>
@@ -332,6 +359,28 @@ export default function JsonAugWidget({
     return resolveExplain(highlight.path, highlightedValue, explainByPointer)
   }, [highlight, highlightedValue, explainByPointer])
 
+  const getTooltip = useCallback(
+    (path: string, kind: JsonHighlightKind) => {
+      const v = getValueAtPointer(value, path)
+      let ex = resolveExplain(path, v, explainByPointer)
+      if (kind === 'json-key') {
+        ex = `Property key · ${ex}`
+      }
+      const ptr = path === '' ? '/' : path
+      const oneLine = ex.replace(/\s+/g, ' ').trim()
+      const short = oneLine.length > 140 ? oneLine.slice(0, 137) + '…' : oneLine
+      return `${ptr} — ${short}`
+    },
+    [value, explainByPointer],
+  )
+
+  const expandTooltip = useCallback((path: string, nextActionIsExpand: boolean) => {
+    const ptr = path === '' ? '(root)' : path
+    return nextActionIsExpand
+      ? `Expand nested values at JSON Pointer ${ptr}`
+      : `Collapse nested values at JSON Pointer ${ptr}`
+  }, [])
+
   const dataHighlight = highlight?.kind ?? ''
   const compressed3d = hoverCode && !hoverViz
 
@@ -341,12 +390,15 @@ export default function JsonAugWidget({
       data-augmented-ui="tl-2-clip-x tr-2-clip-x border"
       data-highlight-info={dataHighlight}
     >
-      <h1 className="json-aug__title">{title}</h1>
+      <h1 className="json-aug__title" title="Hover the tree for JSON Pointer tooltips on each segment.">
+        {title}
+      </h1>
 
       <div className="json-aug__demo">
         <div
           className="json-aug__codeArea"
           data-augmented-ui-reset=""
+          title="Hover keys, values, and brackets to see RFC 6901 pointers and notes. +/− toggles fold nested objects and arrays."
           onPointerEnter={() => setHoverCode(true)}
           onPointerLeave={(e) => {
             const rel = e.relatedTarget as Node | null
@@ -360,7 +412,7 @@ export default function JsonAugWidget({
             className="json-aug__codeContainer"
             data-augmented-ui="tl-clip tr-clip-y br-2-clip-xy both"
           >
-            <span className="json-aug__codeLabel" data-augmented-ui="">
+            <span className="json-aug__codeLabel" data-augmented-ui="" title="Document tree for the applied JSON.">
               JSON
             </span>
             <pre className="json-aug__pre">
@@ -369,6 +421,7 @@ export default function JsonAugWidget({
                   className="json-aug__seg json-aug__seg--root"
                   data-json-path=""
                   data-json-kind="json-root"
+                  title={getTooltip('', 'json-root')}
                   onPointerEnter={() => onSegEnter('', 'json-root')}
                 >
                   <JsonTree
@@ -377,6 +430,8 @@ export default function JsonAugWidget({
                     expanded={expanded}
                     toggle={toggle}
                     onSegEnter={onSegEnter}
+                    getTooltip={getTooltip}
+                    expandTooltip={expandTooltip}
                   />
                 </span>
               </code>
@@ -423,7 +478,16 @@ export default function JsonAugWidget({
             </div>
             <div className="json-aug__explain">
               <strong>Pointer</strong>
-              <code className="json-aug__pointer">{highlight?.path === '' ? '/' : highlight?.path ?? '—'}</code>
+              <code
+                className="json-aug__pointer"
+                title={
+                  highlight
+                    ? getTooltip(highlight.path, highlight.kind)
+                    : 'RFC 6901 JSON Pointer for the hovered tree segment'
+                }
+              >
+                {highlight?.path === '' ? '/' : highlight?.path ?? '—'}
+              </code>
               <strong className="json-aug__explainLabel">Detail</strong>
               <p className="json-aug__explainBody">{explainText}</p>
               {highlight ? (
@@ -438,6 +502,7 @@ export default function JsonAugWidget({
           <div
             className={`json-aug__group3d${compressed3d ? ' json-aug__group3d--compressed' : ''}`}
             data-augmented-ui-reset=""
+            title="Decorative layers: hovering the JSON tree compresses this strip (visual echo of the augmented-ui demo)."
             onPointerEnter={() => setHoverViz(true)}
             onPointerLeave={() => setHoverViz(false)}
           >

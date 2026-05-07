@@ -36,19 +36,35 @@ export default function LexiconPage() {
             <strong>W3C Verifiable Credentials</strong> and CRMS concepts.
           </p>
           <nav className="lex__nav">
-            <Link className="lex__back" to="/">
+            <Link className="lex__back" to="/" title="Credential Dojo home">
               ← Home
             </Link>
-            <Link className="lex__back" to="/discover-kasa">
+            <Link
+              className="lex__back"
+              to="/discover-kasa"
+              title="Demo proof schools (Kasa) with did:key and Kata samples"
+            >
               Discover Kasa
             </Link>
-            <Link className="lex__back" to="/create-ninja-profile">
+            <Link
+              className="lex__back"
+              to="/create-ninja-profile"
+              title="Codename and Kasa (proof school) for the in-browser ninja profile"
+            >
               Create ninja profile
             </Link>
-            <Link className="lex__back" to="/json-explorer">
+            <Link
+              className="lex__back"
+              to="/json-explorer"
+              title="Interactive JSON tree with RFC 6901 pointer tooltips"
+            >
               JSON explorer
             </Link>
-            <Link className="lex__back" to="/kensa">
+            <Link
+              className="lex__back"
+              to="/kensa"
+              title="Enbu の Kensa / Menkyo の Kensa — structural inspection modes"
+            >
               Kensa
             </Link>
           </nav>
@@ -63,7 +79,7 @@ export default function LexiconPage() {
             const t = productTerminology[article.key]
             return (
               <li key={article.key}>
-                <a href={`#${article.key}`}>
+                <a href={`#${article.key}`} title={article.credentialTerm}>
                   {t.name} <span lang="ja">{t.glyph}</span>
                 </a>
               </li>
@@ -109,7 +125,9 @@ export default function LexiconPage() {
         </div>
 
         <footer className="lex__footer">
-          <Link to="/">Return home</Link>
+          <Link to="/" title="Credential Dojo home">
+            Return home
+          </Link>
         </footer>
       </div>
     </div>

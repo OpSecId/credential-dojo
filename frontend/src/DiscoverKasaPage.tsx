@@ -45,14 +45,36 @@ export default function DiscoverKasaPage() {
             (cryptosuites). Keys are deterministic demo material, not production secrets.
           </p>
           <nav className="kasa__nav" aria-label="Section">
-            <Link className="kasa__back" to="/">
+            <Link className="kasa__back" to="/" title="Credential Dojo home">
               ← Home
             </Link>
-            <Link className="kasa__back" to="/create-ninja-profile">
+            <Link
+              className="kasa__back"
+              to="/create-ninja-profile"
+              title="Codename and Kasa (proof school) for the in-browser ninja profile"
+            >
               Create ninja profile
             </Link>
-            <Link className="kasa__back" to="/lexicon">
+            <Link
+              className="kasa__back"
+              to="/lexicon"
+              title="Glossary: Dojo metaphors vs W3C Verifiable Credentials"
+            >
               Lexicon
+            </Link>
+            <Link
+              className="kasa__back"
+              to="/json-explorer"
+              title="Interactive JSON tree with RFC 6901 pointer tooltips"
+            >
+              JSON explorer
+            </Link>
+            <Link
+              className="kasa__back"
+              to="/kensa"
+              title="Enbu の Kensa / Menkyo の Kensa — structural inspection"
+            >
+              Kensa
             </Link>
           </nav>
           {personas !== null && !fromApi ? (
@@ -114,7 +136,11 @@ export default function DiscoverKasaPage() {
             </ul>
             {note ? <p className="kasa__note">{note}</p> : null}
             <p className="kasa__cta">
-              <Link className="kasa__back" to="/">
+              <Link
+                className="kasa__back"
+                to="/"
+                title="Home: Kata carousel, Kinchaku pouch, and lexicon cards"
+              >
                 ← Practice kata on the home dojo
               </Link>
             </p>
