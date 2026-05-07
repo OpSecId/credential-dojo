@@ -312,6 +312,9 @@ export default function HomePage() {
             <Link className="dojo__linkNav" to="/lexicon">
               Full lexicon
             </Link>
+            <Link className="dojo__linkNav" to="/json-explorer">
+              JSON explorer
+            </Link>
             <a className="dojo__link" href={SITE}>
               {SITE.replace(/^https?:\/\//, '')}
             </a>

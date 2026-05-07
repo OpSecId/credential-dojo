@@ -1,0 +1,119 @@
+.json-ex {
+  padding: clamp(1rem, 3vw, 2rem);
+  padding-bottom: 3rem;
+}
+
+.json-ex__header {
+  max-width: 42rem;
+  margin-bottom: 1.5rem;
+}
+
+.json-ex__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.json-ex__title {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  color: var(--text-h);
+}
+
+.json-ex__intro {
+  margin: 0 0 1rem;
+  color: var(--text);
+  line-height: 1.55;
+}
+
+.json-ex__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+}
+
+.json-ex__back {
+  color: var(--cyber-cyan);
+  text-decoration: none;
+  font-size: 0.92rem;
+}
+
+.json-ex__back:hover {
+  text-decoration: underline;
+}
+
+.json-ex__editor {
+  max-width: 72rem;
+  margin: 0 auto 1.5rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--panel-bg);
+}
+
+.json-ex__label {
+  display: block;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
+}
+
+.json-ex__textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 0.75rem;
+  padding: 0.65rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text-h);
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  resize: vertical;
+  min-height: 10rem;
+}
+
+.json-ex__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.json-ex__btn {
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--accent-border);
+  background: var(--accent-soft);
+  color: var(--text-h);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.json-ex__btn:hover {
+  background: rgba(90, 232, 255, 0.14);
+}
+
+.json-ex__btn--ghost {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.json-ex__error {
+  margin: 0.65rem 0 0;
+  color: var(--accent-hot);
+  font-size: 0.88rem;
+}
+
+.json-ex__empty {
+  max-width: 72rem;
+  margin: 1rem auto;
+  color: var(--muted);
+}
