@@ -1,0 +1,131 @@
+.vc-rail {
+  margin: 0 0 1.25rem;
+  padding: 1rem 1.1rem 1.1rem;
+  background: linear-gradient(
+    145deg,
+    rgba(18, 26, 44, 0.92) 0%,
+    rgba(8, 12, 22, 0.88) 50%,
+    rgba(22, 18, 40, 0.9) 100%
+  );
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 1px rgba(90, 232, 255, 0.12),
+    0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.vc-rail__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.vc-rail__title {
+  margin: 0;
+  font-family: var(--font-display, 'Shippori Mincho', serif);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--text-h, #f0f4ff);
+}
+
+.vc-rail__meta {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(90, 232, 255, 0.75);
+}
+
+.vc-rail__hint {
+  margin: 0 0 0.85rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--muted, #7a8498);
+}
+
+.vc-rail__track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: stretch;
+}
+
+.vc-rail__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0.38rem 0.65rem 0.38rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(120, 140, 180, 0.22);
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--muted, #8a92a8);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease;
+}
+
+.vc-rail__chip:hover {
+  border-color: rgba(90, 232, 255, 0.35);
+  color: var(--text-h, #f0f4ff);
+  background: rgba(90, 232, 255, 0.06);
+}
+
+.vc-rail__chip:focus-visible {
+  outline: 2px solid var(--accent, #e8b84a);
+  outline-offset: 2px;
+}
+
+.vc-rail__chip--on {
+  border-color: rgba(90, 232, 255, 0.42);
+  color: #c8f4ff;
+  background: rgba(90, 232, 255, 0.08);
+}
+
+.vc-rail__chip--active {
+  box-shadow:
+    0 0 0 1px rgba(232, 184, 74, 0.45),
+    0 4px 20px rgba(232, 184, 74, 0.12);
+  transform: translateY(-1px);
+}
+
+.vc-rail__chip--gap {
+  border-style: dashed;
+  border-color: rgba(255, 107, 74, 0.28);
+}
+
+.vc-rail__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(100, 110, 130, 0.5);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+
+.vc-rail__chip--on .vc-rail__dot[data-present='true'] {
+  background: #5ae8ff;
+  box-shadow: 0 0 10px rgba(90, 232, 255, 0.65);
+}
+
+.vc-rail__chip--gap .vc-rail__dot[data-present='false'] {
+  background: rgba(255, 107, 74, 0.45);
+}
+
+.vc-rail__key {
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

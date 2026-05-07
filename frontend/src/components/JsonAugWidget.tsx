@@ -1,8 +1,9 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import {
   appendPointer,
   getValueAtPointer,
   pointersExpandedByDefault,
+  pointersToExpandForPath,
 } from '../utils/jsonPointer'
 import './JsonAugWidget.css'
 
@@ -23,9 +24,17 @@ export type JsonAugWidgetProps = {
   explainByPointer?: Record<string, string>
   /** Initial expand depth for nested objects/arrays (0 = root shell only). */
   defaultExpandDepth?: number
+  /**
+   * Programmatic focus (e.g. VC envelope chips). Pair with `focusTick` so the same path can
+   * be re-focused. Expands ancestors and scrolls the segment into view.
+   */
+  focusPointer?: string | null
+  /** Increment when re-focusing the same pointer (e.g. `Date.now()`). */
+  focusTick?: number
 }
 
 function kindForValue(v: unknown): JsonHighlightKind {
+  if (v === undefined) return 'json-null'
   if (v === null) return 'json-null'
   if (Array.isArray(v)) return 'json-array'
   if (typeof v === 'object') return 'json-object'
@@ -318,12 +327,23 @@ function JsonTree({
   return null
 }
 
+function findNodeByJsonPath(container: HTMLElement | null, ptr: string): Element | null {
+  if (!container) return null
+  for (const node of container.querySelectorAll('[data-json-path]')) {
+    if (node.getAttribute('data-json-path') === ptr) return node
+  }
+  return null
+}
+
 export default function JsonAugWidget({
   value,
   title = 'JSON',
   explainByPointer = {},
   defaultExpandDepth = 2,
+  focusPointer = null,
+  focusTick = 0,
 }: JsonAugWidgetProps) {
+  const treeContainerRef = useRef<HTMLDivElement>(null)
   const [expanded, setExpanded] = useState(() =>
     pointersExpandedByDefault(value, defaultExpandDepth),
   )
@@ -333,6 +353,27 @@ export default function JsonAugWidget({
   } | null>(null)
   const [hoverCode, setHoverCode] = useState(false)
   const [hoverViz, setHoverViz] = useState(false)
+
+  useEffect(() => {
+    if (focusPointer === null) return
+    const ptr = focusPointer
+    setExpanded((prev) => {
+      const n = new Set(prev)
+      for (const p of pointersToExpandForPath(ptr)) {
+        n.add(p)
+      }
+      return n
+    })
+    const v = getValueAtPointer(value, ptr)
+    const kind = kindForValue(v)
+    setHighlight({ path: ptr, kind })
+
+    const id = requestAnimationFrame(() => {
+      const el = findNodeByJsonPath(treeContainerRef.current, ptr)
+      el?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    })
+    return () => cancelAnimationFrame(id)
+  }, [focusPointer, focusTick, value])
 
   const toggle = useCallback((p: string) => {
     setExpanded((prev) => {
@@ -409,6 +450,7 @@ export default function JsonAugWidget({
           }}
         >
           <div
+            ref={treeContainerRef}
             className="json-aug__codeContainer"
             data-augmented-ui="tl-clip tr-clip-y br-2-clip-xy both"
           >

@@ -1,68 +1,150 @@
 .json-ex {
   padding: clamp(1rem, 3vw, 2rem);
-  padding-bottom: 3rem;
+  padding-bottom: 3.5rem;
 }
 
-.json-ex__header {
-  max-width: 42rem;
-  margin-bottom: 1.5rem;
+/* --- Hero --- */
+.json-ex__hero {
+  position: relative;
+  max-width: 52rem;
+  margin-bottom: 2rem;
+  padding: 1.25rem 0 1.5rem;
+}
+
+.json-ex__heroGlow {
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 140%;
+  background: radial-gradient(
+    ellipse 70% 60% at 20% 0%,
+    rgba(90, 232, 255, 0.14),
+    transparent 55%
+  );
+  pointer-events: none;
 }
 
 .json-ex__eyebrow {
-  margin: 0 0 0.35rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.16em;
+  position: relative;
+  margin: 0 0 0.4rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--muted);
 }
 
 .json-ex__title {
-  margin: 0 0 0.5rem;
+  position: relative;
+  margin: 0 0 0.55rem;
   font-family: var(--font-display);
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-size: clamp(2rem, 5vw, 2.85rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
   color: var(--text-h);
+  line-height: 1.1;
 }
 
-.json-ex__intro {
-  margin: 0 0 1rem;
+.json-ex__lede {
+  position: relative;
+  margin: 0 0 1.25rem;
+  font-size: 1.02rem;
+  line-height: 1.6;
   color: var(--text);
-  line-height: 1.55;
-}
-
-.json-ex__intro--secondary {
-  margin-top: -0.35rem;
-  font-size: 0.95rem;
-  color: var(--muted);
+  max-width: 46rem;
 }
 
 .json-ex__nav {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.65rem 1rem;
+  gap: 0.65rem 1.15rem;
 }
 
 .json-ex__back {
   color: var(--cyber-cyan);
   text-decoration: none;
   font-size: 0.92rem;
+  font-weight: 600;
 }
 
 .json-ex__back:hover {
   text-decoration: underline;
 }
 
+/* --- Workspace --- */
+.json-ex__workspace {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 92rem;
+  margin: 0 auto;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .json-ex__workspace {
+    grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+  }
+}
+
 .json-ex__editor {
-  max-width: 72rem;
-  margin: 0 auto 1.5rem;
-  padding: 1rem 1.1rem;
+  position: sticky;
+  top: 0.75rem;
+  padding: 1rem 1.1rem 1.15rem;
+  border-radius: 12px;
   border: 1px solid var(--border);
+  background: linear-gradient(165deg, rgba(14, 20, 36, 0.95), rgba(8, 10, 18, 0.92));
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+}
+
+.json-ex__editor--collapsed {
+  padding: 0.65rem 0.85rem;
+}
+
+.json-ex__editorHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.json-ex__editor--collapsed .json-ex__editorHead {
+  margin-bottom: 0;
+}
+
+.json-ex__editorTitle {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.json-ex__iconBtn {
+  margin: 0;
+  padding: 0.35rem 0.55rem;
   border-radius: 8px;
-  background: var(--panel-bg);
+  border: 1px solid rgba(90, 232, 255, 0.25);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--cyber-cyan);
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.json-ex__iconBtn:hover {
+  border-color: rgba(90, 232, 255, 0.45);
+  background: rgba(90, 232, 255, 0.08);
+}
+
+.json-ex__iconBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .json-ex__label {
   display: block;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--muted);
@@ -73,43 +155,53 @@
   width: 100%;
   box-sizing: border-box;
   margin: 0 0 0.75rem;
-  padding: 0.65rem 0.75rem;
+  padding: 0.75rem 0.85rem;
   font-family: var(--font-mono);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   line-height: 1.45;
   color: var(--text-h);
-  background: rgba(0, 0, 0, 0.28);
+  background: rgba(0, 0, 0, 0.32);
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: 8px;
   resize: vertical;
-  min-height: 10rem;
+  min-height: 12rem;
 }
 
-.json-ex__actions {
+.json-ex__toolbar {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.45rem;
 }
 
 .json-ex__btn {
-  padding: 0.45rem 1rem;
-  border-radius: 6px;
-  border: 1px solid var(--accent-border);
-  background: var(--accent-soft);
-  color: var(--text-h);
+  padding: 0.42rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+  color: var(--text);
   font-family: var(--font-body);
-  font-size: 0.9rem;
+  font-size: 0.84rem;
+  font-weight: 600;
   cursor: pointer;
 }
 
 .json-ex__btn:hover {
-  background: rgba(90, 232, 255, 0.14);
+  border-color: rgba(90, 232, 255, 0.35);
+  color: var(--text-h);
+}
+
+.json-ex__btn--primary {
+  border-color: rgba(90, 232, 255, 0.45);
+  background: rgba(90, 232, 255, 0.12);
+  color: var(--text-h);
+}
+
+.json-ex__btn--primary:hover {
+  background: rgba(90, 232, 255, 0.18);
 }
 
 .json-ex__btn--ghost {
   background: transparent;
-  border-color: var(--border);
-  color: var(--text);
 }
 
 .json-ex__error {
@@ -118,8 +210,63 @@
   font-size: 0.88rem;
 }
 
-.json-ex__empty {
-  max-width: 72rem;
-  margin: 1rem auto;
+.json-ex__editorPeek {
+  margin: 0;
+  font-size: 0.86rem;
   color: var(--muted);
+  line-height: 1.45;
+}
+
+.json-ex__main {
+  min-width: 0;
+}
+
+.json-ex__genericNote {
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  border: 1px dashed rgba(120, 140, 180, 0.35);
+  background: rgba(0, 0, 0, 0.18);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.json-ex__code {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  color: var(--cyber-cyan);
+}
+
+.json-ex__empty {
+  margin: 1rem 0;
+  padding: 2rem 1.25rem;
+  text-align: center;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.json-ex__aug .json-aug {
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.json-ex__aug .json-aug__demo {
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.85fr);
+  gap: 1.25rem;
+}
+
+@media (max-width: 900px) {
+  .json-ex__aug .json-aug__demo {
+    grid-template-columns: 1fr;
+  }
+
+  .json-ex__editor {
+    position: static;
+  }
 }

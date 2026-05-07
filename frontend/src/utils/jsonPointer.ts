@@ -35,6 +35,27 @@ export function getValueAtPointer(root: unknown, pointer: string): unknown {
 }
 
 /** Collect pointers for objects/arrays up to `maxDepth` nesting from root (0 = root only). */
+/**
+ * Pointers that must be in the expanded set so the node at `pointer` is visible
+ * (root and every strict ancestor object/array along the path).
+ */
+export function pointersToExpandForPath(pointer: string): string[] {
+  if (pointer === '' || pointer === '/') {
+    return []
+  }
+  if (!pointer.startsWith('/')) {
+    return ['']
+  }
+  const segments = pointer.slice(1).split('/').map(unescapePointerSegment)
+  const out: string[] = ['']
+  let cur = ''
+  for (let i = 0; i < segments.length - 1; i++) {
+    cur = appendPointer(cur, segments[i])
+    out.push(cur)
+  }
+  return out
+}
+
 export function pointersExpandedByDefault(value: unknown, maxDepth: number): Set<string> {
   const set = new Set<string>()
   function walk(v: unknown, path: string, depth: number) {
