@@ -11,6 +11,8 @@ import {
   readNinjaProfile,
 } from './ninjaProfileStorage'
 import { markJourneyPendingStart } from './journey/journeyStorage'
+import { clearPasskey, readPasskey, writePasskey } from './passkey/passkeyStorage'
+import { assertLocalPasskey, createLocalPasskey, isPasskeySupported } from './passkey/webauthn'
 
 function schoolKataHeadline(p: PersonaPublic): string {
   if (p.kataSamples.length >= 2) return `${p.kataSamples[0]} · ${p.kataSamples[1]}`
@@ -25,6 +27,8 @@ export default function CreateNinjaProfilePage() {
   const navigate = useNavigate()
   const [personas, setPersonas] = useState<readonly PersonaPublic[] | null>(null)
   const existing = useMemo(() => readNinjaProfile(), [])
+  const [passkey, setPasskey] = useState(() => readPasskey())
+  const [passkeyMsg, setPasskeyMsg] = useState<string | null>(null)
 
   const [codename, setCodename] = useState(existing?.codename ?? '')
   const [schoolId, setSchoolId] = useState(
@@ -287,6 +291,93 @@ export default function CreateNinjaProfilePage() {
                     </div>
                   ) : null}
                 </dl>
+                <div className="ninjaProfile__summary ninjaProfile__summary--passkey">
+                  <div className="ninjaProfile__summaryRow">
+                    <dt>Passkey</dt>
+                    <dd>
+                      {passkey ? (
+                        <>
+                          <strong>{passkey.label}</strong>{' '}
+                          <span className="ninjaProfile__hint">
+                            Saved {new Date(passkey.createdAt).toLocaleString()}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="ninjaProfile__hint">
+                          Optional. Adds device-level sign-in to this browser profile.
+                        </span>
+                      )}
+                    </dd>
+                  </div>
+                  <div className="ninjaProfile__wizardActions">
+                    {!passkey ? (
+                      <button
+                        type="button"
+                        className="ninjaProfile__secondary"
+                        onClick={async () => {
+                          setPasskeyMsg(null)
+                          try {
+                            if (!isPasskeySupported()) {
+                              setPasskeyMsg('Passkeys are not supported on this device/browser.')
+                              return
+                            }
+                            const res = await createLocalPasskey({
+                              userName: displayName,
+                              userDisplayName: displayName,
+                            })
+                            const stored = {
+                              credentialIdB64Url: res.credentialIdB64Url,
+                              createdAt: new Date().toISOString(),
+                              label: `${displayName} passkey`,
+                            }
+                            writePasskey(stored)
+                            setPasskey(stored)
+                            setPasskeyMsg('Passkey created for this device.')
+                          } catch (e) {
+                            setPasskeyMsg(e instanceof Error ? e.message : 'Passkey creation failed.')
+                          }
+                        }}
+                        title="Create a passkey for this device (WebAuthn)"
+                      >
+                        Create passkey
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          type="button"
+                          className="ninjaProfile__secondary"
+                          onClick={async () => {
+                            setPasskeyMsg(null)
+                            try {
+                              await assertLocalPasskey(passkey.credentialIdB64Url)
+                              setPasskeyMsg('Passkey verified on this device.')
+                            } catch (e) {
+                              setPasskeyMsg(e instanceof Error ? e.message : 'Passkey check failed.')
+                            }
+                          }}
+                        >
+                          Test passkey
+                        </button>
+                        <button
+                          type="button"
+                          className="ninjaProfile__danger"
+                          onClick={() => {
+                            const ok = window.confirm(
+                              'Remove the stored passkey reference from this browser? (The device passkey remains in your OS/manager.)',
+                            )
+                            if (!ok) return
+                            clearPasskey()
+                            setPasskey(null)
+                            setPasskeyMsg('Passkey reference cleared from this browser.')
+                          }}
+                        >
+                          Clear passkey
+                        </button>
+                      </>
+                    )}
+                  </div>
+                  {passkeyMsg ? <p className="ninjaProfile__hint">{passkeyMsg}</p> : null}
+                </div>
                 <form onSubmit={onSubmit}>
                   <div className="ninjaProfile__wizardActions">
                     <button type="button" className="ninjaProfile__ghost" onClick={handleCancel}>

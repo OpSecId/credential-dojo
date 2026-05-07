@@ -477,3 +477,7 @@
   word-break: break-word;
   color: var(--cyber-cyan, #5ae8ff);
 }
+
+.ninjaProfile__summary--passkey {
+  margin-top: 0.75rem;
+}
