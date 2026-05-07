@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "generate:og": "node ./scripts/generate-og-png.mjs",
+    "build": "npm run generate:og && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "sh -c \"exec serve dist -s -p ${PORT:-3000}\""
@@ -29,6 +30,7 @@
     "globals": "^17.5.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
+    "pngjs": "^7.0.0",
     "vite": "^8.0.10"
   }
 }

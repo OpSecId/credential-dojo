@@ -1,0 +1,17 @@
+{
+  "name": "The Credential Dojo",
+  "short_name": "Credential Dojo",
+  "description": "CRMS for W3C Verifiable Credentials — Tehon, Menkyo, Enbu, Tejun, Kensa, Randori, Kinchaku, Kata.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#070910",
+  "theme_color": "#070910",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
