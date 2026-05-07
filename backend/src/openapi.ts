@@ -6,7 +6,7 @@ export const openApiDocument = {
   info: {
     title: "The Credential Dojo API",
     description:
-      "CRMS platform API for W3C Verifiable Credentials. Product terminology: Tehon, Katachi, Menkyo, Tehon の Menkyo, Enbu, Shinbi (render), Kensa, Randori, Teawase, Tejun (workflows), Kinchaku, Kata, Kasa — see `terminology` in responses and the project README.",
+      "CRMS platform API for W3C Verifiable Credentials. Product terminology: Tehon, Katachi, Menkyo, Tehon の Menkyo, Shōkan, Enbu, Shinbi (render), Kensa, Randori, Teawase, Tejun (workflows), Kinchaku, Kata, Kasa — see `terminology` in responses and the project README.",
     version: "0.1.0",
     contact: {
       name: "credential.ninja",
@@ -118,6 +118,7 @@ export const openApiDocument = {
           credential: { $ref: "#/components/schemas/TerminologyEntry" },
           credentialFromTemplate: { $ref: "#/components/schemas/TerminologyEntry" },
           presentation: { $ref: "#/components/schemas/TerminologyEntry" },
+          presentationRequest: { $ref: "#/components/schemas/TerminologyEntry" },
           render: { $ref: "#/components/schemas/TerminologyEntry" },
           presentationInspection: { $ref: "#/components/schemas/TerminologyEntry" },
           credentialInspection: { $ref: "#/components/schemas/TerminologyEntry" },
@@ -141,6 +142,7 @@ export const openApiDocument = {
           credentialMetaphor: { type: "string" },
           credentialFromTemplateMetaphor: { type: "string" },
           presentationMetaphor: { type: "string" },
+          presentationRequestMetaphor: { type: "string" },
           renderMetaphor: { type: "string" },
           presentationInspectionMetaphor: { type: "string" },
           credentialInspectionMetaphor: { type: "string" },
@@ -208,6 +210,7 @@ export const openApiDocument = {
           credentialMetaphor: { type: "string" },
           credentialFromTemplateMetaphor: { type: "string" },
           presentationMetaphor: { type: "string" },
+          presentationRequestMetaphor: { type: "string" },
           renderMetaphor: { type: "string" },
           presentationInspectionMetaphor: { type: "string" },
           credentialInspectionMetaphor: { type: "string" },

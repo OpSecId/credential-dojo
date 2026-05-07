@@ -212,6 +212,7 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
   const [raw, setRaw] = useState('')
   const [applied, setApplied] = useState('')
   const [parseError, setParseError] = useState<string | null>(null)
+  const [isDragOver, setIsDragOver] = useState(false)
 
   const parsed = useMemo(() => {
     if (!applied) return null
@@ -237,6 +238,42 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
       setParseError(e instanceof Error ? e.message : 'Invalid JSON')
     }
   }, [raw])
+
+  const loadJsonFile = useCallback(async (file: File) => {
+    const text = await file.text()
+    setRaw(text)
+    setParseError(null)
+  }, [])
+
+  const onPickFile = useCallback(
+    async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0]
+      if (!file) return
+      try {
+        await loadJsonFile(file)
+      } catch {
+        setParseError('Unable to read file content.')
+      } finally {
+        e.currentTarget.value = ''
+      }
+    },
+    [loadJsonFile],
+  )
+
+  const onDropFile = useCallback(
+    async (e: React.DragEvent<HTMLDivElement>) => {
+      e.preventDefault()
+      setIsDragOver(false)
+      const file = e.dataTransfer.files?.[0]
+      if (!file) return
+      try {
+        await loadJsonFile(file)
+      } catch {
+        setParseError('Unable to read dropped file content.')
+      }
+    },
+    [loadJsonFile],
+  )
 
   const tEnbu = productTerminology.presentationInspection
   const tMenkyo = productTerminology.credentialInspection
@@ -295,6 +332,7 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
           title="Enbu (演武): verifiable presentation — inspect VP-shaped JSON (not crypto verification)"
           onClick={() => setMode('enbu')}
         >
+          <span className="kensa__tabMode">Presentation</span>
           <span className="kensa__tabTitle">{tEnbu.name}</span>
           <span className="kensa__tabGlyph" lang="ja">
             {tEnbu.glyph}
@@ -309,6 +347,7 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
           title="Menkyo (免許): issued credential — inspect a single VC-shaped JSON object"
           onClick={() => setMode('menkyo')}
         >
+          <span className="kensa__tabMode">Credential</span>
           <span className="kensa__tabTitle">{tMenkyo.name}</span>
           <span className="kensa__tabGlyph" lang="ja">
             {tMenkyo.glyph}
@@ -341,21 +380,48 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
         <label className="kensa__label" htmlFor="kensa-json">
           JSON
         </label>
-        <textarea
-          id="kensa-json"
-          className="kensa__textarea"
-          value={raw}
-          onChange={(e) => setRaw(e.target.value)}
-          spellCheck={false}
-          rows={12}
-          placeholder='{ "type": ["VerifiablePresentation"], ... }'
-          title={
-            mode === 'enbu'
-              ? 'Paste a verifiable presentation (VP) JSON object for heuristic checks'
-              : 'Paste one verifiable credential (VC) JSON object for heuristic checks'
-          }
-        />
+        <div
+          className={`kensa__dropzone${isDragOver ? ' kensa__dropzone--active' : ''}`}
+          onDragEnter={(e) => {
+            e.preventDefault()
+            setIsDragOver(true)
+          }}
+          onDragOver={(e) => {
+            e.preventDefault()
+            if (!isDragOver) setIsDragOver(true)
+          }}
+          onDragLeave={(e) => {
+            e.preventDefault()
+            setIsDragOver(false)
+          }}
+          onDrop={onDropFile}
+        >
+          <textarea
+            id="kensa-json"
+            className="kensa__textarea"
+            value={raw}
+            onChange={(e) => setRaw(e.target.value)}
+            spellCheck={false}
+            rows={12}
+            placeholder='{ "type": ["VerifiablePresentation"], ... }'
+            title={
+              mode === 'enbu'
+                ? 'Paste a verifiable presentation (VP) JSON object for heuristic checks'
+                : 'Paste one verifiable credential (VC) JSON object for heuristic checks'
+            }
+          />
+          <p className="kensa__dropHint">Drop a `.json` file here, or use Upload JSON.</p>
+        </div>
         <div className="kensa__actions">
+          <label className="kensa__btn kensa__btn--upload" title="Upload a local JSON file into the editor">
+            Upload JSON
+            <input
+              type="file"
+              accept="application/json,.json"
+              className="kensa__fileInput"
+              onChange={onPickFile}
+            />
+          </label>
           <button
             type="button"
             className="kensa__btn"

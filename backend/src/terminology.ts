@@ -9,6 +9,8 @@ export const productTerminology = {
   credential: { name: "Menkyo", glyph: "免許" },
   credentialFromTemplate: { name: "Tehon の Menkyo", glyph: "手本の免許" },
   presentation: { name: "Enbu", glyph: "演武" },
+  /** Verifier ask/challenge for proofs before holder composes an Enbu. */
+  presentationRequest: { name: "Shōkan", glyph: "招喚" },
   render: { name: "Shinbi", glyph: "審美" },
   presentationInspection: { name: "Enbu の Kensa", glyph: "演武の検査" },
   credentialInspection: { name: "Menkyo の Kensa", glyph: "免許の検査" },

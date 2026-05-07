@@ -99,6 +99,16 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
               Discover Kasa
             </ShellNavLink>
           </li>
+          <li className="app-shell__navItem">
+            <ShellNavLink to="/expedition" onPick={onPick}>
+              Expedition
+            </ShellNavLink>
+          </li>
+          <li className="app-shell__navItem">
+            <ShellNavLink to="/tejun-viewer" onPick={onPick}>
+              Tejun viewer
+            </ShellNavLink>
+          </li>
         </ul>
       </section>
 
@@ -149,6 +159,8 @@ export default function AppShell() {
     if (p.startsWith('/menkyo')) return 'Menkyo の Kensa'
     if (p.startsWith('/json-explorer')) return 'Shinbi'
     if (p.startsWith('/discover-kasa')) return 'Discover Kasa'
+    if (p.startsWith('/expedition')) return 'Expedition'
+    if (p.startsWith('/tejun-viewer')) return 'Tejun viewer'
     if (p.startsWith('/lexicon')) return 'Lexicon'
     if (p.startsWith('/create-ninja-profile')) return 'Ninja profile'
     return 'Credential Dojo'

@@ -38,6 +38,7 @@ type HelloPayload = {
   credentialMetaphor?: string
   credentialFromTemplateMetaphor?: string
   presentationMetaphor?: string
+  presentationRequestMetaphor?: string
   renderMetaphor?: string
   presentationInspectionMetaphor?: string
   credentialInspectionMetaphor?: string
@@ -470,6 +471,24 @@ export default function HomePage() {
             <span className="dojo__ctaTile-kicker">Issuers</span>
             <span className="dojo__ctaTile-title">Discover Kasa</span>
             <span className="dojo__ctaTile-desc">Schools · suites · did:key</span>
+          </Link>
+          <Link
+            className="dojo__ctaTile"
+            to="/expedition"
+            title="Story adventure across the full credential flow"
+          >
+            <span className="dojo__ctaTile-kicker">Journey</span>
+            <span className="dojo__ctaTile-title">Expedition</span>
+            <span className="dojo__ctaTile-desc">Narrative walkthrough of all terms</span>
+          </Link>
+          <Link
+            className="dojo__ctaTile"
+            to="/tejun-viewer"
+            title="React Flow map of the expedition runbook"
+          >
+            <span className="dojo__ctaTile-kicker">Map</span>
+            <span className="dojo__ctaTile-title">Tejun viewer</span>
+            <span className="dojo__ctaTile-desc">Interactive flow of expedition steps</span>
           </Link>
         </nav>
 

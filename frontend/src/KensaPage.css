@@ -109,6 +109,14 @@
   color: var(--text-h);
 }
 
+.kensa__tabMode {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cyber-cyan);
+}
+
 .kensa__tabGlyph {
   font-size: 0.88rem;
   color: var(--muted);
@@ -156,6 +164,25 @@
   min-height: 8rem;
 }
 
+.kensa__dropzone {
+  border: 1px dashed transparent;
+  border-radius: 8px;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.kensa__dropzone--active {
+  border-color: var(--cyber-cyan-dim, rgba(90, 232, 255, 0.35));
+  background: rgba(90, 232, 255, 0.04);
+}
+
+.kensa__dropHint {
+  margin: -0.2rem 0 0.6rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
 .kensa__actions {
   display: flex;
   flex-wrap: wrap;
@@ -171,6 +198,20 @@
   font-family: var(--font-body);
   font-size: 0.9rem;
   cursor: pointer;
+}
+
+.kensa__btn--upload {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.kensa__fileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .kensa__btn:hover {

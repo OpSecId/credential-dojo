@@ -16,6 +16,7 @@
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router-dom": "^7.15.0",
+    "reactflow": "^11.11.4",
     "serve": "^14.2.6"
   },
   "devDependencies": {
@@ -28,9 +29,9 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
+    "pngjs": "^7.0.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
-    "pngjs": "^7.0.0",
     "vite": "^8.0.10"
   }
 }

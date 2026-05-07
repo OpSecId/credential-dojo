@@ -40,6 +40,10 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 
 **Enbu** (演武) is a **formal martial demonstration**—structured, visible, and bounded. It maps to **verifiable presentations**: what the holder **shows** a verifier (proof package, selective disclosure surface) assembled from **Menkyo** in **Kinchaku**.
 
+### Shōkan (招喚) — presentation request
+
+**Shōkan** (招喚) is a **summons / call-in**—a directed ask to present proof. In the CRMS, **Shōkan** names the verifier-side **presentation request** (requested claims, predicates, and constraints) that a holder answers by assembling an **Enbu** from available **Menkyo**.
+
 ### Shinbi (審美) — rendering and display
 
 **Shinbi** (審美) is the lens of **how something is presented and perceived**. In the product, it names the **render/display layer** for credential data: readable JSON views, visual framing, and formatting for humans. **Shinbi is not verification**—that role is **Kensa**.
@@ -71,6 +75,7 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 | Issuer definitions & exemplar (Tehon) | **Tehon** | Copybook for shapes and offers—not issued **Menkyo** |
 | Issued verifiable credential | **Menkyo** | Holder-facing artifact / license record |
 | Credential issued from a Tehon | **Tehon の Menkyo** / **手本の免許** | Lineage: definition → issued Menkyo |
+| Presentation request / proof challenge | **Shōkan** / **招喚** | Verifier ask that the holder answers with Enbu |
 | Verifiable presentation | **Enbu** | Demonstration package to a verifier |
 | Credential render/display layer | **Shinbi** / **審美** | How Menkyo/Enbu data is shown to people |
 | Presentation inspection (VP-shaped JSON) | **Enbu の Kensa** / **演武の検査** | Heuristic “kensa” path on `/kensa` |
@@ -83,7 +88,7 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 | Cryptosuite / proof suite selection | **Kata** | Which “form” signing and verification run |
 | Proof school / issuer persona | **Kasa** / **笠** | Discover Kasa + ninja profile school; ties **did:key** and default **Kata** |
 
-**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `katachiMetaphor`, `credentialMetaphor`, `credentialFromTemplateMetaphor`, `presentationMetaphor`, `presentationInspectionMetaphor`, `credentialInspectionMetaphor`, `exchangeMetaphor`, `handshakeMetaphor`, `workflowMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
+**In code:** canonical labels live in `backend/src/terminology.ts` (returned on `/api/health` and `/api/hello` as `terminology`, plus `templateMetaphor`, `katachiMetaphor`, `credentialMetaphor`, `credentialFromTemplateMetaphor`, `presentationMetaphor`, `presentationRequestMetaphor`, `presentationInspectionMetaphor`, `credentialInspectionMetaphor`, `exchangeMetaphor`, `handshakeMetaphor`, `workflowMetaphor`, `cryptosuitesMetaphor`) and are mirrored for the SPA in `frontend/src/terminology.ts`—**keep the two files aligned** when names or glyphs change.
 
 ## Structure
 

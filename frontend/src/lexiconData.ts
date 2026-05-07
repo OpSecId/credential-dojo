@@ -40,6 +40,12 @@ export const LEXICON_ENTRIES: {
     blurb: 'Verifiable presentations shown to verifiers.',
   },
   {
+    key: 'presentationRequest',
+    title: productTerminology.presentationRequest.name,
+    glyph: productTerminology.presentationRequest.glyph,
+    blurb: 'Verifier presentation request/challenge before Enbu.',
+  },
+  {
     key: 'render',
     title: productTerminology.render.name,
     glyph: productTerminology.render.glyph,
@@ -152,7 +158,17 @@ export const LEXICON_ARTICLES: LexiconArticle[] = [
       '**Enbu** (演武) is a **public martial demonstration**—choreographed, visible to observers, and bounded in time. It shows skill and control rather than a private drill.',
     ],
     inPlatform: [
-      '**Enbu** maps to **verifiable presentations**: the package a holder **shows** a verifier—proofs, selective disclosure, derived predicates—assembled from **Menkyo** and verified under the agreed **Kata**.',
+      '**Enbu** maps to **verifiable presentations**: the package a holder **shows** a verifier—proofs, selective disclosure, derived predicates—assembled from **Menkyo** and verified under the agreed **Kata**. In normal flow, a verifier sends a **Shōkan** first, then the holder prepares the matching Enbu response.',
+    ],
+  },
+  {
+    key: 'presentationRequest',
+    credentialTerm: 'Verifier presentation request / proof challenge',
+    literal: [
+      '**Shōkan** (招喚) is a summons or call-in: an explicit request to appear and demonstrate. It implies a directed ask rather than a full exchange.',
+    ],
+    inPlatform: [
+      '**Shōkan** names a **presentation request**: verifier requirements, requested claims/predicates, and proof expectations sent to a holder before any **Enbu** is returned. Think of it as the “ask” that shapes what Enbu gets assembled from available **Menkyo**.',
     ],
   },
   {
