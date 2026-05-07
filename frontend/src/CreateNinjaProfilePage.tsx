@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import './App.css'
 import './CreateNinjaProfilePage.css'
 import { DEMO_PERSONAS_OFFLINE, type PersonaPublic, type PersonasPayload } from './demoPersonas'
@@ -10,8 +10,6 @@ import {
   isValidSchoolId,
   readNinjaProfile,
 } from './ninjaProfileStorage'
-
-const SITE = 'https://credential.ninja'
 
 function schoolKataHeadline(p: PersonaPublic): string {
   if (p.kataSamples.length >= 2) return `${p.kataSamples[0]} · ${p.kataSamples[1]}`
@@ -115,55 +113,9 @@ export default function CreateNinjaProfilePage() {
           </h1>
           <p className="ninjaProfile__intro">
             A short wizard: choose how you appear on the dojo, pick your proof school (kasa), then
-            confirm. Everything stays in this browser only.
+            confirm. Everything stays in this browser only. Use <strong>Cancel</strong> on any step to
+            leave without saving (you’ll be asked if you changed anything).
           </p>
-          <nav className="ninjaProfile__nav" aria-label="Site">
-            <Link className="ninjaProfile__back" to="/" title="Credential Dojo home">
-              ← Home
-            </Link>
-            <Link
-              className="ninjaProfile__back"
-              to="/discover-kasa"
-              title="Demo proof schools (Kasa) with did:key and Kata samples"
-            >
-              Discover Kasa
-            </Link>
-            <Link
-              className="ninjaProfile__back"
-              to="/lexicon"
-              title="Glossary: Dojo metaphors vs W3C Verifiable Credentials"
-            >
-              Lexicon
-            </Link>
-            <Link
-              className="ninjaProfile__back"
-              to="/json-explorer"
-              title="Interactive JSON tree with RFC 6901 pointer tooltips"
-            >
-              JSON explorer
-            </Link>
-            <Link
-              className="ninjaProfile__back"
-              to="/kensa"
-              title="Enbu の Kensa / Menkyo の Kensa — structural inspection"
-            >
-              Kensa
-            </Link>
-            <span
-              className="ninjaProfile__navCurrent"
-              aria-current="page"
-              title="You are here — ninja profile wizard"
-            >
-              Ninja profile
-            </span>
-            <a
-              className="ninjaProfile__back ninjaProfile__back--external"
-              href={SITE}
-              title="Public Credential Dojo / credential.ninja site"
-            >
-              {SITE.replace(/^https?:\/\//, '')}
-            </a>
-          </nav>
         </header>
 
         <div

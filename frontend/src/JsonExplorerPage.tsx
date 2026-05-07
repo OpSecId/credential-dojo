@@ -62,11 +62,19 @@ export default function JsonExplorerPage() {
       <header className="json-ex__header">
         <p className="json-ex__eyebrow">The Credential Dojo</p>
         <h1 className="json-ex__title" title="Parse JSON, then hover the tree for pointers and explanations">
-          JSON explorer
+          Shinbi (JSON explorer)
         </h1>
         <p className="json-ex__intro">
-          Paste JSON, apply, then hover the augmented tree to see RFC 6901 pointers and notes.
-          Custom explanations use the same pointer strings as keys.
+          Shinbi is the render/display layer: paste JSON, apply, then hover the augmented tree to
+          see RFC 6901 pointers and notes. Custom explanations use the same pointer strings as
+          keys.
+        </p>
+        <p className="json-ex__intro json-ex__intro--secondary">
+          For JSON-LD (e.g. VCs), a natural next step is <strong>expand</strong> /{' '}
+          <strong>compact</strong> against chosen contexts, materialize triples (e.g. N-Quads), and{' '}
+          <strong>compare graphs</strong>—same RDF after normalization should diff cleanly even when
+          the JSON shapes differ. That needs a JSON-LD processor, remote context loading (watch CORS),
+          and UI for two documents side by side.
         </p>
         <nav className="json-ex__nav">
           <Link className="json-ex__back" to="/" title="Credential Dojo home">
