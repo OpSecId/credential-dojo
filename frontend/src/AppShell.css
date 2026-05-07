@@ -189,8 +189,8 @@
   position: sticky;
   top: 0;
   z-index: 200;
-  min-height: calc(2.85rem + env(safe-area-inset-top, 0px));
-  padding: env(safe-area-inset-top, 0px) 0.65rem 0.45rem 0.65rem;
+  min-height: calc(2.55rem + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) 0.6rem 0.35rem 0.6rem;
   margin: 0;
   background: rgba(7, 9, 16, 0.92);
   border-bottom: 1px solid var(--shell-rail-border);
@@ -201,8 +201,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.35rem;
+  height: 2.35rem;
   padding: 0;
   border-radius: 8px;
   border: 1px solid rgba(90, 232, 255, 0.22);
@@ -224,12 +224,45 @@
   flex: 1;
   min-width: 0;
   font-family: var(--font-display, 'Shippori Mincho', serif);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 800;
   color: var(--shell-heading);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.app-shell__topbarActions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.app-shell__topbarAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.05rem;
+  height: 2.05rem;
+  border-radius: 10px;
+  border: 1px solid rgba(90, 232, 255, 0.16);
+  background: rgba(12, 18, 32, 0.55);
+  color: var(--shell-cyan);
+  text-decoration: none;
+  font-family: var(--font-display, 'Shippori Mincho', serif);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.app-shell__topbarAction:hover {
+  border-color: rgba(90, 232, 255, 0.35);
+  background: rgba(90, 232, 255, 0.08);
+  color: var(--shell-heading);
+}
+
+.app-shell__topbarAction:focus-visible {
+  outline: 2px solid var(--shell-accent);
+  outline-offset: 2px;
 }
 
 .app-shell__topbarMeta {
@@ -239,6 +272,12 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+@media (max-width: 420px) {
+  .app-shell__topbarMeta {
+    display: none;
+  }
 }
 
 .app-shell__mainInner {

@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import './AppShell.css'
 import { clearNinjaProfile } from './ninjaProfileStorage'
@@ -142,6 +142,18 @@ export default function AppShell() {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const drawerTitleId = useId()
 
+  const pageTitle = useMemo(() => {
+    const p = location.pathname
+    if (p === '/') return 'Home'
+    if (p.startsWith('/kensa')) return 'Kensa'
+    if (p.startsWith('/menkyo')) return 'Menkyo の Kensa'
+    if (p.startsWith('/json-explorer')) return 'Shinbi'
+    if (p.startsWith('/discover-kasa')) return 'Discover Kasa'
+    if (p.startsWith('/lexicon')) return 'Lexicon'
+    if (p.startsWith('/create-ninja-profile')) return 'Ninja profile'
+    return 'Credential Dojo'
+  }, [location.pathname])
+
   useEffect(() => {
     setDrawerOpen(false)
   }, [location.pathname, location.hash])
@@ -233,7 +245,20 @@ export default function AppShell() {
           >
             <span aria-hidden>☰</span>
           </button>
-          <div className="app-shell__topbarTitle">Credential Dojo</div>
+          <div className="app-shell__topbarTitle" title={pageTitle}>
+            {pageTitle}
+          </div>
+          <nav className="app-shell__topbarActions" aria-label="Quick actions">
+            <Link className="app-shell__topbarAction" to="/kensa" title="Kensa">
+              検
+            </Link>
+            <Link className="app-shell__topbarAction" to="/json-explorer" title="Shinbi (JSON explorer)">
+              審
+            </Link>
+            <Link className="app-shell__topbarAction" to="/lexicon" title="Lexicon">
+              語
+            </Link>
+          </nav>
           <div className="app-shell__topbarMeta" title={profile.codename}>
             {profile.codename}
           </div>
