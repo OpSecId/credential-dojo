@@ -115,10 +115,10 @@ function sdPersona(): PersonaPublic {
   const didKey = encodeDidKey(MULTICODEC.P256_PUB, publicKey);
   return buildPersona({
     id,
-    label: "Sd-ryū",
-    labelJa: "エスディ流",
+    label: "Ec-ryū (SD)",
+    labelJa: "エック流（SD）",
     description:
-      "Demo school for ECDSA selective disclosure (ecdsa-sd-2023): same curve family as Ec-ryū, separate deterministic issuer key for SD-focused flows.",
+      "Ec-ryū selective-disclosure track (ecdsa-sd-2023): same P-256 family as classic Ec-ryū, separate deterministic issuer key for SD-focused flows.",
     proofSchool: "ecdsa",
     didKey,
     kataSamples: [ALL_KATA[4]],
