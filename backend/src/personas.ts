@@ -77,21 +77,10 @@ function edPersona(): PersonaPublic {
     label: "Ed-ryū",
     labelJa: "エド流",
     description:
-      "Ed25519 issuer; kataSamples is the full dojo carousel (every demo suite string). Other Kasa list only suites aligned with their issuer key.",
+      "Ed25519 issuer; kata lists only EdDSA Data Integrity suites and vc-jwt—aligned with this key. Other Kasa list suites matched to their issuer cryptography.",
     proofSchool: "ed25519",
     didKey,
-    kataSamples: [
-      ALL_KATA[0],
-      ALL_KATA[1],
-      ALL_KATA[6],
-      ALL_KATA[2],
-      ALL_KATA[3],
-      ALL_KATA[4],
-      ALL_KATA[5],
-      ALL_KATA[7],
-      ALL_KATA[8],
-      ALL_KATA[9],
-    ],
+    kataSamples: [ALL_KATA[0], ALL_KATA[1], ALL_KATA[6]],
   });
 }
 

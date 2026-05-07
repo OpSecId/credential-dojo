@@ -17,11 +17,16 @@ export type PersonasPayload = {
   note: string
 }
 
-/** Default kata carousel when `/api/personas` is unavailable (order matches Ed-ryū). */
-export const DEFAULT_KATA_SAMPLES = [
+/** Ed-ryū (Ed25519 issuer): suites aligned with this school's key—Discover Kasa + home carousel. */
+export const ED_RYU_KATA_SAMPLES = [
   'eddsa-rdfc-2022',
   'eddsa-jcs-2022',
   'vc-jwt',
+] as const
+
+/** Full demo suite vocabulary when a persona omits `kataSamples` (fallback). */
+export const DEFAULT_KATA_SAMPLES = [
+  ...ED_RYU_KATA_SAMPLES,
   'ecdsa-rdfc-2019',
   'ecdsa-jcs-2019',
   'ecdsa-sd-2023',
@@ -42,10 +47,10 @@ export const DEMO_PERSONAS_OFFLINE: readonly PersonaPublic[] = [
     label: 'Ed-ryū',
     labelJa: 'エド流',
     description:
-      'Ed25519 issuer; kataSamples is the full dojo carousel (every demo suite string). Other Kasa list only suites aligned with their issuer key.',
+      'Ed25519 issuer; kata lists only EdDSA Data Integrity suites and vc-jwt—aligned with this key. Other Kasa list suites matched to their issuer cryptography.',
     proofSchool: 'ed25519',
     didKey: 'did:key:z6Mkjv9qpuroLvWybHc9yppTwTjZjid5EWSpRPfo7wXaKE4e',
-    kataSamples: [...DEFAULT_KATA_SAMPLES],
+    kataSamples: [...ED_RYU_KATA_SAMPLES],
   },
   {
     id: 'ec-ryu',
