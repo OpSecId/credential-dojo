@@ -457,6 +457,55 @@
   outline-offset: 3px;
 }
 
+.dojo__ninjaBar {
+  margin: 0 0 1rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 184, 74, 0.28);
+  background: rgba(0, 0, 0, 0.2);
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--text);
+  text-align: center;
+}
+
+.dojo-scene--day .dojo__ninjaBar {
+  background: rgba(255, 255, 255, 0.45);
+  border-color: rgba(120, 90, 50, 0.22);
+}
+
+.dojo__ninjaBar-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+  margin-right: 0.35rem;
+}
+
+.dojo__ninjaBar-name {
+  color: var(--text-h);
+}
+
+.dojo__ninjaBar-school {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.dojo__ninjaBar-sep {
+  color: var(--muted);
+}
+
+.dojo__ninjaBar-edit {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.dojo__ninjaBar-edit:hover {
+  text-decoration: underline;
+}
+
 .dojo__headerActions {
   margin: 0;
   display: flex;

@@ -48,6 +48,9 @@ export default function DiscoverKasaPage() {
             <Link className="kasa__back" to="/">
               ← Home
             </Link>
+            <Link className="kasa__back" to="/create-ninja-profile">
+              Create ninja profile
+            </Link>
             <Link className="kasa__back" to="/lexicon">
               Lexicon
             </Link>

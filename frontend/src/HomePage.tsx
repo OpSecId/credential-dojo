@@ -8,11 +8,17 @@ import {
   type PersonasPayload,
 } from './demoPersonas'
 import { LEXICON_ENTRIES } from './lexiconData'
+import {
+  isValidSchoolId,
+  patchNinjaProfileSchool,
+  PERSONA_STORAGE_KEY,
+  readNinjaProfile,
+  type NinjaProfile,
+} from './ninjaProfileStorage'
 import { productTerminology } from './terminology'
 
 const SITE = 'https://credential.ninja'
 const THEME_KEY = 'credential-dojo-theme'
-const PERSONA_KEY = 'credential-dojo-persona'
 
 const OFFLINE_PERSONAS = DEMO_PERSONAS_OFFLINE
 
@@ -44,7 +50,11 @@ function readStoredTheme(): DojoTheme {
 
 function readStoredPersonaId(): string {
   try {
-    const v = localStorage.getItem(PERSONA_KEY)
+    const n = readNinjaProfile()
+    if (n && isValidSchoolId(n.schoolId)) {
+      return n.schoolId
+    }
+    const v = localStorage.getItem(PERSONA_STORAGE_KEY)
     if (v === 'ed-ryu' || v === 'ec-ryu' || v === 'sd-ryu' || v === 'bbs-ryu') return v
   } catch {
     /* ignore */
@@ -72,6 +82,7 @@ export default function HomePage() {
   const [apiMessage, setApiMessage] = useState<string | null>(null)
   const [apiStandardsFocus, setApiStandardsFocus] = useState<string | null>(null)
   const [apiError, setApiError] = useState<string | null>(null)
+  const [ninjaProfile, setNinjaProfile] = useState<NinjaProfile | null>(() => readNinjaProfile())
 
   const activePersonas = personas ?? OFFLINE_PERSONAS
 
@@ -171,8 +182,10 @@ export default function HomePage() {
     setSelectedPersonaId(id)
     setKataIndex(0)
     setFocusMeter((f) => Math.min(100, f + 3))
+    patchNinjaProfileSchool(id)
+    setNinjaProfile(readNinjaProfile())
     try {
-      localStorage.setItem(PERSONA_KEY, id)
+      localStorage.setItem(PERSONA_STORAGE_KEY, id)
     } catch {
       /* ignore */
     }
@@ -187,6 +200,12 @@ export default function HomePage() {
   }
 
   const selectedPersona = activePersonas.find((p) => p.id === selectedPersonaId)
+
+  useEffect(() => {
+    const onVis = () => setNinjaProfile(readNinjaProfile())
+    document.addEventListener('visibilitychange', onVis)
+    return () => document.removeEventListener('visibilitychange', onVis)
+  }, [])
 
   const toggleKinchaku = () => {
     setKinchakuCinched((c) => !c)
@@ -262,7 +281,25 @@ export default function HomePage() {
             <strong>Kata</strong> suites. Artifacts live in <strong>Kinchaku</strong>, the
             built-in wallet.
           </p>
+          {ninjaProfile ? (
+            <p className="dojo__ninjaBar">
+              <span className="dojo__ninjaBar-label">Ninja profile</span>{' '}
+              <strong className="dojo__ninjaBar-name">{ninjaProfile.codename}</strong>
+              <span className="dojo__ninjaBar-sep"> · </span>
+              <span className="dojo__ninjaBar-school">
+                {activePersonas.find((p) => p.id === ninjaProfile.schoolId)?.label ??
+                  ninjaProfile.schoolId}
+              </span>
+              <span className="dojo__ninjaBar-sep"> · </span>
+              <Link className="dojo__ninjaBar-edit" to="/create-ninja-profile">
+                Edit
+              </Link>
+            </p>
+          ) : null}
           <p className="dojo__headerActions">
+            <Link className="dojo__linkNav" to="/create-ninja-profile">
+              {ninjaProfile ? 'Ninja profile' : 'Create ninja profile'}
+            </Link>
             <Link className="dojo__linkNav" to="/discover-kasa">
               Discover Kasa
             </Link>
