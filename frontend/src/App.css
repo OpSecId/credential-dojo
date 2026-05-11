@@ -170,94 +170,107 @@
   gap: 2.25rem;
 }
 
+/* Calm uses same meter + hero grid as full landing; hero copy stays narrow & centered */
 .dojo__introBand--calm {
-  max-width: 32rem;
+  width: 100%;
+  max-width: none;
   margin: 0 auto;
   animation: none;
+  padding: 0 1rem;
+}
+
+.dojo__introBand--calm .dojo__meterAside {
+  align-self: start;
+  width: 100%;
+  max-width: 13rem;
 }
 
 .dojo__introBand--calm .dojo__header--calm {
   text-align: center;
-  max-width: none;
+  max-width: 26rem;
+  margin-inline: auto;
 }
 
 .dojo__header--calm .dojo__eyebrow {
-  letter-spacing: 0.18em;
-  font-size: 0.72rem;
-  opacity: 0.78;
+  letter-spacing: 0.2em;
+  font-size: 0.68rem;
+  opacity: 0.62;
+  margin-bottom: 1.75rem;
 }
 
 .dojo__header--calm .dojo__title {
   justify-content: center;
   font-weight: 600;
   letter-spacing: 0.02em;
+  margin-bottom: 1.25rem;
 }
 
-.dojo__header--calm .dojo__lede {
-  font-size: 0.98rem;
-  line-height: 1.7;
+.dojo__lede--calm {
+  font-size: 0.95rem;
+  line-height: 1.65;
   color: var(--muted);
-  max-width: 28rem;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
+  max-width: 22rem;
 }
 
-.dojo__focusZen {
+/* Calm home: typographic entry points only—no loud buttons */
+.dojo__calmStart {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.35rem;
-  margin: 0.5rem auto 0;
-  max-width: 11rem;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.35rem 0.65rem;
+  margin-top: 2.25rem;
 }
 
-.dojo__focusZen-track {
-  width: 100%;
-  height: 3px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-}
-
-.dojo-scene--night .dojo__focusZen-track {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.dojo__focusZen-fill {
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, rgba(90, 232, 255, 0.35), rgba(232, 184, 74, 0.55));
-}
-
-.dojo__focusZen-label {
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  color: var(--muted);
-}
-
-.dojo__calmHint {
-  margin: 0.75rem 0 0;
-  font-size: 0.92rem;
-}
-
-.dojo__calmHint a {
+.dojo__calmStart-link {
+  font-size: 1.05rem;
+  font-weight: 500;
   color: var(--muted);
   text-decoration: none;
+  padding: 0.15rem 0;
   border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease, color 0.2s ease;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.dojo__calmHint a:hover {
-  color: var(--accent);
-  border-bottom-color: rgba(232, 184, 74, 0.45);
+.dojo__calmStart-link:hover {
+  color: var(--text-h);
+}
+
+.dojo__calmStart-link--primary {
+  color: var(--text-h);
+  border-bottom-color: rgba(232, 184, 74, 0.35);
+}
+
+.dojo__calmStart-link--primary:hover {
+  border-bottom-color: rgba(232, 184, 74, 0.65);
+}
+
+.dojo__calmStart-sep {
+  color: var(--muted);
+  opacity: 0.45;
+  font-size: 0.95rem;
+  user-select: none;
 }
 
 .dojo__calmBand {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.75rem;
-  padding: 0.5rem 0 1rem;
+  gap: 0.65rem;
+  margin-top: 3rem;
+  padding: 0 1rem 1rem;
+}
+
+.dojo__calmBand-label {
+  margin: 0;
+  font-size: 0.62rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.55;
 }
 
 .dojo__calmEssentials {
@@ -265,27 +278,30 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 0.35rem 0.5rem;
-  font-size: 0.95rem;
+  gap: 0.35rem 0.45rem;
+  font-size: 0.84rem;
 }
 
 .dojo__calmEssentials a {
-  color: var(--text);
+  color: var(--muted);
   text-decoration: none;
-  padding: 0.2rem 0.35rem;
-  border-radius: 6px;
-  transition: background 0.15s ease, color 0.15s ease;
+  padding: 0.15rem 0.2rem;
+  border-radius: 4px;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
 }
 
 .dojo__calmEssentials a:hover {
-  background: rgba(90, 232, 255, 0.06);
   color: var(--text-h);
+  background: rgba(90, 232, 255, 0.05);
 }
 
 .dojo__calmDot {
   color: var(--muted);
-  opacity: 0.55;
+  opacity: 0.35;
   user-select: none;
+  font-size: 0.75rem;
 }
 
 .dojo__calmExpand {
@@ -302,6 +318,30 @@
     border-color 0.2s ease,
     color 0.2s ease,
     background 0.2s ease;
+}
+
+.dojo__calmExpand--quiet {
+  margin-top: 0.35rem;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  border: none;
+  border-radius: 0;
+  color: var(--muted);
+  opacity: 0.85;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(232, 184, 74, 0.25);
+}
+
+.dojo__calmExpand--quiet:hover {
+  color: var(--text-h);
+  background: transparent;
+  text-decoration-color: rgba(232, 184, 74, 0.45);
+}
+
+.dojo__calmExpand.dojo__calmExpand--quiet:hover {
+  border: none;
 }
 
 .dojo__calmExpand:hover {
