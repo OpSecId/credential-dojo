@@ -85,6 +85,11 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
         <p className="app-shell__sectionLabel">Inspect &amp; explore</p>
         <ul className="app-shell__navList">
           <li className="app-shell__navItem">
+            <ShellNavLink to="/issue-verify" onPick={onPick}>
+              Issue &amp; verify
+            </ShellNavLink>
+          </li>
+          <li className="app-shell__navItem">
             <ShellNavLink to="/kensa" onPick={onPick}>
               Kensa
             </ShellNavLink>
@@ -97,6 +102,11 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
           <li className="app-shell__navItem">
             <ShellNavLink to="/discover-kasa" onPick={onPick}>
               Discover Kasa
+            </ShellNavLink>
+          </li>
+          <li className="app-shell__navItem">
+            <ShellNavLink to="/kinchaku" onPick={onPick}>
+              Kinchaku
             </ShellNavLink>
           </li>
           <li className="app-shell__navItem">
@@ -159,6 +169,7 @@ export default function AppShell() {
     if (p.startsWith('/menkyo')) return 'Menkyo の Kensa'
     if (p.startsWith('/json-explorer')) return 'Shinbi'
     if (p.startsWith('/discover-kasa')) return 'Discover Kasa'
+    if (p.startsWith('/kinchaku')) return 'Kinchaku'
     if (p.startsWith('/expedition')) return 'Expedition'
     if (p.startsWith('/tejun-viewer')) return 'Tejun viewer'
     if (p.startsWith('/lexicon')) return 'Lexicon'

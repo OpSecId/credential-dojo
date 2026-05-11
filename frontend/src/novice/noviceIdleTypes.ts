@@ -107,6 +107,12 @@ export const NOVICE_LESSONS: readonly NoviceLessonDef[] = [
     tip: 'Enbu の Kensa vs Menkyo の Kensa — structural passes.',
   },
   {
+    id: 'visit_issue_verify',
+    pathPrefix: '/issue-verify',
+    label: 'Issue & verify demo Menkyo',
+    tip: 'Browser-only demo VC plus Menkyo-shaped checks.',
+  },
+  {
     id: 'visit_shinbi',
     pathPrefix: '/json-explorer',
     label: 'Explore with Shinbi',
@@ -143,6 +149,7 @@ export function routeInsightBonus(pathname: string): number {
   if (pathname === '/') return 1.08
   if (pathname.startsWith('/lexicon')) return 1.38
   if (pathname.startsWith('/kensa')) return 1.28
+  if (pathname.startsWith('/issue-verify')) return 1.24
   if (pathname.startsWith('/json-explorer')) return 1.22
   if (pathname.startsWith('/discover-kasa')) return 1.18
   if (pathname.startsWith('/create-ninja-profile')) return 1.12
