@@ -24,9 +24,6 @@ const MAX_DELTA_MS = 6 * 60 * 60 * 1000
 type JourneyCtx = {
   state: JourneyState
   level: ReturnType<typeof computeJourneyLevel>
-  panelOpen: boolean
-  setPanelOpen: (open: boolean) => void
-  togglePanel: () => void
   startJourney: () => void
   pendingStart: boolean
   clearPendingStart: () => void
@@ -38,7 +35,6 @@ const JourneyContext = createContext<JourneyCtx | null>(null)
 export function JourneyProvider({ children }: { children: ReactNode }) {
   const loc = useLocation()
   const [state, setState] = useState<JourneyState>(() => loadJourney())
-  const [panelOpen, setPanelOpen] = useState(false)
   const [pendingStart, setPendingStart] = useState(() => readJourneyPendingStart())
   const focusRef = useRef(0)
 
@@ -100,7 +96,6 @@ export function JourneyProvider({ children }: { children: ReactNode }) {
     })
     clearJourneyPendingStart()
     setPendingStart(false)
-    setPanelOpen(true)
   }, [])
 
   const clearPendingStart = useCallback(() => {
@@ -112,23 +107,18 @@ export function JourneyProvider({ children }: { children: ReactNode }) {
     focusRef.current = Math.max(0, Math.min(1, focus0to100 / 100))
   }, [])
 
-  const togglePanel = useCallback(() => setPanelOpen((v) => !v), [])
-
   const level = useMemo(() => computeJourneyLevel(state.learningXp), [state.learningXp])
 
   const value = useMemo<JourneyCtx>(
     () => ({
       state,
       level,
-      panelOpen,
-      setPanelOpen,
-      togglePanel,
       startJourney,
       pendingStart,
       clearPendingStart,
       reportLearningFocus,
     }),
-    [state, level, panelOpen, togglePanel, startJourney, pendingStart, clearPendingStart, reportLearningFocus],
+    [state, level, startJourney, pendingStart, clearPendingStart, reportLearningFocus],
   )
 
   return <JourneyContext.Provider value={value}>{children}</JourneyContext.Provider>

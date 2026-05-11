@@ -12,10 +12,10 @@ import KinchakuPage from './KinchakuPage'
 import LexiconPage from './LexiconPage'
 import TejunViewerPage from './TejunViewerPage'
 import NinjaProfileMenu from './NinjaProfileMenu'
+import DojoProgressHub from './DojoProgressHub'
+import ZenSoundWidget from './zen/ZenSoundWidget'
 import { JourneyProvider } from './journey/JourneyContext'
-import JourneyPanel from './journey/JourneyPanel'
 import { NoviceIdleProvider } from './novice/NoviceIdleContext'
-import NoviceProgressPanel from './novice/NoviceProgressPanel'
 
 export default function App() {
   return (
@@ -29,6 +29,8 @@ export default function App() {
             <Route path="/expedition" element={<ExpeditionPage />} />
             <Route path="/tejun-viewer" element={<TejunViewerPage />} />
             <Route path="/json-explorer" element={<JsonExplorerPage />} />
+            <Route path="/issue" element={<IssueVerifyPage mode="issue" />} />
+            <Route path="/verify" element={<KensaPage initialMode="menkyo" />} />
             <Route path="/issue-verify" element={<IssueVerifyPage />} />
             <Route path="/kensa" element={<KensaPage initialMode="enbu" />} />
             <Route path="/menkyo" element={<KensaPage initialMode="menkyo" />} />
@@ -37,9 +39,9 @@ export default function App() {
           </Route>
         </Routes>
         <NinjaProfileMenu />
-        <JourneyPanel />
+        <ZenSoundWidget />
+        <DojoProgressHub />
       </JourneyProvider>
-      <NoviceProgressPanel />
     </NoviceIdleProvider>
   )
 }

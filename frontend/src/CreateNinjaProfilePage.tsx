@@ -127,14 +127,17 @@ export default function CreateNinjaProfilePage() {
     codename.trim() === '' ? 'Anonymous ninja' : codename.trim()
 
   return (
-    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen`}>
+    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen dojo-scene--calmInner`}>
       <div className="dojo-scene__moon" aria-hidden />
       <div className="dojo-scene__bg" aria-hidden />
       <div className="dojo-scene__grid" aria-hidden />
 
-      <div className="ninjaProfile dojoZenPage">
+      <div className="ninjaProfile dojoZenPage dojoZenPage--calm">
         <header className="dojoZenPage__header">
-          <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
+          <p className="dojoZenPage__eyebrow">
+            credential.ninja ·{' '}
+            <abbr title="W3C Verifiable Credentials — calm, guided practice">W3C VCALM</abbr>
+          </p>
           <h1 className="dojoZenPage__title">
             {isNewProfile ? 'Add ninja profile' : existing ? 'Update ninja profile' : 'Create ninja profile'}
           </h1>
@@ -150,10 +153,7 @@ export default function CreateNinjaProfilePage() {
           </nav>
         </header>
 
-        <div
-          className="ninjaProfile__wizard dojo-augmented dojo-augmented--form"
-          data-augmented-ui="tl-clip br-clip border"
-        >
+        <div className="ninjaProfile__wizard ninjaProfile__wizard--calm">
           <ol className="ninjaProfile__progress" aria-label="Wizard progress">
             {WIZARD_STEPS.map((id, i) => (
               <li

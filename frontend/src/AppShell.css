@@ -53,6 +53,76 @@
   box-sizing: border-box;
 }
 
+.app-shell__homeLogo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.35rem;
+  height: 2.35rem;
+  padding: 0.12rem;
+  border-radius: 8px;
+  border: 1px solid rgba(90, 232, 255, 0.22);
+  background: rgba(12, 18, 32, 0.85);
+  line-height: 0;
+  text-decoration: none;
+}
+
+.app-shell__homeLogo:hover {
+  border-color: rgba(90, 232, 255, 0.45);
+  background: rgba(90, 232, 255, 0.08);
+}
+
+.app-shell__homeLogo:focus-visible {
+  outline: 2px solid var(--shell-accent);
+  outline-offset: 2px;
+}
+
+.app-shell__homeMarkImg {
+  display: block;
+  width: 1.42rem;
+  height: auto;
+  max-height: 1.55rem;
+  object-fit: contain;
+}
+
+.app-shell__homeBrand .app-shell__homeMarkImg {
+  width: 1.65rem;
+  max-height: 1.75rem;
+}
+
+.app-shell__homeBrand {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 1rem;
+  padding: 0.35rem 0.45rem;
+  margin-left: -0.45rem;
+  margin-right: -0.45rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s ease;
+}
+
+.app-shell__homeBrand:hover {
+  background: rgba(90, 232, 255, 0.08);
+}
+
+.app-shell__homeBrand:focus-visible {
+  outline: 2px solid var(--shell-accent);
+  outline-offset: 2px;
+}
+
+.app-shell__homeBrand-mark {
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.app-shell__homeBrand-text {
+  min-width: 0;
+}
+
 .app-shell__brand {
   margin: 0 0 1rem;
   font-family: var(--font-display, 'Shippori Mincho', serif);
@@ -61,6 +131,10 @@
   letter-spacing: 0.04em;
   color: var(--shell-heading);
   line-height: 1.25;
+}
+
+.app-shell__homeBrand .app-shell__brand {
+  margin: 0;
 }
 
 .app-shell__brandSub {
@@ -342,9 +416,25 @@
   overflow-y: auto;
 }
 
+.app-shell__drawerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.app-shell__drawerHeading {
+  margin: 0 0 0.65rem;
+  font-family: var(--font-display, 'Shippori Mincho', serif);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--shell-muted);
+}
+
 .app-shell__drawerClose {
-  align-self: flex-end;
-  margin-bottom: 0.35rem;
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 8px;
@@ -354,6 +444,7 @@
   cursor: pointer;
   font-size: 1.25rem;
   line-height: 1;
+  flex-shrink: 0;
 }
 
 @media (min-width: 900px) {

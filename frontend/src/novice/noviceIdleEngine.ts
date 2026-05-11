@@ -30,6 +30,8 @@ export function previewInsightPerSec(
 
 function routeTrackWeights(pathname: string): { issuer: number; verifier: number; wallet: number } {
   if (pathname.startsWith('/issue-verify')) return { issuer: 1.25, verifier: 1.35, wallet: 0.75 }
+  if (pathname === '/issue') return { issuer: 1.45, verifier: 0.82, wallet: 1.05 }
+  if (pathname === '/verify' || pathname.startsWith('/menkyo')) return { issuer: 0.75, verifier: 1.45, wallet: 0.95 }
   if (pathname.startsWith('/kensa')) return { issuer: 0.45, verifier: 1.55, wallet: 0.85 }
   if (pathname.startsWith('/json-explorer')) return { issuer: 0.9, verifier: 1.1, wallet: 1.2 }
   if (pathname.startsWith('/discover-kasa')) return { issuer: 1.35, verifier: 0.8, wallet: 0.95 }
@@ -48,6 +50,9 @@ function applyLessonFlags(
       next[L.id] = true
     }
     if (L.pathPrefix && env.pathname.startsWith(L.pathPrefix)) {
+      next[L.id] = true
+    }
+    if (L.pathExactAny?.includes(env.pathname)) {
       next[L.id] = true
     }
     if (L.flag === 'ninja_profile' && env.hasNinjaProfile) {

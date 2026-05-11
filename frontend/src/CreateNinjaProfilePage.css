@@ -464,3 +464,91 @@
 .ninjaProfile__summary--passkey {
   margin-top: 0.75rem;
 }
+
+/* Calm landing alignment: soft card, no augmented chrome */
+.ninjaProfile__wizard.ninjaProfile__wizard--calm {
+  gap: 1.1rem;
+  padding: 0.9rem 1rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+}
+
+.dojo-scene--night .ninjaProfile__wizard--calm {
+  border-color: rgba(90, 232, 255, 0.16);
+  background: rgba(10, 14, 24, 0.55);
+}
+
+.dojo-scene--day .ninjaProfile__wizard--calm {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.ninjaProfile__wizard--calm .ninjaProfile__progressStep--active {
+  color: var(--accent);
+}
+
+.ninjaProfile__wizard--calm .ninjaProfile__progressStep--active .ninjaProfile__progressDot {
+  background: var(--accent);
+  box-shadow: none;
+}
+
+.ninjaProfile__wizard--calm .ninjaProfile__stepTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.ninjaProfile__wizard--calm .ninjaProfile__stepBody {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--muted);
+  text-align: center;
+}
+
+.ninjaProfile__wizard--calm .ninjaProfile__wizardActions {
+  justify-content: center;
+}
+
+.ninjaProfile__wizard--calm .ninjaProfile__field {
+  text-align: left;
+}
+
+.ninjaProfile__wizard--calm .ninjaProfile__primary:hover,
+.ninjaProfile__wizard--calm .ninjaProfile__submit:hover {
+  transform: none;
+}
+
+.dojo-scene--night.dojo-scene--calmInner .ninjaProfile__school {
+  border-color: rgba(90, 232, 255, 0.14);
+  background: rgba(10, 14, 24, 0.5);
+  box-shadow: none;
+}
+
+.dojo-scene--night.dojo-scene--calmInner .ninjaProfile__school:hover {
+  border-color: rgba(90, 232, 255, 0.28);
+}
+
+.dojo-scene--night.dojo-scene--calmInner .ninjaProfile__school--selected {
+  border-color: rgba(90, 232, 255, 0.42);
+  box-shadow: 0 0 0 1px rgba(90, 232, 255, 0.12);
+}
+
+.dojo-scene--night.dojo-scene--calmInner .ninjaProfile__input {
+  border-color: rgba(90, 232, 255, 0.14);
+  background: rgba(10, 14, 24, 0.55);
+  box-shadow: none;
+}
+
+.dojo-scene--calmInner .ninjaProfile__summary {
+  background: rgba(10, 14, 24, 0.35);
+  border-color: rgba(90, 232, 255, 0.12);
+}
+
+.dojo-scene--day.dojo-scene--calmInner .ninjaProfile__summary {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.dojo-scene--day.dojo-scene--calmInner .ninjaProfile__school {
+  background: rgba(255, 255, 255, 0.42);
+}

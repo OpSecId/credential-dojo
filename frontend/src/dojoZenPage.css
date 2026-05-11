@@ -22,6 +22,17 @@
   opacity: 0.05;
 }
 
+/* Match calm landing backdrop: very quiet grid, small moon */
+.dojo-scene--zen.dojo-scene--calmInner .dojo-scene__moon {
+  opacity: 0.12;
+  transform: scale(0.92);
+}
+
+.dojo-scene--zen.dojo-scene--calmInner .dojo-scene__grid {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .dojoZenPage {
   position: relative;
   z-index: 2;
@@ -35,6 +46,57 @@
 
 .dojoZenPage--wide {
   max-width: min(72rem, calc(100vw - 2.5rem));
+}
+
+/* Same column rhythm as calm home intro + action cards */
+.dojoZenPage--calm {
+  max-width: min(28rem, 100%);
+  margin-left: auto;
+  margin-right: auto;
+  padding: clamp(1.5rem, 4vh, 2.75rem) 1.25rem 3rem;
+}
+
+.dojoZenPage--calm .dojoZenPage__header {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.dojoZenPage--calm .dojoZenPage__eyebrow {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 22rem;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  opacity: 0.62;
+  text-wrap: balance;
+}
+
+.dojoZenPage--calm .dojoZenPage__title {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-size: clamp(1.35rem, 4vw, 1.9rem);
+}
+
+.dojoZenPage--calm .dojoZenPage__intro {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 26rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.dojoZenPage--calm .dojoZenPage__intro strong {
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+.dojoZenPage--calm .dojoZenPage__nav {
+  justify-content: center;
 }
 
 .dojoZenPage__header {
@@ -111,4 +173,9 @@ button.dojoZenPage__back {
 
 .dojo-scene--day .dojoZenPage__title {
   text-shadow: none;
+}
+
+/* After default night title glow: calm column keeps landing-style shadow only */
+.dojo-scene--night .dojoZenPage--calm .dojoZenPage__title {
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.28);
 }

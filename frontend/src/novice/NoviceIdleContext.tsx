@@ -29,9 +29,6 @@ type NoviceIdleContextValue = {
   rank: ReturnType<typeof computeRankProgress>
   /** Insight / second (approx) at current route and bonuses */
   insightPerSec: number
-  panelOpen: boolean
-  setPanelOpen: (open: boolean) => void
-  togglePanel: () => void
   /** Call from HomePage when training focus (0–100) changes */
   reportFocusMeter: (focus0to100: number) => void
   /** HomePage unmount: stop treating synergy as active */
@@ -54,7 +51,6 @@ export function NoviceIdleProvider({ children }: { children: ReactNode }) {
   const location = useLocation()
   const pathname = location.pathname
   const [state, setState] = useState<NoviceIdlePersisted>(() => loadNoviceIdle())
-  const [panelOpen, setPanelOpen] = useState(false)
   const focusRef = useRef<FocusRef>({ homeFocus01: 0, onHome: false })
 
   const flushTick = useCallback(
@@ -103,20 +99,15 @@ export function NoviceIdleProvider({ children }: { children: ReactNode }) {
     focusRef.current = { homeFocus01: focusRef.current.homeFocus01, onHome: false }
   }, [])
 
-  const togglePanel = useCallback(() => setPanelOpen((o) => !o), [])
-
   const value = useMemo<NoviceIdleContextValue>(
     () => ({
       state,
       rank,
       insightPerSec,
-      panelOpen,
-      setPanelOpen,
-      togglePanel,
       reportFocusMeter,
       clearHomeFocus,
     }),
-    [state, rank, insightPerSec, panelOpen, reportFocusMeter, clearHomeFocus],
+    [state, rank, insightPerSec, reportFocusMeter, clearHomeFocus],
   )
 
   return <NoviceIdleContext.Provider value={value}>{children}</NoviceIdleContext.Provider>

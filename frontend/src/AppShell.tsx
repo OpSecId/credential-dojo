@@ -3,6 +3,28 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import './AppShell.css'
 import { useNinjaProfileSnapshot } from './useNinjaProfileSnapshot'
 
+const BRAND_MARK_SRC = `${import.meta.env.BASE_URL}favicon.svg?v=3`
+
+function HomeLogoLink({
+  className,
+  onNavigate,
+}: {
+  className: string
+  onNavigate?: () => void
+}) {
+  return (
+    <Link
+      to="/"
+      className={className}
+      title="Back home"
+      aria-label="Home — Credential Dojo"
+      onClick={onNavigate}
+    >
+      <img src={BRAND_MARK_SRC} alt="" width={28} height={27} decoding="async" className="app-shell__homeMarkImg" />
+    </Link>
+  )
+}
+
 function ShellNavLink({
   to,
   end,
@@ -72,6 +94,16 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
         <p className="app-shell__sectionLabel">Inspect &amp; explore</p>
         <ul className="app-shell__navList">
           <li className="app-shell__navItem">
+            <ShellNavLink to="/issue" onPick={onPick}>
+              Issue (Tehon の Menkyo)
+            </ShellNavLink>
+          </li>
+          <li className="app-shell__navItem">
+            <ShellNavLink to="/verify" onPick={onPick}>
+              Verify (Menkyo の Kensa)
+            </ShellNavLink>
+          </li>
+          <li className="app-shell__navItem">
             <ShellNavLink to="/issue-verify" onPick={onPick}>
               Issue &amp; verify
             </ShellNavLink>
@@ -133,7 +165,9 @@ export default function AppShell() {
     const p = location.pathname
     if (p === '/') return 'Home'
     if (p.startsWith('/kensa')) return 'Kensa'
-    if (p.startsWith('/menkyo')) return 'Menkyo の Kensa'
+    if (p.startsWith('/verify') || p.startsWith('/menkyo')) return 'Menkyo の Kensa'
+    if (p.startsWith('/issue-verify')) return 'Issue & verify'
+    if (p.startsWith('/issue')) return 'Tehon の Menkyo · Issue'
     if (p.startsWith('/json-explorer')) return 'Shinbi'
     if (p.startsWith('/discover-kasa')) return 'Discover Kasa'
     if (p.startsWith('/kinchaku')) return 'Kinchaku'
@@ -176,10 +210,15 @@ export default function AppShell() {
 
       <aside className="app-shell__rail" aria-label="Dojo navigation">
         <div className="app-shell__railInner">
-          <p className="app-shell__brand">
-            Credential Dojo
-            <span className="app-shell__brandSub">Signed in</span>
-          </p>
+          <Link to="/" className="app-shell__homeBrand" title="Back home" aria-label="Home — Credential Dojo">
+            <span className="app-shell__homeBrand-mark" aria-hidden>
+              <img src={BRAND_MARK_SRC} alt="" width={34} height={32} decoding="async" className="app-shell__homeMarkImg" />
+            </span>
+            <span className="app-shell__brand app-shell__homeBrand-text">
+              Credential Dojo
+              <span className="app-shell__brandSub">Signed in</span>
+            </span>
+          </Link>
           <NavBlocks />
           <footer className="app-shell__railFoot">
             <span>Use the profile menu (top right) to switch profiles, sign out, or edit.</span>
@@ -202,17 +241,19 @@ export default function AppShell() {
         aria-hidden={!drawerOpen}
       >
         <div className="app-shell__drawerInner">
-          <button
-            type="button"
-            className="app-shell__drawerClose"
-            onClick={closeDrawer}
-            aria-label="Close menu"
-          >
-            ×
-          </button>
-          <p id={drawerTitleId} className="app-shell__brand">
+          <div className="app-shell__drawerTop">
+            <HomeLogoLink className="app-shell__homeLogo" onNavigate={closeDrawer} />
+            <button
+              type="button"
+              className="app-shell__drawerClose"
+              onClick={closeDrawer}
+              aria-label="Close menu"
+            >
+              ×
+            </button>
+          </div>
+          <p id={drawerTitleId} className="app-shell__drawerHeading">
             Menu
-            <span className="app-shell__brandSub">Credential Dojo</span>
           </p>
           <NavBlocks onPick={closeDrawer} />
           <footer className="app-shell__railFoot">
@@ -223,6 +264,7 @@ export default function AppShell() {
 
       <div className="app-shell__main">
         <header className="app-shell__topbar">
+          <HomeLogoLink className="app-shell__homeLogo" />
           <button
             type="button"
             className="app-shell__menuBtn"

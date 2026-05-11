@@ -16,7 +16,12 @@ import { addWalletItem } from './walletInventory'
 
 const PREVIEW_CREDENTIAL_ID = 'urn:uuid:00000000-0000-4000-8000-000000000001'
 
-export default function IssueVerifyPage() {
+export type IssueVerifyPageProps = {
+  /** `issue` — issuance only (`/issue`). Default `both` is the combined Issue & verify page. */
+  mode?: 'both' | 'issue'
+}
+
+export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps) {
   const { theme } = useDojoLandingTheme()
   const [personas, setPersonas] = useState<readonly PersonaPublic[] | null>(null)
   const [ninjaProfile, setNinjaProfile] = useState<NinjaProfile | null>(() => readNinjaProfile())
@@ -98,13 +103,14 @@ export default function IssueVerifyPage() {
     addWalletItem({
       type: 'credential',
       title: `Demo Menkyo · ${persona.label}${opSuffix}`,
-      subtitle: 'Issued from Issue & verify (browser demo)',
+      subtitle:
+        mode === 'issue' ? 'Issued from /issue (browser demo)' : 'Issued from Issue & verify (browser demo)',
       issuerOrSource: persona.label,
       status: 'ready',
-      tags: ['Menkyo', 'Demo', 'Issue-verify', persona.proofSchool],
+      tags: ['Menkyo', 'Demo', mode === 'issue' ? 'Issue' : 'Issue-verify', persona.proofSchool],
       preview: text.slice(0, 180),
     })
-  }, [persona, operatorCodename])
+  }, [persona, operatorCodename, mode])
 
   const runVerify = useCallback(() => {
     try {
@@ -119,6 +125,8 @@ export default function IssueVerifyPage() {
 
   const tCred = productTerminology.credential
   const tInspect = productTerminology.credentialInspection
+  const tFromTemplate = productTerminology.credentialFromTemplate
+  const issueOnly = mode === 'issue'
 
   return (
     <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen`}>
@@ -129,19 +137,43 @@ export default function IssueVerifyPage() {
       <div className="issueVerify dojoZenPage dojoZenPage--wide">
         <header className="dojoZenPage__header">
           <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
-          <h1 className="dojoZenPage__title">Issue &amp; verify</h1>
+          <h1 className="dojoZenPage__title">
+            {issueOnly ? (
+              <>
+                {tFromTemplate.name} · Issue <span lang="ja">({tFromTemplate.glyph})</span>
+              </>
+            ) : (
+              <>Issue &amp; verify</>
+            )}
+          </h1>
           <p className="dojoZenPage__intro">
-            Mint a <strong>{tCred.name}</strong>-shaped demo JSON from a proof school (<strong>Kasa</strong>), then run
-            the same structural checks as <strong>{tInspect.name}</strong> — still no cryptographic verification, only
-            shape and field heuristics.
+            {issueOnly ? (
+              <>
+                Mint a <strong>{tCred.name}</strong>-shaped demo JSON from a proof school (<strong>Kasa</strong>) —{' '}
+                <strong>{tFromTemplate.name}</strong> issuance in the browser. No cryptographic verification; for
+                structural inspection of a held credential, use <strong>{tInspect.name}</strong> on{' '}
+                <Link to="/verify">/verify</Link>.
+              </>
+            ) : (
+              <>
+                Mint a <strong>{tCred.name}</strong>-shaped demo JSON from a proof school (<strong>Kasa</strong>), then
+                run the same structural checks as <strong>{tInspect.name}</strong> — still no cryptographic verification,
+                only shape and field heuristics.
+              </>
+            )}
           </p>
           <nav className="dojoZenPage__nav" aria-label="Related pages">
             <Link className="dojoZenPage__back" to="/" title="Back Home">
               ← Back Home
             </Link>
-            <Link className="dojoZenPage__back" to="/menkyo" title="Open full Menkyo inspection (Kensa)">
-              {tInspect.name} (Kensa)
+            <Link className="dojoZenPage__back" to="/verify" title="Open Menkyo inspection (Kensa)">
+              {tInspect.name} (/verify)
             </Link>
+            {issueOnly ? (
+              <Link className="dojoZenPage__back" to="/issue-verify" title="Issue and verify on one page">
+                Issue &amp; verify
+              </Link>
+            ) : null}
             <Link className="dojoZenPage__back" to="/discover-kasa" title="Issuer personas and did:key">
               Discover Kasa
             </Link>
@@ -152,7 +184,7 @@ export default function IssueVerifyPage() {
         className="issueVerify__panel dojo-augmented dojo-augmented--panel"
         data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
       >
-        <div className="issueVerify__grid">
+        <div className={`issueVerify__grid${issueOnly ? ' issueVerify__grid--issueOnly' : ''}`}>
           <div>
             <h2 className="issueVerify__sectionTitle">Issue (demo)</h2>
             <p className="issueVerify__sectionBody">
@@ -256,6 +288,7 @@ export default function IssueVerifyPage() {
             </div>
           </div>
 
+          {issueOnly ? null : (
           <div>
             <h2 className="issueVerify__sectionTitle">Verify (Menkyo path)</h2>
             <p className="issueVerify__sectionBody">
@@ -314,11 +347,19 @@ export default function IssueVerifyPage() {
               </p>
             )}
           </div>
+          )}
         </div>
 
         <p className="issueVerify__footerNote">
           This page is educational: proofs use a placeholder <code>proofValue</code>. For VP-shaped packages, use{' '}
           <Link to="/kensa">Kensa · Enbu</Link>.
+          {issueOnly ? (
+            <>
+              {' '}
+              For credential-shaped checks without issuing here, open{' '}
+              <Link to="/verify">{tInspect.name}</Link>.
+            </>
+          ) : null}
         </p>
       </section>
       </div>

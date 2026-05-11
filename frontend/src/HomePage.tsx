@@ -277,21 +277,10 @@ export default function HomePage() {
         ) : null}
         <header className={`dojo__header${calmLanding ? ' dojo__header--calm' : ''}`}>
           <p className="dojo__eyebrow">
-            {calmLanding ? (
-              <>
-                credential.ninja ·{' '}
-                <abbr title="Credential Management & Registry System">CRMS</abbr>
-                {' · '}
-                <abbr title="World Wide Web Consortium">W3C</abbr> VCs
-              </>
-            ) : (
-              <>
-                credential.ninja ·{' '}
-                <abbr title="Credential Management & Registry System">CRMS</abbr>
-                {' · '}
-                <abbr title="World Wide Web Consortium">W3C</abbr> Verifiable Credentials
-              </>
-            )}
+            <>
+              credential.ninja ·{' '}
+              <abbr title="W3C Verifiable Credentials — calm, guided practice">W3C VCALM</abbr>
+            </>
           </p>
           <h1 className={`dojo__title${calmLanding ? ' dojo__title--calm' : ''}`}>
             <span className="dojo__titleLine">The Credential</span>
@@ -299,8 +288,9 @@ export default function HomePage() {
           </h1>
           {calmLanding ? (
             <p className="dojo__lede dojo__lede--calm">
-              Practice W3C Verifiable Credentials in a small, guided UI. If terms like Tehon, Menkyo, or Enbu
-              feel opaque, the Lexicon is there when you want them decoded.
+              Practice <strong>W3C Verifiable Credentials</strong> in a compact, guided UI—hands-on demos and
+              inspection tools in the browser, without enterprise setup noise. Dojo vocabulary is optional color:{' '}
+              <Link to="/lexicon">open the Lexicon</Link> when you want each metaphor tied back to VC concepts.
             </p>
           ) : (
             <p className="dojo__lede">
@@ -369,7 +359,11 @@ export default function HomePage() {
           {ninjaProfile && !journeyState.started ? (
             <p className="dojo__journeyStart dojo-augmented dojo-augmented--inset" data-augmented-ui="tl-clip br-clip border">
               <span className="dojo__journeyStart-label">Learning Journey</span>{' '}
-              {pendingStart ? 'Profile created — begin your resource journey now.' : 'Begin your parallel resource journey anytime.'}
+              {pendingStart
+                ? 'Profile created — begin your parallel resource journey now.'
+                : 'Begin your parallel resource journey anytime. '}
+              Open <strong>Your dojo</strong> (bottom-right) for rank, journey resources, practice tracks, and
+              achievements — tutorial-style milestones unlock as you explore.
               <button type="button" className="dojo__journeyStart-btn" onClick={startJourney}>
                 Start journey
               </button>
@@ -415,7 +409,7 @@ export default function HomePage() {
             <nav className="dojo__calmActionCards" aria-label="Common flows">
               <Link
                 className="dojo__calmActionCard"
-                to="/issue-verify"
+                to="/issue"
                 title="Template (Tehon) to held credential (Menkyo)—issuance."
               >
                 <span className="dojo__calmActionCard-title">{productTerminology.credentialFromTemplate.name}</span>
@@ -427,20 +421,30 @@ export default function HomePage() {
               </Link>
               <Link
                 className="dojo__calmActionCard"
-                to="/menkyo"
-                title="Structural checks on a VC you already hold."
+                to="/verify"
+                title="Held credential (Menkyo) through inspection (Kensa)—verification."
               >
                 <span className="dojo__calmActionCard-title">{productTerminology.credentialInspection.name}</span>
                 <span className="dojo__calmActionCard-sub" lang="ja">
                   {productTerminology.credentialInspection.glyph}
                 </span>
-                <p className="dojo__calmActionCard-desc">Structural checks on a VC you already hold.</p>
+                <p className="dojo__calmActionCard-desc">
+                  Held credential (Menkyo) through inspection (Kensa)—verification.
+                </p>
                 <span className="dojo__calmActionCard-cta">Open Menkyo Kensa</span>
               </Link>
             </nav>
             <div className="dojo__calmBand">
               <p className="dojo__calmBand-label">Tools</p>
               <nav className="dojo__calmEssentials" aria-label="Tools and demos">
+                <Link to="/issue">Issue</Link>
+                <span className="dojo__calmDot" aria-hidden>
+                  ·
+                </span>
+                <Link to="/verify">Verify</Link>
+                <span className="dojo__calmDot" aria-hidden>
+                  ·
+                </span>
                 <Link to="/issue-verify">Issue &amp; verify</Link>
                 <span className="dojo__calmDot" aria-hidden>
                   ·

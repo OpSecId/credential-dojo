@@ -81,6 +81,8 @@ export type NoviceLessonDef = {
   exactPath?: string
   /** Matched with pathname.startsWith — do not use `/` alone (matches everything). */
   pathPrefix?: string
+  /** Any exact pathname match completes the lesson (OR with pathPrefix / exactPath). */
+  pathExactAny?: readonly string[]
   label: string
   tip: string
   /** Set by app logic, not path alone */
@@ -103,14 +105,15 @@ export const NOVICE_LESSONS: readonly NoviceLessonDef[] = [
   {
     id: 'visit_kensa',
     pathPrefix: '/kensa',
+    pathExactAny: ['/verify', '/menkyo'],
     label: 'Run Kensa inspection',
     tip: 'Enbu の Kensa vs Menkyo の Kensa — structural passes.',
   },
   {
     id: 'visit_issue_verify',
-    pathPrefix: '/issue-verify',
-    label: 'Issue & verify demo Menkyo',
-    tip: 'Browser-only demo VC plus Menkyo-shaped checks.',
+    pathExactAny: ['/issue', '/issue-verify'],
+    label: 'Issue demo Menkyo (issuance)',
+    tip: 'Tehon の Menkyo — browser-only demo VC from /issue or combined Issue & verify.',
   },
   {
     id: 'visit_shinbi',
@@ -149,7 +152,9 @@ export function routeInsightBonus(pathname: string): number {
   if (pathname === '/') return 1.08
   if (pathname.startsWith('/lexicon')) return 1.38
   if (pathname.startsWith('/kensa')) return 1.28
+  if (pathname === '/verify' || pathname.startsWith('/menkyo')) return 1.28
   if (pathname.startsWith('/issue-verify')) return 1.24
+  if (pathname === '/issue') return 1.24
   if (pathname.startsWith('/json-explorer')) return 1.22
   if (pathname.startsWith('/discover-kasa')) return 1.18
   if (pathname.startsWith('/create-ninja-profile')) return 1.12

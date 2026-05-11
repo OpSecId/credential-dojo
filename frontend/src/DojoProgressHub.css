@@ -1,0 +1,491 @@
+/* Unified rank + journey + achievements hub — bottom-right, zen card chrome */
+
+.dojo-hub-dock {
+  position: fixed;
+  z-index: 12050;
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+  bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.65rem;
+  pointer-events: none;
+}
+
+.dojo-hub-dock > * {
+  pointer-events: auto;
+}
+
+.dojo-hub-fab {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0.5rem 0.75rem 0.5rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(90, 232, 255, 0.22);
+  background: rgba(10, 14, 24, 0.88);
+  color: var(--text-h, #f0f4ff);
+  cursor: pointer;
+  box-shadow: 0 4px 22px rgba(0, 0, 0, 0.4);
+  font-family: var(--font-body, system-ui, sans-serif);
+  backdrop-filter: blur(10px);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.dojo-hub-fab:hover {
+  border-color: rgba(232, 184, 74, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.48);
+}
+
+.dojo-hub-fab:focus-visible {
+  outline: 2px solid var(--accent, #e8b84a);
+  outline-offset: 3px;
+}
+
+.dojo-hub-fab__glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: rgba(90, 232, 255, 0.1);
+  font-family: var(--font-display, serif);
+  font-weight: 800;
+  font-size: 1rem;
+  color: #c9dcc4;
+}
+
+.dojo-hub-fab__label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.dojo-hub-fab__meta {
+  font-size: 0.7rem;
+  color: var(--muted, #8a92a8);
+  max-width: 5.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dojo-hub-fab__sep {
+  margin: 0 0.15rem;
+  opacity: 0.7;
+}
+
+.dojo-hub-panel {
+  width: min(23rem, calc(100vw - 1.5rem));
+  max-height: min(80vh, 38rem);
+  overflow: auto;
+  padding: 1rem 1.05rem 1.15rem;
+  border-radius: 14px;
+  border: 1px solid rgba(90, 232, 255, 0.14);
+  background: rgba(10, 14, 22, 0.94);
+  color: var(--text, #b8c0d4);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(12px);
+}
+
+.dojo-hub__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.dojo-hub__title {
+  margin: 0;
+  font-family: var(--font-display, serif);
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-h, #f0f4ff);
+}
+
+.dojo-hub__sub {
+  margin: 0.25rem 0 0;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--muted, #7a8498);
+}
+
+.dojo-hub__profile {
+  margin: 0.5rem 0 0;
+  font-size: 0.76rem;
+  color: var(--muted, #8a92a8);
+}
+
+.dojo-hub__profile--muted {
+  margin-top: 0.45rem;
+}
+
+.dojo-hub__profile a {
+  color: #9ee8ff;
+  font-weight: 600;
+}
+
+.dojo-hub__close {
+  margin: 0;
+  padding: 0.15rem 0.45rem;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-h, #f0f4ff);
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.dojo-hub__close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dojo-hub__stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.dojo-hub__stat {
+  padding: 0.55rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid rgba(120, 200, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.dojo-hub__statLabel {
+  margin: 0;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted, #7a8498);
+}
+
+.dojo-hub__statValue {
+  margin: 0.2rem 0 0;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-h, #f0f4ff);
+  line-height: 1.25;
+}
+
+.dojo-hub__statHint {
+  margin: 0.15rem 0 0;
+  font-size: 0.68rem;
+  color: var(--muted, #8a92a8);
+}
+
+.dojo-hub__rank {
+  margin-bottom: 0.85rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(120, 200, 255, 0.08);
+}
+
+.dojo-hub__blurb {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text, #b8c0d4);
+}
+
+.dojo-hub__bar {
+  margin-top: 0.55rem;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.dojo-hub__barFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #5ae8ff, #e8b84a);
+  transition: width 0.35s ease;
+}
+
+.dojo-hub__bar--journey {
+  margin-top: 0.45rem;
+}
+
+.dojo-hub__barFill--journey {
+  background: linear-gradient(90deg, #e8b84a, #7ee9ff);
+}
+
+.dojo-hub__maxRank {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  color: #c8e8a8;
+}
+
+.dojo-hub__journey {
+  margin-bottom: 0.95rem;
+}
+
+.dojo-hub__h3 {
+  margin: 0 0 0.4rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted, #7a8498);
+}
+
+.dojo-hub__journeyStart p {
+  margin: 0 0 0.55rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--text, #b8c0d4);
+}
+
+.dojo-hub__btn {
+  border: 1px solid rgba(232, 184, 74, 0.45);
+  background: rgba(232, 184, 74, 0.12);
+  color: var(--text-h, #f0f4ff);
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.dojo-hub__btn:hover {
+  background: rgba(232, 184, 74, 0.2);
+}
+
+.dojo-hub__journeyList {
+  margin: 0.45rem 0 0;
+  padding-left: 1rem;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--muted, #8a92a8);
+}
+
+.dojo-hub__journeyList strong {
+  color: var(--text-h, #f0f4ff);
+}
+
+.dojo-hub__tracks {
+  margin-bottom: 0.95rem;
+}
+
+.dojo-hub__tracksIntro {
+  margin: 0 0 0.55rem;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--muted, #8a92a8);
+}
+
+.dojo-hub-track {
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0.55rem;
+  border-radius: 10px;
+  border: 1px solid rgba(120, 200, 255, 0.12);
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.dojo-hub-track__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.dojo-hub-track__title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-h, #f0f4ff);
+}
+
+.dojo-hub-track__level {
+  margin: 0;
+  font-size: 0.7rem;
+  font-family: var(--font-mono, monospace);
+  color: #9ee8ff;
+}
+
+.dojo-hub-track__bar {
+  margin: 0.4rem 0 0.35rem;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.dojo-hub-track__fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.dojo-hub-track__fill--issuer {
+  background: linear-gradient(90deg, #5ae8ff, #7ec8ff);
+}
+
+.dojo-hub-track__fill--verifier {
+  background: linear-gradient(90deg, #e8b84a, #f7d67a);
+}
+
+.dojo-hub-track__fill--wallet {
+  background: linear-gradient(90deg, #66d47e, #7ff0a2);
+}
+
+.dojo-hub-track__meta {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--muted, #8a92a8);
+}
+
+.dojo-hub-track__meta strong {
+  color: var(--text-h, #f0f4ff);
+}
+
+.dojo-hub__perks {
+  margin-bottom: 0.95rem;
+}
+
+.dojo-hub__perkList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.dojo-hub__perk {
+  padding: 0.45rem 0.5rem;
+  border-radius: 8px;
+  border: 1px dashed rgba(120, 140, 180, 0.28);
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.dojo-hub__perk--on {
+  border-style: solid;
+  border-color: rgba(102, 212, 126, 0.35);
+  background: rgba(102, 212, 126, 0.08);
+}
+
+.dojo-hub__perkTitle {
+  margin: 0;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-h, #f0f4ff);
+}
+
+.dojo-hub__perkDesc {
+  margin: 0.15rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--muted, #8a92a8);
+}
+
+.dojo-hub__achievements {
+  margin-bottom: 0.5rem;
+}
+
+.dojo-hub__achHint {
+  margin: 0 0 0.5rem;
+  font-size: 0.74rem;
+  line-height: 1.45;
+  color: var(--muted, #8a92a8);
+}
+
+.dojo-hub__lessonList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.dojo-hub__lesson {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  padding: 0.42rem 0.48rem;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.12);
+  border: 1px solid transparent;
+}
+
+.dojo-hub__lesson--done {
+  border-color: rgba(90, 232, 255, 0.18);
+  background: rgba(90, 232, 255, 0.05);
+}
+
+.dojo-hub__lessonMark {
+  flex-shrink: 0;
+  width: 1.2rem;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--muted, #7a8498);
+}
+
+.dojo-hub__lesson--done .dojo-hub__lessonMark {
+  color: #7ee9ff;
+}
+
+.dojo-hub__lessonLabel {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-h, #f0f4ff);
+}
+
+.dojo-hub__lessonTip {
+  margin: 0.12rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--muted, #8a92a8);
+}
+
+.dojo-hub__foot {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(120, 200, 255, 0.1);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--muted, #8a92a8);
+}
+
+.dojo-hub__foot a {
+  color: #9ee8ff;
+  font-weight: 600;
+}
+
+.dojo-hub__footNote {
+  margin: 0.45rem 0 0;
+  font-size: 0.7rem;
+  opacity: 0.92;
+}
+
+@media (max-width: 480px) {
+  .dojo-hub-fab__label {
+    display: none;
+  }
+
+  .dojo-hub-panel {
+    width: calc(100vw - 1.25rem);
+    max-height: 72vh;
+  }
+
+  .dojo-hub__stats {
+    grid-template-columns: 1fr;
+  }
+}
