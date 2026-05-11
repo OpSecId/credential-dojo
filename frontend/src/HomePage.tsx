@@ -435,11 +435,11 @@ export default function HomePage() {
             <div className="dojo__calmBand">
               <p className="dojo__calmBand-label">Tools</p>
               <nav className="dojo__calmEssentials" aria-label="Tools and demos">
-                <Link to="/issue">Issue</Link>
+                <Link to="/issue">Tehon の Menkyo (Issue Credential)</Link>
                 <span className="dojo__calmDot" aria-hidden>
                   ·
                 </span>
-                <Link to="/verify">Verify</Link>
+                <Link to="/verify">Menkyo の Kensa (Verify Credential)</Link>
                 <span className="dojo__calmDot" aria-hidden>
                   ·
                 </span>

@@ -95,12 +95,12 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
         <ul className="app-shell__navList">
           <li className="app-shell__navItem">
             <ShellNavLink to="/issue" onPick={onPick}>
-              Issue (Tehon の Menkyo)
+              Tehon の Menkyo (Issue Credential)
             </ShellNavLink>
           </li>
           <li className="app-shell__navItem">
             <ShellNavLink to="/verify" onPick={onPick}>
-              Verify (Menkyo の Kensa)
+              Menkyo の Kensa (Verify Credential)
             </ShellNavLink>
           </li>
           <li className="app-shell__navItem">
@@ -165,9 +165,9 @@ export default function AppShell() {
     const p = location.pathname
     if (p === '/') return 'Home'
     if (p.startsWith('/kensa')) return 'Kensa'
-    if (p.startsWith('/verify') || p.startsWith('/menkyo')) return 'Menkyo の Kensa'
+    if (p.startsWith('/verify') || p.startsWith('/menkyo')) return 'Menkyo の Kensa (Verify Credential)'
     if (p.startsWith('/issue-verify')) return 'Issue & verify'
-    if (p.startsWith('/issue')) return 'Tehon の Menkyo · Issue'
+    if (p.startsWith('/issue')) return 'Tehon の Menkyo (Issue Credential)'
     if (p.startsWith('/json-explorer')) return 'Shinbi'
     if (p.startsWith('/discover-kasa')) return 'Discover Kasa'
     if (p.startsWith('/kinchaku')) return 'Kinchaku'
