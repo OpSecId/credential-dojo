@@ -10,6 +10,7 @@ import KensaPage from './KensaPage'
 import KinchakuPage from './KinchakuPage'
 import LexiconPage from './LexiconPage'
 import TejunViewerPage from './TejunViewerPage'
+import NinjaProfileMenu from './NinjaProfileMenu'
 import { JourneyProvider } from './journey/JourneyContext'
 import JourneyPanel from './journey/JourneyPanel'
 import { NoviceIdleProvider } from './novice/NoviceIdleContext'
@@ -34,6 +35,7 @@ export default function App() {
             <Route path="/lexicon" element={<LexiconPage />} />
           </Route>
         </Routes>
+        <NinjaProfileMenu />
         <JourneyPanel />
       </JourneyProvider>
       <NoviceProgressPanel />

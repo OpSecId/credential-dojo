@@ -1,11 +1,12 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import './App.css'
 import './CreateNinjaProfilePage.css'
 import { DEMO_PERSONAS_OFFLINE, type PersonaPublic, type PersonasPayload } from './demoPersonas'
 import { generateNinjaCodename } from './ninjaCodenameGenerator'
 import {
+  appendNinjaProfile,
   clearNinjaProfile,
   createOrUpdateNinjaProfile,
   isValidSchoolId,
@@ -33,20 +34,35 @@ function initWizardSnapshot(): { codename: string; schoolId: string } {
 
 export default function CreateNinjaProfilePage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const isNewProfile = searchParams.get('new') === '1'
+
   const [personas, setPersonas] = useState<readonly PersonaPublic[] | null>(null)
-  const existing = useMemo(() => readNinjaProfile(), [])
+  const existing = isNewProfile ? null : readNinjaProfile()
   const [passkey, setPasskey] = useState(() => readPasskey())
   const [passkeyMsg, setPasskeyMsg] = useState<string | null>(null)
 
-  const initialSnapshot = useRef(initWizardSnapshot())
-  const [codename, setCodename] = useState(initialSnapshot.current.codename)
-  const [schoolId, setSchoolId] = useState(initialSnapshot.current.schoolId)
+  const snapshotSeed = useMemo(() => {
+    if (isNewProfile) {
+      return { codename: generateNinjaCodename(), schoolId: 'ed-ryu' }
+    }
+    return initWizardSnapshot()
+  }, [isNewProfile])
+
+  const [codename, setCodename] = useState(snapshotSeed.codename)
+  const [schoolId, setSchoolId] = useState(snapshotSeed.schoolId)
   const [stepIndex, setStepIndex] = useState(0)
 
-  const isDirty = useMemo(() => {
-    const init = initialSnapshot.current
-    return codename !== init.codename || schoolId !== init.schoolId
-  }, [codename, schoolId])
+  useEffect(() => {
+    setCodename(snapshotSeed.codename)
+    setSchoolId(snapshotSeed.schoolId)
+    setStepIndex(0)
+  }, [snapshotSeed])
+
+  const isDirty = useMemo(
+    () => codename !== snapshotSeed.codename || schoolId !== snapshotSeed.schoolId,
+    [codename, schoolId, snapshotSeed],
+  )
 
   useEffect(() => {
     const base = import.meta.env.VITE_API_BASE ?? ''
@@ -91,8 +107,10 @@ export default function CreateNinjaProfilePage() {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
     if (!isValidSchoolId(schoolId)) return
-    if (!existing) markJourneyPendingStart()
-    createOrUpdateNinjaProfile(codename, schoolId)
+    const priorActive = readNinjaProfile()
+    if (!priorActive) markJourneyPendingStart()
+    if (isNewProfile) appendNinjaProfile(codename, schoolId)
+    else createOrUpdateNinjaProfile(codename, schoolId)
     navigate('/')
   }
 
@@ -116,7 +134,7 @@ export default function CreateNinjaProfilePage() {
         <header className="ninjaProfile__header">
           <p className="ninjaProfile__eyebrow">The Credential Dojo</p>
           <h1 className="ninjaProfile__title">
-            {existing ? 'Update ninja profile' : 'Create ninja profile'}
+            {isNewProfile ? 'Add ninja profile' : existing ? 'Update ninja profile' : 'Create ninja profile'}
           </h1>
           <p className="ninjaProfile__intro">
             A short wizard: choose how you appear on the dojo, pick your proof school (kasa), then
@@ -155,7 +173,11 @@ export default function CreateNinjaProfilePage() {
             {step === 'welcome' && (
               <section className="ninjaProfile__step" aria-labelledby="wizard-welcome">
                 <h2 id="wizard-welcome" className="ninjaProfile__stepTitle">
-                  {existing ? 'Update your dojo identity' : 'Begin your dojo identity'}
+                  {isNewProfile
+                    ? 'Add another dojo identity'
+                    : existing
+                      ? 'Update your dojo identity'
+                      : 'Begin your dojo identity'}
                 </h2>
                 <p className="ninjaProfile__stepBody">
                   You’ll pick a <strong>codename</strong> (or stay anonymous), choose a{' '}
@@ -179,7 +201,7 @@ export default function CreateNinjaProfilePage() {
                   Codename
                 </h2>
                 <p className="ninjaProfile__stepBody">
-                  How you’ll appear in the ninja bar on the home dojo.
+                  How you’ll appear in the profile menu and across the dojo.
                 </p>
                 <label className="ninjaProfile__field">
                   <span className="ninjaProfile__label">Codename</span>
@@ -420,13 +442,13 @@ export default function CreateNinjaProfilePage() {
                     <button type="button" className="ninjaProfile__secondary" onClick={goBack}>
                       Back
                     </button>
-                    {existing ? (
+                    {existing && !isNewProfile ? (
                       <button type="button" className="ninjaProfile__danger" onClick={onClear}>
                         Clear profile
                       </button>
                     ) : null}
                     <button type="submit" className="ninjaProfile__submit">
-                      {existing ? 'Save profile' : 'Create profile'}
+                      {isNewProfile ? 'Add profile' : existing ? 'Save profile' : 'Create profile'}
                     </button>
                   </div>
                 </form>

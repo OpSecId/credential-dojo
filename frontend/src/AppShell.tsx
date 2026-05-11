@@ -1,7 +1,6 @@
 import { useEffect, useId, useMemo, useState } from 'react'
-import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import './AppShell.css'
-import { clearNinjaProfile } from './ninjaProfileStorage'
 import { useNinjaProfileSnapshot } from './useNinjaProfileSnapshot'
 
 function ShellNavLink({
@@ -46,18 +45,6 @@ function ShellNavLink({
 }
 
 function NavBlocks({ onPick }: { onPick?: () => void }) {
-  const navigate = useNavigate()
-
-  const handleClearProfile = () => {
-    const ok = window.confirm(
-      'Remove your ninja profile from this browser? This cannot be undone here.',
-    )
-    if (!ok) return
-    clearNinjaProfile()
-    onPick?.()
-    navigate('/')
-  }
-
   return (
     <>
       <section className="app-shell__section" aria-label="Dojo home">
@@ -132,26 +119,6 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
           </li>
         </ul>
       </section>
-
-      <section className="app-shell__section" aria-label="Account">
-        <p className="app-shell__sectionLabel">You</p>
-        <ul className="app-shell__navList">
-          <li className="app-shell__navItem">
-            <ShellNavLink to="/create-ninja-profile" onPick={onPick}>
-              Ninja profile
-            </ShellNavLink>
-          </li>
-          <li className="app-shell__navItem">
-            <button
-              type="button"
-              className="app-shell__navBtn app-shell__navBtn--danger"
-              onClick={handleClearProfile}
-            >
-              Clear profile
-            </button>
-          </li>
-        </ul>
-      </section>
     </>
   )
 }
@@ -215,8 +182,7 @@ export default function AppShell() {
           </p>
           <NavBlocks />
           <footer className="app-shell__railFoot">
-            <strong>{profile.codename}</strong>
-            <span>Ninja profile · browser only</span>
+            <span>Use the profile menu (top right) to switch profiles, sign out, or edit.</span>
           </footer>
         </div>
       </aside>
@@ -250,8 +216,7 @@ export default function AppShell() {
           </p>
           <NavBlocks onPick={closeDrawer} />
           <footer className="app-shell__railFoot">
-            <strong>{profile.codename}</strong>
-            <span>Ninja profile · browser only</span>
+            <span>Use the profile menu (top right) to switch profiles, sign out, or edit.</span>
           </footer>
         </div>
       </div>
@@ -282,9 +247,6 @@ export default function AppShell() {
               語
             </Link>
           </nav>
-          <div className="app-shell__topbarMeta" title={profile.codename}>
-            {profile.codename}
-          </div>
         </header>
         <div className="app-shell__mainInner" id="app-shell-main" tabIndex={-1}>
           <Outlet />

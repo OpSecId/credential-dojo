@@ -165,44 +165,77 @@
 }
 
 .dojo-scene--landing.dojo-scene--calm .dojo {
-  padding-top: 3.5rem;
-  padding-bottom: 4rem;
-  gap: 2.25rem;
+  padding-top: 1.25rem;
+  padding-bottom: 2.5rem;
+  gap: 2rem;
 }
 
-/* Calm uses same meter + hero grid as full landing; hero copy stays narrow & centered */
+/* Calm: hero + tools as one vertically centered stack; padding balances fixed chrome L/R */
+.dojo-scene--landing.dojo-scene--calm .dojo.dojo--calmLanding {
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1.25rem, env(safe-area-inset-right, 0px), calc(1rem + 2.5vw));
+}
+
+@media (min-width: 560px) {
+  .dojo-scene--landing.dojo-scene--calm .dojo.dojo--calmLanding {
+    padding-right: max(1.5rem, env(safe-area-inset-right, 0px), calc(1.25rem + 3.5vw));
+  }
+}
+
+.dojo__calmStage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: min(78dvh, calc(100dvh - 5.5rem));
+  gap: clamp(1.5rem, 3.5vh, 2.5rem);
+  padding-block: clamp(0.25rem, 2vh, 1.25rem);
+  box-sizing: border-box;
+}
+
+.dojo__calmStage .dojo__calmBand {
+  margin-top: 0;
+}
+
+/* Calm landing: single-column hero; slim focus strip is fixed top-left (see .dojo__focusZen--corner) */
 .dojo__introBand--calm {
   width: 100%;
-  max-width: none;
+  max-width: min(28rem, 100%);
   margin: 0 auto;
   animation: none;
-  padding: 0 1rem;
-}
-
-.dojo__introBand--calm .dojo__meterAside {
-  align-self: start;
-  width: 100%;
-  max-width: 13rem;
+  padding: 0;
 }
 
 .dojo__introBand--calm .dojo__header--calm {
   text-align: center;
-  max-width: 26rem;
+  max-width: 28rem;
   margin-inline: auto;
+  width: 100%;
 }
 
 .dojo__header--calm .dojo__eyebrow {
-  letter-spacing: 0.2em;
-  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  font-size: 0.66rem;
   opacity: 0.62;
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.5rem;
+  max-width: 22rem;
+  margin-left: auto;
+  margin-right: auto;
+  text-wrap: balance;
 }
 
 .dojo__header--calm .dojo__title {
   justify-content: center;
   font-weight: 600;
   letter-spacing: 0.02em;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.15rem;
+}
+
+.dojo__title--calm {
+  flex-direction: column;
+  align-items: center;
+  gap: 0.12rem;
 }
 
 .dojo__lede--calm {
@@ -210,7 +243,8 @@
   line-height: 1.65;
   color: var(--muted);
   margin: 0 auto;
-  max-width: 22rem;
+  max-width: 26rem;
+  text-wrap: pretty;
 }
 
 /* Calm home: typographic entry points only—no loud buttons */
@@ -255,13 +289,73 @@
   user-select: none;
 }
 
+/* Slim training-focus meter (calm home) — fixed top-left, compact “good size” */
+.dojo__focusZen {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.35rem;
+  width: 11rem;
+}
+
+.dojo__focusZen--corner {
+  position: fixed;
+  top: calc(0.65rem + env(safe-area-inset-top, 0px));
+  left: 1rem;
+  z-index: 52;
+  padding: 0.45rem 0.55rem 0.4rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(8, 11, 18, 0.72);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
+}
+
+.dojo-scene--day .dojo__focusZen--corner {
+  background: rgba(255, 252, 248, 0.82);
+  border-color: rgba(40, 32, 20, 0.12);
+}
+
+.dojo__focusZen-track {
+  width: 100%;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+}
+
+.dojo-scene--night .dojo__focusZen-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dojo__focusZen-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(90, 232, 255, 0.45), rgba(232, 184, 74, 0.65));
+}
+
+.dojo__focusZen-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  text-align: left;
+}
+
+@media (max-width: 420px) {
+  .dojo__focusZen--corner {
+    width: min(11rem, calc(100vw - 2rem - 3.5rem));
+  }
+}
+
 .dojo__calmBand {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.65rem;
-  margin-top: 3rem;
-  padding: 0 1rem 1rem;
+  margin-top: 0;
+  padding: 0 0.5rem 0.5rem;
+  width: 100%;
+  max-width: min(36rem, 100%);
 }
 
 .dojo__calmBand-label {
@@ -650,6 +744,21 @@
     grid-template-columns: minmax(10.25rem, 13rem) minmax(0, 1fr);
     gap: 1.35rem 2rem;
     align-items: start;
+  }
+
+  .dojo__introBand--calm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dojo__introBand--calm .dojo__header--calm {
+    text-align: center;
+    margin-inline: auto;
+  }
+
+  .dojo__introBand--calm .dojo__title {
+    justify-content: center;
   }
 
   .dojo__meterAside {
