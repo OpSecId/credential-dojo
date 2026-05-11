@@ -283,6 +283,13 @@ export default function AppShell() {
           </div>
           {narrowViewport ? <NinjaProfileMenu embedded /> : null}
         </header>
+        <div
+          className={`app-shell__mainBrand${isHomePath ? ' app-shell__mainBrand--home' : ''}`}
+          aria-label="Home and current page"
+        >
+          <HomeLogoLink className="app-shell__homeLogo" />
+          <span className="app-shell__mainBrandTitle">{pageTitle}</span>
+        </div>
         <div className="app-shell__mainInner" id="app-shell-main" tabIndex={-1}>
           <Outlet />
         </div>
