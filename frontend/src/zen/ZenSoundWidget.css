@@ -84,6 +84,16 @@
   color: var(--muted, #8a92a8);
 }
 
+.zen-sound__state {
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+.zen-sound__state--idle {
+  opacity: 0.72;
+}
+
 .zen-sound__panel {
   width: 100%;
   margin-top: 0.15rem;

@@ -288,9 +288,7 @@ export default function HomePage() {
           </h1>
           {calmLanding ? (
             <p className="dojo__lede dojo__lede--calm">
-              Practice <strong>W3C Verifiable Credentials</strong> in a compact, guided UI—hands-on demos and
-              inspection tools in the browser, without enterprise setup noise. Dojo vocabulary is optional color:{' '}
-              <Link to="/lexicon">open the Lexicon</Link> when you want each metaphor tied back to VC concepts.
+              <strong>W3C Verifiable Credentials</strong> in the browser—guided demos and inspection, distilled.
             </p>
           ) : (
             <p className="dojo__lede">

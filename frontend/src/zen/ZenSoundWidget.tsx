@@ -66,7 +66,7 @@ export default function ZenSoundWidget() {
           onClick={togglePlay}
           aria-pressed={playing}
           aria-labelledby={labelId}
-          title={playing ? 'Pause zen pad' : 'Play calm zen pad (generated in browser)'}
+          title={playing ? 'Pause calm sound' : 'Play calm sound (browser-generated zen pad)'}
         >
           <span className="zen-sound__icon" aria-hidden>
             {playing ? '◌' : '〰'}
@@ -83,7 +83,10 @@ export default function ZenSoundWidget() {
         </button>
       </div>
       <p id={labelId} className="zen-sound__label">
-        {playing ? 'Zen pad' : 'Calm sound'}
+        Calm sound
+        <span className={`zen-sound__state${playing ? '' : ' zen-sound__state--idle'}`}>
+          {playing ? ' · on' : ' · off'}
+        </span>
       </p>
       {expanded ? (
         <div className="zen-sound__panel">
