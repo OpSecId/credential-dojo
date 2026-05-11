@@ -255,14 +255,15 @@
   min-height: 100dvh;
 }
 
-/* Mobile top bar — sticky (in flow) so PWA viewport isn’t covered by fixed chrome */
+/* Mobile top bar — sticky, light chrome (inner routes are full “dojo scene” layouts) */
 .app-shell__topbar {
   display: flex;
   align-items: center;
   gap: 0.65rem;
   position: sticky;
   top: 0;
-  z-index: 200;
+  /* Below NinjaProfileMenu (220); drawer/backdrop stay above when open */
+  z-index: 180;
   min-height: calc(2.55rem + env(safe-area-inset-top, 0px));
   padding: env(safe-area-inset-top, 0px) 0.6rem 0.35rem 0.6rem;
   margin: 0;
@@ -306,51 +307,54 @@
   text-overflow: ellipsis;
 }
 
-.app-shell__topbarActions {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-}
+/* Narrow viewports: calmer bar, room for fixed profile control, less duplicate chrome */
+@media (max-width: 899px) {
+  .app-shell__topbar {
+    gap: 0.45rem;
+    min-height: calc(2.35rem + env(safe-area-inset-top, 0px));
+    padding: calc(0.38rem + env(safe-area-inset-top, 0px)) max(5.1rem, calc(env(safe-area-inset-right, 0px) + 4.25rem)) 0.38rem 0.55rem;
+    background: linear-gradient(
+      180deg,
+      rgba(7, 9, 16, 0.94) 0%,
+      rgba(7, 9, 16, 0.78) 55%,
+      rgba(7, 9, 16, 0.35) 100%
+    );
+    border-bottom: 1px solid rgba(201, 168, 110, 0.14);
+    backdrop-filter: blur(14px) saturate(1.06);
+  }
 
-.app-shell__topbarAction {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.05rem;
-  height: 2.05rem;
-  border-radius: 10px;
-  border: 1px solid rgba(90, 232, 255, 0.16);
-  background: rgba(12, 18, 32, 0.55);
-  color: var(--shell-cyan);
-  text-decoration: none;
-  font-family: var(--font-display, 'Shippori Mincho', serif);
-  font-weight: 800;
-  letter-spacing: 0.02em;
-}
-
-.app-shell__topbarAction:hover {
-  border-color: rgba(90, 232, 255, 0.35);
-  background: rgba(90, 232, 255, 0.08);
-  color: var(--shell-heading);
-}
-
-.app-shell__topbarAction:focus-visible {
-  outline: 2px solid var(--shell-accent);
-  outline-offset: 2px;
-}
-
-.app-shell__topbarMeta {
-  font-size: 0.72rem;
-  color: var(--shell-muted);
-  max-width: 42vw;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-@media (max-width: 420px) {
-  .app-shell__topbarMeta {
+  .app-shell__topbar--home .app-shell__topbarTitle {
     display: none;
+  }
+
+  .app-shell__topbarTitle {
+    font-family: var(--font-body, 'Zen Kaku Gothic New', system-ui, sans-serif);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(184, 192, 212, 0.88);
+  }
+
+  .app-shell__homeLogo,
+  .app-shell__menuBtn {
+    border-color: rgba(201, 168, 110, 0.22);
+    background: rgba(8, 11, 18, 0.52);
+  }
+
+  .app-shell__homeLogo:hover,
+  .app-shell__menuBtn:hover {
+    border-color: rgba(232, 184, 74, 0.38);
+    background: rgba(14, 18, 28, 0.62);
+  }
+
+  .app-shell__drawer {
+    border-right-color: rgba(201, 168, 110, 0.12);
+  }
+
+  .app-shell__drawerClose {
+    border-color: rgba(201, 168, 110, 0.22);
+    background: rgba(8, 11, 18, 0.52);
   }
 }
 

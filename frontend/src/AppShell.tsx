@@ -198,6 +198,7 @@ export default function AppShell() {
 
   const closeDrawer = () => setDrawerOpen(false)
   const hasProfile = Boolean(profile)
+  const isHomePath = location.pathname === '/'
 
   const railFootHint = hasProfile ? (
     <span>Use the profile menu (top right) to switch profiles, sign out, or edit.</span>
@@ -262,7 +263,7 @@ export default function AppShell() {
       </div>
 
       <div className="app-shell__main">
-        <header className="app-shell__topbar">
+        <header className={`app-shell__topbar${isHomePath ? ' app-shell__topbar--home' : ''}`}>
           <HomeLogoLink className="app-shell__homeLogo" />
           <button
             type="button"
@@ -277,17 +278,6 @@ export default function AppShell() {
           <div className="app-shell__topbarTitle" title={pageTitle}>
             {pageTitle}
           </div>
-          <nav className="app-shell__topbarActions" aria-label="Quick actions">
-            <Link className="app-shell__topbarAction" to="/kensa" title="Kensa">
-              検
-            </Link>
-            <Link className="app-shell__topbarAction" to="/json-explorer" title="Shinbi">
-              審
-            </Link>
-            <Link className="app-shell__topbarAction" to="/lexicon" title="Lexicon">
-              語
-            </Link>
-          </nav>
         </header>
         <div className="app-shell__mainInner" id="app-shell-main" tabIndex={-1}>
           <Outlet />
