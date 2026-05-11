@@ -70,6 +70,78 @@
   --accent-border: rgba(139, 69, 20, 0.28);
 }
 
+/* --- Landing (home): quieter motion and fewer stacked effects --- */
+.dojo-scene--landing .dojo-scene__moon {
+  animation: none;
+  opacity: 0.38;
+}
+
+.dojo-scene--landing.dojo-scene--night .dojo-scene__moon {
+  box-shadow:
+    0 0 28px rgba(255, 230, 180, 0.16),
+    inset -6px -5px 16px rgba(0, 0, 0, 0.14);
+}
+
+.dojo-scene--landing .dojo-scene__bg {
+  transform: none !important;
+  transition: none !important;
+}
+
+.dojo-scene--landing.dojo-scene--night .dojo-scene__bg {
+  background:
+    radial-gradient(ellipse 90% 55% at 50% 100%, rgba(50, 90, 120, 0.12), transparent 58%),
+    linear-gradient(168deg, #05070d 0%, #0c1222 42%, #080b12 100%);
+}
+
+.dojo-scene--landing.dojo-scene--day .dojo-scene__bg {
+  background:
+    radial-gradient(90% 50% at 50% 0%, rgba(255, 248, 230, 0.5), transparent 52%),
+    linear-gradient(180deg, #f5ebe0 0%, #e8dfd2 100%);
+}
+
+.dojo-scene--landing .dojo-scene__embers {
+  animation: none;
+  opacity: 0.12;
+}
+
+.dojo-scene--landing.dojo-scene--day .dojo-scene__embers {
+  opacity: 0.06;
+}
+
+.dojo-scene--landing .dojo-scene__grid {
+  opacity: 0.16;
+}
+
+.dojo-scene--landing.dojo-scene--night .dojo-scene__grid {
+  opacity: 0.2;
+}
+
+.dojo-scene--landing.dojo-scene--night::after {
+  animation: none;
+  opacity: 0.06;
+  transform: none;
+}
+
+.dojo-scene--landing .dojo-lantern__glow {
+  animation: none;
+  opacity: 0.42;
+}
+
+.dojo-scene--landing .dojo__titleLine--accent::after {
+  animation: none;
+  opacity: 0.62;
+}
+
+.dojo-scene--landing.dojo-scene--night .dojo__titleLine {
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.32);
+}
+
+.dojo-scene--landing.dojo-scene--night .dojo__titleLine--accent {
+  text-shadow:
+    0 0 16px rgba(90, 232, 255, 0.08),
+    0 2px 14px rgba(0, 0, 0, 0.38);
+}
+
 .dojo-scene__moon {
   position: fixed;
   top: 4.5rem;

@@ -92,7 +92,6 @@ export default function HomePage() {
   const { reportFocusMeter, clearHomeFocus } = useNoviceIdle()
   const { state: journeyState, pendingStart, startJourney, clearPendingStart, reportLearningFocus } = useJourney()
   const pouchGradId = useId().replace(/:/g, '')
-  const sceneRef = useRef<HTMLDivElement>(null)
   const strikeTimerRef = useRef<number>(0)
   const [theme, setTheme] = useState<DojoTheme>(readStoredTheme)
   const [personas, setPersonas] = useState<readonly PersonaPublic[] | null>(null)
@@ -195,27 +194,6 @@ export default function HomePage() {
     }
   }, [personas, selectedPersonaId])
 
-  const onSceneMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (reduceMotion) return
-      const el = sceneRef.current
-      if (!el) return
-      const r = el.getBoundingClientRect()
-      const x = (e.clientX - r.left) / r.width - 0.5
-      const y = (e.clientY - r.top) / r.height - 0.5
-      el.style.setProperty('--mx', String(x))
-      el.style.setProperty('--my', String(y))
-    },
-    [reduceMotion],
-  )
-
-  const leaveScene = useCallback(() => {
-    const el = sceneRef.current
-    if (!el) return
-    el.style.setProperty('--mx', '0')
-    el.style.setProperty('--my', '0')
-  }, [])
-
   const toggleTheme = () => {
     setTheme((t) => (t === 'night' ? 'day' : 'night'))
   }
@@ -286,11 +264,8 @@ export default function HomePage() {
 
   return (
     <div
-      ref={sceneRef}
-      className={`dojo-scene dojo-scene--${theme}`}
+      className={`dojo-scene dojo-scene--landing dojo-scene--${theme}`}
       data-reduce-motion={reduceMotion ? 'true' : undefined}
-      onMouseMove={onSceneMove}
-      onMouseLeave={leaveScene}
     >
       <div className="dojo-scene__moon" aria-hidden />
       <div className="dojo-scene__bg" aria-hidden />
@@ -345,13 +320,8 @@ export default function HomePage() {
               <span className="dojo__titleLine dojo__titleLine--accent">Dojo</span>
             </h1>
             <p className="dojo__lede">
-              Credential management platform centered on{' '}
-              <strong>W3C Verifiable Credentials</strong>: operators shape{' '}
-              <strong>Tehon</strong> and <strong>Katachi</strong> into <strong>Menkyo</strong>; agents open flows with{' '}
-              <strong>Teawase</strong> handshakes and run <strong>Randori</strong>{' '}
-              exchanges; holders stage <strong>Enbu</strong> for verifiers under{' '}
-              <strong>Kata</strong> suites. Artifacts live in <strong>Kinchaku</strong>, the
-              built-in wallet.
+              Credential operations for <strong>W3C Verifiable Credentials</strong>. Dojo names
+              (Tehon, Menkyo, Enbu, …) are metaphors for real artifacts and steps in this UI.
             </p>
             {!ninjaProfile ? (
               <p className="dojo__heroCtas" aria-label="Get started">

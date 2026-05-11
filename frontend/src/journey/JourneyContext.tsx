@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useDebouncedClientPersist } from '../lib/useDebouncedClientPersist'
 import { readNinjaProfile } from '../ninjaProfileStorage'
 import {
   clearJourneyPendingStart,
@@ -46,9 +47,7 @@ export function JourneyProvider({ children }: { children: ReactNode }) {
       setState((prev) => {
         const hasProfile = readNinjaProfile() !== null
         if (!prev.started || !hasProfile) {
-          const next = { ...prev, lastTickMs: now }
-          saveJourney(next)
-          return next
+          return { ...prev, lastTickMs: now }
         }
         const delta = Math.max(0, Math.min(MAX_DELTA_MS, now - prev.lastTickMs))
         if (delta < 50) return { ...prev, lastTickMs: now }
@@ -62,7 +61,7 @@ export function JourneyProvider({ children }: { children: ReactNode }) {
         const gainIssuer = gainBase * route.issuer
         const gainVerifier = gainBase * route.verifier
         const gainWallet = gainBase * route.wallet
-        const next: JourneyState = {
+        return {
           ...prev,
           lastTickMs: now,
           learningXp: prev.learningXp + gainBase * 1.2,
@@ -70,8 +69,6 @@ export function JourneyProvider({ children }: { children: ReactNode }) {
           verifierTokens: prev.verifierTokens + gainVerifier,
           walletTokens: prev.walletTokens + gainWallet,
         }
-        saveJourney(next)
-        return next
       })
     },
     [loc.pathname],
@@ -91,6 +88,8 @@ export function JourneyProvider({ children }: { children: ReactNode }) {
     document.addEventListener('visibilitychange', onVis)
     return () => document.removeEventListener('visibilitychange', onVis)
   }, [tick])
+
+  useDebouncedClientPersist(state, saveJourney, 5000)
 
   const startJourney = useCallback(() => {
     const now = Date.now()

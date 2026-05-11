@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from 'react'
 import { useLocation } from 'react-router-dom'
+import { useDebouncedClientPersist } from '../lib/useDebouncedClientPersist'
 import { readNinjaProfile } from '../ninjaProfileStorage'
 import { applyIdleTick, previewInsightPerSec } from './noviceIdleEngine'
 import { loadNoviceIdle, saveNoviceIdle } from './noviceIdleStorage'
@@ -54,17 +55,13 @@ export function NoviceIdleProvider({ children }: { children: ReactNode }) {
   const pathname = location.pathname
   const [state, setState] = useState<NoviceIdlePersisted>(() => loadNoviceIdle())
   const [panelOpen, setPanelOpen] = useState(false)
-  /** Bumps when home reports focus so derived rates re-render without waiting for the 1s tick. */
-  const [focusEpoch, setFocusEpoch] = useState(0)
   const focusRef = useRef<FocusRef>({ homeFocus01: 0, onHome: false })
 
   const flushTick = useCallback(
     (now: number) => {
       setState((prev) => {
         const env = buildEnv(pathname, focusRef)
-        const next = applyIdleTick(prev, now, env)
-        saveNoviceIdle(next)
-        return next
+        return applyIdleTick(prev, now, env)
       })
     },
     [pathname],
@@ -85,24 +82,25 @@ export function NoviceIdleProvider({ children }: { children: ReactNode }) {
     return () => document.removeEventListener('visibilitychange', onVis)
   }, [flushTick])
 
+  useDebouncedClientPersist(state, saveNoviceIdle, 5000)
+
   const rank = useMemo(() => computeRankProgress(state.totalInsight), [state.totalInsight])
 
+  /** Rate text refreshes on idle ticks (~1s); `focusRef` is read here so accrual stays correct between ticks. */
   const insightPerSec = useMemo(() => {
     const env = buildEnv(pathname, focusRef)
     return previewInsightPerSec(env, state.lessonsDone, state.totalInsight, env.hasNinjaProfile)
-  }, [pathname, state.lessonsDone, state.totalInsight, state.lastTickMs, focusEpoch])
+  }, [pathname, state.lessonsDone, state.totalInsight, state.lastTickMs])
 
   const reportFocusMeter = useCallback((focus0to100: number) => {
     focusRef.current = {
       homeFocus01: Math.max(0, Math.min(1, focus0to100 / 100)),
       onHome: true,
     }
-    setFocusEpoch((e) => e + 1)
   }, [])
 
   const clearHomeFocus = useCallback(() => {
     focusRef.current = { homeFocus01: focusRef.current.homeFocus01, onHome: false }
-    setFocusEpoch((e) => e + 1)
   }, [])
 
   const togglePanel = useCallback(() => setPanelOpen((o) => !o), [])
