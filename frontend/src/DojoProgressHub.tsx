@@ -1,6 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { DEMO_PERSONAS_OFFLINE } from './demoPersonas'
 import { useJourney } from './journey/JourneyContext'
 import {
   computePerkState,
@@ -29,10 +28,6 @@ export default function DojoProgressHub() {
     verifierXp: noviceState.verifierXp,
     verifiedCount: noviceState.verifiedCount,
   })
-
-  const schoolLabel = profile
-    ? DEMO_PERSONAS_OFFLINE.find((p) => p.id === profile.schoolId)?.label ?? profile.schoolId
-    : ''
 
   useEffect(() => {
     if (!open) return
@@ -100,22 +95,12 @@ export default function DojoProgressHub() {
               <p className="dojo-hub__sub">
                 Rank, parallel journey resources, practice tracks, and achievements — one place.
               </p>
-              {profile ? (
-                <p className="dojo-hub__profile">
-                  Operator <strong>{profile.codename.trim() || 'Anonymous'}</strong>
-                  {profile.schoolId ? (
-                    <>
-                      {' '}
-                      · <strong>{schoolLabel}</strong>
-                    </>
-                  ) : null}
-                </p>
-              ) : (
+              {!profile ? (
                 <p className="dojo-hub__profile dojo-hub__profile--muted">
                   No ninja profile —{' '}
                   <Link to="/create-ninja-profile">create one</Link> to sign into the shell and boost some bonuses.
                 </p>
-              )}
+              ) : null}
             </div>
             <button type="button" className="dojo-hub__close" onClick={() => setOpen(false)} aria-label="Close panel">
               ×

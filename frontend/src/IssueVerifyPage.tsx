@@ -231,14 +231,7 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
                   <Link to="/create-ninja-profile">create one</Link> to issue under your operator identity, or stay on
                   manual Kasa.
                 </p>
-              ) : issuerSource === 'ninja' ? (
-                <p className="issueVerify__profileHint">
-                  Using <strong>{ninjaProfile.codename}</strong> · school{' '}
-                  <strong>{list.find((p) => p.id === ninjaProfile.schoolId)?.label ?? ninjaProfile.schoolId}</strong>{' '}
-                  (<span lang="ja">{list.find((p) => p.id === ninjaProfile.schoolId)?.labelJa}</span>).{' '}
-                  <Link to="/create-ninja-profile">Edit profile</Link>.
-                </p>
-              ) : (
+              ) : issuerSource === 'ninja' ? null : (
                 <p className="issueVerify__profileHint">
                   Manual mode: Kasa chips below set the issuer only. Your ninja profile is not applied until you
                   switch to <strong>Ninja profile</strong>.
