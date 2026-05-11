@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "generate:og": "node ./scripts/generate-og-png.mjs",
-    "build": "npm run generate:og && tsc -b && vite build",
+    "generate:app-icon": "node ./scripts/generate-app-icon-png.mjs",
+    "build": "npm run generate:og && npm run generate:app-icon && tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "sh -c \"exec serve dist -s -p ${PORT:-3000}\""
@@ -30,6 +31,7 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
     "pngjs": "^7.0.0",
+    "sharp": "^0.34.5",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
     "vite": "^8.0.10"

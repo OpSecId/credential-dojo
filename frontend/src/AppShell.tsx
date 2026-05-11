@@ -3,7 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import './AppShell.css'
 import { useNinjaProfileSnapshot } from './useNinjaProfileSnapshot'
 
-const BRAND_MARK_SRC = `${import.meta.env.BASE_URL}favicon.svg?v=3`
+const BRAND_MARK_SRC = `${import.meta.env.BASE_URL}favicon.svg?v=4`
 
 function HomeLogoLink({
   className,
