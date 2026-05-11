@@ -360,7 +360,7 @@ export default function HomePage() {
               {pendingStart
                 ? 'Profile created — begin your parallel resource journey now.'
                 : 'Begin your parallel resource journey anytime. '}
-              Open <strong>Your dojo</strong> (bottom-right) for rank, journey resources, practice tracks, and
+              Open <strong>Your dojo</strong> in the site footer for rank, journey resources, practice tracks, and
               achievements — tutorial-style milestones unlock as you explore.
               <button type="button" className="dojo__journeyStart-btn" onClick={startJourney}>
                 Start journey

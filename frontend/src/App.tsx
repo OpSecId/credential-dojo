@@ -11,9 +11,6 @@ import KensaPage from './KensaPage'
 import KinchakuPage from './KinchakuPage'
 import LexiconPage from './LexiconPage'
 import TejunViewerPage from './TejunViewerPage'
-import './dojoFloatingDock.css'
-import DojoProgressHub from './DojoProgressHub'
-import ZenSoundWidget from './zen/ZenSoundWidget'
 import { JourneyProvider } from './journey/JourneyContext'
 import { NoviceIdleProvider } from './novice/NoviceIdleContext'
 
@@ -38,14 +35,6 @@ export default function App() {
             <Route path="/lexicon" element={<LexiconPage />} />
           </Route>
         </Routes>
-        <div className="dojo-floating-dock" aria-label="Floating tools">
-          <div className="dojo-floating-dock__west">
-            <ZenSoundWidget />
-          </div>
-          <div className="dojo-floating-dock__east">
-            <DojoProgressHub />
-          </div>
-        </div>
       </JourneyProvider>
     </NoviceIdleProvider>
   )

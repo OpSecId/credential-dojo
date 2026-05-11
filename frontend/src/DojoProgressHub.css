@@ -1,7 +1,7 @@
 /* Unified rank + journey + achievements hub — bottom-right, zen card chrome */
 
 .dojo-hub-dock {
-  /* Positioned by `.dojo-floating-dock` */
+  /* Lives in `.app-shell__appFooter` (AppShell) */
   position: relative;
   z-index: 0;
   right: auto;

@@ -1,5 +1,5 @@
 .zen-sound {
-  /* Positioned by `.dojo-floating-dock` (full-width bottom band) */
+  /* Lives in `.app-shell__appFooter` (AppShell) */
   position: relative;
   z-index: 0;
   left: auto;
