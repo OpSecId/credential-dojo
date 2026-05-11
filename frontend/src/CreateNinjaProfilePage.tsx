@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import './App.css'
 import './CreateNinjaProfilePage.css'
 import { DEMO_PERSONAS_OFFLINE, type PersonaPublic, type PersonasPayload } from './demoPersonas'
+import { generateNinjaCodename } from './ninjaCodenameGenerator'
 import {
   clearNinjaProfile,
   createOrUpdateNinjaProfile,
@@ -23,6 +24,13 @@ function schoolKataHeadline(p: PersonaPublic): string {
 const WIZARD_STEPS = ['welcome', 'codename', 'school', 'review'] as const
 type WizardStep = (typeof WIZARD_STEPS)[number]
 
+function initWizardSnapshot(): { codename: string; schoolId: string } {
+  const e = readNinjaProfile()
+  const schoolId = e && isValidSchoolId(e.schoolId) ? e.schoolId : 'ed-ryu'
+  const codename = e?.codename?.trim() ? e.codename.trim() : generateNinjaCodename()
+  return { codename, schoolId }
+}
+
 export default function CreateNinjaProfilePage() {
   const navigate = useNavigate()
   const [personas, setPersonas] = useState<readonly PersonaPublic[] | null>(null)
@@ -30,16 +38,9 @@ export default function CreateNinjaProfilePage() {
   const [passkey, setPasskey] = useState(() => readPasskey())
   const [passkeyMsg, setPasskeyMsg] = useState<string | null>(null)
 
-  const [codename, setCodename] = useState(existing?.codename ?? '')
-  const [schoolId, setSchoolId] = useState(
-    existing && isValidSchoolId(existing.schoolId) ? existing.schoolId : 'ed-ryu',
-  )
-
-  const initialSnapshot = useRef({
-    codename: existing?.codename ?? '',
-    schoolId:
-      existing && isValidSchoolId(existing.schoolId) ? existing.schoolId : 'ed-ryu',
-  })
+  const initialSnapshot = useRef(initWizardSnapshot())
+  const [codename, setCodename] = useState(initialSnapshot.current.codename)
+  const [schoolId, setSchoolId] = useState(initialSnapshot.current.schoolId)
   const [stepIndex, setStepIndex] = useState(0)
 
   const isDirty = useMemo(() => {
@@ -182,17 +183,45 @@ export default function CreateNinjaProfilePage() {
                 </p>
                 <label className="ninjaProfile__field">
                   <span className="ninjaProfile__label">Codename</span>
-                  <input
-                    className="ninjaProfile__input"
-                    name="codename"
-                    autoComplete="nickname"
-                    maxLength={48}
-                    placeholder="e.g. Paper Crane"
-                    value={codename}
-                    onChange={(ev) => setCodename(ev.target.value)}
-                    autoFocus
-                  />
-                  <span className="ninjaProfile__hint">Leave blank to use “Anonymous ninja”.</span>
+                  <div className="ninjaProfile__codenameRow">
+                    <input
+                      className="ninjaProfile__input ninjaProfile__input--codename"
+                      name="codename"
+                      autoComplete="nickname"
+                      maxLength={48}
+                      placeholder="e.g. Paper Crane"
+                      value={codename}
+                      onChange={(ev) => setCodename(ev.target.value)}
+                      autoFocus
+                    />
+                    <button
+                      type="button"
+                      className="ninjaProfile__generateCodename"
+                      onClick={() => setCodename(generateNinjaCodename())}
+                      title="Generate another codename"
+                      aria-label="Generate new codename"
+                    >
+                      <svg
+                        className="ninjaProfile__generateCodenameIcon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden
+                      >
+                        <path
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                          stroke="currentColor"
+                          strokeWidth="1.75"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <span className="ninjaProfile__hint">
+                    A name is suggested for new profiles. Clear the field to save as “Anonymous
+                    ninja”.
+                  </span>
                 </label>
                 <div className="ninjaProfile__wizardActions">
                   <button type="button" className="ninjaProfile__ghost" onClick={handleCancel}>
