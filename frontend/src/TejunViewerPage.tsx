@@ -12,7 +12,9 @@ import ReactFlow, {
   type Node,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
+import './App.css'
 import './TejunViewerPage.css'
+import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { EXPEDITION_STEPS } from './expeditionSteps'
 
 type LaneKey = 'define' | 'issue' | 'present' | 'inspect' | 'operate'
@@ -42,6 +44,7 @@ function laneForStepIndex(i: number): LaneKey {
 }
 
 export default function TejunViewerPage() {
+  const { theme } = useDojoLandingTheme()
   const [selectedId, setSelectedId] = useState('s0')
 
   const { nodes, edges } = useMemo(() => {
@@ -90,28 +93,29 @@ export default function TejunViewerPage() {
   }
 
   return (
-    <div className="dojo-scene dojo-scene--night tejun-viewer">
+    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen`}>
       <div className="dojo-scene__moon" aria-hidden />
       <div className="dojo-scene__bg" aria-hidden />
       <div className="dojo-scene__grid" aria-hidden />
 
-      <header className="tejun-viewer__header">
-        <p className="tejun-viewer__eyebrow">Tejun Viewer</p>
-        <h1 className="tejun-viewer__title">Expedition Flow Map</h1>
-        <p className="tejun-viewer__intro">
-          Interactive runbook view of the expedition narrative, from Tehon through Tejun.
-        </p>
-        <nav className="tejun-viewer__nav">
-          <Link className="tejun-viewer__back" to="/" title="Back Home">
-            ← Back Home
-          </Link>
-          <Link className="tejun-viewer__back" to="/expedition">
-            Expedition
-          </Link>
-        </nav>
-      </header>
+      <div className="tejun-viewer dojoZenPage dojoZenPage--wide">
+        <header className="dojoZenPage__header">
+          <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
+          <h1 className="dojoZenPage__title">Tejun viewer</h1>
+          <p className="dojoZenPage__intro">
+            Interactive runbook view of the expedition narrative, from Tehon through Tejun.
+          </p>
+          <nav className="dojoZenPage__nav" aria-label="Tejun viewer navigation">
+            <Link className="dojoZenPage__back" to="/" title="Back Home">
+              ← Back Home
+            </Link>
+            <Link className="dojoZenPage__back" to="/expedition">
+              Expedition
+            </Link>
+          </nav>
+        </header>
 
-      <div className="tejun-viewer__layout">
+        <div className="tejun-viewer__layout">
         <aside className="tejun-viewer__details dojo-augmented dojo-augmented--panel" data-augmented-ui="tl-clip br-clip border">
           <p className="tejun-viewer__detailsLabel">Selected Step</p>
           {selected ? (
@@ -153,6 +157,7 @@ export default function TejunViewerPage() {
             <Controls />
           </ReactFlow>
         </section>
+      </div>
       </div>
     </div>
   )

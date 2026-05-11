@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import './App.css'
 import './ExpeditionPage.css'
+import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { EXPEDITION_STEPS } from './expeditionSteps'
 import { addWalletItem } from './walletInventory'
 
@@ -20,6 +22,7 @@ function phaseForStep(i: number): string {
 }
 
 export default function ExpeditionPage() {
+  const { theme } = useDojoLandingTheme()
   const [index, setIndex] = useState(0)
   const [schoolId, setSchoolId] = useState<(typeof SCHOOL_CHOICES)[number]['id']>('ed-ryu')
   const [wallet, setWallet] = useState<string[]>([])
@@ -122,35 +125,36 @@ export default function ExpeditionPage() {
   }
 
   return (
-    <div className="dojo-scene dojo-scene--night expedition">
+    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen`}>
       <div className="dojo-scene__moon" aria-hidden />
       <div className="dojo-scene__bg" aria-hidden />
       <div className="dojo-scene__grid" aria-hidden />
 
-      <header className="expedition__header">
-        <p className="expedition__eyebrow">Story Adventure</p>
-        <h1 className="expedition__title">Dojo Expedition</h1>
-        <p className="expedition__intro">
-          March through a credential-combat campaign: earn Menkyo, answer Shōkan challenges, and keep
-          Kinchaku stocked after every step.
-        </p>
-        <nav className="expedition__nav">
-          <Link className="expedition__back" to="/" title="Back Home">
-            ← Back Home
-          </Link>
-          <Link className="expedition__back" to="/lexicon">
-            Lexicon
-          </Link>
-          <Link className="expedition__back" to="/tejun-viewer">
-            Tejun viewer
-          </Link>
-          <Link className="expedition__back" to="/kinchaku">
-            Kinchaku
-          </Link>
-        </nav>
-      </header>
+      <div className="expedition dojoZenPage dojoZenPage--wide">
+        <header className="dojoZenPage__header">
+          <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
+          <h1 className="dojoZenPage__title">Dojo Expedition</h1>
+          <p className="dojoZenPage__intro">
+            Story adventure: march through a credential-combat campaign—earn Menkyo, answer Shōkan challenges, and keep
+            Kinchaku stocked after every step.
+          </p>
+          <nav className="dojoZenPage__nav" aria-label="Expedition navigation">
+            <Link className="dojoZenPage__back" to="/" title="Back Home">
+              ← Back Home
+            </Link>
+            <Link className="dojoZenPage__back" to="/lexicon">
+              Lexicon
+            </Link>
+            <Link className="dojoZenPage__back" to="/tejun-viewer">
+              Tejun viewer
+            </Link>
+            <Link className="dojoZenPage__back" to="/kinchaku">
+              Kinchaku
+            </Link>
+          </nav>
+        </header>
 
-      <section className="expedition__layout">
+        <section className="expedition__layout">
         <aside
           className={`expedition__visual expedition__visual--${phase} dojo-augmented dojo-augmented--panel`}
           data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
@@ -325,6 +329,7 @@ export default function ExpeditionPage() {
           </div>
         </div>
       </section>
+      </div>
     </div>
   )
 }

@@ -4,6 +4,7 @@ import JsonAugWidget from './components/JsonAugWidget'
 import VcEnvelopeRail from './components/VcEnvelopeRail'
 import './App.css'
 import './JsonExplorerPage.css'
+import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { VC_ROOT_EXPLAIN, looksLikeVerifiableCredential } from './utils/vcEnvelope'
 
 const SAMPLE_JSON = `{
@@ -41,6 +42,7 @@ const EXPLAIN_BY_POINTER: Record<string, string> = {
 }
 
 export default function JsonExplorerPage() {
+  const { theme } = useDojoLandingTheme()
   const [raw, setRaw] = useState(SAMPLE_JSON)
   const [applied, setApplied] = useState(SAMPLE_JSON)
   const [parseError, setParseError] = useState<string | null>(null)
@@ -98,28 +100,28 @@ export default function JsonExplorerPage() {
   }, [])
 
   return (
-    <div className="dojo-scene dojo-scene--night json-ex">
+    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen`}>
       <div className="dojo-scene__moon" aria-hidden />
       <div className="dojo-scene__bg" aria-hidden />
       <div className="dojo-scene__grid" aria-hidden />
 
-      <header className="json-ex__hero">
-        <div className="json-ex__heroGlow" aria-hidden />
-        <p className="json-ex__eyebrow">The Credential Dojo · Shinbi</p>
-        <h1 className="json-ex__title">JSON explorer</h1>
-        <p className="json-ex__lede">
-          Parse JSON, skim the augmented tree, and read RFC 6901 pointers with context. For{' '}
-          <strong>Verifiable Credentials</strong>, the top-level keys follow a stable structure—use
-          the rail to jump between slots instantly.
-        </p>
-        <nav className="json-ex__nav" aria-label="Back navigation">
-          <Link className="json-ex__back" to="/" title="Back Home">
-            ← Back Home
-          </Link>
-        </nav>
-      </header>
+      <div className="json-ex dojoZenPage dojoZenPage--wide">
+        <header className="dojoZenPage__header">
+          <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
+          <h1 className="dojoZenPage__title">Shinbi · JSON explorer</h1>
+          <p className="dojoZenPage__intro">
+            Parse JSON, skim the augmented tree, and read RFC 6901 pointers with context. For{' '}
+            <strong>Verifiable Credentials</strong>, the top-level keys follow a stable structure—use
+            the rail to jump between slots instantly.
+          </p>
+          <nav className="dojoZenPage__nav" aria-label="Back navigation">
+            <Link className="dojoZenPage__back" to="/" title="Back Home">
+              ← Back Home
+            </Link>
+          </nav>
+        </header>
 
-      <div className="json-ex__workspace">
+        <div className="json-ex__workspace">
         <aside className={`json-ex__editor${editorOpen ? '' : ' json-ex__editor--collapsed'}`}>
           <div className="json-ex__editorHead">
             <h2 className="json-ex__editorTitle">Source</h2>
@@ -212,6 +214,7 @@ export default function JsonExplorerPage() {
             </>
           )}
         </div>
+      </div>
       </div>
     </div>
   )

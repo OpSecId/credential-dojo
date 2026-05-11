@@ -1,73 +1,8 @@
-.kensa {
-  padding: clamp(0.85rem, 2.2vw, 1.6rem);
-  padding-bottom: 3rem;
-}
-
-.kensa__header,
 .kensa__tabs,
 .kensa__panel {
   max-width: 52rem;
   margin-left: auto;
   margin-right: auto;
-}
-
-.kensa__header {
-  margin-bottom: 0.75rem;
-  padding: 0.85rem 0.95rem 0.9rem;
-  border-radius: 12px;
-  border: 1px solid rgba(90, 232, 255, 0.28);
-  background: linear-gradient(165deg, rgba(14, 20, 36, 0.98), rgba(8, 10, 18, 0.96));
-  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.22);
-}
-
-.kensa__eyebrow {
-  margin: 0 0 0.25rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #94a3bd;
-}
-
-.kensa__title {
-  margin: 0 0 0.35rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3.6vw, 2.25rem);
-  color: #f4f7ff;
-}
-
-.kensa__intro {
-  margin: 0 0 0.75rem;
-  color: #d6deef;
-  line-height: 1.55;
-}
-
-.kensa__intro strong {
-  color: var(--cyber-cyan);
-  font-weight: 600;
-}
-
-.kensa__nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem 1rem;
-}
-
-.kensa__back {
-  color: var(--cyber-cyan);
-  text-decoration: none;
-  font-size: 0.92rem;
-}
-
-.kensa__homeCta {
-  padding: 0.28rem 0.6rem;
-  border: 1px solid rgba(90, 232, 255, 0.35);
-  border-radius: 6px;
-  background: rgba(90, 232, 255, 0.08);
-  font-weight: 700;
-}
-
-.kensa__back:hover {
-  text-decoration: underline;
 }
 
 .kensa__tabs {

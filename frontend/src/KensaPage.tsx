@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './App.css'
 import './KensaPage.css'
+import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { productTerminology } from './terminology'
 import {
   inspectJson,
@@ -163,6 +164,7 @@ const SAMPLE_REQ_CUSTOM = `{
 }`
 
 export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: InspectMode }) {
+  const { theme } = useDojoLandingTheme()
   const [mode, setMode] = useState<InspectMode>(initialMode)
   const [enbuArtifact, setEnbuArtifact] = useState<EnbuArtifact>('response')
   const [requestProtocol, setRequestProtocol] = useState<RequestProtocol>('oid4vp')
@@ -301,46 +303,47 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
   }, [initialMode])
 
   return (
-    <div className="dojo-scene dojo-scene--night kensa">
+    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen`}>
       <div className="dojo-scene__moon" aria-hidden />
       <div className="dojo-scene__bg" aria-hidden />
       <div className="dojo-scene__grid" aria-hidden />
 
-      <header className="kensa__header">
-        <p className="kensa__eyebrow">The Credential Dojo</p>
-        <h1
-          className="kensa__title"
-          title="Inspection (検査): choose Enbu (presentation) or Menkyo (credential) structural checks"
-        >
-          Kensa
-        </h1>
-        <p className="kensa__intro">
-          Two inspection paths: presentation-shaped JSON (<strong>{tEnbu.name}</strong>,{' '}
-          <span lang="ja">{tEnbu.glyph}</span>) versus a single credential (<strong>{tMenkyo.name}</strong>,{' '}
-          <span lang="ja">{tMenkyo.glyph}</span>). Heuristics only—no cryptographic verification on this page.
-        </p>
-        <nav className="kensa__nav">
-          <Link className="kensa__back kensa__homeCta" to="/" title="Back Home">
-            🏠 Back Home
-          </Link>
-          <Link
-            className="kensa__back"
-            to="/lexicon"
-            title="Glossary including Enbu の Kensa and Menkyo の Kensa articles"
+      <div className="kensa dojoZenPage dojoZenPage--wide">
+        <header className="dojoZenPage__header">
+          <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
+          <h1
+            className="dojoZenPage__title"
+            title="Inspection (検査): choose Enbu (presentation) or Menkyo (credential) structural checks"
           >
-            Lexicon
-          </Link>
-          <Link
-            className="kensa__back"
-            to="/json-explorer"
-            title="Shinbi render view: interactive JSON tree with RFC 6901 pointer tooltips"
-          >
-            Shinbi
-          </Link>
-        </nav>
-      </header>
+            Kensa
+          </h1>
+          <p className="dojoZenPage__intro">
+            Two inspection paths: presentation-shaped JSON (<strong>{tEnbu.name}</strong>,{' '}
+            <span lang="ja">{tEnbu.glyph}</span>) versus a single credential (<strong>{tMenkyo.name}</strong>,{' '}
+            <span lang="ja">{tMenkyo.glyph}</span>). Heuristics only—no cryptographic verification on this page.
+          </p>
+          <nav className="dojoZenPage__nav" aria-label="Kensa navigation">
+            <Link className="dojoZenPage__back" to="/" title="Back Home">
+              ← Back Home
+            </Link>
+            <Link
+              className="dojoZenPage__back"
+              to="/lexicon"
+              title="Glossary including Enbu の Kensa and Menkyo の Kensa articles"
+            >
+              Lexicon
+            </Link>
+            <Link
+              className="dojoZenPage__back"
+              to="/json-explorer"
+              title="Shinbi render view: interactive JSON tree with RFC 6901 pointer tooltips"
+            >
+              Shinbi
+            </Link>
+          </nav>
+        </header>
 
-      <div className="kensa__tabs" role="tablist" aria-label="Inspection mode">
+        <div className="kensa__tabs" role="tablist" aria-label="Inspection mode">
         <button
           type="button"
           role="tab"
@@ -575,6 +578,7 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
           </section>
         </div>
       </section>
+      </div>
     </div>
   )
 }

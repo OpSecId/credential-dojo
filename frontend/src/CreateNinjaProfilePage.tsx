@@ -12,6 +12,7 @@ import {
   isValidSchoolId,
   readNinjaProfile,
 } from './ninjaProfileStorage'
+import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { markJourneyPendingStart } from './journey/journeyStorage'
 import { clearPasskey, readPasskey, writePasskey } from './passkey/passkeyStorage'
 import { assertLocalPasskey, createLocalPasskey, isPasskeySupported } from './passkey/webauthn'
@@ -33,6 +34,7 @@ function initWizardSnapshot(): { codename: string; schoolId: string } {
 }
 
 export default function CreateNinjaProfilePage() {
+  const { theme } = useDojoLandingTheme()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const isNewProfile = searchParams.get('new') === '1'
@@ -125,24 +127,24 @@ export default function CreateNinjaProfilePage() {
     codename.trim() === '' ? 'Anonymous ninja' : codename.trim()
 
   return (
-    <div className="dojo-scene dojo-scene--night">
+    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen`}>
       <div className="dojo-scene__moon" aria-hidden />
       <div className="dojo-scene__bg" aria-hidden />
       <div className="dojo-scene__grid" aria-hidden />
 
-      <div className="ninjaProfile">
-        <header className="ninjaProfile__header">
-          <p className="ninjaProfile__eyebrow">The Credential Dojo</p>
-          <h1 className="ninjaProfile__title">
+      <div className="ninjaProfile dojoZenPage">
+        <header className="dojoZenPage__header">
+          <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
+          <h1 className="dojoZenPage__title">
             {isNewProfile ? 'Add ninja profile' : existing ? 'Update ninja profile' : 'Create ninja profile'}
           </h1>
-          <p className="ninjaProfile__intro">
+          <p className="dojoZenPage__intro">
             A short wizard: choose how you appear on the dojo, pick your proof school (kasa), then
             confirm. Everything stays in this browser only. Use <strong>Cancel</strong> on any step to
             leave without saving (you’ll be asked if you changed anything).
           </p>
-          <nav className="ninjaProfile__nav" aria-label="Back navigation">
-            <Link className="ninjaProfile__back" to="/" title="Back Home">
+          <nav className="dojoZenPage__nav" aria-label="Back navigation">
+            <Link className="dojoZenPage__back" to="/" title="Back Home">
               ← Back Home
             </Link>
           </nav>

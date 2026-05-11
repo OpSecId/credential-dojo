@@ -3,51 +3,9 @@
 }
 
 .kinchaku-page__main {
-  width: min(1100px, 100%);
-  margin: 0 auto;
+  width: 100%;
   display: grid;
   gap: 1rem;
-}
-
-.kinchaku-page__header {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: rgba(13, 20, 36, 0.78);
-  padding: 1rem;
-}
-
-.kinchaku-page__eyebrow {
-  margin: 0;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.74rem;
-}
-
-.kinchaku-page__title {
-  margin: 0.25rem 0 0;
-}
-
-.kinchaku-page__intro {
-  margin: 0.45rem 0 0;
-  color: var(--muted);
-}
-
-.kinchaku-page__nav {
-  margin-top: 0.8rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.kinchaku-page__back {
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  text-decoration: none;
-  color: var(--text-h);
-  padding: 0.34rem 0.72rem;
-  font-size: 0.82rem;
-  background: rgba(255, 255, 255, 0.03);
 }
 
 .kinchaku-page__stats {

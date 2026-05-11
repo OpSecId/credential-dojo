@@ -1,59 +1,7 @@
-.expedition {
-  padding: clamp(0.85rem, 2.2vw, 1.6rem);
-  padding-bottom: 3rem;
-}
-
-.expedition__header,
 .expedition__layout {
   max-width: 52rem;
   margin-left: auto;
   margin-right: auto;
-}
-
-.expedition__header {
-  margin-bottom: 0.8rem;
-  padding: 0.9rem 1rem;
-  border-radius: 12px;
-  border: 1px solid var(--border);
-  background: linear-gradient(165deg, rgba(14, 20, 36, 0.92), rgba(8, 10, 18, 0.9));
-}
-
-.expedition__eyebrow {
-  margin: 0 0 0.25rem;
-  font-size: 0.75rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-
-.expedition__title {
-  margin: 0 0 0.35rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3.6vw, 2.25rem);
-  color: var(--text-h);
-}
-
-.expedition__intro {
-  margin: 0 0 0.7rem;
-  color: var(--text);
-}
-
-.expedition__nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem 1rem;
-}
-
-.expedition__back {
-  color: var(--cyber-cyan);
-  text-decoration: none;
-}
-
-.expedition__back:hover {
-  text-decoration: underline;
-}
-
-.expedition__layout {
   display: grid;
   grid-template-columns: minmax(14rem, 17rem) minmax(0, 1fr);
   gap: 0.75rem;

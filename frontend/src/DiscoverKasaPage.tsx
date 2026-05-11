@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './App.css'
 import './DiscoverKasaPage.css'
+import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { DEMO_PERSONAS_OFFLINE, type PersonaPublic, type PersonasPayload } from './demoPersonas'
 
 const PERSONAS_FETCH_MS = 8000
 
 export default function DiscoverKasaPage() {
+  const { theme } = useDojoLandingTheme()
   /** Offline-first: static hosts without `/api` proxy never resolve fetch — avoid a stuck spinner. */
   const [personas, setPersonas] =
     useState<readonly PersonaPublic[]>(DEMO_PERSONAS_OFFLINE)
@@ -57,48 +59,48 @@ export default function DiscoverKasaPage() {
   }
 
   return (
-    <div className="dojo-scene dojo-scene--night">
+    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen`}>
       <div className="dojo-scene__moon" aria-hidden />
       <div className="dojo-scene__bg" aria-hidden />
       <div className="dojo-scene__grid" aria-hidden />
 
-      <div className="kasa">
-        <header className="kasa__header">
-          <p className="kasa__eyebrow">The Credential Dojo</p>
-          <h1 className="kasa__title">Discover Kasa</h1>
-          <p className="kasa__intro">
+      <div className="kasa dojoZenPage dojoZenPage--wide">
+        <header className="dojoZenPage__header">
+          <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
+          <h1 className="dojoZenPage__title">Discover Kasa</h1>
+          <p className="dojoZenPage__intro">
             <strong>Kasa</strong> (笠) is a woven travel hat—here, the shaded porch where we line up
             the <strong>proof schools</strong>. Each school is a persona with its own issuer{' '}
             <code className="kasa__inline">did:key</code> and preferred <strong>Kata</strong>{' '}
             (cryptosuites). Keys are deterministic demo material, not production secrets.
           </p>
-          <nav className="kasa__nav" aria-label="Section">
-            <Link className="kasa__back" to="/" title="Back Home">
+          <nav className="dojoZenPage__nav" aria-label="Section">
+            <Link className="dojoZenPage__back" to="/" title="Back Home">
               ← Back Home
             </Link>
             <Link
-              className="kasa__back"
+              className="dojoZenPage__back"
               to="/create-ninja-profile"
               title="Codename and Kasa (proof school) for the in-browser ninja profile"
             >
               Create ninja profile
             </Link>
             <Link
-              className="kasa__back"
+              className="dojoZenPage__back"
               to="/lexicon"
               title="Glossary: Dojo metaphors vs W3C Verifiable Credentials"
             >
               Lexicon
             </Link>
             <Link
-              className="kasa__back"
+              className="dojoZenPage__back"
               to="/json-explorer"
               title="Shinbi render view: interactive JSON tree with RFC 6901 pointer tooltips"
             >
               Shinbi
             </Link>
             <Link
-              className="kasa__back"
+              className="dojoZenPage__back"
               to="/kensa"
               title="Enbu の Kensa / Menkyo の Kensa — structural inspection"
             >
@@ -176,7 +178,7 @@ export default function DiscoverKasaPage() {
         {note ? <p className="kasa__note">{note}</p> : null}
         <p className="kasa__cta">
           <Link
-            className="kasa__back"
+            className="dojoZenPage__back"
             to="/"
             title="Home: Kata carousel, Kinchaku pouch, and lexicon cards"
           >

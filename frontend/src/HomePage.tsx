@@ -20,12 +20,15 @@ import {
 import { useJourney } from './journey/JourneyContext'
 import { useNoviceIdle } from './novice/NoviceIdleContext'
 import { productTerminology } from './terminology'
+import { useDojoLandingTheme } from './DojoLandingThemeContext'
 
 const SITE = 'https://credential.ninja'
-const THEME_KEY = 'credential-dojo-theme'
 /** Default true — zen landing; user can open full tools & playground */
 const CALM_LANDING_KEY = 'credential-dojo-calm-landing'
 const HELLO_FETCH_MS = 8000
+/** “Training focus” meter — idle decay (much slower than the old ~2 min drain from full). */
+const TRAINING_FOCUS_DECAY_MS = 3500
+const TRAINING_FOCUS_DECAY_STEP = 0.07
 
 function readCalmLandingPref(): boolean {
   try {
@@ -61,18 +64,6 @@ type HelloPayload = {
   terminology?: typeof productTerminology
 }
 
-type DojoTheme = 'night' | 'day'
-
-function readStoredTheme(): DojoTheme {
-  try {
-    const v = localStorage.getItem(THEME_KEY)
-    if (v === 'day' || v === 'night') return v
-  } catch {
-    /* ignore */
-  }
-  return 'night'
-}
-
 function readStoredPersonaId(): string {
   try {
     const n = readNinjaProfile()
@@ -101,11 +92,11 @@ function prefersReducedMotion(): boolean {
 }
 
 export default function HomePage() {
+  const { theme } = useDojoLandingTheme()
   const { reportFocusMeter, clearHomeFocus } = useNoviceIdle()
   const { state: journeyState, pendingStart, startJourney, clearPendingStart, reportLearningFocus } = useJourney()
   const pouchGradId = useId().replace(/:/g, '')
   const strikeTimerRef = useRef<number>(0)
-  const [theme, setTheme] = useState<DojoTheme>(readStoredTheme)
   const [personas, setPersonas] = useState<readonly PersonaPublic[] | null>(null)
   const [personasNote, setPersonasNote] = useState<string | null>(null)
   const [selectedPersonaId, setSelectedPersonaId] = useState(readStoredPersonaId)
@@ -131,14 +122,6 @@ export default function HomePage() {
 
   useEffect(() => {
     try {
-      localStorage.setItem(THEME_KEY, theme)
-    } catch {
-      /* ignore */
-    }
-  }, [theme])
-
-  useEffect(() => {
-    try {
       localStorage.setItem(CALM_LANDING_KEY, calmLanding ? '1' : '0')
     } catch {
       /* ignore */
@@ -148,8 +131,8 @@ export default function HomePage() {
   useEffect(() => {
     if (reduceMotion) return
     const id = window.setInterval(() => {
-      setFocusMeter((f) => Math.max(0, f - 0.6))
-    }, 700)
+      setFocusMeter((f) => Math.max(0, f - TRAINING_FOCUS_DECAY_STEP))
+    }, TRAINING_FOCUS_DECAY_MS)
     return () => clearInterval(id)
   }, [reduceMotion])
 
@@ -215,10 +198,6 @@ export default function HomePage() {
     }
   }, [personas, selectedPersonaId])
 
-  const toggleTheme = () => {
-    setTheme((t) => (t === 'night' ? 'day' : 'night'))
-  }
-
   const selectPersona = (id: string) => {
     setSelectedPersonaId(id)
     setKataIndex(0)
@@ -281,6 +260,7 @@ export default function HomePage() {
             <div
               className="dojo__focusMeter dojo-augmented dojo-augmented--meter"
               data-augmented-ui="tl-clip br-clip border"
+              aria-label={`Training focus meter, ${Math.round(focusMeter)} percent`}
             >
               <div className="dojo__focusMeter-track" role="presentation">
                 <div
@@ -289,8 +269,8 @@ export default function HomePage() {
                 />
               </div>
               <span className="dojo__focusMeter-caption">
-                修業 · training focus — kata, Kinchaku, and school switches feed it; high focus speeds
-                novice-path insight (修 · Novice path)
+                Training focus (修 · shū) — kata, Kinchaku, and school switches raise it; it eases down
+                slowly when idle. Higher levels speed novice-path insight (Novice path).
               </span>
             </div>
           </aside>
@@ -319,8 +299,8 @@ export default function HomePage() {
           </h1>
           {calmLanding ? (
             <p className="dojo__lede dojo__lede--calm">
-              W3C Verifiable Credentials in this UI—Dojo names (Tehon, Menkyo, Enbu, …) map to real artifacts
-              and flows.
+              Practice W3C Verifiable Credentials in a small, guided UI. If terms like Tehon, Menkyo, or Enbu
+              feel opaque, the Lexicon is there when you want them decoded.
             </p>
           ) : (
             <p className="dojo__lede">
@@ -415,28 +395,16 @@ export default function HomePage() {
       <div className="dojo-scene__embers" aria-hidden />
       <div className="dojo-scene__grid" aria-hidden />
 
-      <button
-        type="button"
-        className="dojo-lantern"
-        onClick={toggleTheme}
-        aria-pressed={theme === 'night'}
-        aria-label={
-          theme === 'night'
-            ? 'Switch to day dojo (paper theme)'
-            : 'Switch to night dojo (lantern theme)'
-        }
-      >
-        <span className="dojo-lantern__glow" aria-hidden />
-        <span className="dojo-lantern__body" aria-hidden />
-        <span className="dojo-lantern__label">{theme === 'night' ? '夜' : '昼'}</span>
-      </button>
-
       {calmLanding ? (
-        <div className="dojo__focusZen dojo__focusZen--corner" aria-label="Training focus">
+        <div
+          className="dojo__focusZen dojo__focusZen--corner"
+          aria-label={`Training focus, ${Math.round(focusMeter)} percent`}
+          title="Training focus — rises as you use the dojo; drifts down slowly when idle (修 · shū)."
+        >
           <div className="dojo__focusZen-track" role="presentation">
             <div className="dojo__focusZen-fill" style={{ width: `${Math.round(focusMeter)}%` }} />
           </div>
-          <span className="dojo__focusZen-label">修 · {Math.round(focusMeter)}%</span>
+          <span className="dojo__focusZen-label">Training · {Math.round(focusMeter)}%</span>
         </div>
       ) : null}
 
@@ -444,6 +412,32 @@ export default function HomePage() {
         {calmLanding ? (
           <div className="dojo__calmStage">
             <div className="dojo__introBand dojo__introBand--calm">{renderHomeIntro()}</div>
+            <nav className="dojo__calmActionCards" aria-label="Common flows">
+              <Link
+                className="dojo__calmActionCard"
+                to="/issue-verify"
+                title="Issuance: from Tehon (template) to Menkyo (held credential)"
+              >
+                <span className="dojo__calmActionCard-title" lang="ja">
+                  TehonのMenkyo
+                </span>
+                <span className="dojo__calmActionCard-sub">手本の免許</span>
+                <p className="dojo__calmActionCard-desc">Template (Tehon) to held credential (Menkyo)—issuance.</p>
+                <span className="dojo__calmActionCard-cta">Open issuance</span>
+              </Link>
+              <Link
+                className="dojo__calmActionCard"
+                to="/menkyo"
+                title="Menkyo の Kensa — structural checks on a stored VC"
+              >
+                <span className="dojo__calmActionCard-title" lang="ja">
+                  Menkyo の Kensa
+                </span>
+                <span className="dojo__calmActionCard-sub">免許の検査</span>
+                <p className="dojo__calmActionCard-desc">Structural checks on a VC you already hold.</p>
+                <span className="dojo__calmActionCard-cta">Open Menkyo Kensa</span>
+              </Link>
+            </nav>
             <div className="dojo__calmBand">
               <p className="dojo__calmBand-label">Tools</p>
               <nav className="dojo__calmEssentials" aria-label="Tools and demos">

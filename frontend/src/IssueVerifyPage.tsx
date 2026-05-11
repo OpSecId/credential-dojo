@@ -10,12 +10,14 @@ import {
   readNinjaProfile,
   type NinjaProfile,
 } from './ninjaProfileStorage'
+import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { productTerminology } from './terminology'
 import { addWalletItem } from './walletInventory'
 
 const PREVIEW_CREDENTIAL_ID = 'urn:uuid:00000000-0000-4000-8000-000000000001'
 
 export default function IssueVerifyPage() {
+  const { theme } = useDojoLandingTheme()
   const [personas, setPersonas] = useState<readonly PersonaPublic[] | null>(null)
   const [ninjaProfile, setNinjaProfile] = useState<NinjaProfile | null>(() => readNinjaProfile())
   const [issuerSource, setIssuerSource] = useState<'manual' | 'ninja'>(() =>
@@ -119,33 +121,34 @@ export default function IssueVerifyPage() {
   const tInspect = productTerminology.credentialInspection
 
   return (
-    <div className="dojo-scene dojo-scene--night issueVerify">
+    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen`}>
       <div className="dojo-scene__moon" aria-hidden />
       <div className="dojo-scene__bg" aria-hidden />
       <div className="dojo-scene__grid" aria-hidden />
 
-      <header className="issueVerify__header">
-        <p className="issueVerify__eyebrow">The Credential Dojo</p>
-        <h1 className="issueVerify__title">Issue &amp; verify</h1>
-        <p className="issueVerify__intro">
-          Mint a <strong>{tCred.name}</strong>-shaped demo JSON from a proof school (<strong>Kasa</strong>), then run
-          the same structural checks as <strong>{tInspect.name}</strong> — still no cryptographic verification, only
-          shape and field heuristics.
-        </p>
-        <nav className="issueVerify__nav" aria-label="Related pages">
-          <Link className="issueVerify__back" to="/" title="Back Home">
-            ← Home
-          </Link>
-          <Link className="issueVerify__back" to="/menkyo" title="Open full Menkyo inspection (Kensa)">
-            {tInspect.name} (Kensa) →
-          </Link>
-          <Link className="issueVerify__back" to="/discover-kasa" title="Issuer personas and did:key">
-            Discover Kasa
-          </Link>
-        </nav>
-      </header>
+      <div className="issueVerify dojoZenPage dojoZenPage--wide">
+        <header className="dojoZenPage__header">
+          <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
+          <h1 className="dojoZenPage__title">Issue &amp; verify</h1>
+          <p className="dojoZenPage__intro">
+            Mint a <strong>{tCred.name}</strong>-shaped demo JSON from a proof school (<strong>Kasa</strong>), then run
+            the same structural checks as <strong>{tInspect.name}</strong> — still no cryptographic verification, only
+            shape and field heuristics.
+          </p>
+          <nav className="dojoZenPage__nav" aria-label="Related pages">
+            <Link className="dojoZenPage__back" to="/" title="Back Home">
+              ← Back Home
+            </Link>
+            <Link className="dojoZenPage__back" to="/menkyo" title="Open full Menkyo inspection (Kensa)">
+              {tInspect.name} (Kensa)
+            </Link>
+            <Link className="dojoZenPage__back" to="/discover-kasa" title="Issuer personas and did:key">
+              Discover Kasa
+            </Link>
+          </nav>
+        </header>
 
-      <section
+        <section
         className="issueVerify__panel dojo-augmented dojo-augmented--panel"
         data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
       >
@@ -318,6 +321,7 @@ export default function IssueVerifyPage() {
           <Link to="/kensa">Kensa · Enbu</Link>.
         </p>
       </section>
+      </div>
     </div>
   )
 }

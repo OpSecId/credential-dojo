@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
+import './dojoZenPage.css'
 import AppShell from './AppShell'
 import CreateNinjaProfilePage from './CreateNinjaProfilePage'
 import DiscoverKasaPage from './DiscoverKasaPage'

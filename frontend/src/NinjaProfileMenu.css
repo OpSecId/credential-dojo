@@ -1,14 +1,21 @@
-/* Fixed top-right; on home sits left of theme lantern */
-.ninjaProfileMenu {
+/* Top bar: profile menu; on home, theme lantern sits in the same row (see HomePage + DojoLandingThemeContext) */
+.ninjaProfileMenuShell {
   position: fixed;
   top: calc(0.65rem + env(safe-area-inset-top, 0px));
   right: 1rem;
   z-index: 60;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.45rem;
   font-family: var(--font-body, 'Zen Kaku Gothic New', system-ui, sans-serif);
 }
 
-.ninjaProfileMenu--home {
-  right: calc(1rem + 3.25rem + 0.65rem);
+.ninjaProfileMenu {
+  position: relative;
+  top: auto;
+  right: auto;
+  z-index: 1;
 }
 
 .ninjaProfileMenu__toggle {
@@ -220,9 +227,5 @@
 @media (max-width: 380px) {
   .ninjaProfileMenu__name {
     display: none;
-  }
-
-  .ninjaProfileMenu--home {
-    right: calc(1rem + 3.25rem + 0.35rem);
   }
 }

@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom'
 import './App.css'
 import './LexiconPage.css'
 import { LEXICON_ARTICLES, lexiconAnchorForBoldSegment } from './lexiconData'
+import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { productTerminology } from './terminology'
 import type { LexiconKey } from './lexiconData'
 
@@ -49,42 +50,31 @@ function tryLinkForKey(key: LexiconKey): { to: string; label: string } {
 }
 
 export default function LexiconPage() {
+  const { theme } = useDojoLandingTheme()
   const location = useLocation()
   const printMode = useMemo(() => new URLSearchParams(location.search).get('print') === '1', [location.search])
 
   return (
-    <div className={`dojo-scene dojo-scene--night${printMode ? ' lex-print' : ''}`}>
+    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen${printMode ? ' lex-print' : ''}`}>
       <div className="dojo-scene__moon" aria-hidden />
       <div className="dojo-scene__bg" aria-hidden />
       <div className="dojo-scene__grid" aria-hidden />
 
-      <div className="lex">
-        <header className="lex__header">
-          <Link
-            className="lex__home"
-            to="/"
-            title="Back Home"
-            aria-label="Back Home"
-          >
-            <span className="lex__homeIcon" aria-hidden>
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 10.5 12 3l9 7.5" />
-                <path d="M5.5 9.5V20h13V9.5" />
-                <path d="M9.5 20v-6h5v6" />
-              </svg>
-            </span>
-            <span className="lex__homeText">Back Home</span>
-          </Link>
-          <div className="lex__headerBody">
-            <p className="lex__eyebrow">The Credential Dojo</p>
-            <h1 className="lex__title">Lexicon</h1>
-            <p className="lex__intro">
-              <strong>What this is.</strong> Japanese terms in the product are <strong>metaphors for copy and navigation</strong>—a shared vocabulary, not a security model. They are <strong>not</strong> claims about cryptographic strength, compliance, or threat models.
-            </p>
-            <p className="lex__intro lex__intro--second">
-              <strong>What each entry does.</strong> We give the word in its everyday or dōjō sense, then how we use it for <strong>W3C Verifiable Credentials</strong>, holder/issuer language, and this CRMS.
-            </p>
-          </div>
+      <div className="lex dojoZenPage dojoZenPage--wide">
+        <header className="dojoZenPage__header">
+          <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
+          <h1 className="dojoZenPage__title">Lexicon</h1>
+          <p className="dojoZenPage__intro">
+            <strong>What this is.</strong> Japanese terms in the product are <strong>metaphors for copy and navigation</strong>—a shared vocabulary, not a security model. They are <strong>not</strong> claims about cryptographic strength, compliance, or threat models.
+          </p>
+          <p className="dojoZenPage__intro dojoZenPage__intro--follow">
+            <strong>What each entry does.</strong> We give the word in its everyday or dōjō sense, then how we use it for <strong>W3C Verifiable Credentials</strong>, holder/issuer language, and this CRMS.
+          </p>
+          <nav className="dojoZenPage__nav" aria-label="Lexicon navigation">
+            <Link className="dojoZenPage__back" to="/" title="Back Home">
+              ← Back Home
+            </Link>
+          </nav>
         </header>
 
         <ol

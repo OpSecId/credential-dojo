@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import './App.css'
 import './NinjaProfileMenu.css'
+import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { DEMO_PERSONAS_OFFLINE } from './demoPersonas'
 import {
   NINJA_PROFILE_CHANGED_EVENT,
@@ -21,6 +23,7 @@ function monogram(codename: string): string {
 }
 
 export default function NinjaProfileMenu() {
+  const { theme, toggleTheme } = useDojoLandingTheme()
   const location = useLocation()
   const activeProfile = useNinjaProfileSnapshot()
   const [open, setOpen] = useState(false)
@@ -88,10 +91,32 @@ export default function NinjaProfileMenu() {
   }
 
   const isHome = location.pathname === '/'
-  const rootClass = `ninjaProfileMenu${isHome ? ' ninjaProfileMenu--home' : ''}`
+  const shellClass = `ninjaProfileMenuShell${isHome ? ' ninjaProfileMenuShell--home' : ''}`
 
   return (
-    <div className={rootClass} ref={rootRef}>
+    <div
+      className={shellClass}
+      ref={rootRef}
+      data-dojo-theme={isHome ? theme : undefined}
+    >
+      {isHome ? (
+        <button
+          type="button"
+          className="dojo-lantern dojo-lantern--toolbar"
+          onClick={toggleTheme}
+          aria-pressed={theme === 'night'}
+          aria-label={
+            theme === 'night'
+              ? 'Switch to day dojo (paper theme)'
+              : 'Switch to night dojo (lantern theme)'
+          }
+        >
+          <span className="dojo-lantern__glow" aria-hidden />
+          <span className="dojo-lantern__body" aria-hidden />
+          <span className="dojo-lantern__label">{theme === 'night' ? '夜' : '昼'}</span>
+        </button>
+      ) : null}
+      <div className="ninjaProfileMenu">
       <button
         type="button"
         className="ninjaProfileMenu__toggle"
@@ -194,6 +219,7 @@ export default function NinjaProfileMenu() {
           </div>
         </div>
       ) : null}
+      </div>
     </div>
   )
 }

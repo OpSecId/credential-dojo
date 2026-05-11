@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './App.css'
 import './KinchakuPage.css'
+import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { productTerminology } from './terminology'
 import { getWalletItems, type WalletItemType, type WalletItemStatus } from './walletInventory'
 
@@ -12,6 +13,7 @@ const STATUS_LABEL: Record<WalletItemStatus, string> = {
 }
 
 export default function KinchakuPage() {
+  const { theme } = useDojoLandingTheme()
   const [items, setItems] = useState(() => getWalletItems())
   const [tab, setTab] = useState<'all' | WalletItemType>('all')
   const [activeId, setActiveId] = useState(items[0]?.id ?? '')
@@ -37,31 +39,32 @@ export default function KinchakuPage() {
   }, [items])
 
   return (
-    <div className="dojo-scene dojo-scene--night kinchaku-page">
+    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen`}>
       <div className="dojo-scene__moon" aria-hidden />
       <div className="dojo-scene__bg" aria-hidden />
-      <main className="kinchaku-page__main">
-        <header className="kinchaku-page__header">
-          <p className="kinchaku-page__eyebrow">Wallet</p>
-          <h1 className="kinchaku-page__title">
+      <div className="dojo-scene__grid" aria-hidden />
+      <main className="kinchaku-page__main kinchaku-page dojoZenPage dojoZenPage--wide">
+        <header className="dojoZenPage__header">
+          <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
+          <h1 className="dojoZenPage__title">
             {productTerminology.wallet.name}{' '}
             <span lang="ja">{productTerminology.wallet.glyph}</span>
           </h1>
-          <p className="kinchaku-page__intro">
+          <p className="dojoZenPage__intro">
             A full inventory of stored <strong>Menkyo</strong> credentials and flow artifacts like{' '}
             <strong>Shokan</strong> requests and <strong>Enbu</strong> responses.
           </p>
-          <nav className="kinchaku-page__nav" aria-label="Kinchaku navigation">
-            <Link className="kinchaku-page__back" to="/">
-              🏠 Back Home
+          <nav className="dojoZenPage__nav" aria-label="Kinchaku navigation">
+            <Link className="dojoZenPage__back" to="/">
+              ← Back Home
             </Link>
-            <Link className="kinchaku-page__back" to="/kensa">
+            <Link className="dojoZenPage__back" to="/kensa">
               Open Kensa
             </Link>
-            <Link className="kinchaku-page__back" to="/expedition">
+            <Link className="dojoZenPage__back" to="/expedition">
               Open Expedition
             </Link>
-            <button type="button" className="kinchaku-page__back" onClick={() => setItems(getWalletItems())}>
+            <button type="button" className="dojoZenPage__back" onClick={() => setItems(getWalletItems())}>
               Refresh Wallet
             </button>
           </nav>
