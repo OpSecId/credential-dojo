@@ -1,0 +1,160 @@
+import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
+import './App.css'
+import './KinchakuPage.css'
+import { productTerminology } from './terminology'
+import { getWalletItems, type WalletItemType, type WalletItemStatus } from './walletInventory'
+
+const STATUS_LABEL: Record<WalletItemStatus, string> = {
+  ready: 'Ready',
+  queued: 'Queued',
+  archived: 'Archived',
+}
+
+export default function KinchakuPage() {
+  const [items, setItems] = useState(() => getWalletItems())
+  const [tab, setTab] = useState<'all' | WalletItemType>('all')
+  const [activeId, setActiveId] = useState(items[0]?.id ?? '')
+
+  const filtered = useMemo(() => {
+    if (tab === 'all') return items
+    return items.filter((item) => item.type === tab)
+  }, [tab, items])
+
+  const activeItem = filtered.find((item) => item.id === activeId) ?? filtered[0]
+
+  useEffect(() => {
+    const onStorage = () => setItems(getWalletItems())
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
+
+  const stats = useMemo(() => {
+    const credentials = items.filter((i) => i.type === 'credential').length
+    const artifacts = items.filter((i) => i.type === 'artifact').length
+    const queued = items.filter((i) => i.status === 'queued').length
+    return { credentials, artifacts, queued }
+  }, [items])
+
+  return (
+    <div className="dojo-scene dojo-scene--night kinchaku-page">
+      <div className="dojo-scene__moon" aria-hidden />
+      <div className="dojo-scene__bg" aria-hidden />
+      <main className="kinchaku-page__main">
+        <header className="kinchaku-page__header">
+          <p className="kinchaku-page__eyebrow">Wallet</p>
+          <h1 className="kinchaku-page__title">
+            {productTerminology.wallet.name}{' '}
+            <span lang="ja">{productTerminology.wallet.glyph}</span>
+          </h1>
+          <p className="kinchaku-page__intro">
+            A full inventory of stored <strong>Menkyo</strong> credentials and flow artifacts like{' '}
+            <strong>Shokan</strong> requests and <strong>Enbu</strong> responses.
+          </p>
+          <nav className="kinchaku-page__nav" aria-label="Kinchaku navigation">
+            <Link className="kinchaku-page__back" to="/">
+              🏠 Back Home
+            </Link>
+            <Link className="kinchaku-page__back" to="/kensa">
+              Open Kensa
+            </Link>
+            <Link className="kinchaku-page__back" to="/expedition">
+              Open Expedition
+            </Link>
+            <button type="button" className="kinchaku-page__back" onClick={() => setItems(getWalletItems())}>
+              Refresh Wallet
+            </button>
+          </nav>
+        </header>
+
+        <section className="kinchaku-page__stats" aria-label="Wallet totals">
+          <article className="kinchaku-page__statCard">
+            <p className="kinchaku-page__statLabel">Menkyo stored</p>
+            <p className="kinchaku-page__statValue">{stats.credentials}</p>
+          </article>
+          <article className="kinchaku-page__statCard">
+            <p className="kinchaku-page__statLabel">Artifacts logged</p>
+            <p className="kinchaku-page__statValue">{stats.artifacts}</p>
+          </article>
+          <article className="kinchaku-page__statCard">
+            <p className="kinchaku-page__statLabel">Queue waiting</p>
+            <p className="kinchaku-page__statValue">{stats.queued}</p>
+          </article>
+        </section>
+
+        <section className="kinchaku-page__workspace">
+          <div className="kinchaku-page__listCard">
+            <div className="kinchaku-page__tabs" role="tablist" aria-label="Inventory filter">
+              <button
+                type="button"
+                className={`kinchaku-page__tab${tab === 'all' ? ' kinchaku-page__tab--active' : ''}`}
+                onClick={() => setTab('all')}
+              >
+                All
+              </button>
+              <button
+                type="button"
+                className={`kinchaku-page__tab${tab === 'credential' ? ' kinchaku-page__tab--active' : ''}`}
+                onClick={() => setTab('credential')}
+              >
+                Credentials
+              </button>
+              <button
+                type="button"
+                className={`kinchaku-page__tab${tab === 'artifact' ? ' kinchaku-page__tab--active' : ''}`}
+                onClick={() => setTab('artifact')}
+              >
+                Artifacts
+              </button>
+            </div>
+            <ul className="kinchaku-page__list">
+              {filtered.map((item) => (
+                <li key={item.id}>
+                  <button
+                    type="button"
+                    className={`kinchaku-page__item${activeItem?.id === item.id ? ' kinchaku-page__item--active' : ''}`}
+                    onClick={() => setActiveId(item.id)}
+                  >
+                    <p className="kinchaku-page__itemTitle">{item.title}</p>
+                    <p className="kinchaku-page__itemMeta">
+                      {item.subtitle} · {item.issuerOrSource}
+                    </p>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <aside className="kinchaku-page__detailCard">
+            {activeItem ? (
+              <>
+                <p className="kinchaku-page__detailType">
+                  {activeItem.type === 'credential' ? 'Credential' : 'Artifact'} ·{' '}
+                  {STATUS_LABEL[activeItem.status]}
+                </p>
+                <h2 className="kinchaku-page__detailTitle">{activeItem.title}</h2>
+                <p className="kinchaku-page__detailSubtitle">{activeItem.subtitle}</p>
+                <p className="kinchaku-page__detailRow">
+                  <strong>Source:</strong> {activeItem.issuerOrSource}
+                </p>
+                <p className="kinchaku-page__detailRow">
+                  <strong>Updated:</strong> {new Date(activeItem.updatedAt).toLocaleString()}
+                </p>
+                <div className="kinchaku-page__tags" aria-label="Item tags">
+                  {activeItem.tags.map((tag) => (
+                    <span key={tag} className="kinchaku-page__tag">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <pre className="kinchaku-page__preview">{activeItem.preview}</pre>
+              </>
+            ) : (
+              <p className="kinchaku-page__empty">No inventory for the selected filter yet.</p>
+            )}
+          </aside>
+        </section>
+      </main>
+    </div>
+  )
+}
