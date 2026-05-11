@@ -196,14 +196,17 @@ export default function AppShell() {
     }
   }, [drawerOpen])
 
-  if (!profile) {
-    return <Outlet />
-  }
-
   const closeDrawer = () => setDrawerOpen(false)
+  const hasProfile = Boolean(profile)
+
+  const railFootHint = hasProfile ? (
+    <span>Use the profile menu (top right) to switch profiles, sign out, or edit.</span>
+  ) : (
+    <span>Open the profile menu (top right) to create a ninja profile or sign in.</span>
+  )
 
   return (
-    <div className="app-shell app-shell--authed">
+    <div className={`app-shell app-shell--authed${hasProfile ? '' : ' app-shell--guest'}`}>
       <a className="app-shell__skip" href="#app-shell-main">
         Skip to content
       </a>
@@ -216,13 +219,11 @@ export default function AppShell() {
             </span>
             <span className="app-shell__brand app-shell__homeBrand-text">
               Credential Dojo
-              <span className="app-shell__brandSub">Signed in</span>
+              {hasProfile ? <span className="app-shell__brandSub">Signed in</span> : null}
             </span>
           </Link>
           <NavBlocks />
-          <footer className="app-shell__railFoot">
-            <span>Use the profile menu (top right) to switch profiles, sign out, or edit.</span>
-          </footer>
+          <footer className="app-shell__railFoot">{railFootHint}</footer>
         </div>
       </aside>
 
@@ -256,9 +257,7 @@ export default function AppShell() {
             Menu
           </p>
           <NavBlocks onPick={closeDrawer} />
-          <footer className="app-shell__railFoot">
-            <span>Use the profile menu (top right) to switch profiles, sign out, or edit.</span>
-          </footer>
+          <footer className="app-shell__railFoot">{railFootHint}</footer>
         </div>
       </div>
 
