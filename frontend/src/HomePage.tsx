@@ -416,24 +416,24 @@ export default function HomePage() {
               <Link
                 className="dojo__calmActionCard"
                 to="/issue-verify"
-                title="Issuance: from Tehon (template) to Menkyo (held credential)"
+                title="Template (Tehon) to held credential (Menkyo)—issuance."
               >
-                <span className="dojo__calmActionCard-title" lang="ja">
-                  TehonのMenkyo
+                <span className="dojo__calmActionCard-title">{productTerminology.credentialFromTemplate.name}</span>
+                <span className="dojo__calmActionCard-sub" lang="ja">
+                  {productTerminology.credentialFromTemplate.glyph}
                 </span>
-                <span className="dojo__calmActionCard-sub">手本の免許</span>
                 <p className="dojo__calmActionCard-desc">Template (Tehon) to held credential (Menkyo)—issuance.</p>
                 <span className="dojo__calmActionCard-cta">Open issuance</span>
               </Link>
               <Link
                 className="dojo__calmActionCard"
                 to="/menkyo"
-                title="Menkyo の Kensa — structural checks on a stored VC"
+                title="Structural checks on a VC you already hold."
               >
-                <span className="dojo__calmActionCard-title" lang="ja">
-                  Menkyo の Kensa
+                <span className="dojo__calmActionCard-title">{productTerminology.credentialInspection.name}</span>
+                <span className="dojo__calmActionCard-sub" lang="ja">
+                  {productTerminology.credentialInspection.glyph}
                 </span>
-                <span className="dojo__calmActionCard-sub">免許の検査</span>
                 <p className="dojo__calmActionCard-desc">Structural checks on a VC you already hold.</p>
                 <span className="dojo__calmActionCard-cta">Open Menkyo Kensa</span>
               </Link>
