@@ -24,7 +24,20 @@ import { productTerminology } from './terminology'
 
 const SITE = 'https://credential.ninja'
 const THEME_KEY = 'credential-dojo-theme'
+/** Default true — zen landing; user can open full tools & playground */
+const CALM_LANDING_KEY = 'credential-dojo-calm-landing'
 const HELLO_FETCH_MS = 8000
+
+function readCalmLandingPref(): boolean {
+  try {
+    const v = localStorage.getItem(CALM_LANDING_KEY)
+    if (v === '0') return false
+    if (v === '1') return true
+  } catch {
+    /* ignore */
+  }
+  return true
+}
 
 const OFFLINE_PERSONAS = DEMO_PERSONAS_OFFLINE
 
@@ -105,6 +118,7 @@ export default function HomePage() {
   const [apiStandardsFocus, setApiStandardsFocus] = useState<string | null>(null)
   const [apiError, setApiError] = useState<string | null>(null)
   const [ninjaProfile, setNinjaProfile] = useState<NinjaProfile | null>(() => readNinjaProfile())
+  const [calmLanding, setCalmLanding] = useState(readCalmLandingPref)
 
   const activePersonas = personas ?? OFFLINE_PERSONAS
 
@@ -123,6 +137,14 @@ export default function HomePage() {
       /* ignore */
     }
   }, [theme])
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(CALM_LANDING_KEY, calmLanding ? '1' : '0')
+    } catch {
+      /* ignore */
+    }
+  }, [calmLanding])
 
   useEffect(() => {
     if (reduceMotion) return
@@ -264,7 +286,7 @@ export default function HomePage() {
 
   return (
     <div
-      className={`dojo-scene dojo-scene--landing dojo-scene--${theme}`}
+      className={`dojo-scene dojo-scene--landing${calmLanding ? ' dojo-scene--calm' : ''} dojo-scene--${theme}`}
       data-reduce-motion={reduceMotion ? 'true' : undefined}
     >
       <div className="dojo-scene__moon" aria-hidden />
@@ -289,26 +311,28 @@ export default function HomePage() {
       </button>
 
       <div className="dojo">
-        <div className="dojo__introBand">
-          <aside className="dojo__meterAside">
-            <div
-              className="dojo__focusMeter dojo-augmented dojo-augmented--meter"
-              data-augmented-ui="tl-clip br-clip border"
-            >
-              <div className="dojo__focusMeter-track" role="presentation">
-                <div
-                  className="dojo__focusMeter-fill"
-                  style={{ width: `${Math.round(focusMeter)}%` }}
-                />
+        <div className={`dojo__introBand${calmLanding ? ' dojo__introBand--calm' : ''}`}>
+          {!calmLanding ? (
+            <aside className="dojo__meterAside">
+              <div
+                className="dojo__focusMeter dojo-augmented dojo-augmented--meter"
+                data-augmented-ui="tl-clip br-clip border"
+              >
+                <div className="dojo__focusMeter-track" role="presentation">
+                  <div
+                    className="dojo__focusMeter-fill"
+                    style={{ width: `${Math.round(focusMeter)}%` }}
+                  />
+                </div>
+                <span className="dojo__focusMeter-caption">
+                  修業 · training focus — kata, Kinchaku, and school switches feed it; high focus speeds
+                  novice-path insight (修 · Novice path)
+                </span>
               </div>
-              <span className="dojo__focusMeter-caption">
-                修業 · training focus — kata, Kinchaku, and school switches feed it; high focus speeds
-                novice-path insight (修 · Novice path)
-              </span>
-            </div>
-          </aside>
+            </aside>
+          ) : null}
 
-          <header className="dojo__header">
+          <header className={`dojo__header${calmLanding ? ' dojo__header--calm' : ''}`}>
             <p className="dojo__eyebrow">
               credential.ninja ·{' '}
               <abbr title="Credential Management & Registry System">CRMS</abbr>
@@ -323,6 +347,14 @@ export default function HomePage() {
               Credential operations for <strong>W3C Verifiable Credentials</strong>. Dojo names
               (Tehon, Menkyo, Enbu, …) are metaphors for real artifacts and steps in this UI.
             </p>
+            {calmLanding ? (
+              <div className="dojo__focusZen" aria-label="Training focus">
+                <div className="dojo__focusZen-track" role="presentation">
+                  <div className="dojo__focusZen-fill" style={{ width: `${Math.round(focusMeter)}%` }} />
+                </div>
+                <span className="dojo__focusZen-label">修 · {Math.round(focusMeter)}%</span>
+              </div>
+            ) : null}
             {!ninjaProfile ? (
               <p className="dojo__heroCtas" aria-label="Get started">
                 <Link
@@ -341,7 +373,14 @@ export default function HomePage() {
                 </Link>
               </p>
             ) : null}
-            {!ninjaProfile ? (
+            {!ninjaProfile && calmLanding ? (
+              <p className="dojo__calmHint">
+                <Link to="/lexicon" title="Glossary of Dojo terms">
+                  New to the terms? Lexicon →
+                </Link>
+              </p>
+            ) : null}
+            {!ninjaProfile && !calmLanding ? (
               <section
                 className="dojo__lexPrimer dojo-augmented dojo-augmented--inset"
                 data-augmented-ui="tl-clip br-clip border"
@@ -418,6 +457,41 @@ export default function HomePage() {
           </header>
         </div>
 
+        {calmLanding ? (
+          <div className="dojo__calmBand">
+            <nav className="dojo__calmEssentials" aria-label="Essential destinations">
+              <Link to="/lexicon">Lexicon</Link>
+              <span className="dojo__calmDot" aria-hidden>
+                ·
+              </span>
+              <Link to="/issue-verify">Issue &amp; verify</Link>
+              <span className="dojo__calmDot" aria-hidden>
+                ·
+              </span>
+              <Link to="/kensa">Kensa</Link>
+              <span className="dojo__calmDot" aria-hidden>
+                ·
+              </span>
+              <Link to="/expedition">Expedition</Link>
+              <span className="dojo__calmDot" aria-hidden>
+                ·
+              </span>
+              <Link to="/discover-kasa">Kasa</Link>
+            </nav>
+            <button type="button" className="dojo__calmExpand" onClick={() => setCalmLanding(false)}>
+              Full dojo — tools &amp; playground
+            </button>
+          </div>
+        ) : null}
+
+        {!calmLanding ? (
+          <button type="button" className="dojo__calmCollapse" onClick={() => setCalmLanding(true)}>
+            Return to calm view
+          </button>
+        ) : null}
+
+        {!calmLanding ? (
+          <>
         <nav className="dojo__ctaBand" aria-label="Quick tools">
           <Link
             className="dojo__ctaTile"
@@ -726,6 +800,8 @@ export default function HomePage() {
           </section>
           </div>
         </section>
+          </>
+        ) : null}
       </div>
     </div>
   )

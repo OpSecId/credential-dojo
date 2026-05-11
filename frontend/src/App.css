@@ -142,6 +142,196 @@
     0 2px 14px rgba(0, 0, 0, 0.38);
 }
 
+/* --- Calm (zen) landing: minimal first paint, optional full dojo ---
+   Use .dojo-scene--landing.dojo-scene--calm so these beat
+   .dojo-scene--landing.dojo-scene--night * (higher specificity than .dojo-scene--calm alone). */
+.dojo-scene--landing.dojo-scene--calm .dojo-scene__moon {
+  opacity: 0.12;
+  transform: scale(0.92);
+}
+
+.dojo-scene--landing.dojo-scene--calm .dojo-scene__embers,
+.dojo-scene--landing.dojo-scene--calm .dojo-scene__grid {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.dojo-scene--landing.dojo-scene--calm.dojo-scene--night::after {
+  opacity: 0;
+}
+
+.dojo-scene--landing.dojo-scene--calm .dojo-lantern {
+  opacity: 0.75;
+}
+
+.dojo-scene--landing.dojo-scene--calm .dojo {
+  padding-top: 3.5rem;
+  padding-bottom: 4rem;
+  gap: 2.25rem;
+}
+
+.dojo__introBand--calm {
+  max-width: 32rem;
+  margin: 0 auto;
+  animation: none;
+}
+
+.dojo__introBand--calm .dojo__header--calm {
+  text-align: center;
+  max-width: none;
+}
+
+.dojo__header--calm .dojo__eyebrow {
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  opacity: 0.78;
+}
+
+.dojo__header--calm .dojo__title {
+  justify-content: center;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.dojo__header--calm .dojo__lede {
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dojo__focusZen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.5rem auto 0;
+  max-width: 11rem;
+}
+
+.dojo__focusZen-track {
+  width: 100%;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.dojo-scene--night .dojo__focusZen-track {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dojo__focusZen-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(90, 232, 255, 0.35), rgba(232, 184, 74, 0.55));
+}
+
+.dojo__focusZen-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.dojo__calmHint {
+  margin: 0.75rem 0 0;
+  font-size: 0.92rem;
+}
+
+.dojo__calmHint a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.dojo__calmHint a:hover {
+  color: var(--accent);
+  border-bottom-color: rgba(232, 184, 74, 0.45);
+}
+
+.dojo__calmBand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
+  padding: 0.5rem 0 1rem;
+}
+
+.dojo__calmEssentials {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  font-size: 0.95rem;
+}
+
+.dojo__calmEssentials a {
+  color: var(--text);
+  text-decoration: none;
+  padding: 0.2rem 0.35rem;
+  border-radius: 6px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dojo__calmEssentials a:hover {
+  background: rgba(90, 232, 255, 0.06);
+  color: var(--text-h);
+}
+
+.dojo__calmDot {
+  color: var(--muted);
+  opacity: 0.55;
+  user-select: none;
+}
+
+.dojo__calmExpand {
+  font: inherit;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.dojo__calmExpand:hover {
+  border-color: rgba(90, 232, 255, 0.28);
+  color: var(--text-h);
+  background: rgba(90, 232, 255, 0.04);
+}
+
+.dojo__calmExpand:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.dojo__calmCollapse {
+  align-self: center;
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin-bottom: -0.5rem;
+}
+
+.dojo__calmCollapse:hover {
+  color: var(--text-h);
+}
+
 .dojo-scene__moon {
   position: fixed;
   top: 4.5rem;

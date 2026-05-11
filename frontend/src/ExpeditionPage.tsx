@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './ExpeditionPage.css'
 import { EXPEDITION_STEPS } from './expeditionSteps'
+import { addWalletItem } from './walletInventory'
 
 const STEP_ICONS = ['📜', '🧭', '🎓', '🗡️', '🔥', '🏵️', '👛', '📣', '🎭', '🛂', '🔎', '🖼️', '🤝', '🌉', '🗺️'] as const
 const SCHOOL_CHOICES = [
@@ -35,24 +36,71 @@ export default function ExpeditionPage() {
   useEffect(() => {
     if (seenStepsRef.current.has(index)) return
     seenStepsRef.current.add(index)
-    if (index === 0) setArtifacts((prev) => ['Tehon draft created', ...prev].slice(0, 8))
+    addWalletItem({
+      type: 'artifact',
+      title: `Mission Log · Step ${index + 1}`,
+      subtitle: step.title,
+      issuerOrSource: 'Expedition Chronicle',
+      status: 'archived',
+      tags: ['Mission', phase, step.term.name],
+      preview: `{ "scene": "${step.scene.replace(/"/g, "'").slice(0, 160)}" }`,
+    })
+    if (index === 0) {
+      setArtifacts((prev) => ['Tehon draft created', ...prev].slice(0, 8))
+      addWalletItem({
+        type: 'artifact',
+        title: 'Tehon Draft',
+        subtitle: 'Expedition setup artifact',
+        issuerOrSource: 'Dojo Expedition',
+        status: 'archived',
+        tags: ['Tehon', 'Expedition'],
+        preview: '{ "event": "tehon-draft-created" }',
+      })
+    }
     if (index === 4) {
       setWallet((prev) => [`Menkyo: First forged credential (${selectedSchool.label})`, ...prev])
       setArtifacts((prev) => [`Tehon の Menkyo issued (${selectedSchool.kata})`, ...prev].slice(0, 8))
+      addWalletItem({
+        type: 'credential',
+        title: `Menkyo · ${selectedSchool.label}`,
+        subtitle: 'First forged expedition credential',
+        issuerOrSource: selectedSchool.label,
+        status: 'ready',
+        tags: ['Menkyo', selectedSchool.kata, 'Expedition'],
+        preview: `{ "type": ["VerifiableCredential"], "issuer": "${selectedSchool.kata}" }`,
+      })
     }
     if (index === 7) setExchanges((prev) => ['Verifier opened Shōkan channel', ...prev].slice(0, 10))
     if (index === 8) setArtifacts((prev) => ['Enbu package assembled', ...prev].slice(0, 8))
     if (index === 13) setExchanges((prev) => ['Randori session started', ...prev].slice(0, 10))
-  }, [index, selectedSchool.kata, selectedSchool.label])
+  }, [index, phase, selectedSchool.kata, selectedSchool.label, step.scene, step.term.name, step.title])
 
   const receiveShokan = () => {
     setExchanges((prev) => [`Shōkan received for ${selectedSchool.label} proofs`, ...prev].slice(0, 10))
     setArtifacts((prev) => [`Request artifact: ${selectedSchool.kata} requirements`, ...prev].slice(0, 8))
+    addWalletItem({
+      type: 'artifact',
+      title: `Shokan Request · ${selectedSchool.label}`,
+      subtitle: 'Verifier challenge received during expedition',
+      issuerOrSource: 'Verifier Channel',
+      status: 'queued',
+      tags: ['Shokan', selectedSchool.kata, 'Request'],
+      preview: `{ "challenge": "${selectedSchool.kata}-proofs" }`,
+    })
   }
 
   const assembleEnbu = () => {
     const entry = `Enbu response #${artifacts.filter((a) => a.startsWith('Enbu response')).length + 1} (${selectedSchool.label})`
     setArtifacts((prev) => [entry, ...prev].slice(0, 8))
+    addWalletItem({
+      type: 'artifact',
+      title: `Enbu Response · ${selectedSchool.label}`,
+      subtitle: 'Presentation bundle assembled',
+      issuerOrSource: 'Local wallet composer',
+      status: 'ready',
+      tags: ['Enbu', selectedSchool.kata, 'Response'],
+      preview: '{ "type": ["VerifiablePresentation"] }',
+    })
   }
 
   const runExchangeTurn = () => {
@@ -61,6 +109,15 @@ export default function ExpeditionPage() {
       setExchanges((prev) => [`Randori turn ${turn}: verifier ↔ holder (${selectedSchool.kata})`, ...prev].slice(0, 10))
     if (turn % 2 === 0) {
       setWallet((prev) => [`Menkyo proof receipt #${turn / 2} (${selectedSchool.label})`, ...prev].slice(0, 8))
+      addWalletItem({
+        type: 'credential',
+        title: `Menkyo Proof Receipt #${turn / 2}`,
+        subtitle: 'Received from Randori exchange turn',
+        issuerOrSource: selectedSchool.label,
+        status: 'ready',
+        tags: ['Menkyo', 'Randori', selectedSchool.kata],
+        preview: `{ "turn": ${turn}, "school": "${selectedSchool.id}" }`,
+      })
     }
   }
 
@@ -74,7 +131,8 @@ export default function ExpeditionPage() {
         <p className="expedition__eyebrow">Story Adventure</p>
         <h1 className="expedition__title">Dojo Expedition</h1>
         <p className="expedition__intro">
-          Follow a narrative mission through the full credential flow, one term at a time.
+          March through a credential-combat campaign: earn Menkyo, answer Shōkan challenges, and keep
+          Kinchaku stocked after every step.
         </p>
         <nav className="expedition__nav">
           <Link className="expedition__back" to="/" title="Back Home">
@@ -85,6 +143,9 @@ export default function ExpeditionPage() {
           </Link>
           <Link className="expedition__back" to="/tejun-viewer">
             Tejun viewer
+          </Link>
+          <Link className="expedition__back" to="/kinchaku">
+            Kinchaku
           </Link>
         </nav>
       </header>
@@ -152,6 +213,15 @@ export default function ExpeditionPage() {
                     onClick={() => {
                       setSchoolId(school.id)
                       setExchanges((prev) => [`Issuer school chosen: ${school.label}`, ...prev].slice(0, 10))
+                      addWalletItem({
+                        type: 'artifact',
+                        title: `School Selection · ${school.label}`,
+                        subtitle: 'Issuer school chosen for expedition',
+                        issuerOrSource: 'Dojo Expedition',
+                        status: 'archived',
+                        tags: ['Kasa', school.kata, 'Choice'],
+                        preview: `{ "school": "${school.id}", "kata": "${school.kata}" }`,
+                      })
                     }}
                     title={`${school.label} · ${school.kata}`}
                   >
