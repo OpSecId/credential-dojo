@@ -1,8 +1,9 @@
 .zen-sound {
-  position: fixed;
-  z-index: 11940;
-  left: max(0.75rem, env(safe-area-inset-left, 0px));
-  bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  /* Positioned by `.dojo-floating-dock` (full-width bottom band) */
+  position: relative;
+  z-index: 0;
+  left: auto;
+  bottom: auto;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

@@ -1,6 +1,8 @@
 import { useEffect, useId, useMemo, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import './AppShell.css'
+import NinjaProfileMenu from './NinjaProfileMenu'
+import { useMediaQuery } from './useMediaQuery'
 import { useNinjaProfileSnapshot } from './useNinjaProfileSnapshot'
 
 const BRAND_MARK_SRC = `${import.meta.env.BASE_URL}favicon.svg?v=4`
@@ -158,6 +160,7 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
 export default function AppShell() {
   const profile = useNinjaProfileSnapshot()
   const location = useLocation()
+  const narrowViewport = useMediaQuery('(max-width: 899px)')
   const [drawerOpen, setDrawerOpen] = useState(false)
   const drawerTitleId = useId()
 
@@ -278,11 +281,13 @@ export default function AppShell() {
           <div className="app-shell__topbarTitle" title={pageTitle}>
             {pageTitle}
           </div>
+          {narrowViewport ? <NinjaProfileMenu embedded /> : null}
         </header>
         <div className="app-shell__mainInner" id="app-shell-main" tabIndex={-1}>
           <Outlet />
         </div>
       </div>
+      {!narrowViewport ? <NinjaProfileMenu /> : null}
     </div>
   )
 }

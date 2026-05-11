@@ -262,8 +262,9 @@
   gap: 0.65rem;
   position: sticky;
   top: 0;
-  /* Below NinjaProfileMenu (220); drawer/backdrop stay above when open */
-  z-index: 180;
+  overflow: visible;
+  /* Stacking for embedded profile dropdown */
+  z-index: 200;
   min-height: calc(2.55rem + env(safe-area-inset-top, 0px));
   padding: env(safe-area-inset-top, 0px) 0.6rem 0.35rem 0.6rem;
   margin: 0;
@@ -312,7 +313,7 @@
   .app-shell__topbar {
     gap: 0.45rem;
     min-height: calc(2.35rem + env(safe-area-inset-top, 0px));
-    padding: calc(0.38rem + env(safe-area-inset-top, 0px)) max(5.1rem, calc(env(safe-area-inset-right, 0px) + 4.25rem)) 0.38rem 0.55rem;
+    padding: calc(0.38rem + env(safe-area-inset-top, 0px)) 0.55rem 0.38rem 0.55rem;
     background: linear-gradient(
       180deg,
       rgba(7, 9, 16, 0.94) 0%,
@@ -359,7 +360,8 @@
 }
 
 .app-shell__mainInner {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* Room for `.dojo-floating-dock` (zen + progress hub) */
+  padding-bottom: calc(5.75rem + env(safe-area-inset-bottom, 0px));
 }
 
 @media (min-width: 900px) {

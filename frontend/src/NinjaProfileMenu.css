@@ -3,13 +3,30 @@
   position: fixed;
   top: calc(0.65rem + env(safe-area-inset-top, 0px));
   right: 1rem;
-  /* Above app-shell mobile topbar (z-index 180) so the toggle stays reachable */
   z-index: 220;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 0.45rem;
   font-family: var(--font-body, 'Zen Kaku Gothic New', system-ui, sans-serif);
+}
+
+.ninjaProfileMenuShell--embedded {
+  position: static;
+  top: auto;
+  right: auto;
+  z-index: auto;
+  flex-shrink: 0;
+  min-width: 0;
+  gap: 0.35rem;
+}
+
+.ninjaProfileMenuShell--embedded .ninjaProfileMenu__toggle {
+  max-width: min(44vw, 11rem);
+}
+
+.ninjaProfileMenuShell--embedded .ninjaProfileMenu__panel {
+  z-index: 520;
 }
 
 .ninjaProfileMenu {

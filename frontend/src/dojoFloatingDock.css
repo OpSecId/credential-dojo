@@ -1,0 +1,34 @@
+/* Single bottom band: calm sound (west) + progress hub (east) — avoids overlap on narrow screens */
+
+.dojo-floating-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: max(0.65rem, env(safe-area-inset-bottom, 0px));
+  z-index: 11990;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0 max(0.65rem, env(safe-area-inset-right, 0px)) 0 max(0.65rem, env(safe-area-inset-left, 0px));
+  pointer-events: none;
+}
+
+.dojo-floating-dock > * {
+  pointer-events: auto;
+}
+
+.dojo-floating-dock__west,
+.dojo-floating-dock__east {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  max-width: min(50vw - 0.75rem, 16rem);
+}
+
+.dojo-floating-dock__east {
+  align-items: flex-end;
+  margin-left: auto;
+}

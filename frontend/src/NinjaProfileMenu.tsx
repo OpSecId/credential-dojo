@@ -22,7 +22,12 @@ function monogram(codename: string): string {
   return ch === ch.toLowerCase() ? ch.toUpperCase() : ch
 }
 
-export default function NinjaProfileMenu() {
+export type NinjaProfileMenuProps = {
+  /** When true, sits in the AppShell top row (mobile) instead of fixed viewport corner */
+  embedded?: boolean
+}
+
+export default function NinjaProfileMenu({ embedded = false }: NinjaProfileMenuProps) {
   const { theme, toggleTheme } = useDojoLandingTheme()
   const location = useLocation()
   const activeProfile = useNinjaProfileSnapshot()
@@ -91,7 +96,7 @@ export default function NinjaProfileMenu() {
   }
 
   const isHome = location.pathname === '/'
-  const shellClass = `ninjaProfileMenuShell${isHome ? ' ninjaProfileMenuShell--home' : ''}`
+  const shellClass = `ninjaProfileMenuShell${isHome ? ' ninjaProfileMenuShell--home' : ''}${embedded ? ' ninjaProfileMenuShell--embedded' : ''}`
 
   return (
     <div
