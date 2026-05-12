@@ -4,6 +4,7 @@ import './App.css'
 import './KinchakuOid4vciPage.css'
 import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { parseOid4vciCredentialOfferInput, type Oid4vciParseResult } from './oid4vci/parseOid4vciCredentialOfferUri'
+import { SAMPLE_VERES_SANDBOX_CREDENTIAL_OFFER_URI } from './oid4vci/sampleCredentialOffers'
 import { productTerminology } from './terminology'
 
 export default function KinchakuOid4vciPage() {
@@ -21,6 +22,13 @@ export default function KinchakuOid4vciPage() {
     setFetchError(null)
     setResult(parseOid4vciCredentialOfferInput(input))
   }, [input])
+
+  const loadVeresExample = useCallback(() => {
+    setInput(SAMPLE_VERES_SANDBOX_CREDENTIAL_OFFER_URI)
+    setFetchedJson(null)
+    setFetchError(null)
+    setResult(parseOid4vciCredentialOfferInput(SAMPLE_VERES_SANDBOX_CREDENTIAL_OFFER_URI))
+  }, [])
 
   const offerUri = useMemo(() => {
     if (result?.kind !== 'success') return null
@@ -83,7 +91,8 @@ export default function KinchakuOid4vciPage() {
             Paste an <strong>openid-credential-offer</strong> URI, an <strong>https</strong> URL that carries{' '}
             <code>credential_offer</code> or <code>credential_offer_uri</code>, or the raw{' '}
             <strong>credential offer JSON</strong>. Parsing runs in the browser only; fetching the offer URI may be
-            blocked by CORS.
+            blocked by CORS. Try the <strong>Veres Platform sandbox</strong> sample (credential-offer via exchange URL)
+            with the button below.
           </p>
           <nav className="dojoZenPage__nav" aria-label="Navigation">
             <Link className="dojoZenPage__back" to="/">
@@ -110,11 +119,14 @@ export default function KinchakuOid4vciPage() {
               setFetchError(null)
             }}
             spellCheck={false}
-            placeholder={`openid-credential-offer://?credential_offer=%7B%22credential_issuer%22%3A%22https%3A%2F%2F…%22%7D`}
+            placeholder="openid-credential-offer://?credential_offer_uri=https%3A%2F%2F… or ?credential_offer={…}"
           />
           <div className="kinchaku-oid4vci__actions">
             <button type="button" className="kinchaku-oid4vci__btn kinchaku-oid4vci__btn--primary" onClick={runParse}>
               Parse
+            </button>
+            <button type="button" className="kinchaku-oid4vci__btn" onClick={loadVeresExample}>
+              Load Veres sandbox example
             </button>
             <button
               type="button"
