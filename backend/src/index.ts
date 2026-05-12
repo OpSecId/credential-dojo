@@ -3,6 +3,7 @@ import express from "express";
 import swaggerUi from "swagger-ui-express";
 import { openApiDocument } from "./openapi.js";
 import { listDemoPersonas } from "./personas.js";
+import { processOid4vciOfferBody } from "./oid4vci/processOffer.js";
 import { productTerminology } from "./terminology.js";
 
 const app = express();
@@ -103,6 +104,20 @@ app.get("/api/hello", (_req, res) => {
     standardsFocus,
     terminology: productTerminology,
   });
+});
+
+app.post("/api/oid4vci/process-offer", async (req, res) => {
+  try {
+    const out = await processOid4vciOfferBody(req.body);
+    res.status(out.ok ? 200 : 422).json(out);
+  } catch (e) {
+    res.status(500).json({
+      ok: false,
+      steps: [],
+      error: "Internal error",
+      detail: e instanceof Error ? e.message : String(e),
+    });
+  }
 });
 
 app.listen(PORT, () => {

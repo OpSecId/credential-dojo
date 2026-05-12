@@ -76,6 +76,43 @@ export const openApiDocument = {
         },
       },
     },
+    "/api/oid4vci/process-offer": {
+      post: {
+        tags: ["Demo"],
+        summary: "OID4VCI demo — process credential offer (server-side)",
+        description:
+          "Fetches credential_offer via https URI when needed, resolves openid-credential-issuer metadata, may exchange a pre-authorized_code for an access token, and POSTs a credential request. Demo proxy: https only, no mTLS / DPoP / rich client auth.",
+        operationId: "postOid4vciProcessOffer",
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  credentialOfferUri: { type: "string", description: "HTTPS URL returning credential offer JSON" },
+                  credentialOffer: { type: "object", description: "Inline credential offer object" },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          "200": {
+            description: "Pipeline completed (may include partial success)",
+            content: { "application/json": { schema: { type: "object" } } },
+          },
+          "422": {
+            description: "Invalid input or upstream fetch/metadata failure",
+            content: { "application/json": { schema: { type: "object" } } },
+          },
+          "500": {
+            description: "Unexpected server error",
+            content: { "application/json": { schema: { type: "object" } } },
+          },
+        },
+      },
+    },
     "/api/openapi.json": {
       get: {
         tags: ["Platform"],

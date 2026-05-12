@@ -206,3 +206,63 @@
   color: var(--accent);
   font-weight: 700;
 }
+
+.kinchaku-oid4vci__meta--spaced {
+  margin-top: 0.75rem;
+}
+
+.kinchaku-oid4vci__apiHint {
+  margin: 0.55rem 0 0;
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.kinchaku-oid4vci__apiHint code {
+  font-size: 0.72rem;
+}
+
+.kinchaku-oid4vci__result--client {
+  border-color: rgba(90, 232, 255, 0.22);
+}
+
+.kinchaku-oid4vci__steps {
+  margin: 0 0 0.75rem;
+  padding-left: 1.15rem;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.kinchaku-oid4vci__steps li {
+  margin-bottom: 0.35rem;
+}
+
+.kinchaku-oid4vci__step--ok {
+  color: var(--text);
+}
+
+.kinchaku-oid4vci__step--fail {
+  color: var(--accent-hot);
+}
+
+.kinchaku-oid4vci__stepId {
+  font-weight: 800;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+}
+
+.kinchaku-oid4vci__stepUrl {
+  font-size: 0.72rem;
+  word-break: break-all;
+}
+
+.kinchaku-oid4vci__stepDetail {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.kinchaku-oid4vci__pre--tall {
+  max-height: min(36rem, 62vh);
+}

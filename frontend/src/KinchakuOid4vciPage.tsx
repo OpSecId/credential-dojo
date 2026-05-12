@@ -6,6 +6,28 @@ import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { parseOid4vciCredentialOfferInput, type Oid4vciParseResult } from './oid4vci/parseOid4vciCredentialOfferUri'
 import { SAMPLE_VERES_SANDBOX_CREDENTIAL_OFFER_URI } from './oid4vci/sampleCredentialOffers'
 import { productTerminology } from './terminology'
+import { addWalletItem } from './walletInventory'
+
+type Oid4vciClientStep = { id: string; ok: boolean; detail?: string; url?: string }
+
+type Oid4vciClientOk = {
+  ok: true
+  steps: Oid4vciClientStep[]
+  credentialOffer: unknown
+  credentialIssuer: string
+  issuerMetadata: unknown | null
+  tokenResponse: unknown | null
+  credentialResponse: unknown | null
+}
+
+type Oid4vciClientErr = {
+  ok: false
+  steps: Oid4vciClientStep[]
+  error: string
+  detail?: string
+}
+
+type Oid4vciClientResult = Oid4vciClientOk | Oid4vciClientErr
 
 export default function KinchakuOid4vciPage() {
   const { theme } = useDojoLandingTheme()
@@ -14,12 +36,17 @@ export default function KinchakuOid4vciPage() {
   const [fetchError, setFetchError] = useState<string | null>(null)
   const [fetchLoading, setFetchLoading] = useState(false)
   const [fetchedJson, setFetchedJson] = useState<unknown | null>(null)
+  const [clientResult, setClientResult] = useState<Oid4vciClientResult | null>(null)
+  const [clientLoading, setClientLoading] = useState(false)
+  const [clientHttpError, setClientHttpError] = useState<string | null>(null)
 
   const wallet = productTerminology.wallet
 
   const runParse = useCallback(() => {
     setFetchedJson(null)
     setFetchError(null)
+    setClientResult(null)
+    setClientHttpError(null)
     setResult(parseOid4vciCredentialOfferInput(input))
   }, [input])
 
@@ -27,6 +54,8 @@ export default function KinchakuOid4vciPage() {
     setInput(SAMPLE_VERES_SANDBOX_CREDENTIAL_OFFER_URI)
     setFetchedJson(null)
     setFetchError(null)
+    setClientResult(null)
+    setClientHttpError(null)
     setResult(parseOid4vciCredentialOfferInput(SAMPLE_VERES_SANDBOX_CREDENTIAL_OFFER_URI))
   }, [])
 
@@ -76,6 +105,55 @@ export default function KinchakuOid4vciPage() {
     return null
   }, [fetchedJson, result])
 
+  const processPayload = useMemo((): { credentialOfferUri?: string; credentialOffer?: unknown } | null => {
+    if (fetchedJson !== null) return { credentialOffer: fetchedJson }
+    if (result?.kind !== 'success') return null
+    if (result.credentialOfferJson !== null) return { credentialOffer: result.credentialOfferJson }
+    if (result.credentialOfferUri) return { credentialOfferUri: result.credentialOfferUri }
+    return null
+  }, [fetchedJson, result])
+
+  const canRunClient = Boolean(processPayload) && !clientLoading
+
+  const runOid4vciClient = useCallback(async () => {
+    if (!processPayload) return
+    setClientLoading(true)
+    setClientResult(null)
+    setClientHttpError(null)
+    try {
+      const base = import.meta.env.VITE_API_BASE ?? ''
+      const res = await fetch(`${base}/api/oid4vci/process-offer`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(processPayload),
+      })
+      const data = (await res.json()) as Oid4vciClientResult
+      if (!res.ok) {
+        setClientHttpError(`HTTP ${res.status}\n${JSON.stringify(data, null, 2).slice(0, 1200)}`)
+        setClientLoading(false)
+        return
+      }
+      setClientResult(data)
+      if (data.ok === true && data.credentialResponse != null) {
+        const text = JSON.stringify(data.credentialResponse, null, 2)
+        addWalletItem({
+          type: 'credential',
+          title: 'OID4VCI · Issued credential',
+          subtitle: 'Kinchaku OID4VCI client (demo proxy)',
+          issuerOrSource: data.credentialIssuer,
+          status: 'ready',
+          tags: ['Menkyo', 'OID4VCI', 'Kinchaku'],
+          preview: text.slice(0, 180),
+          bodyJson: text,
+        })
+      }
+    } catch (e) {
+      setClientHttpError(e instanceof Error ? `${e.name}: ${e.message}` : String(e))
+    } finally {
+      setClientLoading(false)
+    }
+  }, [processPayload])
+
   return (
     <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen kinchaku-oid4vci`}>
       <div className="dojo-scene__moon" aria-hidden />
@@ -90,9 +168,11 @@ export default function KinchakuOid4vciPage() {
           <p className="dojoZenPage__intro">
             Paste an <strong>openid-credential-offer</strong> URI, an <strong>https</strong> URL that carries{' '}
             <code>credential_offer</code> or <code>credential_offer_uri</code>, or the raw{' '}
-            <strong>credential offer JSON</strong>. Parsing runs in the browser only; fetching the offer URI may be
-            blocked by CORS. Try the <strong>Veres Platform sandbox</strong> sample (credential-offer via exchange URL)
-            with the button below.
+            <strong>credential offer JSON</strong>. <strong>Parse</strong> runs in the browser;{' '}
+            <strong>Process offer (API)</strong> runs the OID4VCI demo client on the Dojo backend (same-origin{' '}
+            <code>/api</code> in dev) so it can fetch metadata, exchange a <code>pre-authorized_code</code>, and request
+            a credential without browser CORS limits. Issued credentials are appended to{' '}
+            <Link to="/kinchaku">{wallet.name}</Link> when the credential endpoint returns JSON.
           </p>
           <nav className="dojoZenPage__nav" aria-label="Navigation">
             <Link className="dojoZenPage__back" to="/">
@@ -117,6 +197,8 @@ export default function KinchakuOid4vciPage() {
               setResult(null)
               setFetchedJson(null)
               setFetchError(null)
+              setClientResult(null)
+              setClientHttpError(null)
             }}
             spellCheck={false}
             placeholder="openid-credential-offer://?credential_offer_uri=https%3A%2F%2F… or ?credential_offer={…}"
@@ -136,7 +218,19 @@ export default function KinchakuOid4vciPage() {
             >
               {fetchLoading ? 'Fetching…' : 'Fetch offer JSON'}
             </button>
+            <button
+              type="button"
+              className="kinchaku-oid4vci__btn kinchaku-oid4vci__btn--primary"
+              disabled={!canRunClient}
+              onClick={() => void runOid4vciClient()}
+            >
+              {clientLoading ? 'Processing…' : 'Process offer (API)'}
+            </button>
           </div>
+          <p className="kinchaku-oid4vci__apiHint">
+            Requires the backend (<code>npm run dev -w backend</code> or deployed API). Demo only — no mTLS / DPoP /
+            wallet-bound proofs.
+          </p>
         </section>
 
         {result?.kind === 'error' ? (
@@ -169,8 +263,8 @@ export default function KinchakuOid4vciPage() {
             ) : null}
             {result.notes.length > 0 ? (
               <ul className="kinchaku-oid4vci__notes">
-                {result.notes.map((n) => (
-                  <li key={n}>{n}</li>
+                {result.notes.map((n, i) => (
+                  <li key={`${i}-${n}`}>{n}</li>
                 ))}
               </ul>
             ) : null}
@@ -188,11 +282,70 @@ export default function KinchakuOid4vciPage() {
                 <pre className="kinchaku-oid4vci__pre">{JSON.stringify(displayJson, null, 2)}</pre>
               </>
             ) : (
-              <p className="kinchaku-oid4vci__meta" style={{ marginTop: '0.5rem' }}>
+              <p className="kinchaku-oid4vci__meta kinchaku-oid4vci__meta--spaced">
                 No inline <code>credential_offer</code> JSON yet. Use <strong>Fetch offer JSON</strong> if the issuer
-                allows browser CORS.
+                allows browser CORS, or <strong>Process offer (API)</strong> to fetch the offer on the server.
               </p>
             )}
+          </section>
+        ) : null}
+
+        {clientHttpError ? (
+          <section className="kinchaku-oid4vci__result kinchaku-oid4vci__result--client" aria-live="polite">
+            <h2 className="kinchaku-oid4vci__resultTitle">API request failed</h2>
+            <pre className="kinchaku-oid4vci__pre kinchaku-oid4vci__pre--error">{clientHttpError}</pre>
+          </section>
+        ) : null}
+
+        {clientResult ? (
+          <section className="kinchaku-oid4vci__result kinchaku-oid4vci__result--client" aria-live="polite">
+            <h2 className="kinchaku-oid4vci__resultTitle">OID4VCI client</h2>
+            {clientResult.ok === false ? (
+              <>
+                <p className="kinchaku-oid4vci__error">{clientResult.error}</p>
+                {clientResult.detail ? <p className="kinchaku-oid4vci__errorDetail">{clientResult.detail}</p> : null}
+              </>
+            ) : null}
+            <ol className="kinchaku-oid4vci__steps">
+              {clientResult.steps.map((s) => (
+                <li key={s.id} className={s.ok ? 'kinchaku-oid4vci__step--ok' : 'kinchaku-oid4vci__step--fail'}>
+                  <span className="kinchaku-oid4vci__stepId">{s.id}</span>
+                  {s.url ? (
+                    <>
+                      {' '}
+                      <code className="kinchaku-oid4vci__stepUrl">{s.url}</code>
+                    </>
+                  ) : null}
+                  {s.detail ? <span className="kinchaku-oid4vci__stepDetail"> — {s.detail}</span> : null}
+                </li>
+              ))}
+            </ol>
+            {clientResult.ok === true && clientResult.issuerMetadata != null ? (
+              <>
+                <h3 className="kinchaku-oid4vci__jsonTitle">Issuer metadata (excerpt)</h3>
+                <pre className="kinchaku-oid4vci__pre kinchaku-oid4vci__pre--tall">
+                  {JSON.stringify(clientResult.issuerMetadata, null, 2).slice(0, 8000)}
+                  {JSON.stringify(clientResult.issuerMetadata, null, 2).length > 8000 ? '\n…' : ''}
+                </pre>
+              </>
+            ) : null}
+            {clientResult.ok === true && clientResult.tokenResponse != null ? (
+              <>
+                <h3 className="kinchaku-oid4vci__jsonTitle">Token response</h3>
+                <pre className="kinchaku-oid4vci__pre">{JSON.stringify(clientResult.tokenResponse, null, 2)}</pre>
+              </>
+            ) : null}
+            {clientResult.ok === true && clientResult.credentialResponse != null ? (
+              <>
+                <h3 className="kinchaku-oid4vci__jsonTitle">Credential response</h3>
+                <pre className="kinchaku-oid4vci__pre kinchaku-oid4vci__pre--tall">
+                  {JSON.stringify(clientResult.credentialResponse, null, 2)}
+                </pre>
+                <p className="kinchaku-oid4vci__meta kinchaku-oid4vci__meta--spaced">
+                  Also saved to <Link to="/kinchaku">{wallet.name}</Link> inventory.
+                </p>
+              </>
+            ) : null}
           </section>
         ) : null}
       </main>
