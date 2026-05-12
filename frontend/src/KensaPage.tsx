@@ -212,6 +212,7 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
           requestProtocol.toUpperCase(),
         ],
         preview: raw.slice(0, 180),
+        bodyJson: raw,
       })
     } catch (e) {
       setParseError(e instanceof Error ? e.message : 'Invalid JSON')
@@ -292,6 +293,7 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
       status: 'archived',
       tags: ['Sample', 'Kensa', mode === 'menkyo' ? 'Menkyo' : 'Enbu'],
       preview: sample.slice(0, 180),
+      bodyJson: sample,
     })
   }, [mode, enbuArtifact, requestProtocol])
 

@@ -149,6 +149,45 @@
   color: var(--text-h);
 }
 
+.kinchaku-page__jsonLabel {
+  margin: 0.75rem 0 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.kinchaku-page__jsonHint {
+  margin: 0.75rem 0 0.35rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.kinchaku-page__bodyJson {
+  margin: 0;
+  margin-top: 0.35rem;
+  max-height: min(32rem, 52vh);
+  overflow: auto;
+  border: 1px solid rgba(90, 232, 255, 0.18);
+  border-radius: 10px;
+  padding: 0.75rem 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: rgba(0, 0, 0, 0.42);
+  color: rgba(240, 244, 255, 0.96);
+  scrollbar-color: rgba(90, 232, 255, 0.35) rgba(0, 0, 0, 0.2);
+}
+
+.dojo-scene--day .kinchaku-page__bodyJson {
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--text-h);
+  border-color: rgba(40, 32, 20, 0.14);
+}
+
 .kinchaku-page__empty {
   margin: 0;
   color: var(--muted);

@@ -211,6 +211,7 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
         ...(tpl ? [tpl.title] : []),
       ],
       preview: text.slice(0, 180),
+      bodyJson: text,
     })
   }, [persona, operatorCodename, mode, issueOnly, selectedTemplate])
 

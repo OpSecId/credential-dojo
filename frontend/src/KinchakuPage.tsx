@@ -52,7 +52,9 @@ export default function KinchakuPage() {
           </h1>
           <p className="dojoZenPage__intro">
             A full inventory of stored <strong>Menkyo</strong> credentials and flow artifacts like{' '}
-            <strong>Shokan</strong> requests and <strong>Enbu</strong> responses.
+            <strong>Shokan</strong> requests and <strong>Enbu</strong> responses. Select a credential to view the full
+            issued JSON when it was saved from <Link to="/issue">issuance</Link> or Kensa; the seed student Menkyo
+            includes a complete demo VC.
           </p>
           <nav className="dojoZenPage__nav" aria-label="Kinchaku navigation">
             <Link className="dojoZenPage__back" to="/">
@@ -153,7 +155,19 @@ export default function KinchakuPage() {
                     </span>
                   ))}
                 </div>
-                <pre className="kinchaku-page__preview">{activeItem.preview}</pre>
+                {activeItem.bodyJson ? (
+                  <>
+                    <p className="kinchaku-page__jsonLabel">
+                      {activeItem.type === 'credential' ? 'Menkyo · full JSON' : 'Artifact · full JSON'}
+                    </p>
+                    <pre className="kinchaku-page__bodyJson">{activeItem.bodyJson}</pre>
+                  </>
+                ) : (
+                  <>
+                    <p className="kinchaku-page__jsonHint">Preview only — no full JSON stored for this row.</p>
+                    <pre className="kinchaku-page__preview">{activeItem.preview}</pre>
+                  </>
+                )}
               </>
             ) : (
               <p className="kinchaku-page__empty">No inventory for the selected filter yet.</p>

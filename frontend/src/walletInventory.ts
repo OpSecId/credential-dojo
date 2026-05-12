@@ -10,13 +10,42 @@ export type WalletItem = {
   status: WalletItemStatus
   tags: string[]
   updatedAt: string
+  /** Short line for list rows / legacy display */
   preview: string
+  /** Full JSON payload when available (e.g. issued Menkyo VC) */
+  bodyJson?: string
 }
 
 type WalletItemInput = Omit<WalletItem, 'id' | 'updatedAt'>
 
 const STORAGE_KEY = 'dojo.kinchaku.inventory.v1'
 const MAX_ITEMS = 60
+
+const SEED_STUDENT_CREDENTIAL_JSON = `{
+  "@context": ["https://www.w3.org/ns/credentials/v2"],
+  "id": "urn:uuid:seed-student-menkyo-demo",
+  "type": ["VerifiableCredential", "StudentCredential"],
+  "issuer": "did:key:z6MkregistrarEdRyuDemoDojo000000000000000",
+  "validFrom": "2026-05-07T07:10:00.000Z",
+  "credentialSubject": {
+    "id": "did:key:z6MkholderStudentExampleDemo000000000000",
+    "studentId": "STU-2048",
+    "program": "Credential Dojo · Demo pathway",
+    "pathway": "Kinchaku seed · Student ID Menkyo"
+  },
+  "credentialSchema": {
+    "id": "https://credential.ninja/schemas/student-demo-v1",
+    "type": "JsonSchema"
+  },
+  "proof": {
+    "type": "DataIntegrityProof",
+    "cryptosuite": "eddsa-rdfc-2022",
+    "verificationMethod": "did:key:z6MkregistrarEdRyuDemoDojo000000000000000#z6MkregistrarEdRyuDemoDojo000000000000000",
+    "proofPurpose": "assertionMethod",
+    "created": "2026-05-07T07:10:00.000Z",
+    "proofValue": "z58DEMODOJOPLACEHOLDERNOTAVERIFIEDSIGNATURE"
+  }
+}`
 
 const DEFAULT_ITEMS: WalletItem[] = [
   {
@@ -29,6 +58,7 @@ const DEFAULT_ITEMS: WalletItem[] = [
     tags: ['Menkyo', 'Identity', 'EdDSA'],
     updatedAt: '2026-05-07T07:10:00Z',
     preview: '{ "type": ["VerifiableCredential", "StudentCredential"], "issuer": "did:key:z6M..." }',
+    bodyJson: SEED_STUDENT_CREDENTIAL_JSON,
   },
   {
     id: 'seed-shokan-oid4vp',
@@ -49,7 +79,10 @@ function safeReadRaw(): WalletItem[] | null {
     if (!raw) return null
     const parsed = JSON.parse(raw) as unknown
     if (!Array.isArray(parsed)) return null
-    return parsed.filter(Boolean) as WalletItem[]
+    const items = parsed.filter(Boolean) as WalletItem[]
+    return items.map((it) =>
+      it.id === 'seed-menkyo-student' && !it.bodyJson ? { ...it, bodyJson: SEED_STUDENT_CREDENTIAL_JSON } : it,
+    )
   } catch {
     return null
   }
