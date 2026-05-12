@@ -136,7 +136,6 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
   const tFromTemplate = productTerminology.credentialFromTemplate
   const tTehon = productTerminology.template
   const tKasa = productTerminology.kasa
-  const tKata = productTerminology.cryptosuites
 
   return (
     <DojoFlowPageShell>
@@ -146,7 +145,6 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
         }
       >
         {issueOnly ? (
-          <>
             <p className="dojo-flowPage__intro">
               <strong>{tTehon.name}</strong> <span lang="ja">({tTehon.glyph})</span> — issuer copybook.
               <br />
@@ -155,13 +153,6 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
               <strong>{tFromTemplate.name}</strong> <span lang="ja">({tFromTemplate.glyph})</span> is that thread:
               Tehon into Menkyo.
             </p>
-            <p className="dojo-flowPage__introFollow">
-              Pick a card below—five claim sketches, one VC envelope. Proof school <strong>{tKasa.name}</strong>{' '}
-              <span lang="ja">({tKasa.glyph})</span>, suite <strong>{tKata.name}</strong>{' '}
-              <span lang="ja">({tKata.glyph})</span>. Browser-only. <Link to="/verify">/verify</Link> —{' '}
-              <strong>{tInspect.name}</strong>.
-            </p>
-          </>
         ) : (
           <p className="dojo-flowPage__intro">
             Mint a <strong>{tCred.name}</strong>-shaped demo JSON from a proof school (<strong>{tKasa.name}</strong>
