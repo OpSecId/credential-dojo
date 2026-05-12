@@ -17,7 +17,6 @@ import {
   readNinjaProfile,
   type NinjaProfile,
 } from './ninjaProfileStorage'
-import { useHomeTrainingFocusShell } from './HomeTrainingFocusShellContext'
 import { useJourney } from './journey/JourneyContext'
 import { useNoviceIdle } from './novice/NoviceIdleContext'
 import { productTerminology } from './terminology'
@@ -94,7 +93,6 @@ function prefersReducedMotion(): boolean {
 
 export default function HomePage() {
   const { theme } = useDojoLandingTheme()
-  const { setMeter: setShellTrainingMeter } = useHomeTrainingFocusShell()
   const { reportFocusMeter, clearHomeFocus } = useNoviceIdle()
   const { state: journeyState, pendingStart, startJourney, clearPendingStart, reportLearningFocus } = useJourney()
   const pouchGradId = useId().replace(/:/g, '')
@@ -143,10 +141,6 @@ export default function HomePage() {
     reportLearningFocus(focusMeter)
     return () => clearHomeFocus()
   }, [focusMeter, reportFocusMeter, clearHomeFocus, reportLearningFocus])
-
-  useEffect(() => {
-    setShellTrainingMeter(focusMeter)
-  }, [focusMeter, setShellTrainingMeter])
 
   useEffect(() => {
     const base = import.meta.env.VITE_API_BASE ?? ''
@@ -341,8 +335,7 @@ export default function HomePage() {
               {pendingStart
                 ? 'Profile created — begin your parallel resource journey now.'
                 : 'Begin your parallel resource journey anytime. '}
-              Open <strong>Your dojo</strong> from the rank bar in the top bar for rank, journey resources, practice tracks, and
-              achievements — tutorial-style milestones unlock as you explore.
+              Tutorial-style milestones unlock as you explore routes and tools in the playground and rail.
               <button type="button" className="dojo__journeyStart-btn" onClick={startJourney}>
                 Start journey
               </button>

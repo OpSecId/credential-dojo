@@ -133,21 +133,7 @@
     }
   }
 
-  /* --- Toolbar lantern (home) --- */
-  .dojo-lantern.dojo-lantern--toolbar {
-    transition: transform var(--dojo-dur-1) var(--dojo-ease-spring);
-  }
-
-  .dojo-lantern.dojo-lantern--toolbar:hover {
-    transform: scale(1.06);
-  }
-
-  .dojo-lantern.dojo-lantern--toolbar:active {
-    transform: scale(0.96);
-  }
-
-  /* --- Rank strip + profile toggle --- */
-  .dojo-hub-navRank,
+  /* --- Profile menu toggle --- */
   .ninjaProfileMenu__toggle {
     transition:
       transform var(--dojo-dur-1) var(--dojo-ease-out),
@@ -156,12 +142,10 @@
       box-shadow var(--dojo-dur-1) ease;
   }
 
-  .dojo-hub-navRank:hover,
   .ninjaProfileMenu__toggle:hover {
     transform: translateY(-1px);
   }
 
-  .dojo-hub-navRank:active,
   .ninjaProfileMenu__toggle:active {
     transform: translateY(0) scale(0.98);
   }
@@ -292,7 +276,6 @@
 
   .app-shell__navLink:hover,
   .app-shell__navBtn:hover,
-  .dojo-hub-navRank:hover,
   .ninjaProfileMenu__toggle:hover,
   .ninjaProfileMenu__row:hover,
   .issueVerify__btn:hover,

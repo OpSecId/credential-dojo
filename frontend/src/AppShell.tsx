@@ -1,14 +1,7 @@
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import './App.css'
 import './AppShell.css'
-import { DojoHubUiProvider } from './DojoHubUiContext'
-import { HomeTrainingFocusShellProvider } from './HomeTrainingFocusShellContext'
-import DojoLandingThemeLantern from './DojoLandingThemeLantern'
-import DojoNavRankProgress from './DojoNavRankProgress'
-import DojoProgressHub from './DojoProgressHub'
-import TrainingFocusNavBar from './TrainingFocusNavBar'
 import NinjaProfileMenu from './NinjaProfileMenu'
-import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { useNinjaProfileSnapshot } from './useNinjaProfileSnapshot'
 import { productTerminology } from './terminology'
 
@@ -166,10 +159,7 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
 
 export default function AppShell() {
   const profile = useNinjaProfileSnapshot()
-  const location = useLocation()
-  const { theme } = useDojoLandingTheme()
   const hasProfile = Boolean(profile)
-  const isHomePath = location.pathname === '/'
 
   const railFootHint = hasProfile ? (
     <span>Use the profile menu in the top bar to switch profiles, sign out, or edit.</span>
@@ -178,46 +168,34 @@ export default function AppShell() {
   )
 
   return (
-    <DojoHubUiProvider>
-      <HomeTrainingFocusShellProvider>
-      <div className={`app-shell app-shell--authed${hasProfile ? '' : ' app-shell--guest'}`}>
-        <a className="app-shell__skip" href="#app-shell-main">
-          Skip to content
-        </a>
+    <div className={`app-shell app-shell--authed${hasProfile ? '' : ' app-shell--guest'}`}>
+      <a className="app-shell__skip" href="#app-shell-main">
+        Skip to content
+      </a>
 
-        <header
-          className="app-shell__topNav"
-          aria-label="Site"
-          data-dojo-theme={isHomePath ? theme : undefined}
-        >
-          <div className="app-shell__topNavLeft">
-            <HomeLogoLink className="app-shell__homeLogo" />
-            {isHomePath ? <TrainingFocusNavBar /> : null}
-            <DojoNavRankProgress />
-          </div>
-          <div className="app-shell__topNavRight">
-            {isHomePath ? <DojoLandingThemeLantern /> : null}
-            <NinjaProfileMenu />
-          </div>
-        </header>
+      <header className="app-shell__topNav" aria-label="Site">
+        <div className="app-shell__topNavLeft">
+          <HomeLogoLink className="app-shell__homeLogo" />
+        </div>
+        <div className="app-shell__topNavRight">
+          <NinjaProfileMenu />
+        </div>
+      </header>
 
-        <div className="app-shell__bodyRow">
-          <aside className="app-shell__rail" aria-label="Dojo navigation">
-            <div className="app-shell__railInner">
-              <NavBlocks />
-              <footer className="app-shell__railFoot">{railFootHint}</footer>
-            </div>
-          </aside>
-
-          <div className="app-shell__stage">
-            <main className="app-shell__mainInner" id="app-shell-main" tabIndex={-1}>
-              <Outlet />
-            </main>
-            <DojoProgressHub showFab={false} />
+      <div className="app-shell__bodyRow">
+        <aside className="app-shell__rail" aria-label="Dojo navigation">
+          <div className="app-shell__railInner">
+            <NavBlocks />
+            <footer className="app-shell__railFoot">{railFootHint}</footer>
           </div>
+        </aside>
+
+        <div className="app-shell__stage">
+          <main className="app-shell__mainInner" id="app-shell-main" tabIndex={-1}>
+            <Outlet />
+          </main>
         </div>
       </div>
-      </HomeTrainingFocusShellProvider>
-    </DojoHubUiProvider>
+    </div>
   )
 }
