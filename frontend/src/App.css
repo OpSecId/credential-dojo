@@ -166,6 +166,14 @@
   gap: 2rem;
 }
 
+@media (max-width: 899px) {
+  .dojo-scene--landing.dojo-scene--calm .dojo {
+    padding-top: 0.55rem;
+    padding-bottom: 2rem;
+    gap: 1.25rem;
+  }
+}
+
 /* Calm: hero + tools as one vertically centered stack; padding balances fixed chrome L/R */
 .dojo-scene--landing.dojo-scene--calm .dojo.dojo--calmLanding {
   padding-left: max(1rem, env(safe-area-inset-left, 0px));
@@ -188,6 +196,15 @@
   gap: clamp(1.5rem, 3.5vh, 2.5rem);
   padding-block: clamp(0.25rem, 2vh, 1.25rem);
   box-sizing: border-box;
+}
+
+@media (max-width: 899px) {
+  .dojo__calmStage {
+    justify-content: flex-start;
+    min-height: 0;
+    gap: 1.15rem;
+    padding-block: 0.2rem 0.65rem;
+  }
 }
 
 .dojo__calmStage .dojo__calmBand {
@@ -760,6 +777,13 @@
   flex-direction: column;
   gap: 2rem;
   text-align: center;
+}
+
+@media (max-width: 899px) {
+  .dojo {
+    padding: 1rem 1rem 2.5rem;
+    gap: 1.35rem;
+  }
 }
 
 /* Intro: hero — wide layout is single column (meter moved to shell top nav) */

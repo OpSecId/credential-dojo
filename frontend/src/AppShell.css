@@ -200,7 +200,7 @@
   display: block;
   width: 100%;
   flex-shrink: 0;
-  max-height: min(42vh, 300px);
+  max-height: min(32vh, 240px);
   min-height: 0;
   overflow: hidden;
 }

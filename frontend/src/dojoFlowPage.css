@@ -22,6 +22,17 @@
   box-sizing: border-box;
 }
 
+@media (max-width: 899px) {
+  .dojo-flowPage__stage {
+    gap: 1rem;
+    padding-block: 0.2rem 0.75rem;
+  }
+
+  .dojo-flowPage__hero {
+    margin-bottom: 0.85rem;
+  }
+}
+
 .dojo-flowPage__hero {
   text-align: center;
   max-width: min(36rem, 100%);
