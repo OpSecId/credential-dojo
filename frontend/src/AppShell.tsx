@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import './App.css'
 import './AppShell.css'
@@ -162,9 +163,45 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
   )
 }
 
+function IconHome({ className }: { className?: string }) {
+  return (
+    <svg className={className} width={22} height={22} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M4 10.5L12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5Z"
+        stroke="currentColor"
+        strokeWidth={1.75}
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function IconIssue({ className }: { className?: string }) {
+  return (
+    <svg className={className} width={22} height={22} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z"
+        stroke="currentColor"
+        strokeWidth={1.75}
+        strokeLinejoin="round"
+      />
+      <path d="M14 2v6h6M12 18v-6M9 15h6" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" />
+    </svg>
+  )
+}
+
+function IconNavMenu({ className }: { className?: string }) {
+  return (
+    <svg className={className} width={22} height={22} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path d="M5 7h14M5 12h14M5 17h10" stroke="currentColor" strokeWidth={1.75} strokeLinecap="round" />
+    </svg>
+  )
+}
+
 export default function AppShell() {
   const profile = useNinjaProfileSnapshot()
   const hasProfile = Boolean(profile)
+  const railRef = useRef<HTMLElement>(null)
 
   const railFootHint = hasProfile ? (
     <span>Use the profile menu in the top bar to switch profiles, sign out, or edit.</span>
@@ -183,7 +220,7 @@ export default function AppShell() {
           <HomeLogoLink className="app-shell__homeLogo" />
           <Link
             to="/kinchaku"
-            className="app-shell__walletPill"
+            className="app-shell__walletPill app-shell__walletPill--topNav"
             title={`${productTerminology.wallet.name} — stored Menkyo & artifacts`}
             aria-label={`Open ${productTerminology.wallet.name} wallet`}
           >
@@ -199,7 +236,7 @@ export default function AppShell() {
       </header>
 
       <div className="app-shell__bodyRow">
-        <aside className="app-shell__rail" aria-label="Dojo navigation">
+        <aside ref={railRef} className="app-shell__rail" id="app-shell-rail" aria-label="Dojo navigation">
           <div className="app-shell__railInner">
             <NavBlocks />
             <footer className="app-shell__railFoot">{railFootHint}</footer>
@@ -212,6 +249,51 @@ export default function AppShell() {
           </main>
         </div>
       </div>
+
+      <nav className="app-shell__mobileTabBar" aria-label="Quick actions">
+        <NavLink
+          to="/"
+          end
+          className={({ isActive }: { isActive: boolean }) =>
+            `app-shell__mobileTab${isActive ? ' app-shell__mobileTab--active' : ''}`
+          }
+        >
+          <IconHome className="app-shell__mobileTabIcon" />
+          <span className="app-shell__mobileTabLabel">Home</span>
+        </NavLink>
+        <NavLink
+          to="/kinchaku"
+          className={({ isActive }: { isActive: boolean }) =>
+            `app-shell__mobileTab app-shell__mobileTab--wallet${isActive ? ' app-shell__mobileTab--active' : ''}`
+          }
+          title={`${productTerminology.wallet.name} — stored Menkyo & artifacts`}
+          aria-label={`Open ${productTerminology.wallet.name} wallet`}
+        >
+          <span className="app-shell__mobileTabGlyph" lang="ja">
+            {productTerminology.wallet.glyph}
+          </span>
+          <span className="app-shell__mobileTabLabel">{productTerminology.wallet.name}</span>
+        </NavLink>
+        <NavLink
+          to="/issue"
+          className={({ isActive }: { isActive: boolean }) =>
+            `app-shell__mobileTab${isActive ? ' app-shell__mobileTab--active' : ''}`
+          }
+        >
+          <IconIssue className="app-shell__mobileTabIcon" />
+          <span className="app-shell__mobileTabLabel">Issue</span>
+        </NavLink>
+        <button
+          type="button"
+          className="app-shell__mobileTab app-shell__mobileTab--button"
+          onClick={() => railRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })}
+          aria-controls="app-shell-rail"
+          aria-label="Scroll to site navigation"
+        >
+          <IconNavMenu className="app-shell__mobileTabIcon" />
+          <span className="app-shell__mobileTabLabel">Nav</span>
+        </button>
+      </nav>
     </div>
   )
 }

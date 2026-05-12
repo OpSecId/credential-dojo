@@ -352,16 +352,28 @@
   .app-shell__railInner {
     padding-top: 0.55rem;
   }
+
+  /* Space for fixed bottom tab bar so rail stays clear */
+  .app-shell__bodyRow {
+    padding-bottom: calc(3.35rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .app-shell__walletPill--topNav {
+    display: none;
+  }
 }
 
 .app-shell__mainInner {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
 }
 
 @media (min-width: 900px) {
+  .app-shell__mainInner {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+  }
+
   .app-shell__bodyRow {
     flex-direction: row;
   }
@@ -380,5 +392,122 @@
     height: 100%;
     border-right: 1px solid var(--shell-rail-border);
     border-bottom: none;
+  }
+}
+
+/* Fixed mobile footer — quick actions (wallet lives here on narrow viewports) */
+.app-shell__mobileTabBar {
+  display: none;
+}
+
+@media (max-width: 899px) {
+  .app-shell__mobileTabBar {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 400;
+    align-items: stretch;
+    justify-content: space-around;
+    gap: 0.15rem;
+    min-height: calc(3.15rem + env(safe-area-inset-bottom, 0px));
+    padding: 0.35rem 0.4rem env(safe-area-inset-bottom, 0px);
+    box-sizing: border-box;
+    background: rgba(7, 9, 16, 0.94);
+    border-top: 1px solid rgba(201, 168, 110, 0.2);
+    backdrop-filter: blur(14px) saturate(1.06);
+    box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.35);
+  }
+
+  .app-shell__mobileTab {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.12rem;
+    min-width: 0;
+    padding: 0.2rem 0.15rem;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--shell-muted);
+    text-decoration: none;
+    font: inherit;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .app-shell__mobileTab:hover {
+    color: var(--shell-text);
+    background: rgba(90, 232, 255, 0.06);
+  }
+
+  .app-shell__mobileTab:focus-visible {
+    outline: 2px solid var(--shell-accent);
+    outline-offset: 1px;
+  }
+
+  .app-shell__mobileTab--active {
+    color: var(--shell-cyan);
+    background: rgba(90, 232, 255, 0.1);
+  }
+
+  .app-shell__mobileTab--wallet {
+    color: rgba(240, 244, 255, 0.88);
+  }
+
+  .app-shell__mobileTab--wallet.app-shell__mobileTab--active {
+    color: var(--shell-accent);
+    background: rgba(232, 184, 74, 0.14);
+    box-shadow: inset 0 0 0 1px rgba(232, 184, 74, 0.28);
+  }
+
+  .app-shell__mobileTab--button {
+    text-align: center;
+  }
+
+  .app-shell__mobileTabIcon {
+    flex-shrink: 0;
+    opacity: 0.92;
+  }
+
+  .app-shell__mobileTabGlyph {
+    display: block;
+    font-size: 1.05rem;
+    line-height: 1;
+    font-weight: 800;
+    color: var(--shell-accent);
+    letter-spacing: 0.02em;
+  }
+
+  .app-shell__mobileTab--wallet .app-shell__mobileTabGlyph {
+    margin-bottom: -0.05rem;
+  }
+
+  .app-shell__mobileTabLabel {
+    display: block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.15;
+  }
+
+  .app-shell__mobileTab--wallet .app-shell__mobileTabLabel {
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-weight: 800;
+    font-family: var(--font-display, 'Shippori Mincho', serif);
+    font-size: 0.68rem;
+  }
+
+  .app-shell__mainInner {
+    padding-bottom: calc(0.85rem + 3.35rem + env(safe-area-inset-bottom, 0px));
   }
 }
