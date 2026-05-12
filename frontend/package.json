@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run generate:app-icon && vite",
     "generate:og": "node ./scripts/generate-og-png.mjs",
     "generate:app-icon": "node ./scripts/generate-app-icon-png.mjs",
     "build": "npm run generate:og && npm run generate:app-icon && tsc -b && vite build",
@@ -34,6 +34,7 @@
     "sharp": "^0.34.5",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.58.2",
-    "vite": "^8.0.10"
+    "vite": "^8.0.10",
+    "vite-plugin-pwa": "^1.3.0"
   }
 }
