@@ -3,7 +3,13 @@ import { Link } from 'react-router-dom'
 import './IssueVerifyPage.css'
 import { DojoFlowPageHero, DojoFlowPageShell } from './dojoFlowPage'
 import { DEMO_PERSONAS_OFFLINE, type PersonaPublic, type PersonasPayload } from './demoPersonas'
-import { buildDemoMenkyo } from './issueVerifyDemoVc'
+import {
+  buildDemoCredential,
+  buildDemoMenkyo,
+  ISSUE_CREDENTIAL_TEMPLATES,
+  previewCredentialIdForTemplate,
+  type IssueCredentialTemplateId,
+} from './issueVerifyDemoVc'
 import { inspectJson } from './kensa/kensaInspect'
 import {
   NINJA_PROFILE_CHANGED_EVENT,
@@ -13,7 +19,7 @@ import {
 import { productTerminology } from './terminology'
 import { addWalletItem } from './walletInventory'
 
-const PREVIEW_CREDENTIAL_ID = 'urn:uuid:00000000-0000-4000-8000-000000000001'
+const COMBINED_PREVIEW_CREDENTIAL_ID = previewCredentialIdForTemplate('dojo-demo')
 
 export type IssueVerifyPageProps = {
   /** `issue` — issuance only (`/issue`). Default `both` is the combined Issue & verify page. */
@@ -21,8 +27,10 @@ export type IssueVerifyPageProps = {
 }
 
 export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps) {
+  const issueOnly = mode === 'issue'
   const [personas, setPersonas] = useState<readonly PersonaPublic[] | null>(null)
   const [ninjaProfile, setNinjaProfile] = useState<NinjaProfile | null>(() => readNinjaProfile())
+  const [selectedTemplate, setSelectedTemplate] = useState<IssueCredentialTemplateId>('dojo-demo')
   const [rawJson, setRawJson] = useState('')
   const [appliedJson, setAppliedJson] = useState('')
   const [parseError, setParseError] = useState<string | null>(null)
@@ -59,14 +67,18 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
 
   const operatorCodename = ninjaProfile?.codename
 
-  const previewVc = useMemo(
-    () =>
-      buildDemoMenkyo(persona, {
+  const previewVc = useMemo(() => {
+    if (issueOnly) {
+      return buildDemoCredential(persona, selectedTemplate, {
         operatorCodename,
-        credentialId: PREVIEW_CREDENTIAL_ID,
-      }),
-    [persona, operatorCodename],
-  )
+        credentialId: previewCredentialIdForTemplate(selectedTemplate),
+      })
+    }
+    return buildDemoMenkyo(persona, {
+      operatorCodename,
+      credentialId: COMBINED_PREVIEW_CREDENTIAL_ID,
+    })
+  }, [issueOnly, persona, operatorCodename, selectedTemplate])
 
   const previewText = useMemo(() => JSON.stringify(previewVc, null, 2), [previewVc])
 
@@ -81,23 +93,32 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
   }, [appliedJson])
 
   const issueDemo = useCallback(() => {
-    const vc = buildDemoMenkyo(persona, { operatorCodename })
+    const vc = issueOnly
+      ? buildDemoCredential(persona, selectedTemplate, { operatorCodename })
+      : buildDemoMenkyo(persona, { operatorCodename })
     const text = JSON.stringify(vc, null, 2)
     setRawJson(text)
     setAppliedJson(text)
     setParseError(null)
     const opSuffix = operatorCodename ? ` · ${operatorCodename}` : ''
+    const tpl = issueOnly ? ISSUE_CREDENTIAL_TEMPLATES.find((t) => t.id === selectedTemplate) : undefined
     addWalletItem({
       type: 'credential',
-      title: `Demo Menkyo · ${persona.label}${opSuffix}`,
+      title: tpl ? `Demo · ${tpl.title}${opSuffix}` : `Demo Menkyo · ${persona.label}${opSuffix}`,
       subtitle:
         mode === 'issue' ? 'Issued from /issue (browser demo)' : 'Issued from Issue & verify (browser demo)',
       issuerOrSource: persona.label,
       status: 'ready',
-      tags: ['Menkyo', 'Demo', mode === 'issue' ? 'Issue' : 'Issue-verify', persona.proofSchool],
+      tags: [
+        'Menkyo',
+        'Demo',
+        mode === 'issue' ? 'Issue' : 'Issue-verify',
+        persona.proofSchool,
+        ...(tpl ? [tpl.title] : []),
+      ],
       preview: text.slice(0, 180),
     })
-  }, [persona, operatorCodename, mode])
+  }, [persona, operatorCodename, mode, issueOnly, selectedTemplate])
 
   const runVerify = useCallback(() => {
     try {
@@ -116,7 +137,6 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
   const tTehon = productTerminology.template
   const tKasa = productTerminology.kasa
   const tKata = productTerminology.cryptosuites
-  const issueOnly = mode === 'issue'
 
   return (
     <DojoFlowPageShell>
@@ -138,12 +158,11 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
               concrete credential JSON you can hold and present).
             </p>
             <p className="dojo-flowPage__introFollow">
-              <strong>{tKasa.name}</strong> (<span lang="ja">{tKasa.glyph}</span>) picks the <strong>demo proof school</strong>{' '}
-              (issuer persona), which also sets the cryptosuite metaphor <strong>{tKata.name}</strong> (
-              <span lang="ja">{tKata.glyph}</span>) and the demo <code>did:key</code> flavor on the payload below. This
-              page only <strong>mints shaped demo JSON in your browser</strong>—no chain proofs or canonical
-              verification. For structural inspection of that JSON as a held credential, use{' '}
-              <strong>{tInspect.name}</strong> on <Link to="/verify">/verify</Link>.
+              On this route, <strong>pick one of five template cards</strong> below—each mints a different demo VC
+              claim shape while sharing the same W3C VC envelope. Your <strong>{tKasa.name}</strong> (
+              <span lang="ja">{tKasa.glyph}</span>) sets the proof school and <strong>{tKata.name}</strong> (
+              <span lang="ja">{tKata.glyph}</span>) suite on the signature block. Everything stays in the browser—open{' '}
+              <strong>{tInspect.name}</strong> on <Link to="/verify">/verify</Link> to inspect the JSON.
             </p>
           </>
         ) : (
@@ -164,29 +183,77 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
         <div className={`issueVerify__grid${issueOnly ? ' issueVerify__grid--issueOnly' : ''}`}>
           <div>
             <h2 className="issueVerify__sectionTitle">Issue (demo)</h2>
-            <p className="issueVerify__sectionBody">
-              The demo issuer follows your <strong>active ninja profile</strong>: its <strong>Kasa</strong> (proof
-              school), <strong>Kata</strong> flavor, and your codename on the subject. Change school or codename in{' '}
-              <Link to="/create-ninja-profile">ninja profile</Link> or the shell profile menu. With no profile saved,
-              we use the default <strong>Ed-ryū</strong> demo school and no operator name.
-            </p>
+            {issueOnly ? (
+              <>
+                <p className="issueVerify__sectionBody">
+                  Each card is a different <strong>Tehon-style</strong> sketch: baseline Dojo, university degree,
+                  employment, training completion, or event admission. Issuer <strong>Kasa</strong>, cryptosuite{' '}
+                  <strong>Kata</strong>, and optional codename still follow your{' '}
+                  <Link to="/create-ninja-profile">ninja profile</Link> or shell profile menu.
+                </p>
+                {!ninjaProfile ? (
+                  <p className="issueVerify__profileHint">
+                    Sign in from the profile menu to attach your codename—or stay signed out and use the default demo
+                    issuer.
+                  </p>
+                ) : null}
+                <div className="issueVerify__tplGrid" role="radiogroup" aria-label="Credential template">
+                  {ISSUE_CREDENTIAL_TEMPLATES.map((tpl) => (
+                    <button
+                      key={tpl.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={selectedTemplate === tpl.id}
+                      className={`issueVerify__tplCard${
+                        selectedTemplate === tpl.id ? ' issueVerify__tplCard--selected' : ''
+                      }`}
+                      onClick={() => setSelectedTemplate(tpl.id)}
+                    >
+                      <span className="issueVerify__tplGlyph" aria-hidden>
+                        {tpl.glyph}
+                      </span>
+                      <span className="issueVerify__tplTitle">{tpl.title}</span>
+                      <span className="issueVerify__tplSubtitle">{tpl.subtitle}</span>
+                    </button>
+                  ))}
+                </div>
+                <div className="issueVerify__actions">
+                  <button type="button" className="issueVerify__btn issueVerify__btn--primary" onClick={issueDemo}>
+                    Issue selected template
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="issueVerify__sectionBody">
+                  The demo issuer follows your <strong>active ninja profile</strong>: its <strong>Kasa</strong> (proof
+                  school), <strong>Kata</strong> flavor, and your codename on the subject. Change school or codename in{' '}
+                  <Link to="/create-ninja-profile">ninja profile</Link> or the shell profile menu. With no profile saved,
+                  we use the default <strong>Ed-ryū</strong> demo school and no operator name.
+                </p>
 
-            {!ninjaProfile ? (
-              <p className="issueVerify__profileHint">
-                No ninja profile in this browser —{' '}
-                <Link to="/create-ninja-profile">create one</Link> to issue under your identity, or continue with the
-                default demo issuer.
-              </p>
-            ) : null}
+                {!ninjaProfile ? (
+                  <p className="issueVerify__profileHint">
+                    No ninja profile in this browser —{' '}
+                    <Link to="/create-ninja-profile">create one</Link> to issue under your identity, or continue with the
+                    default demo issuer.
+                  </p>
+                ) : null}
 
-            <div className="issueVerify__actions">
-              <button type="button" className="issueVerify__btn issueVerify__btn--primary" onClick={issueDemo}>
-                Issue demo Menkyo
-              </button>
-            </div>
+                <div className="issueVerify__actions">
+                  <button type="button" className="issueVerify__btn issueVerify__btn--primary" onClick={issueDemo}>
+                    Issue demo Menkyo
+                  </button>
+                </div>
+              </>
+            )}
 
             <div className="issueVerify__previewBlock">
-              <p className="issueVerify__previewLabel">Preview (active profile Kasa &amp; codename)</p>
+              <p className="issueVerify__previewLabel">
+                {issueOnly
+                  ? 'Preview (selected template · Kasa & codename)'
+                  : 'Preview (active profile Kasa & codename)'}
+              </p>
               <pre className="issueVerify__preview" title="Read-only preview of the next Issue payload shape">
                 {previewText}
               </pre>
