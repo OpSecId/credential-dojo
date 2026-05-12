@@ -396,6 +396,10 @@ export default function HomePage() {
             <div className="dojo__calmBand">
               <p className="dojo__calmBand-label">Tools</p>
               <nav className="dojo__calmEssentials" aria-label="Tools and demos">
+                <Link to="/kinchaku">{productTerminology.wallet.name}</Link>
+                <span className="dojo__calmDot" aria-hidden>
+                  ·
+                </span>
                 <Link to="/issue">{productTerminology.credentialFromTemplate.issueCredentialLabel}</Link>
                 <span className="dojo__calmDot" aria-hidden>
                   ·
@@ -636,6 +640,9 @@ export default function HomePage() {
                 </div>
 
                 <div className="kinchaku-widget__actions" aria-label="Wallet quick actions">
+                  <Link className="kinchaku-widget__action kinchaku-widget__action--primary" to="/kinchaku">
+                    Open wallet
+                  </Link>
                   <Link className="kinchaku-widget__action" to="/kensa">
                     Inspect
                   </Link>

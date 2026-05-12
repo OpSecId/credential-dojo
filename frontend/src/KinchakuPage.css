@@ -8,6 +8,59 @@
   gap: 1rem;
 }
 
+.kinchaku-page__walletCta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kinchaku-page__walletCtaPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.52rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(232, 184, 74, 0.45);
+  background: rgba(232, 184, 74, 0.14);
+  color: var(--accent);
+  font-size: 0.9rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.kinchaku-page__walletCtaPrimary:hover {
+  border-color: rgba(232, 184, 74, 0.65);
+  background: rgba(232, 184, 74, 0.22);
+}
+
+.kinchaku-page__scanQr {
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 0.5rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid rgba(90, 232, 255, 0.35);
+  background: rgba(90, 232, 255, 0.08);
+  color: var(--text-h);
+  cursor: pointer;
+}
+
+.kinchaku-page__scanQr:hover {
+  border-color: rgba(90, 232, 255, 0.55);
+  background: rgba(90, 232, 255, 0.12);
+}
+
+.kinchaku-page__scanQr--nav {
+  padding: 0.35rem 0.72rem;
+  font-size: 0.82rem;
+  border-radius: 10px;
+}
+
+.dojo-scene--day .kinchaku-page__scanQr {
+  color: var(--text-h);
+}
+
 .kinchaku-page__stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

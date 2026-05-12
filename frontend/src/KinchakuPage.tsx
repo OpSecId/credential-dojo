@@ -1,10 +1,12 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import './App.css'
 import './KinchakuPage.css'
 import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { productTerminology } from './terminology'
 import { getWalletItems, type WalletItemType, type WalletItemStatus } from './walletInventory'
+
+const KinchakuOid4vciQrModal = lazy(() => import('./KinchakuOid4vciQrModal'))
 
 const STATUS_LABEL: Record<WalletItemStatus, string> = {
   ready: 'Ready',
@@ -14,9 +16,11 @@ const STATUS_LABEL: Record<WalletItemStatus, string> = {
 
 export default function KinchakuPage() {
   const { theme } = useDojoLandingTheme()
+  const navigate = useNavigate()
   const [items, setItems] = useState(() => getWalletItems())
   const [tab, setTab] = useState<'all' | WalletItemType>('all')
   const [activeId, setActiveId] = useState(items[0]?.id ?? '')
+  const [qrOpen, setQrOpen] = useState(false)
 
   const filtered = useMemo(() => {
     if (tab === 'all') return items
@@ -69,11 +73,33 @@ export default function KinchakuPage() {
             <Link className="dojoZenPage__back" to="/kinchaku-oid4vci">
               OID4VCI offer URI
             </Link>
+            <button type="button" className="kinchaku-page__scanQr kinchaku-page__scanQr--nav" onClick={() => setQrOpen(true)}>
+              Scan QR (OID4VCI)
+            </button>
             <button type="button" className="dojoZenPage__back" onClick={() => setItems(getWalletItems())}>
               Refresh Wallet
             </button>
           </nav>
         </header>
+
+        <div className="kinchaku-page__walletCta" role="region" aria-label="Wallet shortcuts">
+          <Link className="kinchaku-page__walletCtaPrimary" to="/kinchaku-oid4vci">
+            Add via OID4VCI offer
+          </Link>
+          <button type="button" className="kinchaku-page__scanQr" onClick={() => setQrOpen(true)}>
+            Scan QR code
+          </button>
+        </div>
+
+        {qrOpen ? (
+          <Suspense fallback={null}>
+            <KinchakuOid4vciQrModal
+              open
+              onClose={() => setQrOpen(false)}
+              onDecoded={(text) => navigate('/kinchaku-oid4vci', { state: { prefilledOffer: text } })}
+            />
+          </Suspense>
+        ) : null}
 
         <section className="kinchaku-page__stats" aria-label="Wallet totals">
           <article className="kinchaku-page__statCard">

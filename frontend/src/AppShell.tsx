@@ -75,6 +75,11 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
         <p className="app-shell__sectionLabel">Dojo</p>
         <ul className="app-shell__navList">
           <li className="app-shell__navItem">
+            <ShellNavLink to="/kinchaku" onPick={onPick}>
+              {productTerminology.wallet.name} (wallet)
+            </ShellNavLink>
+          </li>
+          <li className="app-shell__navItem">
             <ShellNavLink to="/" end onPick={onPick}>
               Home
             </ShellNavLink>
@@ -123,11 +128,6 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
           <li className="app-shell__navItem">
             <ShellNavLink to="/discover-kasa" onPick={onPick}>
               Discover Kasa
-            </ShellNavLink>
-          </li>
-          <li className="app-shell__navItem">
-            <ShellNavLink to="/kinchaku" onPick={onPick}>
-              Kinchaku
             </ShellNavLink>
           </li>
           <li className="app-shell__navItem">
@@ -181,6 +181,17 @@ export default function AppShell() {
       <header className="app-shell__topNav" aria-label="Site">
         <div className="app-shell__topNavLeft">
           <HomeLogoLink className="app-shell__homeLogo" />
+          <Link
+            to="/kinchaku"
+            className="app-shell__walletPill"
+            title={`${productTerminology.wallet.name} — stored Menkyo & artifacts`}
+            aria-label={`Open ${productTerminology.wallet.name} wallet`}
+          >
+            <span className="app-shell__walletPillGlyph" lang="ja">
+              {productTerminology.wallet.glyph}
+            </span>
+            <span className="app-shell__walletPillLabel">{productTerminology.wallet.name}</span>
+          </Link>
         </div>
         <div className="app-shell__topNavRight">
           <NinjaProfileMenu />

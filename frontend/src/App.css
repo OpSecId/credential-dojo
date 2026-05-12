@@ -1916,6 +1916,16 @@
   background: rgba(90, 232, 255, 0.16);
 }
 
+.kinchaku-widget__action--primary {
+  border-color: rgba(232, 184, 74, 0.45);
+  background: rgba(232, 184, 74, 0.14);
+  color: var(--accent);
+}
+
+.kinchaku-widget__action--primary:hover {
+  background: rgba(232, 184, 74, 0.24);
+}
+
 .dojo-pouch {
   position: relative;
   display: grid;

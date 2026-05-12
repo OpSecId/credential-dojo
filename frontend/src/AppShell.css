@@ -240,6 +240,42 @@
   flex: 1;
 }
 
+.app-shell__walletPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  padding: 0.22rem 0.55rem 0.22rem 0.42rem;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 184, 74, 0.35);
+  background: rgba(232, 184, 74, 0.1);
+  color: var(--shell-heading);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.app-shell__walletPill:hover {
+  border-color: rgba(232, 184, 74, 0.55);
+  background: rgba(232, 184, 74, 0.16);
+}
+
+.app-shell__walletPill:focus-visible {
+  outline: 2px solid var(--shell-accent);
+  outline-offset: 2px;
+}
+
+.app-shell__walletPillGlyph {
+  font-size: 0.95rem;
+  line-height: 1;
+  opacity: 0.95;
+}
+
+.app-shell__walletPillLabel {
+  font-family: var(--font-display, 'Shippori Mincho', serif);
+}
+
 .app-shell__topNavRight {
   display: flex;
   align-items: center;

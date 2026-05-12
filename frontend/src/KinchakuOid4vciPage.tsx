@@ -1,11 +1,12 @@
-import { useCallback, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import './App.css'
 import './KinchakuOid4vciPage.css'
 import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { parseOid4vciCredentialOfferInput, type Oid4vciParseResult } from './oid4vci/parseOid4vciCredentialOfferUri'
 import { SAMPLE_VERES_SANDBOX_CREDENTIAL_OFFER_URI } from './oid4vci/sampleCredentialOffers'
 import { productTerminology } from './terminology'
+import type { KinchakuOid4vciLocationState } from './kinchakuOid4vciNavState'
 import { addWalletItem } from './walletInventory'
 
 type Oid4vciClientStep = { id: string; ok: boolean; detail?: string; url?: string }
@@ -31,6 +32,8 @@ type Oid4vciClientResult = Oid4vciClientOk | Oid4vciClientErr
 
 export default function KinchakuOid4vciPage() {
   const { theme } = useDojoLandingTheme()
+  const location = useLocation()
+  const navigate = useNavigate()
   const [input, setInput] = useState('')
   const [result, setResult] = useState<Oid4vciParseResult | null>(null)
   const [fetchError, setFetchError] = useState<string | null>(null)
@@ -41,6 +44,20 @@ export default function KinchakuOid4vciPage() {
   const [clientHttpError, setClientHttpError] = useState<string | null>(null)
 
   const wallet = productTerminology.wallet
+
+  useEffect(() => {
+    const st = location.state as KinchakuOid4vciLocationState | null | undefined
+    const raw = st?.prefilledOffer
+    if (typeof raw !== 'string' || !raw.trim()) return
+    const trimmed = raw.trim()
+    setInput(trimmed)
+    setFetchedJson(null)
+    setFetchError(null)
+    setClientResult(null)
+    setClientHttpError(null)
+    setResult(parseOid4vciCredentialOfferInput(trimmed))
+    navigate(`${location.pathname}${location.search}${location.hash}`, { replace: true, state: null })
+  }, [location.state, location.pathname, location.search, location.hash, navigate])
 
   const runParse = useCallback(() => {
     setFetchedJson(null)

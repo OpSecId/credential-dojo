@@ -13,6 +13,7 @@
     "start": "sh -c \"exec serve dist -s -p ${PORT:-3000}\""
   },
   "dependencies": {
+    "@zxing/browser": "^0.2.0",
     "augmented-ui": "^2.0.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
