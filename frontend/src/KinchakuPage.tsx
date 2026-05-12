@@ -43,11 +43,11 @@ export default function KinchakuPage() {
   }, [items])
 
   return (
-    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen`}>
+    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen kinchaku-page`}>
       <div className="dojo-scene__moon" aria-hidden />
       <div className="dojo-scene__bg" aria-hidden />
       <div className="dojo-scene__grid" aria-hidden />
-      <main className="kinchaku-page__main kinchaku-page dojoZenPage dojoZenPage--wide">
+      <main className="dojoZenPage dojoZenPage--wide">
         <header className="dojoZenPage__header">
           <p className="dojoZenPage__eyebrow">Credential Dojo</p>
           <h1 className="dojoZenPage__title">
@@ -61,7 +61,7 @@ export default function KinchakuPage() {
           </p>
           <nav className="dojoZenPage__nav" aria-label="Kinchaku navigation">
             <Link className="dojoZenPage__back" to="/">
-              ← Back Home
+              ← Home
             </Link>
             <Link className="dojoZenPage__back" to="/kensa">
               Open Kensa
@@ -81,15 +81,6 @@ export default function KinchakuPage() {
           </nav>
         </header>
 
-        <div className="kinchaku-page__walletCta" role="region" aria-label="Wallet shortcuts">
-          <Link className="kinchaku-page__walletCtaPrimary" to="/kinchaku-oid4vci">
-            Add via OID4VCI offer
-          </Link>
-          <button type="button" className="kinchaku-page__scanQr" onClick={() => setQrOpen(true)}>
-            Scan QR code
-          </button>
-        </div>
-
         {qrOpen ? (
           <Suspense fallback={null}>
             <KinchakuOid4vciQrModal
@@ -100,23 +91,44 @@ export default function KinchakuPage() {
           </Suspense>
         ) : null}
 
-        <section className="kinchaku-page__stats" aria-label="Wallet totals">
-          <article className="kinchaku-page__statCard">
-            <p className="kinchaku-page__statLabel">Menkyo stored</p>
-            <p className="kinchaku-page__statValue">{stats.credentials}</p>
-          </article>
-          <article className="kinchaku-page__statCard">
-            <p className="kinchaku-page__statLabel">Artifacts logged</p>
-            <p className="kinchaku-page__statValue">{stats.artifacts}</p>
-          </article>
-          <article className="kinchaku-page__statCard">
-            <p className="kinchaku-page__statLabel">Queue waiting</p>
-            <p className="kinchaku-page__statValue">{stats.queued}</p>
-          </article>
+        <section className="kinchaku-page__panel kinchaku-page__quickPanel" aria-labelledby="kinchaku-quick-label">
+          <p id="kinchaku-quick-label" className="kinchaku-page__panelLabel">
+            Add to wallet
+          </p>
+          <div className="kinchaku-page__walletCta" role="group" aria-label="Wallet shortcuts">
+            <Link className="kinchaku-page__walletCtaPrimary" to="/kinchaku-oid4vci">
+              Add via OID4VCI offer
+            </Link>
+            <button type="button" className="kinchaku-page__scanQr" onClick={() => setQrOpen(true)}>
+              Scan QR code
+            </button>
+          </div>
         </section>
 
-        <section className="kinchaku-page__workspace">
-          <div className="kinchaku-page__listCard">
+        <section
+          className="kinchaku-page__panel kinchaku-page__inventoryPanel"
+          aria-labelledby="kinchaku-inventory-label"
+        >
+          <h2 id="kinchaku-inventory-label" className="kinchaku-page__inventoryHeading">
+            Inventory
+          </h2>
+          <div className="kinchaku-page__stats" aria-label="Wallet totals">
+            <article className="kinchaku-page__statCard">
+              <p className="kinchaku-page__statLabel">Menkyo stored</p>
+              <p className="kinchaku-page__statValue">{stats.credentials}</p>
+            </article>
+            <article className="kinchaku-page__statCard">
+              <p className="kinchaku-page__statLabel">Artifacts logged</p>
+              <p className="kinchaku-page__statValue">{stats.artifacts}</p>
+            </article>
+            <article className="kinchaku-page__statCard">
+              <p className="kinchaku-page__statLabel">Queue waiting</p>
+              <p className="kinchaku-page__statValue">{stats.queued}</p>
+            </article>
+          </div>
+
+          <div className="kinchaku-page__workspace">
+            <div className="kinchaku-page__listCard">
             <div className="kinchaku-page__tabs" role="tablist" aria-label="Inventory filter">
               <button
                 type="button"
@@ -156,16 +168,16 @@ export default function KinchakuPage() {
                 </li>
               ))}
             </ul>
-          </div>
+            </div>
 
-          <aside className="kinchaku-page__detailCard">
+            <aside className="kinchaku-page__detailCard">
             {activeItem ? (
               <>
                 <p className="kinchaku-page__detailType">
                   {activeItem.type === 'credential' ? 'Credential' : 'Artifact'} ·{' '}
                   {STATUS_LABEL[activeItem.status]}
                 </p>
-                <h2 className="kinchaku-page__detailTitle">{activeItem.title}</h2>
+                <h3 className="kinchaku-page__detailTitle">{activeItem.title}</h3>
                 <p className="kinchaku-page__detailSubtitle">{activeItem.subtitle}</p>
                 <p className="kinchaku-page__detailRow">
                   <strong>Source:</strong> {activeItem.issuerOrSource}
@@ -197,7 +209,8 @@ export default function KinchakuPage() {
             ) : (
               <p className="kinchaku-page__empty">No inventory for the selected filter yet.</p>
             )}
-          </aside>
+            </aside>
+          </div>
         </section>
       </main>
     </div>
