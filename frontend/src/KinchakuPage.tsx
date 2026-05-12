@@ -64,6 +64,9 @@ export default function KinchakuPage() {
             <Link className="dojoZenPage__back" to="/expedition">
               Open Expedition
             </Link>
+            <Link className="dojoZenPage__back" to="/kinchaku-oid4vci">
+              OID4VCI offer URI
+            </Link>
             <button type="button" className="dojoZenPage__back" onClick={() => setItems(getWalletItems())}>
               Refresh Wallet
             </button>

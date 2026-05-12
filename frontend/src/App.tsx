@@ -9,6 +9,7 @@ import IssueVerifyPage from './IssueVerifyPage'
 import JsonExplorerPage from './JsonExplorerPage'
 import KensaPage from './KensaPage'
 import KinchakuPage from './KinchakuPage'
+import KinchakuOid4vciPage from './KinchakuOid4vciPage'
 import LexiconPage from './LexiconPage'
 import TejunViewerPage from './TejunViewerPage'
 import { JourneyProvider } from './journey/JourneyContext'
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="/kensa" element={<KensaPage initialMode="enbu" />} />
             <Route path="/menkyo" element={<KensaPage initialMode="menkyo" />} />
             <Route path="/kinchaku" element={<KinchakuPage />} />
+            <Route path="/kinchaku-oid4vci" element={<KinchakuOid4vciPage />} />
             <Route path="/lexicon" element={<LexiconPage />} />
           </Route>
         </Routes>

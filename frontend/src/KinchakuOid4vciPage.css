@@ -1,0 +1,208 @@
+.kinchaku-oid4vci {
+  min-height: calc(100dvh - 2rem);
+}
+
+.kinchaku-oid4vci__panel {
+  margin-top: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(11, 18, 34, 0.86);
+  padding: 1rem 1rem 1.1rem;
+}
+
+.dojo-scene--day .kinchaku-oid4vci__panel {
+  background: rgba(255, 252, 246, 0.88);
+}
+
+.kinchaku-oid4vci__label {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.kinchaku-oid4vci__textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 6.5rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.32);
+  color: var(--text-h);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  resize: vertical;
+}
+
+.dojo-scene--day .kinchaku-oid4vci__textarea {
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.kinchaku-oid4vci__textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.kinchaku-oid4vci__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+}
+
+.kinchaku-oid4vci__btn {
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.48rem 0.95rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--text-h);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.kinchaku-oid4vci__btn:hover {
+  border-color: rgba(90, 232, 255, 0.4);
+  background: rgba(90, 232, 255, 0.08);
+}
+
+.kinchaku-oid4vci__btn--primary {
+  border-color: rgba(232, 184, 74, 0.45);
+  background: rgba(232, 184, 74, 0.12);
+  color: var(--accent);
+}
+
+.kinchaku-oid4vci__btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.kinchaku-oid4vci__result {
+  margin-top: 1.1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  padding: 0.85rem 1rem;
+  background: rgba(9, 16, 31, 0.72);
+}
+
+.dojo-scene--day .kinchaku-oid4vci__result {
+  background: rgba(255, 252, 246, 0.82);
+}
+
+.kinchaku-oid4vci__resultTitle {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+.kinchaku-oid4vci__jsonTitle {
+  margin: 0.75rem 0 0.45rem;
+  font-family: var(--font-display);
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+.kinchaku-oid4vci__fetchErrTitle {
+  margin: 0.75rem 0 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-hot);
+}
+
+.kinchaku-oid4vci__pre--error {
+  border-color: rgba(255, 107, 74, 0.35);
+  background: rgba(255, 107, 74, 0.07);
+  color: var(--text);
+  max-height: min(14rem, 40vh);
+}
+
+.kinchaku-oid4vci__meta {
+  margin: 0 0 0.65rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.kinchaku-oid4vci__meta code {
+  font-size: 0.76rem;
+  color: var(--text-h);
+}
+
+.kinchaku-oid4vci__notes {
+  margin: 0 0 0.75rem;
+  padding-left: 1.1rem;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.kinchaku-oid4vci__notes li {
+  margin-bottom: 0.25rem;
+}
+
+.kinchaku-oid4vci__error {
+  margin: 0;
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 107, 74, 0.4);
+  background: rgba(255, 107, 74, 0.08);
+  color: var(--accent-hot);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.kinchaku-oid4vci__errorDetail {
+  margin: 0.45rem 0 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.kinchaku-oid4vci__pre {
+  margin: 0;
+  max-height: min(28rem, 52vh);
+  overflow: auto;
+  padding: 0.75rem 0.8rem;
+  border-radius: 10px;
+  border: 1px solid rgba(120, 200, 255, 0.12);
+  background: rgba(0, 0, 0, 0.45);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: rgba(240, 244, 255, 0.95);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.dojo-scene--day .kinchaku-oid4vci__pre {
+  background: rgba(255, 255, 255, 0.65);
+  color: var(--text-h);
+  border-color: rgba(40, 32, 20, 0.12);
+}
+
+.kinchaku-oid4vci__uriRow {
+  margin: 0 0 0.65rem;
+  font-size: 0.82rem;
+  color: var(--text);
+  word-break: break-all;
+}
+
+.kinchaku-oid4vci__uriRow a {
+  color: var(--accent);
+  font-weight: 700;
+}

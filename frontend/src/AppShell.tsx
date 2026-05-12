@@ -131,6 +131,11 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
             </ShellNavLink>
           </li>
           <li className="app-shell__navItem">
+            <ShellNavLink to="/kinchaku-oid4vci" onPick={onPick}>
+              Kinchaku · OID4VCI
+            </ShellNavLink>
+          </li>
+          <li className="app-shell__navItem">
             <ShellNavLink to="/expedition" onPick={onPick}>
               Expedition
             </ShellNavLink>
