@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import './App.css'
 import './KinchakuOid4vciPage.css'
+import { debugLog } from './debugLog'
 import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { parseOid4vciCredentialOfferInput, type Oid4vciParseResult } from './oid4vci/parseOid4vciCredentialOfferUri'
 import { SAMPLE_VERES_SANDBOX_CREDENTIAL_OFFER_URI } from './oid4vci/sampleCredentialOffers'
@@ -137,6 +138,11 @@ export default function KinchakuOid4vciPage() {
     setClientLoading(true)
     setClientResult(null)
     setClientHttpError(null)
+    debugLog('process-offer: request', {
+      keys: Object.keys(processPayload),
+      hasUri: Boolean(processPayload.credentialOfferUri),
+      hasInline: Boolean(processPayload.credentialOffer),
+    })
     try {
       const base = import.meta.env.VITE_API_BASE ?? ''
       const res = await fetch(`${base}/api/oid4vci/process-offer`, {
@@ -145,8 +151,10 @@ export default function KinchakuOid4vciPage() {
         body: JSON.stringify(processPayload),
       })
       const data = (await res.json()) as Oid4vciClientResult
+      debugLog('process-offer: response', { status: res.ok, httpStatus: res.status, ok: data.ok, stepCount: data.steps?.length })
       if (!res.ok) {
         setClientHttpError(`HTTP ${res.status}\n${JSON.stringify(data, null, 2).slice(0, 1200)}`)
+        debugLog('process-offer: HTTP error body', data)
         setClientLoading(false)
         return
       }
@@ -165,6 +173,7 @@ export default function KinchakuOid4vciPage() {
         })
       }
     } catch (e) {
+      debugLog('process-offer: fetch threw', e)
       setClientHttpError(e instanceof Error ? `${e.name}: ${e.message}` : String(e))
     } finally {
       setClientLoading(false)
@@ -189,7 +198,9 @@ export default function KinchakuOid4vciPage() {
             <strong>Process offer (API)</strong> runs the OID4VCI demo client on the Dojo backend (same-origin{' '}
             <code>/api</code> in dev) so it can fetch metadata, exchange a <code>pre-authorized_code</code>, and request
             a credential without browser CORS limits. Issued credentials are appended to{' '}
-            <Link to="/kinchaku">{wallet.name}</Link> when the credential endpoint returns JSON.
+            <Link to="/kinchaku">{wallet.name}</Link> when the credential endpoint returns JSON. Verbose browser logs:{' '}
+            <code>localStorage.setItem('credential-dojo-debug','1')</code> then reload, or set <code>VITE_DEBUG=true</code>{' '}
+            at build time.
           </p>
           <nav className="dojoZenPage__nav" aria-label="Navigation">
             <Link className="dojoZenPage__back" to="/">

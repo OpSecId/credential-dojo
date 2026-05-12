@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import swaggerUi from "swagger-ui-express";
+import { debugLog } from "./debugLog.js";
 import { openApiDocument } from "./openapi.js";
 import { listDemoPersonas } from "./personas.js";
 import { processOid4vciOfferBody } from "./oid4vci/processOffer.js";
@@ -107,10 +108,18 @@ app.get("/api/hello", (_req, res) => {
 });
 
 app.post("/api/oid4vci/process-offer", async (req, res) => {
+  const t0 = Date.now();
   try {
     const out = await processOid4vciOfferBody(req.body);
+    debugLog("POST /api/oid4vci/process-offer", {
+      ms: Date.now() - t0,
+      ok: out.ok,
+      error: out.ok ? undefined : out.error,
+      steps: out.steps.map((s) => ({ id: s.id, ok: s.ok, url: s.url, detail: s.detail?.slice(0, 160) })),
+    });
     res.status(out.ok ? 200 : 422).json(out);
   } catch (e) {
+    debugLog("POST /api/oid4vci/process-offer: thrown", e);
     res.status(500).json({
       ok: false,
       steps: [],
@@ -122,4 +131,7 @@ app.post("/api/oid4vci/process-offer", async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`API listening on http://localhost:${PORT}`);
+  if (process.env.CREDENTIAL_DOJO_DEBUG === "1" || (process.env.DEBUG ?? "").split(/[\s,]+/).includes("credential-dojo")) {
+    console.log("[credential-dojo:debug] Verbose API logging is on (CREDENTIAL_DOJO_DEBUG=1 or DEBUG=credential-dojo)");
+  }
 });

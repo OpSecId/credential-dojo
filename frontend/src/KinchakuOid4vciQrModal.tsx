@@ -2,6 +2,7 @@ import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type 
 import { BrowserMultiFormatReader } from '@zxing/browser'
 import { BarcodeFormat, DecodeHintType } from '@zxing/library'
 import './KinchakuOid4vciQrModal.css'
+import { debugLog } from './debugLog'
 import { isLikelyOid4vciText } from './oid4vci/isLikelyOid4vciText'
 
 const hints = new Map<DecodeHintType, unknown>([
@@ -77,6 +78,7 @@ export default function KinchakuOid4vciQrModal({ open, onClose, onDecoded }: Pro
       finishWithText(result.getText())
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e)
+      debugLog('QR scan: camera error', e)
       setError(msg.includes('Permission') ? 'Camera permission was denied.' : `Camera scan failed: ${msg}`)
       setPhase('idle')
     } finally {
