@@ -12,6 +12,7 @@ import NinjaProfileMenu from './NinjaProfileMenu'
 import ZenSoundWidget from './zen/ZenSoundWidget'
 import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { useNinjaProfileSnapshot } from './useNinjaProfileSnapshot'
+import { productTerminology } from './terminology'
 
 const BRAND_MARK_SRC = `${import.meta.env.BASE_URL}favicon.svg?v=4`
 
@@ -105,7 +106,7 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
         <ul className="app-shell__navList">
           <li className="app-shell__navItem">
             <ShellNavLink to="/issue" onPick={onPick}>
-              Tehon の Menkyo (Issue Credential)
+              {productTerminology.credentialFromTemplate.issueCredentialLabel}
             </ShellNavLink>
           </li>
           <li className="app-shell__navItem">

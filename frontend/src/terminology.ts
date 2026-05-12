@@ -14,7 +14,12 @@ export const productTerminology = {
   /** Issued W3C Verifiable Credential (the holder-facing license-like record). */
   credential: { name: 'Menkyo', glyph: '免許' },
   /** Menkyo produced from a Tehon: issuance / instantiated credential from a definition. */
-  credentialFromTemplate: { name: 'Tehon の Menkyo', glyph: '手本の免許' },
+  credentialFromTemplate: {
+    name: 'Tehon の Menkyo',
+    glyph: '手本の免許',
+    /** Shell rail, home links, /issue hero — metaphor · English gloss (compound kanji). */
+    issueCredentialLabel: 'Tehon の Menkyo · Issue Credential (手本の免許)',
+  },
   presentation: { name: 'Enbu', glyph: '演武' },
   /** Verifier ask/challenge for proofs before holder composes an Enbu. */
   presentationRequest: { name: 'Shōkan', glyph: '招喚' },

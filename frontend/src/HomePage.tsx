@@ -403,7 +403,7 @@ export default function HomePage() {
             <div className="dojo__calmBand">
               <p className="dojo__calmBand-label">Tools</p>
               <nav className="dojo__calmEssentials" aria-label="Tools and demos">
-                <Link to="/issue">Tehon の Menkyo (Issue Credential)</Link>
+                <Link to="/issue">{productTerminology.credentialFromTemplate.issueCredentialLabel}</Link>
                 <span className="dojo__calmDot" aria-hidden>
                   ·
                 </span>

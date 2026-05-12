@@ -138,13 +138,7 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
         <header className="dojoZenPage__header">
           <p className="dojoZenPage__eyebrow">Credential Dojo</p>
           <h1 className="dojoZenPage__title">
-            {issueOnly ? (
-              <>
-                {tFromTemplate.name} · Issue <span lang="ja">({tFromTemplate.glyph})</span>
-              </>
-            ) : (
-              <>Issue &amp; verify</>
-            )}
+            {issueOnly ? productTerminology.credentialFromTemplate.issueCredentialLabel : <>Issue &amp; verify</>}
           </h1>
           <p className="dojoZenPage__intro">
             {issueOnly ? (
