@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useId, useRef, useState, type ChangeEvent } from 'react'
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ChangeEvent } from 'react'
 import { BrowserMultiFormatReader } from '@zxing/browser'
 import { BarcodeFormat, DecodeHintType } from '@zxing/library'
 import './KinchakuOid4vciQrModal.css'
@@ -86,6 +86,18 @@ export default function KinchakuOid4vciQrModal({ open, onClose, onDecoded }: Pro
     }
   }, [finishWithText])
 
+  const startCameraRef = useRef(startCamera)
+  startCameraRef.current = startCamera
+
+  useLayoutEffect(() => {
+    if (!open) return
+    void startCameraRef.current()
+    return () => {
+      BrowserMultiFormatReader.releaseAllStreams()
+      if (videoRef.current) BrowserMultiFormatReader.cleanVideoSource(videoRef.current)
+    }
+  }, [open])
+
   const onPickFile = useCallback(
     async (e: ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0]
@@ -123,10 +135,11 @@ export default function KinchakuOid4vciQrModal({ open, onClose, onDecoded }: Pro
           Scan OID4VCI QR
         </h2>
         <p className="kinchaku-qr-modal__hint">
-          Point at a credential-offer QR, or upload a screenshot. You will be taken to Kinchaku · OID4VCI with the value filled in.
+          The camera starts automatically. Point at the credential-offer QR, or use upload if you prefer a screenshot.
+          On success you will go to Kinchaku · OID4VCI with the value filled in.
         </p>
 
-        <video ref={videoRef} className="kinchaku-qr-modal__video" playsInline muted aria-hidden={phase === 'idle'} />
+        <video ref={videoRef} className="kinchaku-qr-modal__video" playsInline muted aria-hidden={phase === 'idle' && !error} />
 
         {error ? (
           <p className="kinchaku-qr-modal__error" role="alert">
@@ -136,7 +149,7 @@ export default function KinchakuOid4vciQrModal({ open, onClose, onDecoded }: Pro
 
         <div className="kinchaku-qr-modal__actions">
           <button type="button" className="kinchaku-qr-modal__btn kinchaku-qr-modal__btn--primary" disabled={phase === 'busy'} onClick={() => void startCamera()}>
-            {phase === 'busy' ? 'Scanning…' : 'Use camera'}
+            {phase === 'busy' ? 'Scanning…' : error ? 'Retry camera' : 'Use camera'}
           </button>
           <button
             type="button"
