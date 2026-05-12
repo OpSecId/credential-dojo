@@ -1,3 +1,20 @@
+/* Wider workspace than other flow pages (Kensa, Lexicon stay at default flow width). */
+.dojo-scene.dojo-scene--landing:has(.issueVerify) .dojo-flowPage {
+  max-width: min(88rem, calc(100% - 1rem));
+  padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+  padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+}
+
+.dojo-scene.dojo-scene--landing:has(.issueVerify) .issueVerify.dojoZenPage--wide {
+  max-width: min(88rem, calc(100vw - 1rem));
+}
+
+@media (min-width: 900px) {
+  .dojo-scene.dojo-scene--landing:has(.issueVerify) .issueVerify__grid--issueOnly {
+    grid-template-columns: minmax(0, min(56rem, 100%));
+  }
+}
+
 .issueVerify__panel {
   padding: 1.35rem 1.25rem 1.5rem;
 }
