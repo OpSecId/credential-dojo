@@ -5,7 +5,10 @@
  * `token_endpoint` and `credential_endpoint` can be discovered.
  */
 
+/** Default for token/credential/offer fetches */
 const FETCH_TIMEOUT_MS = 25_000
+/** Issuer metadata may be probed at many path prefixes; keep per-probe bounded so total wall time stays under typical edge limits (e.g. Cloudflare ~100s). */
+const METADATA_PROBE_TIMEOUT_MS = 12_000
 
 export type Oid4vciStep = {
   id: string
@@ -100,22 +103,33 @@ function* issuerMetadataCandidateUrls(credentialIssuer: string): Generator<strin
 
 async function discoverIssuerMetadata(credentialIssuer: string, steps: Oid4vciStep[]): Promise<unknown | null> {
   assertHttpsIssuerUrl(credentialIssuer)
-  for (const metaUrl of issuerMetadataCandidateUrls(credentialIssuer)) {
-    try {
-      const { res, text } = await fetchWithTimeout(metaUrl, {
-        headers: { Accept: "application/json" },
-      })
-      if (!res.ok) continue
-      let json: unknown
+  const candidates = [...issuerMetadataCandidateUrls(credentialIssuer)]
+  type ProbeOk = { kind: "ok"; metaUrl: string; status: number; json: unknown }
+  type ProbeFail = { kind: "fail" }
+  const outcomes = await Promise.all(
+    candidates.map(async (metaUrl): Promise<ProbeOk | ProbeFail> => {
       try {
-        json = JSON.parse(text) as unknown
+        const { res, text } = await fetchWithTimeout(metaUrl, {
+          headers: { Accept: "application/json" },
+          timeoutMs: METADATA_PROBE_TIMEOUT_MS,
+        })
+        if (!res.ok) return { kind: "fail" }
+        try {
+          const json = JSON.parse(text) as unknown
+          return { kind: "ok", metaUrl, status: res.status, json }
+        } catch {
+          return { kind: "fail" }
+        }
       } catch {
-        continue
+        return { kind: "fail" }
       }
-      push(steps, { id: "issuer_metadata", ok: true, url: metaUrl, detail: `HTTP ${res.status}` })
-      return json
-    } catch {
-      /* try next */
+    }),
+  )
+  for (let i = 0; i < candidates.length; i++) {
+    const o = outcomes[i]
+    if (o?.kind === "ok") {
+      push(steps, { id: "issuer_metadata", ok: true, url: o.metaUrl, detail: `HTTP ${o.status}` })
+      return o.json
     }
   }
   push(steps, {
