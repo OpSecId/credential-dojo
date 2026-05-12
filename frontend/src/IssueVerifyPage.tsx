@@ -151,7 +151,7 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
               <strong>{tCred.name}</strong> <span lang="ja">({tCred.glyph})</span> — what you hold after issuance.
               <br />
               <strong>{tFromTemplate.name}</strong> <span lang="ja">({tFromTemplate.glyph})</span> is that thread:
-              Tehon into Menkyo.
+              Tehon into Menkyo. (Issuance)
             </p>
         ) : (
           <p className="dojo-flowPage__intro">
@@ -173,10 +173,7 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
             <h2 className="issueVerify__sectionTitle">Issue (demo)</h2>
             {issueOnly ? (
               <>
-                <p className="issueVerify__sectionBody">
-                  Five sketches—baseline, degree, work, training, admission. <strong>Kasa</strong>, <strong>Kata</strong>,
-                  codename: your <Link to="/create-ninja-profile">ninja profile</Link> or shell menu.
-                </p>
+                <p className="issueVerify__sectionBody">Pick one of the templates.</p>
                 {!ninjaProfile ? (
                   <p className="issueVerify__profileHint">
                     Sign in from the profile menu to attach your codename—or stay signed out and use the default demo
