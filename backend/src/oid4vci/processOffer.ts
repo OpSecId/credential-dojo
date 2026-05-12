@@ -5,6 +5,8 @@
  * `token_endpoint` and `credential_endpoint` can be discovered.
  */
 
+import { clipIssuerResponseBody } from "../debugLog.js"
+
 /** Default for token/credential/offer fetches */
 const FETCH_TIMEOUT_MS = 25_000
 /** Issuer metadata may be probed at many path prefixes; keep per-probe bounded so total wall time stays under typical edge limits (e.g. Cloudflare ~100s). */
@@ -224,7 +226,7 @@ async function exchangePreAuthorizedCode(
         id: "token_exchange",
         ok: false,
         url: tokenEndpoint,
-        detail: `HTTP ${res.status}: ${text.slice(0, 400)}`,
+        detail: `HTTP ${res.status}: ${clipIssuerResponseBody(text)}`,
       })
       return null
     }
@@ -325,8 +327,9 @@ async function requestCredential(
         })
         return json
       }
-      const snippet =
-        typeof json === "object" && json !== null ? JSON.stringify(json).slice(0, 420) : text.slice(0, 420)
+      const snippet = clipIssuerResponseBody(
+        typeof json === "object" && json !== null ? JSON.stringify(json) : text,
+      )
       parts.push(`#${i + 1} {${Object.keys(body).join(",")}} → HTTP ${res.status}: ${snippet}`)
     } catch (e) {
       parts.push(`#${i + 1} {${Object.keys(body).join(",")}} → ${e instanceof Error ? e.message : String(e)}`)
@@ -342,7 +345,7 @@ async function requestCredential(
     id: "credential_request",
     ok: false,
     url: credentialEndpoint,
-    detail: detail.slice(0, 950),
+    detail: clipIssuerResponseBody(detail),
   })
   return null
 }
@@ -394,9 +397,14 @@ export async function processOid4vciOfferBody(body: unknown): Promise<Oid4vciPro
           id: "fetch_offer",
           ok: false,
           url: b.credentialOfferUri,
-          detail: `HTTP ${res.status}: ${text.slice(0, 400)}`,
+          detail: `HTTP ${res.status}: ${clipIssuerResponseBody(text)}`,
         })
-        return { ok: false, steps, error: "Failed to fetch credential offer", detail: text.slice(0, 200) }
+        return {
+          ok: false,
+          steps,
+          error: "Failed to fetch credential offer",
+          detail: clipIssuerResponseBody(text),
+        }
       }
       offer = JSON.parse(text) as unknown
       push(steps, { id: "fetch_offer", ok: true, url: b.credentialOfferUri, detail: `HTTP ${res.status}` })

@@ -115,7 +115,7 @@ app.post("/api/oid4vci/process-offer", async (req, res) => {
       ms: Date.now() - t0,
       ok: out.ok,
       error: out.ok ? undefined : out.error,
-      steps: out.steps.map((s) => ({ id: s.id, ok: s.ok, url: s.url, detail: s.detail?.slice(0, 160) })),
+      steps: out.steps.map((s) => ({ id: s.id, ok: s.ok, url: s.url, detail: s.detail })),
     });
     res.status(out.ok ? 200 : 422).json(out);
   } catch (e) {
