@@ -10,7 +10,7 @@ export const productTerminology = {
   credentialFromTemplate: {
     name: "Tehon の Menkyo",
     glyph: "手本の免許",
-    issueCredentialLabel: "Tehon の Menkyo · Issue Credential (手本の免許)",
+    issueCredentialLabel: "Tehon の Menkyo",
   },
   presentation: { name: "Enbu", glyph: "演武" },
   /** Verifier ask/challenge for proofs before holder composes an Enbu. */

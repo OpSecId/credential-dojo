@@ -148,8 +148,10 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
         {issueOnly ? (
           <>
             <p className="dojo-flowPage__intro">
-              <strong>{tTehon.name}</strong> <span lang="ja">({tTehon.glyph})</span> — issuer copybook.{' '}
-              <strong>{tCred.name}</strong> <span lang="ja">({tCred.glyph})</span> — what you hold after issuance.{' '}
+              <strong>{tTehon.name}</strong> <span lang="ja">({tTehon.glyph})</span> — issuer copybook.
+              <br />
+              <strong>{tCred.name}</strong> <span lang="ja">({tCred.glyph})</span> — what you hold after issuance.
+              <br />
               <strong>{tFromTemplate.name}</strong> <span lang="ja">({tFromTemplate.glyph})</span> is that thread:
               Tehon into Menkyo.
             </p>
