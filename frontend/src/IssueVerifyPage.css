@@ -34,59 +34,8 @@
   color: var(--text);
 }
 
-.issueVerify__issuerMode {
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  margin-bottom: 1rem;
-}
-
-.issueVerify__issuerModeLabel {
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: var(--muted);
-}
-
-.issueVerify__issuerModeRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.issueVerify__issuerModeBtn {
-  font: inherit;
-  font-size: 0.82rem;
-  font-weight: 600;
-  padding: 0.4rem 0.75rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.22);
-  color: var(--text);
-  cursor: pointer;
-  transition:
-    border-color 0.15s ease,
-    background 0.15s ease;
-}
-
-.issueVerify__issuerModeBtn:hover:not(:disabled) {
-  border-color: rgba(90, 232, 255, 0.35);
-}
-
-.issueVerify__issuerModeBtn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.issueVerify__issuerModeBtn--active {
-  border-color: rgba(90, 232, 255, 0.55);
-  background: rgba(90, 232, 255, 0.1);
-  color: var(--text-h);
-}
-
 .issueVerify__profileHint {
-  margin: 0;
+  margin: 0 0 1rem;
   font-size: 0.82rem;
   line-height: 1.45;
   color: var(--muted);
@@ -124,49 +73,6 @@
   color: var(--text-h);
   white-space: pre-wrap;
   word-break: break-word;
-}
-
-.issueVerify__schoolRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.issueVerify__schoolRow--locked {
-  opacity: 0.72;
-}
-
-.issueVerify__schoolChip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.35rem 0.65rem;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.22);
-  color: var(--text);
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    border-color 0.15s ease,
-    background 0.15s ease;
-}
-
-.issueVerify__schoolChip:hover {
-  border-color: rgba(90, 232, 255, 0.35);
-}
-
-.issueVerify__schoolChip--active {
-  border-color: rgba(90, 232, 255, 0.55);
-  background: rgba(90, 232, 255, 0.1);
-  color: var(--text-h);
-}
-
-.issueVerify__schoolJa {
-  font-size: 0.78rem;
-  color: var(--muted);
 }
 
 .issueVerify__actions {

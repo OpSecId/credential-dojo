@@ -25,10 +25,6 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
   const { theme } = useDojoLandingTheme()
   const [personas, setPersonas] = useState<readonly PersonaPublic[] | null>(null)
   const [ninjaProfile, setNinjaProfile] = useState<NinjaProfile | null>(() => readNinjaProfile())
-  const [issuerSource, setIssuerSource] = useState<'manual' | 'ninja'>(() =>
-    readNinjaProfile() ? 'ninja' : 'manual',
-  )
-  const [schoolId, setSchoolId] = useState(() => readNinjaProfile()?.schoolId ?? 'ed-ryu')
   const [rawJson, setRawJson] = useState('')
   const [appliedJson, setAppliedJson] = useState('')
   const [parseError, setParseError] = useState<string | null>(null)
@@ -44,18 +40,6 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
   }, [])
 
   useEffect(() => {
-    if (issuerSource === 'ninja' && ninjaProfile) {
-      setSchoolId(ninjaProfile.schoolId)
-    }
-  }, [issuerSource, ninjaProfile])
-
-  useEffect(() => {
-    if (issuerSource === 'ninja' && !ninjaProfile) {
-      setIssuerSource('manual')
-    }
-  }, [issuerSource, ninjaProfile])
-
-  useEffect(() => {
     const base = import.meta.env.VITE_API_BASE ?? ''
     fetch(`${base}/api/personas`)
       .then((res) => {
@@ -67,10 +51,15 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
   }, [])
 
   const list = personas ?? DEMO_PERSONAS_OFFLINE
+
+  const schoolId = useMemo(() => {
+    const id = ninjaProfile?.schoolId ?? 'ed-ryu'
+    return list.some((p) => p.id === id) ? id : 'ed-ryu'
+  }, [ninjaProfile, list])
+
   const persona = list.find((p) => p.id === schoolId) ?? list[0]
 
-  const operatorCodename =
-    issuerSource === 'ninja' && ninjaProfile ? ninjaProfile.codename : undefined
+  const operatorCodename = ninjaProfile?.codename
 
   const previewVc = useMemo(
     () =>
@@ -171,22 +160,6 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
               verification, only shape and field heuristics.
             </p>
           )}
-          <nav className="dojoZenPage__nav" aria-label="Related pages">
-            <Link className="dojoZenPage__back" to="/" title="Back Home">
-              ← Back Home
-            </Link>
-            <Link className="dojoZenPage__back" to="/verify" title="Open Menkyo inspection (Kensa)">
-              {tInspect.name} (/verify)
-            </Link>
-            {issueOnly ? (
-              <Link className="dojoZenPage__back" to="/issue-verify" title="Issue and verify on one page">
-                Issue &amp; verify
-              </Link>
-            ) : null}
-            <Link className="dojoZenPage__back" to="/discover-kasa" title="Issuer personas and did:key">
-              Discover Kasa
-            </Link>
-          </nav>
         </header>
 
         <section
@@ -197,84 +170,19 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
           <div>
             <h2 className="issueVerify__sectionTitle">Issue (demo)</h2>
             <p className="issueVerify__sectionBody">
-              Choose who acts as the demo issuer: pick a school directly, or use your saved ninja profile so the
-              issuer <code>did:key</code> and <strong>Kata</strong> follow your <strong>Kasa</strong> and your codename
-              appears on the credential subject.
+              The demo issuer follows your <strong>active ninja profile</strong>: its <strong>Kasa</strong> (proof
+              school), <strong>Kata</strong> flavor, and your codename on the subject. Change school or codename in{' '}
+              <Link to="/create-ninja-profile">ninja profile</Link> or the shell profile menu. With no profile saved,
+              we use the default <strong>Ed-ryū</strong> demo school and no operator name.
             </p>
 
-            <div className="issueVerify__issuerMode">
-              <p className="issueVerify__issuerModeLabel">Issuer profile</p>
-              <div className="issueVerify__issuerModeRow" role="radiogroup" aria-label="Issuer profile source">
-                <button
-                  type="button"
-                  role="radio"
-                  aria-checked={issuerSource === 'manual'}
-                  className={`issueVerify__issuerModeBtn${issuerSource === 'manual' ? ' issueVerify__issuerModeBtn--active' : ''}`}
-                  onClick={() => setIssuerSource('manual')}
-                >
-                  Manual Kasa
-                </button>
-                <button
-                  type="button"
-                  role="radio"
-                  aria-checked={issuerSource === 'ninja'}
-                  disabled={!ninjaProfile}
-                  title={
-                    ninjaProfile
-                      ? 'Use ninja profile school and codename on the demo credential'
-                      : 'Save a ninja profile first'
-                  }
-                  className={`issueVerify__issuerModeBtn${issuerSource === 'ninja' ? ' issueVerify__issuerModeBtn--active' : ''}`}
-                  onClick={() => {
-                    if (!ninjaProfile) return
-                    setIssuerSource('ninja')
-                    setSchoolId(ninjaProfile.schoolId)
-                  }}
-                >
-                  Ninja profile
-                </button>
-              </div>
-              {!ninjaProfile ? (
-                <p className="issueVerify__profileHint">
-                  No ninja profile in this browser —{' '}
-                  <Link to="/create-ninja-profile">create one</Link> to issue under your operator identity, or stay on
-                  manual Kasa.
-                </p>
-              ) : issuerSource === 'ninja' ? null : (
-                <p className="issueVerify__profileHint">
-                  Manual mode: Kasa chips below set the issuer only. Your ninja profile is not applied until you
-                  switch to <strong>Ninja profile</strong>.
-                </p>
-              )}
-            </div>
-
-            <p className="issueVerify__label">Kasa (issuer school)</p>
-            <div
-              className={`issueVerify__schoolRow${issuerSource === 'ninja' ? ' issueVerify__schoolRow--locked' : ''}`}
-              role="radiogroup"
-              aria-label="Demo issuer school"
-            >
-              {list.map((p) => (
-                <button
-                  key={p.id}
-                  type="button"
-                  role="radio"
-                  aria-checked={schoolId === p.id}
-                  disabled={issuerSource === 'ninja'}
-                  className={`issueVerify__schoolChip${schoolId === p.id ? ' issueVerify__schoolChip--active' : ''}`}
-                  onClick={() => {
-                    setIssuerSource('manual')
-                    setSchoolId(p.id)
-                  }}
-                  title={issuerSource === 'ninja' ? 'Switch to manual Kasa to change school' : p.description}
-                >
-                  {p.label}
-                  <span className="issueVerify__schoolJa" lang="ja">
-                    {p.labelJa}
-                  </span>
-                </button>
-              ))}
-            </div>
+            {!ninjaProfile ? (
+              <p className="issueVerify__profileHint">
+                No ninja profile in this browser —{' '}
+                <Link to="/create-ninja-profile">create one</Link> to issue under your identity, or continue with the
+                default demo issuer.
+              </p>
+            ) : null}
 
             <div className="issueVerify__actions">
               <button type="button" className="issueVerify__btn issueVerify__btn--primary" onClick={issueDemo}>
@@ -283,7 +191,7 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
             </div>
 
             <div className="issueVerify__previewBlock">
-              <p className="issueVerify__previewLabel">Preview (updates with issuer profile &amp; Kasa)</p>
+              <p className="issueVerify__previewLabel">Preview (active profile Kasa &amp; codename)</p>
               <pre className="issueVerify__preview" title="Read-only preview of the next Issue payload shape">
                 {previewText}
               </pre>
