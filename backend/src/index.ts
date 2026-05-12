@@ -109,6 +109,7 @@ app.get("/api/hello", (_req, res) => {
 
 app.post("/api/oid4vci/process-offer", async (req, res) => {
   const t0 = Date.now();
+  debugLog("POST /api/oid4vci/process-offer: begin");
   try {
     const out = await processOid4vciOfferBody(req.body);
     debugLog("POST /api/oid4vci/process-offer", {
