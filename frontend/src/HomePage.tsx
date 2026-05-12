@@ -262,12 +262,7 @@ export default function HomePage() {
     return (
       <>
         <header className={`dojo__header${calmLanding ? ' dojo__header--calm' : ''}`}>
-          <p className="dojo__eyebrow">
-            <>
-              credential.ninja ·{' '}
-              <abbr title="W3C Verifiable Credentials — calm, guided practice">W3C VCALM</abbr>
-            </>
-          </p>
+          <p className="dojo__eyebrow">credential.ninja</p>
           <h1 className={`dojo__title${calmLanding ? ' dojo__title--calm' : ''}`}>
             <span className="dojo__titleLine">Credential</span>
             <span className="dojo__titleLine dojo__titleLine--accent">Dojo</span>

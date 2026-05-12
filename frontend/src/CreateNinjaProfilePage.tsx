@@ -134,10 +134,7 @@ export default function CreateNinjaProfilePage() {
 
       <div className="ninjaProfile dojoZenPage dojoZenPage--calm">
         <header className="dojoZenPage__header">
-          <p className="dojoZenPage__eyebrow">
-            credential.ninja ·{' '}
-            <abbr title="W3C Verifiable Credentials — calm, guided practice">W3C VCALM</abbr>
-          </p>
+          <p className="dojoZenPage__eyebrow">credential.ninja</p>
           <h1 className="dojoZenPage__title">
             {isNewProfile ? 'Add ninja profile' : existing ? 'Update ninja profile' : 'Create ninja profile'}
           </h1>
