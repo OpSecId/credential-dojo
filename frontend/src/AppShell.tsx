@@ -1,4 +1,3 @@
-import { useEffect, useId, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import './App.css'
 import './AppShell.css'
@@ -169,28 +168,6 @@ export default function AppShell() {
   const profile = useNinjaProfileSnapshot()
   const location = useLocation()
   const { theme } = useDojoLandingTheme()
-  const [drawerOpen, setDrawerOpen] = useState(false)
-  const drawerTitleId = useId()
-
-  useEffect(() => {
-    setDrawerOpen(false)
-  }, [location.pathname, location.hash])
-
-  useEffect(() => {
-    if (!drawerOpen) return
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setDrawerOpen(false)
-    }
-    window.addEventListener('keydown', onKey)
-    const prev = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-    return () => {
-      window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = prev
-    }
-  }, [drawerOpen])
-
-  const closeDrawer = () => setDrawerOpen(false)
   const hasProfile = Boolean(profile)
   const isHomePath = location.pathname === '/'
 
@@ -214,16 +191,6 @@ export default function AppShell() {
           data-dojo-theme={isHomePath ? theme : undefined}
         >
           <div className="app-shell__topNavLeft">
-            <button
-              type="button"
-              className="app-shell__menuBtn"
-              aria-expanded={drawerOpen}
-              aria-controls="app-shell-drawer-panel"
-              onClick={() => setDrawerOpen((o) => !o)}
-              aria-label={drawerOpen ? 'Close menu' : 'Open menu'}
-            >
-              <span aria-hidden>☰</span>
-            </button>
             <HomeLogoLink className="app-shell__homeLogo" />
             {isHomePath ? <TrainingFocusNavBar /> : null}
             <DojoNavRankProgress />
@@ -247,40 +214,6 @@ export default function AppShell() {
               <Outlet />
             </main>
             <DojoProgressHub showFab={false} />
-          </div>
-        </div>
-
-        <div
-          className={`app-shell__backdrop${drawerOpen ? ' app-shell__backdrop--open' : ''}`}
-          aria-hidden={!drawerOpen}
-          onClick={closeDrawer}
-        />
-
-        <div
-          id="app-shell-drawer-panel"
-          className={`app-shell__drawer${drawerOpen ? ' app-shell__drawer--open' : ''}`}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={drawerTitleId}
-          aria-hidden={!drawerOpen}
-        >
-          <div className="app-shell__drawerInner">
-            <div className="app-shell__drawerTop">
-              <HomeLogoLink className="app-shell__homeLogo" onNavigate={closeDrawer} />
-              <button
-                type="button"
-                className="app-shell__drawerClose"
-                onClick={closeDrawer}
-                aria-label="Close menu"
-              >
-                ×
-              </button>
-            </div>
-            <p id={drawerTitleId} className="app-shell__drawerHeading">
-              Menu
-            </p>
-            <NavBlocks onPick={closeDrawer} />
-            <footer className="app-shell__railFoot">{railFootHint}</footer>
           </div>
         </div>
       </div>

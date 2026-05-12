@@ -50,10 +50,6 @@
   }
 
   /* --- Shell chrome --- */
-  .app-shell__drawer {
-    transition: transform var(--dojo-dur-2) var(--dojo-ease-out);
-  }
-
   .app-shell__topNav {
     transition:
       border-color var(--dojo-dur-2) ease,
@@ -74,9 +70,7 @@
     transform: translateX(3px);
   }
 
-  .app-shell__homeLogo,
-  .app-shell__menuBtn,
-  .app-shell__drawerClose {
+  .app-shell__homeLogo {
     transition:
       transform var(--dojo-dur-1) var(--dojo-ease-spring),
       border-color 0.2s ease,
@@ -84,15 +78,11 @@
       box-shadow var(--dojo-dur-1) ease;
   }
 
-  .app-shell__homeLogo:hover,
-  .app-shell__menuBtn:hover,
-  .app-shell__drawerClose:hover {
+  .app-shell__homeLogo:hover {
     transform: scale(1.045);
   }
 
-  .app-shell__homeLogo:active,
-  .app-shell__menuBtn:active,
-  .app-shell__drawerClose:active {
+  .app-shell__homeLogo:active {
     transform: scale(0.96);
   }
 
