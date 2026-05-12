@@ -21,6 +21,79 @@ import { addWalletItem } from './walletInventory'
 
 const COMBINED_PREVIEW_CREDENTIAL_ID = previewCredentialIdForTemplate('dojo-demo')
 
+type VcPreviewSummary = {
+  headline: string
+  types: string[]
+  issuer: string
+  credentialId: string
+  cryptosuite: string
+  proofPurpose: string
+  validFrom: string
+  subjectTeaser: string
+}
+
+function subjectTeaserFromVc(subject: Record<string, unknown>): string {
+  if (typeof subject.degreeName === 'string') return subject.degreeName
+  if (typeof subject.roleTitle === 'string' && typeof subject.organizationName === 'string') {
+    return `${subject.roleTitle} · ${subject.organizationName}`
+  }
+  if (typeof subject.courseTitle === 'string') return subject.courseTitle
+  if (typeof subject.note === 'string') {
+    const n = subject.note.trim()
+    return n.length > 140 ? `${n.slice(0, 137)}…` : n
+  }
+  if (typeof subject.eventName === 'string') return subject.eventName
+  return ''
+}
+
+function summarizeVcPreview(
+  vc: Record<string, unknown>,
+  opts: { templateTitle?: string; personaLabel: string },
+): VcPreviewSummary {
+  const typesRaw = vc.type
+  const types = Array.isArray(typesRaw)
+    ? typesRaw.map((x) => String(x))
+    : typeof typesRaw === 'string'
+      ? [typesRaw]
+      : []
+
+  const issuer = typeof vc.issuer === 'string' ? vc.issuer : ''
+  const credentialId = typeof vc.id === 'string' ? vc.id : ''
+  const validFrom = typeof vc.validFrom === 'string' ? vc.validFrom : ''
+
+  const proof =
+    vc.proof && typeof vc.proof === 'object' && vc.proof !== null ? (vc.proof as Record<string, unknown>) : {}
+  const cryptosuite = typeof proof.cryptosuite === 'string' ? proof.cryptosuite : '—'
+  const proofPurpose = typeof proof.proofPurpose === 'string' ? proof.proofPurpose : '—'
+
+  const sub =
+    vc.credentialSubject && typeof vc.credentialSubject === 'object' && vc.credentialSubject !== null
+      ? (vc.credentialSubject as Record<string, unknown>)
+      : {}
+  const subjectTeaser = subjectTeaserFromVc(sub)
+
+  const primaryType = types.find((t) => t !== 'VerifiableCredential') ?? types[0] ?? 'VerifiableCredential'
+  const headline = opts.templateTitle
+    ? `${opts.templateTitle} · ${opts.personaLabel}`
+    : `${primaryType.replace(/Credential$/, '') || 'Demo'} · ${opts.personaLabel}`
+
+  return {
+    headline,
+    types,
+    issuer,
+    credentialId,
+    cryptosuite,
+    proofPurpose,
+    validFrom,
+    subjectTeaser,
+  }
+}
+
+function truncateDid(s: string, lead = 14, tail = 10): string {
+  if (s.length <= lead + tail + 3) return s
+  return `${s.slice(0, lead)}…${s.slice(-tail)}`
+}
+
 export type IssueVerifyPageProps = {
   /** `issue` — issuance only (`/issue`). Default `both` is the combined Issue & verify page. */
   mode?: 'both' | 'issue'
@@ -81,6 +154,27 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
   }, [issueOnly, persona, operatorCodename, selectedTemplate])
 
   const previewText = useMemo(() => JSON.stringify(previewVc, null, 2), [previewVc])
+
+  const selectedTemplateMeta = issueOnly
+    ? ISSUE_CREDENTIAL_TEMPLATES.find((t) => t.id === selectedTemplate)
+    : undefined
+
+  const previewSummary = useMemo(
+    () =>
+      summarizeVcPreview(previewVc as Record<string, unknown>, {
+        templateTitle: issueOnly ? selectedTemplateMeta?.title : 'Dojo demo',
+        personaLabel: persona.label,
+      }),
+    [previewVc, issueOnly, selectedTemplateMeta?.title, persona.label],
+  )
+
+  const copyPreview = useCallback(() => {
+    try {
+      void navigator.clipboard.writeText(previewText)
+    } catch {
+      /* ignore */
+    }
+  }, [previewText])
 
   const verifyResult = useMemo(() => {
     const t = appliedJson.trim()
@@ -231,16 +325,84 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
               </>
             )}
 
-            <div className="issueVerify__previewBlock">
-              <p className="issueVerify__previewLabel">
-                {issueOnly
-                  ? 'Preview (selected template · Kasa & codename)'
-                  : 'Preview (active profile Kasa & codename)'}
-              </p>
-              <pre className="issueVerify__preview" title="Read-only preview of the next Issue payload shape">
-                {previewText}
-              </pre>
-            </div>
+            <aside
+              className="issueVerify__previewCard"
+              aria-labelledby="issue-verify-preview-title"
+            >
+              <div className="issueVerify__previewCard-head">
+                <div className="issueVerify__previewCard-titles">
+                  <p className="issueVerify__previewCard-kicker">Menkyo preview</p>
+                  <h3 className="issueVerify__previewCard-title" id="issue-verify-preview-title">
+                    {previewSummary.headline}
+                  </h3>
+                  <p className="issueVerify__previewCard-sub">
+                    {issueOnly
+                      ? 'Shape for the selected template — same envelope your Issue button will mint.'
+                      : 'Shape from your active Kasa — same envelope Issue will mint here.'}
+                  </p>
+                </div>
+                <div className="issueVerify__previewCard-actions">
+                  <span className="issueVerify__previewPill" title="Preview only; not yet written to the editor">
+                    Read-only
+                  </span>
+                  <button type="button" className="issueVerify__previewCopy" onClick={copyPreview}>
+                    Copy JSON
+                  </button>
+                </div>
+              </div>
+
+              {previewSummary.types.length > 0 ? (
+                <ul className="issueVerify__previewTypes" aria-label="Credential types">
+                  {previewSummary.types.map((t) => (
+                    <li key={t} className="issueVerify__previewTypeChip">
+                      {t}
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+
+              {previewSummary.subjectTeaser ? (
+                <p className="issueVerify__previewSubject">{previewSummary.subjectTeaser}</p>
+              ) : null}
+
+              <dl className="issueVerify__previewMeta">
+                <div className="issueVerify__previewMetaRow">
+                  <dt>Issuer (did:key)</dt>
+                  <dd className="issueVerify__previewMetaMono" title={previewSummary.issuer}>
+                    {truncateDid(previewSummary.issuer)}
+                  </dd>
+                </div>
+                <div className="issueVerify__previewMetaRow">
+                  <dt>Cryptosuite</dt>
+                  <dd className="issueVerify__previewMetaMono">{previewSummary.cryptosuite}</dd>
+                </div>
+                <div className="issueVerify__previewMetaRow">
+                  <dt>Proof purpose</dt>
+                  <dd>{previewSummary.proofPurpose}</dd>
+                </div>
+                {previewSummary.validFrom ? (
+                  <div className="issueVerify__previewMetaRow">
+                    <dt>Valid from</dt>
+                    <dd className="issueVerify__previewMetaMono">{previewSummary.validFrom}</dd>
+                  </div>
+                ) : null}
+                <div className="issueVerify__previewMetaRow">
+                  <dt>Credential id</dt>
+                  <dd className="issueVerify__previewMetaMono" title={previewSummary.credentialId}>
+                    {truncateDid(previewSummary.credentialId, 22, 14)}
+                  </dd>
+                </div>
+              </dl>
+
+              <div className="issueVerify__previewJson">
+                <div className="issueVerify__previewJson-bar">
+                  <span className="issueVerify__previewJson-label">application/vc+json</span>
+                </div>
+                <pre className="issueVerify__preview" title="Read-only preview of the next Issue payload">
+                  {previewText}
+                </pre>
+              </div>
+            </aside>
           </div>
 
           {issueOnly ? null : (
