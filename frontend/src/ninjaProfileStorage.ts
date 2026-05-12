@@ -11,6 +11,9 @@ const NINJA_VAULT_KEY = 'credential-dojo-ninja-vault'
 /** Fired on same-tab profile writes so shell UI can refresh (e.g. after wizard save). */
 export const NINJA_PROFILE_CHANGED_EVENT = 'credential-dojo-ninja-profile-changed'
 
+/** Default in-browser identity when the vault is empty or codename is left blank. */
+export const DEFAULT_NINJA_CODENAME = 'Anonymous'
+
 function notifyNinjaProfileChanged(): void {
   try {
     window.dispatchEvent(new CustomEvent(NINJA_PROFILE_CHANGED_EVENT))
@@ -47,7 +50,7 @@ export function isValidSchoolId(id: string): boolean {
 function normalizeCodename(raw: string): string {
   const t = raw.trim().replace(/\s+/g, ' ')
   const cut = t.slice(0, 48)
-  return cut.length > 0 ? cut : 'Anonymous ninja'
+  return cut.length > 0 ? cut : DEFAULT_NINJA_CODENAME
 }
 
 function generateProfileId(): string {
@@ -142,9 +145,29 @@ function persistVault(vault: VaultV1): void {
   }
 }
 
+function createDefaultAnonymousRecord(): NinjaProfileRecord {
+  return {
+    id: generateProfileId(),
+    codename: DEFAULT_NINJA_CODENAME,
+    schoolId: 'ed-ryu',
+    createdAt: new Date().toISOString(),
+  }
+}
+
+/** If the vault has no profiles, persist a default Anonymous session (Ed-ryū). */
+function seedVaultIfEmpty(vault: VaultV1): VaultV1 {
+  if (vault.profiles.length > 0) return vault
+  const rec = createDefaultAnonymousRecord()
+  const next: VaultV1 = { v: 1, profiles: [rec], activeId: rec.id }
+  persistVault(next)
+  return next
+}
+
 function ensureVault(): VaultV1 {
   const existing = readVaultRaw()
-  if (existing) return existing
+  if (existing) {
+    return seedVaultIfEmpty(existing)
+  }
 
   const legacy = readLegacySingleProfile()
   if (legacy) {
@@ -158,7 +181,7 @@ function ensureVault(): VaultV1 {
     return vault
   }
 
-  return { v: 1, profiles: [], activeId: null }
+  return seedVaultIfEmpty({ v: 1, profiles: [], activeId: null })
 }
 
 /** All stored profiles (browser only). */

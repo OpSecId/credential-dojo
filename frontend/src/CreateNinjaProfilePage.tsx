@@ -9,6 +9,7 @@ import {
   appendNinjaProfile,
   clearNinjaProfile,
   createOrUpdateNinjaProfile,
+  DEFAULT_NINJA_CODENAME,
   isValidSchoolId,
   readNinjaProfile,
 } from './ninjaProfileStorage'
@@ -109,8 +110,7 @@ export default function CreateNinjaProfilePage() {
   const onSubmit = (e: FormEvent) => {
     e.preventDefault()
     if (!isValidSchoolId(schoolId)) return
-    const priorActive = readNinjaProfile()
-    if (!priorActive) markJourneyPendingStart()
+    if (isNewProfile) markJourneyPendingStart()
     if (isNewProfile) appendNinjaProfile(codename, schoolId)
     else createOrUpdateNinjaProfile(codename, schoolId)
     navigate('/')
@@ -123,8 +123,7 @@ export default function CreateNinjaProfilePage() {
     navigate('/')
   }
 
-  const displayName =
-    codename.trim() === '' ? 'Anonymous ninja' : codename.trim()
+  const displayName = codename.trim() === '' ? DEFAULT_NINJA_CODENAME : codename.trim()
 
   return (
     <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen dojo-scene--calmInner`}>
