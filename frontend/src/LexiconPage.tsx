@@ -1,10 +1,9 @@
 import type { ReactNode } from 'react'
 import { Fragment, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import './App.css'
 import './LexiconPage.css'
+import { DojoFlowPageHero, DojoFlowPageShell } from './dojoFlowPage'
 import { LEXICON_ARTICLES, lexiconAnchorForBoldSegment } from './lexiconData'
-import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { productTerminology } from './terminology'
 import type { LexiconKey } from './lexiconData'
 
@@ -52,33 +51,22 @@ function tryLinkForKey(key: LexiconKey): { to: string; label: string } {
 }
 
 export default function LexiconPage() {
-  const { theme } = useDojoLandingTheme()
   const location = useLocation()
   const printMode = useMemo(() => new URLSearchParams(location.search).get('print') === '1', [location.search])
 
   return (
-    <div className={`dojo-scene dojo-scene--${theme} dojo-scene--zen${printMode ? ' lex-print' : ''}`}>
-      <div className="dojo-scene__moon" aria-hidden />
-      <div className="dojo-scene__bg" aria-hidden />
-      <div className="dojo-scene__grid" aria-hidden />
+    <DojoFlowPageShell sceneExtraClass={printMode ? 'lex-print' : undefined}>
+      <DojoFlowPageHero title="Lexicon">
+        <p className="dojo-flowPage__intro">
+          <strong>What this is.</strong> Japanese terms in the product are <strong>metaphors for copy and navigation</strong>—a shared vocabulary, not a security model. They are <strong>not</strong> claims about cryptographic strength, compliance, or threat models.
+        </p>
+        <p className="dojo-flowPage__introFollow">
+          <strong>What each entry does.</strong> We give the word in its everyday or dōjō sense, then how we use it for <strong>W3C Verifiable Credentials</strong>, holder/issuer language, and this CRMS.
+        </p>
+      </DojoFlowPageHero>
 
-      <div className="lex dojoZenPage dojoZenPage--wide">
-        <header className="dojoZenPage__header">
-          <p className="dojoZenPage__eyebrow">Credential Dojo</p>
-          <h1 className="dojoZenPage__title">Lexicon</h1>
-          <p className="dojoZenPage__intro">
-            <strong>What this is.</strong> Japanese terms in the product are <strong>metaphors for copy and navigation</strong>—a shared vocabulary, not a security model. They are <strong>not</strong> claims about cryptographic strength, compliance, or threat models.
-          </p>
-          <p className="dojoZenPage__intro dojoZenPage__intro--follow">
-            <strong>What each entry does.</strong> We give the word in its everyday or dōjō sense, then how we use it for <strong>W3C Verifiable Credentials</strong>, holder/issuer language, and this CRMS.
-          </p>
-          <nav className="dojoZenPage__nav" aria-label="Lexicon navigation">
-            <Link className="dojoZenPage__back" to="/" title="Back Home">
-              ← Back Home
-            </Link>
-          </nav>
-        </header>
-
+      <div className="dojo-flowPage__body">
+        <div className="lex dojoZenPage dojoZenPage--wide">
         <ol
           className="lex__toc dojo-augmented dojo-augmented--toc"
           data-augmented-ui="tl-clip br-clip border"
@@ -176,7 +164,9 @@ export default function LexiconPage() {
           })}
         </div>
 
+        </div>
+
       </div>
-    </div>
+    </DojoFlowPageShell>
   )
 }
