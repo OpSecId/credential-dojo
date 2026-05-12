@@ -8,10 +8,10 @@
 import { clipIssuerResponseBody } from "../debugLog.js"
 import { buildOid4vciProofJwt, cNonceFromTokenResponse, pickProofAlg } from "./oid4vciProofJwt.js"
 
-/** Default for token/credential/offer fetches */
-const FETCH_TIMEOUT_MS = 25_000
-/** Issuer metadata may be probed at many path prefixes; keep per-probe bounded so total wall time stays under typical edge limits (e.g. Cloudflare ~100s). */
-const METADATA_PROBE_TIMEOUT_MS = 12_000
+/** Default for token / credential / credential-offer HTTPS fetches in process-offer */
+const FETCH_TIMEOUT_MS = 10_000
+/** Issuer metadata path probes run in parallel; keep each probe bounded. */
+const METADATA_PROBE_TIMEOUT_MS = 8_000
 
 export type Oid4vciStep = {
   id: string
