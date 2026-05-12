@@ -230,6 +230,9 @@ export default function AppShell() {
           </div>
           <div className="app-shell__topNavRight">
             {isHomePath ? <DojoLandingThemeLantern /> : null}
+            <div className="app-shell__topNavSound">
+              <ZenSoundWidget />
+            </div>
             <NinjaProfileMenu />
           </div>
         </header>
@@ -246,11 +249,6 @@ export default function AppShell() {
             <main className="app-shell__mainInner" id="app-shell-main" tabIndex={-1}>
               <Outlet />
             </main>
-            <footer className="app-shell__appFooter" aria-label="Sound">
-              <div className="app-shell__appFooterInner">
-                <ZenSoundWidget />
-              </div>
-            </footer>
             <DojoProgressHub showFab={false} />
           </div>
         </div>

@@ -1,5 +1,5 @@
 .zen-sound {
-  /* Lives in `.app-shell__appFooterInner` (AppShell) */
+  /* Compact layout when nested in `.app-shell__topNavSound` (AppShell top nav). */
   position: relative;
   z-index: 0;
   left: auto;
