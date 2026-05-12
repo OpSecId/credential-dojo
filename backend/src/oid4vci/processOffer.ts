@@ -247,56 +247,104 @@ function accessTokenFromTokenResponse(tr: unknown): string | null {
   return typeof t === "string" && t.length > 0 ? t : null
 }
 
+function credentialDefinitionForConfiguration(
+  issuerMetadata: Record<string, unknown>,
+  configurationId: string,
+): Record<string, unknown> | undefined {
+  const supported = issuerMetadata.credential_configurations_supported
+  if (!supported || typeof supported !== "object" || Array.isArray(supported)) return undefined
+  const cfg = (supported as Record<string, unknown>)[configurationId]
+  if (!cfg || typeof cfg !== "object" || Array.isArray(cfg)) return undefined
+  const cd = (cfg as Record<string, unknown>).credential_definition
+  if (!cd || typeof cd !== "object" || Array.isArray(cd)) return undefined
+  return cd as Record<string, unknown>
+}
+
+function issuerHasNonceEndpoint(issuerMetadata: Record<string, unknown>): boolean {
+  const n = issuerMetadata.nonce_endpoint
+  return typeof n === "string" && n.startsWith("https://")
+}
+
 async function requestCredential(
   credentialEndpoint: string,
   accessToken: string,
   configurationId: string,
   formatHint: string | undefined,
+  issuerMetadata: Record<string, unknown>,
   steps: Oid4vciStep[],
 ): Promise<unknown | null> {
-  // Some issuers (e.g. Veres) validate the body with additionalProperties: false and only
-  // allow `format` (and proofs, etc.) — sending both `credential_configuration_id` and
-  // `format` triggers "should NOT have additional properties" for `credential_configuration_id`.
-  const body: Record<string, unknown> =
-    formatHint != null && formatHint !== ""
-      ? { format: formatHint }
-      : { credential_configuration_id: configurationId }
-  try {
-    const { res, text } = await fetchWithTimeout(credentialEndpoint, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(body),
-    })
-    let json: unknown
-    try {
-      json = JSON.parse(text) as unknown
-    } catch {
-      json = { raw: text }
+  // Try several shapes: ldp_vc often ships credential_definition in metadata; some issuers accept
+  // only format, others only credential_configuration_id (never send both in one body).
+  const credDef = credentialDefinitionForConfiguration(issuerMetadata, configurationId)
+  const trials: Record<string, unknown>[] = []
+  if (formatHint != null && formatHint !== "") {
+    if (formatHint === "ldp_vc" && credDef) {
+      trials.push({ format: formatHint, credential_definition: credDef })
     }
-    if (!res.ok) {
-      push(steps, {
-        id: "credential_request",
-        ok: false,
-        url: credentialEndpoint,
-        detail: `HTTP ${res.status}: ${typeof json === "object" ? JSON.stringify(json).slice(0, 500) : text.slice(0, 500)}`,
-      })
-      return null
-    }
-    push(steps, { id: "credential_request", ok: true, url: credentialEndpoint, detail: `HTTP ${res.status}` })
-    return json
-  } catch (e) {
-    push(steps, {
-      id: "credential_request",
-      ok: false,
-      url: credentialEndpoint,
-      detail: e instanceof Error ? e.message : String(e),
-    })
-    return null
+    trials.push({ format: formatHint })
   }
+  trials.push({ credential_configuration_id: configurationId })
+
+  const seen = new Set<string>()
+  const uniq: Record<string, unknown>[] = []
+  for (const b of trials) {
+    const k = JSON.stringify(b)
+    if (seen.has(k)) continue
+    seen.add(k)
+    uniq.push(b)
+  }
+
+  const parts: string[] = []
+  for (let i = 0; i < uniq.length; i++) {
+    const body = uniq[i]!
+    try {
+      const { res, text } = await fetchWithTimeout(credentialEndpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(body),
+      })
+      let json: unknown
+      try {
+        json = JSON.parse(text) as unknown
+      } catch {
+        json = { raw: text }
+      }
+      if (res.ok) {
+        push(steps, {
+          id: "credential_request",
+          ok: true,
+          url: credentialEndpoint,
+          detail:
+            uniq.length > 1
+              ? `HTTP ${res.status} (${Object.keys(body).sort().join(", ")})`
+              : `HTTP ${res.status}`,
+        })
+        return json
+      }
+      const snippet =
+        typeof json === "object" && json !== null ? JSON.stringify(json).slice(0, 420) : text.slice(0, 420)
+      parts.push(`#${i + 1} {${Object.keys(body).join(",")}} → HTTP ${res.status}: ${snippet}`)
+    } catch (e) {
+      parts.push(`#${i + 1} {${Object.keys(body).join(",")}} → ${e instanceof Error ? e.message : String(e)}`)
+    }
+  }
+
+  let detail = parts.join(" || ")
+  if (issuerHasNonceEndpoint(issuerMetadata)) {
+    detail +=
+      " — Issuer lists nonce_endpoint: holder proofs (OID4VCI §8.2) are usually required for ldp_vc; this demo server does not yet fetch c_nonce or sign jwt/di_vp proofs."
+  }
+  push(steps, {
+    id: "credential_request",
+    ok: false,
+    url: credentialEndpoint,
+    detail: detail.slice(0, 950),
+  })
+  return null
 }
 
 function firstConfigurationId(offer: Record<string, unknown>): string | null {
@@ -486,6 +534,7 @@ export async function processOid4vciOfferBody(body: unknown): Promise<Oid4vciPro
     accessToken,
     cfgId,
     formatHint,
+    meta,
     steps,
   )
 
