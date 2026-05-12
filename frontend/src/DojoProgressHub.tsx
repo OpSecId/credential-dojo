@@ -303,7 +303,7 @@ export default function DojoProgressHub({ showFab = true }: DojoProgressHubProps
 
           <footer className="dojo-hub__foot">
             <p>
-              On the <Link to="/">home dojo</Link>, the <strong>training focus</strong> strip boosts insight while you
+              On the <Link to="/">home dojo</Link>, the <strong>training focus</strong> meter in the top bar boosts insight while you
               stay sharp — kata, Kinchaku, and school switches feed all tracks. Hidden tabs earn slower.
             </p>
             <p className="dojo-hub__footNote">Progress saves in this browser only.</p>

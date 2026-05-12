@@ -17,6 +17,7 @@ import {
   readNinjaProfile,
   type NinjaProfile,
 } from './ninjaProfileStorage'
+import { useHomeTrainingFocusShell } from './HomeTrainingFocusShellContext'
 import { useJourney } from './journey/JourneyContext'
 import { useNoviceIdle } from './novice/NoviceIdleContext'
 import { productTerminology } from './terminology'
@@ -93,6 +94,7 @@ function prefersReducedMotion(): boolean {
 
 export default function HomePage() {
   const { theme } = useDojoLandingTheme()
+  const { setMeter: setShellTrainingMeter } = useHomeTrainingFocusShell()
   const { reportFocusMeter, clearHomeFocus } = useNoviceIdle()
   const { state: journeyState, pendingStart, startJourney, clearPendingStart, reportLearningFocus } = useJourney()
   const pouchGradId = useId().replace(/:/g, '')
@@ -141,6 +143,10 @@ export default function HomePage() {
     reportLearningFocus(focusMeter)
     return () => clearHomeFocus()
   }, [focusMeter, reportFocusMeter, clearHomeFocus, reportLearningFocus])
+
+  useEffect(() => {
+    setShellTrainingMeter(focusMeter)
+  }, [focusMeter, setShellTrainingMeter])
 
   useEffect(() => {
     const base = import.meta.env.VITE_API_BASE ?? ''
@@ -255,26 +261,6 @@ export default function HomePage() {
   function renderHomeIntro() {
     return (
       <>
-        {!calmLanding ? (
-          <aside className="dojo__meterAside">
-            <div
-              className="dojo__focusMeter dojo-augmented dojo-augmented--meter"
-              data-augmented-ui="tl-clip br-clip border"
-              aria-label={`Training focus meter, ${Math.round(focusMeter)} percent`}
-            >
-              <div className="dojo__focusMeter-track" role="presentation">
-                <div
-                  className="dojo__focusMeter-fill"
-                  style={{ width: `${Math.round(focusMeter)}%` }}
-                />
-              </div>
-              <span className="dojo__focusMeter-caption">
-                Training focus (修 · shū) — kata, Kinchaku, and school switches raise it; it eases down
-                slowly when idle. Higher levels speed novice-path insight (Novice path).
-              </span>
-            </div>
-          </aside>
-        ) : null}
         <header className={`dojo__header${calmLanding ? ' dojo__header--calm' : ''}`}>
           <p className="dojo__eyebrow">
             <>
@@ -386,19 +372,6 @@ export default function HomePage() {
       <div className="dojo-scene__bg" aria-hidden />
       <div className="dojo-scene__embers" aria-hidden />
       <div className="dojo-scene__grid" aria-hidden />
-
-      {calmLanding ? (
-        <div
-          className="dojo__focusZen dojo__focusZen--corner"
-          aria-label={`Training focus, ${Math.round(focusMeter)} percent`}
-          title="Training focus — rises as you use the dojo; drifts down slowly when idle (修 · shū)."
-        >
-          <div className="dojo__focusZen-track" role="presentation">
-            <div className="dojo__focusZen-fill" style={{ width: `${Math.round(focusMeter)}%` }} />
-          </div>
-          <span className="dojo__focusZen-label">Training · {Math.round(focusMeter)}%</span>
-        </div>
-      ) : null}
 
       <div className={`dojo${calmLanding ? ' dojo--calmLanding' : ''}`}>
         {calmLanding ? (

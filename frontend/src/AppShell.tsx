@@ -3,9 +3,11 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 import './App.css'
 import './AppShell.css'
 import { DojoHubUiProvider } from './DojoHubUiContext'
+import { HomeTrainingFocusShellProvider } from './HomeTrainingFocusShellContext'
 import DojoLandingThemeLantern from './DojoLandingThemeLantern'
 import DojoNavRankProgress from './DojoNavRankProgress'
 import DojoProgressHub from './DojoProgressHub'
+import TrainingFocusNavBar from './TrainingFocusNavBar'
 import NinjaProfileMenu from './NinjaProfileMenu'
 import ZenSoundWidget from './zen/ZenSoundWidget'
 import { useDojoLandingTheme } from './DojoLandingThemeContext'
@@ -200,6 +202,7 @@ export default function AppShell() {
 
   return (
     <DojoHubUiProvider>
+      <HomeTrainingFocusShellProvider>
       <div className={`app-shell app-shell--authed${hasProfile ? '' : ' app-shell--guest'}`}>
         <a className="app-shell__skip" href="#app-shell-main">
           Skip to content
@@ -222,6 +225,7 @@ export default function AppShell() {
               <span aria-hidden>☰</span>
             </button>
             <HomeLogoLink className="app-shell__homeLogo" />
+            {isHomePath ? <TrainingFocusNavBar /> : null}
             <DojoNavRankProgress />
           </div>
           <div className="app-shell__topNavRight">
@@ -285,6 +289,7 @@ export default function AppShell() {
           </div>
         </div>
       </div>
+      </HomeTrainingFocusShellProvider>
     </DojoHubUiProvider>
   )
 }
