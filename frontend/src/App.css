@@ -18,6 +18,13 @@
   isolation: isolate;
 }
 
+/* In AppShell scroll column, full-viewport min-height stacks empty space above short routes */
+@media (max-width: 899px) {
+  .app-shell__mainInner .dojo-scene {
+    min-height: 0;
+  }
+}
+
 .dojo-scene--night {
   --bg-deep: #070910;
   --bg-veil: rgba(18, 22, 34, 0.92);
@@ -204,6 +211,14 @@
     min-height: 0;
     gap: 1.15rem;
     padding-block: 0.2rem 0.65rem;
+  }
+
+  .dojo__header--calm .dojo__eyebrow {
+    margin-bottom: 1rem;
+  }
+
+  .dojo__calmStart {
+    margin-top: 1.35rem;
   }
 }
 

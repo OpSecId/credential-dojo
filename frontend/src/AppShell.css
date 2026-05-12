@@ -302,6 +302,20 @@
     border-color: rgba(232, 184, 74, 0.38);
     background: rgba(14, 18, 28, 0.62);
   }
+
+  /* Main first: avoids a tall nav strip pushing page content below the fold */
+  .app-shell__stage {
+    order: 1;
+  }
+
+  .app-shell__rail {
+    order: 2;
+    max-height: min(28vh, 200px);
+  }
+
+  .app-shell__railInner {
+    padding-top: 0.55rem;
+  }
 }
 
 .app-shell__mainInner {
