@@ -148,21 +148,16 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
         {issueOnly ? (
           <>
             <p className="dojo-flowPage__intro">
-              In this UI, <strong>{tCred.name}</strong> (<span lang="ja">{tCred.glyph}</span>) names the{' '}
-              <strong>issued verifiable credential</strong>—the holder-facing record <em>after</em> issuance, not the
-              issuer&apos;s definitions. <strong>{tTehon.name}</strong> (<span lang="ja">{tTehon.glyph}</span>) is the
-              issuer <strong>copybook</strong>: templates, offers, and exemplars on the issuer side.{' '}
-              <strong>{tFromTemplate.name}</strong> (<span lang="ja">{tFromTemplate.glyph}</span>) ties them: literally
-              the <strong>Menkyo from the Tehon</strong>—the same lineage as{' '}
-              <strong>issuing a VC from a credential definition</strong> in a CRMS (definition and policy stance →
-              concrete credential JSON you can hold and present).
+              <strong>{tTehon.name}</strong> <span lang="ja">({tTehon.glyph})</span> — issuer copybook.{' '}
+              <strong>{tCred.name}</strong> <span lang="ja">({tCred.glyph})</span> — what you hold after issuance.{' '}
+              <strong>{tFromTemplate.name}</strong> <span lang="ja">({tFromTemplate.glyph})</span> is that thread:
+              Tehon into Menkyo.
             </p>
             <p className="dojo-flowPage__introFollow">
-              On this route, <strong>pick one of five template cards</strong> below—each mints a different demo VC
-              claim shape while sharing the same W3C VC envelope. Your <strong>{tKasa.name}</strong> (
-              <span lang="ja">{tKasa.glyph}</span>) sets the proof school and <strong>{tKata.name}</strong> (
-              <span lang="ja">{tKata.glyph}</span>) suite on the signature block. Everything stays in the browser—open{' '}
-              <strong>{tInspect.name}</strong> on <Link to="/verify">/verify</Link> to inspect the JSON.
+              Pick a card below—five claim sketches, one VC envelope. Proof school <strong>{tKasa.name}</strong>{' '}
+              <span lang="ja">({tKasa.glyph})</span>, suite <strong>{tKata.name}</strong>{' '}
+              <span lang="ja">({tKata.glyph})</span>. Browser-only. <Link to="/verify">/verify</Link> —{' '}
+              <strong>{tInspect.name}</strong>.
             </p>
           </>
         ) : (
@@ -186,10 +181,8 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
             {issueOnly ? (
               <>
                 <p className="issueVerify__sectionBody">
-                  Each card is a different <strong>Tehon-style</strong> sketch: baseline Dojo, university degree,
-                  employment, training completion, or event admission. Issuer <strong>Kasa</strong>, cryptosuite{' '}
-                  <strong>Kata</strong>, and optional codename still follow your{' '}
-                  <Link to="/create-ninja-profile">ninja profile</Link> or shell profile menu.
+                  Five sketches—baseline, degree, work, training, admission. <strong>Kasa</strong>, <strong>Kata</strong>,
+                  codename: your <Link to="/create-ninja-profile">ninja profile</Link> or shell menu.
                 </p>
                 {!ninjaProfile ? (
                   <p className="issueVerify__profileHint">
