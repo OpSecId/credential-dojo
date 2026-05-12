@@ -100,7 +100,7 @@ export default function TejunViewerPage() {
 
       <div className="tejun-viewer dojoZenPage dojoZenPage--wide">
         <header className="dojoZenPage__header">
-          <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
+          <p className="dojoZenPage__eyebrow">Credential Dojo</p>
           <h1 className="dojoZenPage__title">Tejun viewer</h1>
           <p className="dojoZenPage__intro">
             Interactive runbook view of the expedition narrative, from Tehon through Tejun.

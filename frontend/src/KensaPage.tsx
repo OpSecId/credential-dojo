@@ -310,7 +310,7 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
 
       <div className="kensa dojoZenPage dojoZenPage--wide">
         <header className="dojoZenPage__header">
-          <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
+          <p className="dojoZenPage__eyebrow">Credential Dojo</p>
           <h1
             className="dojoZenPage__title"
             title="Inspection (検査): choose Enbu (presentation) or Menkyo (credential) structural checks"

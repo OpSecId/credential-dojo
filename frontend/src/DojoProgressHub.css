@@ -1,7 +1,7 @@
 /* Unified rank + journey + achievements hub — bottom-right, zen card chrome */
 
 .dojo-hub-dock {
-  /* Lives in `.app-shell__appFooter` (AppShell) */
+  /* Default: FAB in flow (e.g. footer). Fabless: anchor panel above shell footer. */
   position: relative;
   z-index: 0;
   right: auto;
@@ -11,6 +11,27 @@
   align-items: flex-end;
   gap: 0.65rem;
   pointer-events: none;
+}
+
+.dojo-hub-dock--fabless {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  z-index: 400;
+  pointer-events: none;
+}
+
+.dojo-hub-dock--fabless .dojo-hub-panel {
+  position: absolute;
+  right: max(0.65rem, env(safe-area-inset-right, 0px));
+  bottom: max(4.25rem, calc(3.75rem + env(safe-area-inset-bottom, 0px)));
+  left: auto;
+  top: auto;
+  pointer-events: auto;
+  max-height: min(80vh, calc(100dvh - 7rem));
 }
 
 .dojo-hub-dock > * {

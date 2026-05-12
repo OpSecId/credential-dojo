@@ -45,7 +45,7 @@ export default function KinchakuPage() {
       <div className="dojo-scene__grid" aria-hidden />
       <main className="kinchaku-page__main kinchaku-page dojoZenPage dojoZenPage--wide">
         <header className="dojoZenPage__header">
-          <p className="dojoZenPage__eyebrow">The Credential Dojo</p>
+          <p className="dojoZenPage__eyebrow">Credential Dojo</p>
           <h1 className="dojoZenPage__title">
             {productTerminology.wallet.name}{' '}
             <span lang="ja">{productTerminology.wallet.glyph}</span>

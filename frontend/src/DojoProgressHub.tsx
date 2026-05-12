@@ -1,5 +1,6 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { useDojoHubUi } from './DojoHubUiContext'
 import { useJourney } from './journey/JourneyContext'
 import {
   computePerkState,
@@ -11,11 +12,16 @@ import { useNoviceIdle } from './novice/NoviceIdleContext'
 import { useNinjaProfileSnapshot } from './useNinjaProfileSnapshot'
 import './DojoProgressHub.css'
 
-export default function DojoProgressHub() {
+export type DojoProgressHubProps = {
+  /** When false, the FAB is hidden and the hub is opened from the top-nav rank control (or other triggers). */
+  showFab?: boolean
+}
+
+export default function DojoProgressHub({ showFab = true }: DojoProgressHubProps) {
   const { state: journeyState, level: journeyLevel, startJourney } = useJourney()
   const { state: noviceState, rank, insightPerSec } = useNoviceIdle()
   const profile = useNinjaProfileSnapshot()
-  const [open, setOpen] = useState(false)
+  const { open, setOpen } = useDojoHubUi()
   const panelRef = useRef<HTMLDivElement>(null)
   const titleId = useId()
 
@@ -43,8 +49,10 @@ export default function DojoProgressHub() {
     const onPointer = (e: MouseEvent) => {
       const t = e.target as Node
       if (panelRef.current && !panelRef.current.contains(t)) {
-        const fab = document.querySelector('.dojo-hub-fab')
-        if (fab && fab.contains(t)) return
+        const triggers = document.querySelectorAll('.dojo-hub-openTrigger')
+        for (let i = 0; i < triggers.length; i += 1) {
+          if (triggers[i].contains(t)) return
+        }
         setOpen(false)
       }
     }
@@ -58,10 +66,14 @@ export default function DojoProgressHub() {
   }
 
   return (
-    <div className="dojo-hub-dock" aria-live="polite">
+    <div
+      className={`dojo-hub-dock${showFab ? '' : ' dojo-hub-dock--fabless'}`}
+      aria-live="polite"
+    >
+      {showFab ? (
       <button
         type="button"
-        className="dojo-hub-fab"
+        className="dojo-hub-openTrigger dojo-hub-fab"
         aria-expanded={open}
         aria-controls={open ? 'dojo-progress-hub' : undefined}
         onClick={() => setOpen((o) => !o)}
@@ -77,6 +89,7 @@ export default function DojoProgressHub() {
           {journeyState.started ? <span>L{journeyLevel.level}</span> : null}
         </span>
       </button>
+      ) : null}
 
       {open ? (
         <div

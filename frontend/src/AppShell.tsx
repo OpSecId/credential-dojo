@@ -1,9 +1,14 @@
-import { useEffect, useId, useMemo, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import './App.css'
 import './AppShell.css'
+import { DojoHubUiProvider } from './DojoHubUiContext'
+import DojoLandingThemeLantern from './DojoLandingThemeLantern'
+import DojoNavRankProgress from './DojoNavRankProgress'
 import DojoProgressHub from './DojoProgressHub'
 import NinjaProfileMenu from './NinjaProfileMenu'
 import ZenSoundWidget from './zen/ZenSoundWidget'
+import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { useNinjaProfileSnapshot } from './useNinjaProfileSnapshot'
 
 const BRAND_MARK_SRC = `${import.meta.env.BASE_URL}favicon.svg?v=4`
@@ -161,25 +166,9 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
 export default function AppShell() {
   const profile = useNinjaProfileSnapshot()
   const location = useLocation()
+  const { theme } = useDojoLandingTheme()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const drawerTitleId = useId()
-
-  const pageTitle = useMemo(() => {
-    const p = location.pathname
-    if (p === '/') return 'Home'
-    if (p.startsWith('/kensa')) return 'Kensa'
-    if (p.startsWith('/verify') || p.startsWith('/menkyo')) return 'Menkyo の Kensa (Verify Credential)'
-    if (p.startsWith('/issue-verify')) return 'Issue & verify'
-    if (p.startsWith('/issue')) return 'Tehon の Menkyo (Issue Credential)'
-    if (p.startsWith('/json-explorer')) return 'Shinbi'
-    if (p.startsWith('/discover-kasa')) return 'Discover Kasa'
-    if (p.startsWith('/kinchaku')) return 'Kinchaku'
-    if (p.startsWith('/expedition')) return 'Expedition'
-    if (p.startsWith('/tejun-viewer')) return 'Tejun viewer'
-    if (p.startsWith('/lexicon')) return 'Lexicon'
-    if (p.startsWith('/create-ninja-profile')) return 'Ninja profile'
-    return 'Credential Dojo'
-  }, [location.pathname])
 
   useEffect(() => {
     setDrawerOpen(false)
@@ -210,87 +199,92 @@ export default function AppShell() {
   )
 
   return (
-    <div className={`app-shell app-shell--authed${hasProfile ? '' : ' app-shell--guest'}`}>
-      <a className="app-shell__skip" href="#app-shell-main">
-        Skip to content
-      </a>
+    <DojoHubUiProvider>
+      <div className={`app-shell app-shell--authed${hasProfile ? '' : ' app-shell--guest'}`}>
+        <a className="app-shell__skip" href="#app-shell-main">
+          Skip to content
+        </a>
 
-      <header className={`app-shell__topNav${isHomePath ? ' app-shell__topNav--home' : ''}`} aria-label="Site">
-        <HomeLogoLink className="app-shell__homeLogo" />
-        <button
-          type="button"
-          className="app-shell__menuBtn"
-          aria-expanded={drawerOpen}
-          aria-controls="app-shell-drawer-panel"
-          onClick={() => setDrawerOpen((o) => !o)}
-          aria-label={drawerOpen ? 'Close menu' : 'Open menu'}
+        <header
+          className="app-shell__topNav"
+          aria-label="Site"
+          data-dojo-theme={isHomePath ? theme : undefined}
         >
-          <span aria-hidden>☰</span>
-        </button>
-        <div className="app-shell__topNavTitle" title={pageTitle}>
-          {pageTitle}
-        </div>
-        <NinjaProfileMenu />
-      </header>
-
-      <div className="app-shell__bodyRow">
-        <aside className="app-shell__rail" aria-label="Dojo navigation">
-          <div className="app-shell__railInner">
-            <NavBlocks />
-            <footer className="app-shell__railFoot">{railFootHint}</footer>
-          </div>
-        </aside>
-
-        <div className="app-shell__stage">
-          <main className="app-shell__mainInner" id="app-shell-main" tabIndex={-1}>
-            <Outlet />
-          </main>
-          <footer className="app-shell__appFooter" aria-label="Dojo tools">
-            <div className="app-shell__appFooterTools">
-              <div className="app-shell__appFooterWest">
-                <ZenSoundWidget />
-              </div>
-              <div className="app-shell__appFooterEast">
-                <DojoProgressHub />
-              </div>
-            </div>
-          </footer>
-        </div>
-      </div>
-
-      <div
-        className={`app-shell__backdrop${drawerOpen ? ' app-shell__backdrop--open' : ''}`}
-        aria-hidden={!drawerOpen}
-        onClick={closeDrawer}
-      />
-
-      <div
-        id="app-shell-drawer-panel"
-        className={`app-shell__drawer${drawerOpen ? ' app-shell__drawer--open' : ''}`}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={drawerTitleId}
-        aria-hidden={!drawerOpen}
-      >
-        <div className="app-shell__drawerInner">
-          <div className="app-shell__drawerTop">
-            <HomeLogoLink className="app-shell__homeLogo" onNavigate={closeDrawer} />
+          <div className="app-shell__topNavLeft">
             <button
               type="button"
-              className="app-shell__drawerClose"
-              onClick={closeDrawer}
-              aria-label="Close menu"
+              className="app-shell__menuBtn"
+              aria-expanded={drawerOpen}
+              aria-controls="app-shell-drawer-panel"
+              onClick={() => setDrawerOpen((o) => !o)}
+              aria-label={drawerOpen ? 'Close menu' : 'Open menu'}
             >
-              ×
+              <span aria-hidden>☰</span>
             </button>
+            <HomeLogoLink className="app-shell__homeLogo" />
+            <DojoNavRankProgress />
           </div>
-          <p id={drawerTitleId} className="app-shell__drawerHeading">
-            Menu
-          </p>
-          <NavBlocks onPick={closeDrawer} />
-          <footer className="app-shell__railFoot">{railFootHint}</footer>
+          <div className="app-shell__topNavRight">
+            {isHomePath ? <DojoLandingThemeLantern /> : null}
+            <NinjaProfileMenu />
+          </div>
+        </header>
+
+        <div className="app-shell__bodyRow">
+          <aside className="app-shell__rail" aria-label="Dojo navigation">
+            <div className="app-shell__railInner">
+              <NavBlocks />
+              <footer className="app-shell__railFoot">{railFootHint}</footer>
+            </div>
+          </aside>
+
+          <div className="app-shell__stage">
+            <main className="app-shell__mainInner" id="app-shell-main" tabIndex={-1}>
+              <Outlet />
+            </main>
+            <footer className="app-shell__appFooter" aria-label="Sound">
+              <div className="app-shell__appFooterInner">
+                <ZenSoundWidget />
+              </div>
+            </footer>
+            <DojoProgressHub showFab={false} />
+          </div>
+        </div>
+
+        <div
+          className={`app-shell__backdrop${drawerOpen ? ' app-shell__backdrop--open' : ''}`}
+          aria-hidden={!drawerOpen}
+          onClick={closeDrawer}
+        />
+
+        <div
+          id="app-shell-drawer-panel"
+          className={`app-shell__drawer${drawerOpen ? ' app-shell__drawer--open' : ''}`}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={drawerTitleId}
+          aria-hidden={!drawerOpen}
+        >
+          <div className="app-shell__drawerInner">
+            <div className="app-shell__drawerTop">
+              <HomeLogoLink className="app-shell__homeLogo" onNavigate={closeDrawer} />
+              <button
+                type="button"
+                className="app-shell__drawerClose"
+                onClick={closeDrawer}
+                aria-label="Close menu"
+              >
+                ×
+              </button>
+            </div>
+            <p id={drawerTitleId} className="app-shell__drawerHeading">
+              Menu
+            </p>
+            <NavBlocks onPick={closeDrawer} />
+            <footer className="app-shell__railFoot">{railFootHint}</footer>
+          </div>
         </div>
       </div>
-    </div>
+    </DojoHubUiProvider>
   )
 }

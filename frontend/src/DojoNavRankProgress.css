@@ -1,0 +1,71 @@
+.dojo-hub-navRank {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.2rem;
+  min-width: 4.5rem;
+  max-width: min(42vw, 14rem);
+  flex: 1;
+  margin: 0;
+  padding: 0.28rem 0.45rem 0.32rem;
+  border-radius: 8px;
+  border: 1px solid rgba(90, 232, 255, 0.2);
+  background: rgba(10, 14, 22, 0.75);
+  color: var(--shell-heading, #f0f4ff);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  backdrop-filter: blur(8px);
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.dojo-hub-navRank:hover {
+  border-color: rgba(232, 184, 74, 0.38);
+  background: rgba(14, 18, 28, 0.82);
+}
+
+.dojo-hub-navRank:focus-visible {
+  outline: 2px solid var(--shell-accent, #e8b84a);
+  outline-offset: 2px;
+}
+
+.dojo-hub-navRank__bar {
+  display: block;
+  height: 0.28rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.dojo-hub-navRank__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(90, 232, 255, 0.55), rgba(232, 184, 74, 0.85));
+  min-width: 4px;
+  transition: width 0.35s ease-out;
+}
+
+.dojo-hub-navRank__meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem;
+  min-width: 0;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(184, 192, 212, 0.88);
+}
+
+.dojo-hub-navRank__ja {
+  font-family: var(--font-display, 'Shippori Mincho', serif);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--shell-heading, #f0f4ff);
+}
