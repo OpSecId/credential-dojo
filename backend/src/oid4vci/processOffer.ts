@@ -6,6 +6,7 @@
  */
 
 import { clipIssuerResponseBody } from "../debugLog.js"
+import { buildOid4vciProofJwt, cNonceFromTokenResponse, pickProofAlg } from "./oid4vciProofJwt.js"
 
 /** Default for token/credential/offer fetches */
 const FETCH_TIMEOUT_MS = 25_000
@@ -267,12 +268,121 @@ function issuerHasNonceEndpoint(issuerMetadata: Record<string, unknown>): boolea
   return typeof n === "string" && n.startsWith("https://")
 }
 
+async function resolveCNonceForProof(
+  tokenResponse: unknown,
+  issuerMetadata: Record<string, unknown>,
+  steps: Oid4vciStep[],
+): Promise<string | null> {
+  const fromToken = cNonceFromTokenResponse(tokenResponse)
+  if (fromToken) return fromToken
+  const ep = issuerMetadata.nonce_endpoint
+  if (typeof ep !== "string" || !ep.startsWith("https://")) return null
+  try {
+    assertHttpsIssuerUrl(ep)
+  } catch (e) {
+    push(steps, {
+      id: "nonce_fetch",
+      ok: false,
+      url: ep,
+      detail: e instanceof Error ? e.message : String(e),
+    })
+    return null
+  }
+  try {
+    const { res, text } = await fetchWithTimeout(ep, {
+      method: "POST",
+      headers: { Accept: "application/json" },
+    })
+    let json: unknown
+    try {
+      json = JSON.parse(text) as unknown
+    } catch {
+      json = null
+    }
+    if (!res.ok) {
+      push(steps, {
+        id: "nonce_fetch",
+        ok: false,
+        url: ep,
+        detail: `HTTP ${res.status}: ${clipIssuerResponseBody(text)}`,
+      })
+      return null
+    }
+    const n =
+      json && typeof json === "object" && !Array.isArray(json)
+        ? (json as Record<string, unknown>).c_nonce
+        : undefined
+    if (typeof n !== "string" || !n.length) {
+      push(steps, {
+        id: "nonce_fetch",
+        ok: false,
+        url: ep,
+        detail: "JSON missing c_nonce",
+      })
+      return null
+    }
+    push(steps, { id: "nonce_fetch", ok: true, url: ep, detail: `HTTP ${res.status}` })
+    return n
+  } catch (e) {
+    push(steps, {
+      id: "nonce_fetch",
+      ok: false,
+      url: ep,
+      detail: e instanceof Error ? e.message : String(e),
+    })
+    return null
+  }
+}
+
+async function postCredentialTrials(
+  credentialEndpoint: string,
+  accessToken: string,
+  bodies: Record<string, unknown>[],
+): Promise<
+  | { ok: true; json: unknown; body: Record<string, unknown> }
+  | { ok: false; parts: string[] }
+> {
+  const parts: string[] = []
+  for (let i = 0; i < bodies.length; i++) {
+    const body = bodies[i]!
+    try {
+      const { res, text } = await fetchWithTimeout(credentialEndpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(body),
+      })
+      let json: unknown
+      try {
+        json = JSON.parse(text) as unknown
+      } catch {
+        json = { raw: text }
+      }
+      if (res.ok) {
+        return { ok: true, json, body }
+      }
+      const snippet = clipIssuerResponseBody(
+        typeof json === "object" && json !== null ? JSON.stringify(json) : text,
+      )
+      parts.push(`#${i + 1} {${Object.keys(body).sort().join(",")}} → HTTP ${res.status}: ${snippet}`)
+    } catch (e) {
+      parts.push(`#${i + 1} {${Object.keys(body).sort().join(",")}} → ${e instanceof Error ? e.message : String(e)}`)
+    }
+  }
+  return { ok: false, parts }
+}
+
 async function requestCredential(
   credentialEndpoint: string,
   accessToken: string,
   configurationId: string,
   formatHint: string | undefined,
   issuerMetadata: Record<string, unknown>,
+  credentialIssuerId: string,
+  tokenResponse: unknown,
   steps: Oid4vciStep[],
 ): Promise<unknown | null> {
   // Try several shapes: ldp_vc often ships credential_definition in metadata; some issuers accept
@@ -296,50 +406,91 @@ async function requestCredential(
     uniq.push(b)
   }
 
-  const parts: string[] = []
-  for (let i = 0; i < uniq.length; i++) {
-    const body = uniq[i]!
-    try {
-      const { res, text } = await fetchWithTimeout(credentialEndpoint, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify(body),
-      })
-      let json: unknown
+  const first = await postCredentialTrials(credentialEndpoint, accessToken, uniq)
+  if (first.ok) {
+    push(steps, {
+      id: "credential_request",
+      ok: true,
+      url: credentialEndpoint,
+      detail:
+        uniq.length > 1
+          ? `HTTP 200 (${Object.keys(first.body).sort().join(", ")})`
+          : `HTTP 200`,
+    })
+    return first.json
+  }
+
+  const proofErrorHint = first.parts.some((p) =>
+    /proof is required|invalid_proof|proofs|ldp_vc/i.test(p),
+  )
+  const cNonceInToken = cNonceFromTokenResponse(tokenResponse) != null
+  const shouldTryProofJwt =
+    formatHint === "ldp_vc" &&
+    (proofErrorHint || cNonceInToken || issuerHasNonceEndpoint(issuerMetadata))
+
+  if (shouldTryProofJwt) {
+    const cNonce = await resolveCNonceForProof(tokenResponse, issuerMetadata, steps)
+    if (cNonce) {
+      const alg = pickProofAlg(issuerMetadata, configurationId)
+      let proofJwt: string
       try {
-        json = JSON.parse(text) as unknown
-      } catch {
-        json = { raw: text }
+        proofJwt = buildOid4vciProofJwt({
+          alg,
+          credentialIssuerId: credentialIssuerId,
+          cNonce,
+        })
+      } catch (e) {
+        push(steps, {
+          id: "credential_holder_proof",
+          ok: false,
+          detail: e instanceof Error ? e.message : String(e),
+        })
+        let detail = first.parts.join(" || ")
+        push(steps, {
+          id: "credential_request",
+          ok: false,
+          url: credentialEndpoint,
+          detail: clipIssuerResponseBody(detail),
+        })
+        return null
       }
-      if (res.ok) {
+      push(steps, {
+        id: "credential_holder_proof",
+        ok: true,
+        detail: `JWT proof (${alg}, typ=openid4vci-proof+jwt, aud+nonce)`,
+      })
+      const withProof = uniq.map((b) => ({ ...b, proofs: { jwt: [proofJwt] } }))
+      const second = await postCredentialTrials(credentialEndpoint, accessToken, withProof)
+      if (second.ok) {
         push(steps, {
           id: "credential_request",
           ok: true,
           url: credentialEndpoint,
-          detail:
-            uniq.length > 1
-              ? `HTTP ${res.status} (${Object.keys(body).sort().join(", ")})`
-              : `HTTP ${res.status}`,
+          detail: `HTTP 200 with proofs (${Object.keys(second.body).sort().join(", ")})`,
         })
-        return json
+        return second.json
       }
-      const snippet = clipIssuerResponseBody(
-        typeof json === "object" && json !== null ? JSON.stringify(json) : text,
-      )
-      parts.push(`#${i + 1} {${Object.keys(body).join(",")}} → HTTP ${res.status}: ${snippet}`)
-    } catch (e) {
-      parts.push(`#${i + 1} {${Object.keys(body).join(",")}} → ${e instanceof Error ? e.message : String(e)}`)
+      let detail = second.parts.join(" || ")
+      push(steps, {
+        id: "credential_request",
+        ok: false,
+        url: credentialEndpoint,
+        detail: clipIssuerResponseBody(detail),
+      })
+      return null
     }
+    push(steps, {
+      id: "credential_holder_proof",
+      ok: false,
+      detail:
+        "c_nonce missing on token response and nonce fetch unavailable — cannot build OID4VCI proof JWT (need c_nonce for ldp_vc).",
+    })
   }
 
-  let detail = parts.join(" || ")
-  if (issuerHasNonceEndpoint(issuerMetadata)) {
+  let detail = first.parts.join(" || ")
+  if (issuerHasNonceEndpoint(issuerMetadata) && formatHint === "ldp_vc" && !shouldTryProofJwt) {
     detail +=
-      " — Issuer lists nonce_endpoint: holder proofs (OID4VCI §8.2) are usually required for ldp_vc; this demo server does not yet fetch c_nonce or sign jwt/di_vp proofs."
+      " — Issuer lists nonce_endpoint: holder proofs (OID4VCI §8.2) are often required for ldp_vc; retry if the issuer returns proof-related errors."
   }
   push(steps, {
     id: "credential_request",
@@ -543,6 +694,8 @@ export async function processOid4vciOfferBody(body: unknown): Promise<Oid4vciPro
     cfgId,
     formatHint,
     meta,
+    credentialIssuer,
+    tokenResponse,
     steps,
   )
 
