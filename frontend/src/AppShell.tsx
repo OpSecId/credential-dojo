@@ -9,7 +9,6 @@ import DojoNavRankProgress from './DojoNavRankProgress'
 import DojoProgressHub from './DojoProgressHub'
 import TrainingFocusNavBar from './TrainingFocusNavBar'
 import NinjaProfileMenu from './NinjaProfileMenu'
-import ZenSoundWidget from './zen/ZenSoundWidget'
 import { useDojoLandingTheme } from './DojoLandingThemeContext'
 import { useNinjaProfileSnapshot } from './useNinjaProfileSnapshot'
 import { productTerminology } from './terminology'
@@ -231,9 +230,6 @@ export default function AppShell() {
           </div>
           <div className="app-shell__topNavRight">
             {isHomePath ? <DojoLandingThemeLantern /> : null}
-            <div className="app-shell__topNavSound">
-              <ZenSoundWidget />
-            </div>
             <NinjaProfileMenu />
           </div>
         </header>

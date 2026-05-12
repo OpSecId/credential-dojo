@@ -58,9 +58,9 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 2.35rem;
-  height: 2.35rem;
-  padding: 0.12rem;
+  width: 2.15rem;
+  height: 2.15rem;
+  padding: 0.1rem;
   border-radius: 8px;
   border: 1px solid rgba(90, 232, 255, 0.22);
   background: rgba(12, 18, 32, 0.85);
@@ -80,9 +80,9 @@
 
 .app-shell__homeMarkImg {
   display: block;
-  width: 1.42rem;
+  width: 1.32rem;
   height: auto;
-  max-height: 1.55rem;
+  max-height: 1.42rem;
   object-fit: contain;
 }
 
@@ -210,12 +210,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: 0.35rem;
   flex-shrink: 0;
   overflow: visible;
   z-index: 200;
-  min-height: calc(2.55rem + env(safe-area-inset-top, 0px));
-  padding: env(safe-area-inset-top, 0px) 0.6rem 0.35rem 0.6rem;
+  min-height: calc(2.2rem + env(safe-area-inset-top, 0px));
+  padding: env(safe-area-inset-top, 0px) 0.45rem 0.28rem 0.45rem;
   margin: 0;
   background: rgba(7, 9, 16, 0.92);
   border-bottom: 1px solid var(--shell-rail-border);
@@ -226,7 +226,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.32rem;
   min-width: 0;
   flex: 1;
 }
@@ -234,45 +234,25 @@
 /* Home: training strip + rank hub trigger share the left cluster */
 .app-shell__topNavLeft:has(.app-shell__trainingFocus) .dojo-hub-navRank {
   flex: 0 1 auto;
-  max-width: min(11rem, 36vw);
+  max-width: min(10rem, 34vw);
 }
 
 .app-shell__topNavRight {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  flex-shrink: 0;
-}
-
-/* Compact zen card in the top bar (dropdown stacks above main via shell z-index) */
-.app-shell__topNavSound {
-  display: flex;
-  align-items: center;
-  max-width: min(12rem, 38vw);
-  min-width: 0;
-}
-
-.app-shell__topNavSound .zen-sound {
-  max-width: 100%;
-  padding: 0.28rem 0.42rem 0.32rem;
   gap: 0.28rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
-}
-
-.app-shell__topNavSound .zen-sound.zen-sound--open {
-  position: relative;
-  z-index: 215;
+  flex-shrink: 0;
 }
 
 .app-shell__trainingFocus {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 0.18rem;
+  gap: 0.14rem;
   min-width: 0;
-  flex: 1 1 7rem;
-  max-width: min(12rem, 40vw);
-  padding: 0.28rem 0.45rem 0.3rem;
+  flex: 1 1 6.25rem;
+  max-width: min(10.5rem, 36vw);
+  padding: 0.22rem 0.38rem 0.24rem;
   border-radius: 8px;
   border: 1px solid rgba(201, 168, 110, 0.22);
   background: rgba(8, 11, 18, 0.52);
@@ -306,7 +286,7 @@
 }
 
 .app-shell__trainingFocus-label {
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -324,8 +304,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.35rem;
-  height: 2.35rem;
+  width: 2.15rem;
+  height: 2.15rem;
   padding: 0;
   border-radius: 8px;
   border: 1px solid rgba(90, 232, 255, 0.22);
@@ -349,9 +329,9 @@
   }
 
   .app-shell__topNav {
-    gap: 0.65rem;
-    min-height: calc(2.45rem + env(safe-area-inset-top, 0px));
-    padding: calc(0.42rem + env(safe-area-inset-top, 0px)) 0.75rem 0.42rem 0.75rem;
+    gap: 0.45rem;
+    min-height: calc(2.15rem + env(safe-area-inset-top, 0px));
+    padding: calc(0.32rem + env(safe-area-inset-top, 0px)) 0.6rem 0.32rem 0.6rem;
     background: linear-gradient(
       180deg,
       rgba(7, 9, 16, 0.94) 0%,
@@ -378,9 +358,9 @@
 /* Narrow viewports: tighter bar + drawer chrome */
 @media (max-width: 899px) {
   .app-shell__topNav {
-    gap: 0.4rem;
-    min-height: calc(2.35rem + env(safe-area-inset-top, 0px));
-    padding: calc(0.38rem + env(safe-area-inset-top, 0px)) 0.55rem 0.38rem 0.55rem;
+    gap: 0.32rem;
+    min-height: calc(2.1rem + env(safe-area-inset-top, 0px));
+    padding: calc(0.3rem + env(safe-area-inset-top, 0px)) 0.45rem 0.28rem 0.45rem;
     background: linear-gradient(
       180deg,
       rgba(7, 9, 16, 0.94) 0%,
@@ -392,7 +372,7 @@
   }
 
   .app-shell__topNavLeft {
-    gap: 0.38rem;
+    gap: 0.3rem;
   }
 
   .app-shell__homeLogo,

@@ -1,17 +1,17 @@
-/* App shell top nav: profile menu; on home, theme lantern sits in the same row (HomePage + DojoLandingThemeContext) */
+/* App shell top nav: profile menu; on home, theme lantern sits in the same row */
 .ninjaProfileMenuShell {
   position: static;
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.25rem;
   flex-shrink: 0;
   min-width: 0;
   font-family: var(--font-body, 'Zen Kaku Gothic New', system-ui, sans-serif);
 }
 
 .ninjaProfileMenuShell .ninjaProfileMenu__toggle {
-  max-width: min(44vw, 11rem);
+  max-width: min(40vw, 10rem);
 }
 
 .ninjaProfileMenuShell .ninjaProfileMenu__panel {
@@ -28,16 +28,16 @@
 .ninjaProfileMenu__toggle {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  max-width: min(42vw, 14rem);
-  padding: 0.35rem 0.55rem 0.35rem 0.4rem;
-  border-radius: 10px;
+  gap: 0.35rem;
+  max-width: min(40vw, 12rem);
+  padding: 0.26rem 0.42rem 0.26rem 0.35rem;
+  border-radius: 8px;
   border: 1px solid rgba(90, 232, 255, 0.22);
   background: rgba(10, 14, 24, 0.88);
   color: var(--text-h, #f0f4ff);
   cursor: pointer;
   backdrop-filter: blur(10px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
   transition:
     border-color 0.15s ease,
     background 0.15s ease;
@@ -56,19 +56,19 @@
 .ninjaProfileMenu__glyph {
   display: grid;
   place-items: center;
-  width: 1.85rem;
-  height: 1.85rem;
-  border-radius: 8px;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 7px;
   font-family: var(--font-display, 'Shippori Mincho', serif);
   font-weight: 800;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   background: linear-gradient(145deg, rgba(90, 232, 255, 0.12), rgba(232, 184, 74, 0.1));
   border: 1px solid rgba(255, 255, 255, 0.08);
   flex-shrink: 0;
 }
 
 .ninjaProfileMenu__name {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 700;
   white-space: nowrap;
   overflow: hidden;

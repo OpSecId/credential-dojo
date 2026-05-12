@@ -2,12 +2,12 @@
   display: inline-flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 0.2rem;
-  min-width: 4.5rem;
-  max-width: min(42vw, 14rem);
+  gap: 0.14rem;
+  min-width: 4rem;
+  max-width: min(38vw, 12rem);
   flex: 1;
   margin: 0;
-  padding: 0.28rem 0.45rem 0.32rem;
+  padding: 0.2rem 0.38rem 0.24rem;
   border-radius: 8px;
   border: 1px solid rgba(90, 232, 255, 0.2);
   background: rgba(10, 14, 22, 0.75);
@@ -33,7 +33,7 @@
 
 .dojo-hub-navRank__bar {
   display: block;
-  height: 0.28rem;
+  height: 0.22rem;
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.35);
   overflow: hidden;
@@ -52,9 +52,9 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 0.35rem;
+  gap: 0.28rem;
   min-width: 0;
-  font-size: 0.62rem;
+  font-size: 0.58rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -63,7 +63,7 @@
 
 .dojo-hub-navRank__ja {
   font-family: var(--font-display, 'Shippori Mincho', serif);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: none;
