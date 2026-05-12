@@ -1,0 +1,326 @@
+/**
+ * Global motion polish — loaded last from App.tsx.
+ * Respects prefers-reduced-motion and .dojo-scene[data-reduce-motion="true"].
+ */
+
+@media (prefers-reduced-motion: no-preference) {
+  :root {
+    --dojo-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --dojo-ease-spring: cubic-bezier(0.33, 1.15, 0.68, 1);
+    --dojo-dur-1: 0.2s;
+    --dojo-dur-2: 0.34s;
+    --dojo-dur-3: 0.52s;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @keyframes dojo-rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes dojo-card-settle {
+    from {
+      opacity: 0.72;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes dojo-pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* --- Shell chrome --- */
+  .app-shell__drawer {
+    transition: transform var(--dojo-dur-2) var(--dojo-ease-out);
+  }
+
+  .app-shell__topNav {
+    transition:
+      border-color var(--dojo-dur-2) ease,
+      box-shadow var(--dojo-dur-3) ease;
+  }
+
+  .app-shell__navLink,
+  .app-shell__navBtn {
+    transition:
+      transform var(--dojo-dur-1) var(--dojo-ease-out),
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .app-shell__navLink:hover,
+  .app-shell__navBtn:hover {
+    transform: translateX(3px);
+  }
+
+  .app-shell__homeLogo,
+  .app-shell__menuBtn,
+  .app-shell__drawerClose {
+    transition:
+      transform var(--dojo-dur-1) var(--dojo-ease-spring),
+      border-color 0.2s ease,
+      background 0.2s ease,
+      box-shadow var(--dojo-dur-1) ease;
+  }
+
+  .app-shell__homeLogo:hover,
+  .app-shell__menuBtn:hover,
+  .app-shell__drawerClose:hover {
+    transform: scale(1.045);
+  }
+
+  .app-shell__homeLogo:active,
+  .app-shell__menuBtn:active,
+  .app-shell__drawerClose:active {
+    transform: scale(0.96);
+  }
+
+  /* --- Flow pages (issue, Kensa, lexicon, …) --- */
+  .dojo-flowPage__hero {
+    animation: dojo-rise var(--dojo-dur-3) var(--dojo-ease-out) both;
+  }
+
+  .dojo-flowPage__body {
+    animation: dojo-rise var(--dojo-dur-3) var(--dojo-ease-out) 0.07s both;
+  }
+
+  /* --- Home calm action cards --- */
+  .dojo__calmActionCard {
+    transition:
+      border-color var(--dojo-dur-1) var(--dojo-ease-out),
+      background var(--dojo-dur-1) var(--dojo-ease-out),
+      box-shadow var(--dojo-dur-1) var(--dojo-ease-out),
+      transform var(--dojo-dur-2) var(--dojo-ease-spring);
+  }
+
+  .dojo__calmActionCards .dojo__calmActionCard {
+    animation: dojo-card-settle var(--dojo-dur-3) var(--dojo-ease-out) both;
+  }
+
+  .dojo__calmActionCards .dojo__calmActionCard:nth-child(1) {
+    animation-delay: 0.03s;
+  }
+  .dojo__calmActionCards .dojo__calmActionCard:nth-child(2) {
+    animation-delay: 0.08s;
+  }
+  .dojo__calmActionCards .dojo__calmActionCard:nth-child(3) {
+    animation-delay: 0.13s;
+  }
+  .dojo__calmActionCards .dojo__calmActionCard:nth-child(4) {
+    animation-delay: 0.18s;
+  }
+  .dojo__calmActionCards .dojo__calmActionCard:nth-child(5) {
+    animation-delay: 0.23s;
+  }
+  .dojo__calmActionCards .dojo__calmActionCard:nth-child(6) {
+    animation-delay: 0.28s;
+  }
+
+  @media (hover: hover) {
+    .dojo__calmActionCard:hover {
+      transform: translateY(-4px);
+    }
+  }
+
+  /* --- Toolbar lantern (home) --- */
+  .dojo-lantern.dojo-lantern--toolbar {
+    transition: transform var(--dojo-dur-1) var(--dojo-ease-spring);
+  }
+
+  .dojo-lantern.dojo-lantern--toolbar:hover {
+    transform: scale(1.06);
+  }
+
+  .dojo-lantern.dojo-lantern--toolbar:active {
+    transform: scale(0.96);
+  }
+
+  /* --- Rank strip + profile toggle --- */
+  .dojo-hub-navRank,
+  .ninjaProfileMenu__toggle {
+    transition:
+      transform var(--dojo-dur-1) var(--dojo-ease-out),
+      border-color 0.2s ease,
+      background 0.2s ease,
+      box-shadow var(--dojo-dur-1) ease;
+  }
+
+  .dojo-hub-navRank:hover,
+  .ninjaProfileMenu__toggle:hover {
+    transform: translateY(-1px);
+  }
+
+  .dojo-hub-navRank:active,
+  .ninjaProfileMenu__toggle:active {
+    transform: translateY(0) scale(0.98);
+  }
+
+  .ninjaProfileMenu__panel {
+    transform-origin: top right;
+    animation: dojo-pop-in var(--dojo-dur-2) var(--dojo-ease-out) both;
+  }
+
+  .ninjaProfileMenu__row {
+    transition:
+      background var(--dojo-dur-1) ease,
+      transform var(--dojo-dur-1) var(--dojo-ease-out);
+  }
+
+  .ninjaProfileMenu__row:hover {
+    transform: translateX(2px);
+  }
+
+  /* --- Augmented / tool panels (hover-capable only) --- */
+  @media (hover: hover) {
+    .dojo-augmented--panel[data-augmented-ui],
+    .issueVerify__panel,
+    .kensa__panel {
+      transition:
+        transform var(--dojo-dur-2) var(--dojo-ease-out),
+        box-shadow var(--dojo-dur-2) ease;
+    }
+
+    .dojo-augmented--panel[data-augmented-ui]:hover,
+    .issueVerify__panel:hover,
+    .kensa__panel:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  /* --- Kensa tabs --- */
+  .kensa__tab {
+    transition:
+      border-color var(--dojo-dur-1) ease,
+      background var(--dojo-dur-1) ease,
+      transform var(--dojo-dur-1) var(--dojo-ease-out),
+      box-shadow var(--dojo-dur-1) ease;
+  }
+
+  .kensa__tab:hover {
+    transform: translateY(-1px);
+  }
+
+  /* --- Issue template cards --- */
+  .issueVerify__tplCard {
+    transition:
+      border-color var(--dojo-dur-1) ease,
+      background var(--dojo-dur-1) ease,
+      box-shadow var(--dojo-dur-1) ease,
+      transform var(--dojo-dur-2) var(--dojo-ease-spring);
+  }
+
+  .issueVerify__tplCard:hover {
+    transform: translateY(-2px);
+  }
+
+  .issueVerify__tplCard--selected {
+    transform: scale(1.02);
+  }
+
+  .issueVerify__tplCard--selected:hover {
+    transform: scale(1.02) translateY(-2px);
+  }
+
+  /* --- Primary actions --- */
+  .issueVerify__btn,
+  .kensa__btn,
+  .kensa__modeBtn {
+    transition:
+      border-color var(--dojo-dur-1) ease,
+      background var(--dojo-dur-1) ease,
+      color 0.2s ease,
+      transform var(--dojo-dur-1) var(--dojo-ease-out),
+      box-shadow var(--dojo-dur-1) ease;
+  }
+
+  .issueVerify__btn:hover,
+  .kensa__btn:hover,
+  .kensa__modeBtn:hover {
+    transform: translateY(-1px);
+  }
+
+  .issueVerify__btn:active,
+  .kensa__btn:active,
+  .kensa__modeBtn:active {
+    transform: translateY(0) scale(0.99);
+  }
+
+  /* --- Zen inner-page nav links --- */
+  .dojoZenPage__back {
+    transition:
+      transform var(--dojo-dur-1) var(--dojo-ease-out),
+      border-color 0.2s ease,
+      background 0.2s ease,
+      color 0.2s ease;
+  }
+
+  .dojoZenPage__back:hover {
+    transform: translateX(-3px);
+  }
+}
+
+/* --- Reduced motion + scene flag (matches App.css dojo patterns) --- */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .dojo-flowPage__hero,
+  .dojo-flowPage__body,
+  .dojo__calmActionCards .dojo__calmActionCard,
+  .ninjaProfileMenu__panel {
+    animation: none !important;
+  }
+
+  .dojo-flowPage__hero,
+  .dojo-flowPage__body,
+  .dojo__calmActionCards .dojo__calmActionCard {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .app-shell__navLink:hover,
+  .app-shell__navBtn:hover,
+  .dojo-hub-navRank:hover,
+  .ninjaProfileMenu__toggle:hover,
+  .ninjaProfileMenu__row:hover,
+  .issueVerify__btn:hover,
+  .kensa__btn:hover,
+  .kensa__modeBtn:hover,
+  .kensa__tab:hover,
+  .issueVerify__tplCard:hover,
+  .issueVerify__tplCard--selected,
+  .dojo__calmActionCard:hover,
+  .dojoZenPage__back:hover {
+    transform: none !important;
+  }
+}
+
+.dojo-scene[data-reduce-motion='true'] .dojo-flowPage__hero,
+.dojo-scene[data-reduce-motion='true'] .dojo-flowPage__body,
+.dojo-scene[data-reduce-motion='true'] .dojo__calmActionCards .dojo__calmActionCard {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}

@@ -13,6 +13,7 @@ import LexiconPage from './LexiconPage'
 import TejunViewerPage from './TejunViewerPage'
 import { JourneyProvider } from './journey/JourneyContext'
 import { NoviceIdleProvider } from './novice/NoviceIdleContext'
+import './dojoMotion.css'
 
 export default function App() {
   return (
