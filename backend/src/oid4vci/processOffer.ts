@@ -240,8 +240,13 @@ async function requestCredential(
   formatHint: string | undefined,
   steps: Oid4vciStep[],
 ): Promise<unknown | null> {
-  const body: Record<string, unknown> = { credential_configuration_id: configurationId }
-  if (formatHint) body.format = formatHint
+  // Some issuers (e.g. Veres) validate the body with additionalProperties: false and only
+  // allow `format` (and proofs, etc.) — sending both `credential_configuration_id` and
+  // `format` triggers "should NOT have additional properties" for `credential_configuration_id`.
+  const body: Record<string, unknown> =
+    formatHint != null && formatHint !== ""
+      ? { format: formatHint }
+      : { credential_configuration_id: configurationId }
   try {
     const { res, text } = await fetchWithTimeout(credentialEndpoint, {
       method: "POST",
