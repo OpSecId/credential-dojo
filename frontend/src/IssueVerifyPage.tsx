@@ -126,6 +126,9 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
   const tCred = productTerminology.credential
   const tInspect = productTerminology.credentialInspection
   const tFromTemplate = productTerminology.credentialFromTemplate
+  const tTehon = productTerminology.template
+  const tKasa = productTerminology.kasa
+  const tKata = productTerminology.cryptosuites
   const issueOnly = mode === 'issue'
 
   return (
@@ -140,22 +143,34 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
           <h1 className="dojoZenPage__title">
             {issueOnly ? productTerminology.credentialFromTemplate.issueCredentialLabel : <>Issue &amp; verify</>}
           </h1>
-          <p className="dojoZenPage__intro">
-            {issueOnly ? (
-              <>
-                Mint a <strong>{tCred.name}</strong>-shaped demo JSON from a proof school (<strong>Kasa</strong>) —{' '}
-                <strong>{tFromTemplate.name}</strong> issuance in the browser. No cryptographic verification; for
-                structural inspection of a held credential, use <strong>{tInspect.name}</strong> on{' '}
-                <Link to="/verify">/verify</Link>.
-              </>
-            ) : (
-              <>
-                Mint a <strong>{tCred.name}</strong>-shaped demo JSON from a proof school (<strong>Kasa</strong>), then
-                run the same structural checks as <strong>{tInspect.name}</strong> — still no cryptographic verification,
-                only shape and field heuristics.
-              </>
-            )}
-          </p>
+          {issueOnly ? (
+            <>
+              <p className="dojoZenPage__intro">
+                In this UI, <strong>{tCred.name}</strong> (<span lang="ja">{tCred.glyph}</span>) names the{' '}
+                <strong>issued verifiable credential</strong>—the holder-facing record <em>after</em> issuance, not the
+                issuer&apos;s definitions. <strong>{tTehon.name}</strong> (<span lang="ja">{tTehon.glyph}</span>) is the
+                issuer <strong>copybook</strong>: templates, offers, and exemplars on the issuer side.{' '}
+                <strong>{tFromTemplate.name}</strong> (<span lang="ja">{tFromTemplate.glyph}</span>) ties them: literally
+                the <strong>Menkyo from the Tehon</strong>—the same lineage as{' '}
+                <strong>issuing a VC from a credential definition</strong> in a CRMS (definition and policy stance →
+                concrete credential JSON you can hold and present).
+              </p>
+              <p className="dojoZenPage__intro dojoZenPage__intro--follow">
+                <strong>{tKasa.name}</strong> (<span lang="ja">{tKasa.glyph}</span>) picks the <strong>demo proof school</strong>{' '}
+                (issuer persona), which also sets the cryptosuite metaphor <strong>{tKata.name}</strong> (
+                <span lang="ja">{tKata.glyph}</span>) and the demo <code>did:key</code> flavor on the payload below. This
+                page only <strong>mints shaped demo JSON in your browser</strong>—no chain proofs or canonical
+                verification. For structural inspection of that JSON as a held credential, use{' '}
+                <strong>{tInspect.name}</strong> on <Link to="/verify">/verify</Link>.
+              </p>
+            </>
+          ) : (
+            <p className="dojoZenPage__intro">
+              Mint a <strong>{tCred.name}</strong>-shaped demo JSON from a proof school (<strong>{tKasa.name}</strong>
+              ), then run the same structural checks as <strong>{tInspect.name}</strong> — still no cryptographic
+              verification, only shape and field heuristics.
+            </p>
+          )}
           <nav className="dojoZenPage__nav" aria-label="Related pages">
             <Link className="dojoZenPage__back" to="/" title="Back Home">
               ← Back Home
