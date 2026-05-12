@@ -57,8 +57,7 @@ export default function KinchakuPage() {
           <p className="dojoZenPage__intro">
             A full inventory of stored <strong>Menkyo</strong> credentials and flow artifacts like{' '}
             <strong>Shokan</strong> requests and <strong>Enbu</strong> responses. Select a credential to view the full
-            issued JSON when it was saved from <Link to="/issue">issuance</Link> or Kensa; the seed student Menkyo
-            includes a complete demo VC.
+            issued JSON when it was saved from <Link to="/issue">issuance</Link>, Kensa, or OID4VCI.
           </p>
           <nav className="dojoZenPage__nav" aria-label="Kinchaku navigation">
             <Link className="dojoZenPage__back" to="/">
