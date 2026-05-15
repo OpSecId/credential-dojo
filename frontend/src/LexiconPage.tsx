@@ -43,7 +43,7 @@ const FLOW_STEPS: readonly { label: string; anchor: LexiconKey }[] = [
 function tryLinkForKey(key: LexiconKey): { to: string; label: string } {
   if (key === 'presentationInspection') return { to: '/kensa', label: 'Try in Kensa' }
   if (key === 'credentialInspection') return { to: '/verify', label: 'Try in Kensa' }
-  if (key === 'credentialFromTemplate') return { to: '/issue', label: 'Try issuance' }
+  if (key === 'credentialFromTemplate') return { to: '/dojo/issuance', label: 'Try issuance' }
   if (key === 'render' || key === 'katachi') return { to: '/json-explorer', label: 'Try in Shinbi' }
   if (key === 'kasa' || key === 'cryptosuites') return { to: '/discover-kasa', label: 'Try in Discover Kasa' }
   if (key === 'workflow' || key === 'exchange' || key === 'handshake') return { to: '/tejun-viewer', label: 'Try in Tejun viewer' }

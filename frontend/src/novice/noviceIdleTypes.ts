@@ -111,9 +111,9 @@ export const NOVICE_LESSONS: readonly NoviceLessonDef[] = [
   },
   {
     id: 'visit_issue_verify',
-    pathExactAny: ['/issue', '/issue-verify'],
+    pathExactAny: ['/dojo/issuance', '/issue-verify'],
     label: 'Issue demo Menkyo (issuance)',
-    tip: 'Tehon の Menkyo — browser-only demo VC from /issue or combined Issue & verify.',
+    tip: 'Tehon の Menkyo — browser-only demo VC from /dojo/issuance or combined Issue & verify.',
   },
   {
     id: 'visit_shinbi',
@@ -154,7 +154,7 @@ export function routeInsightBonus(pathname: string): number {
   if (pathname.startsWith('/kensa')) return 1.28
   if (pathname === '/verify' || pathname.startsWith('/menkyo')) return 1.28
   if (pathname.startsWith('/issue-verify')) return 1.24
-  if (pathname === '/issue') return 1.24
+  if (pathname === '/dojo/issuance') return 1.24
   if (pathname.startsWith('/json-explorer')) return 1.22
   if (pathname.startsWith('/discover-kasa')) return 1.18
   if (pathname.startsWith('/create-ninja-profile')) return 1.12

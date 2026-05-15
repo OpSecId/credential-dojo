@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import './dojoZenPage.css'
 import AppShell from './AppShell'
 import CreateNinjaProfilePage from './CreateNinjaProfilePage'
@@ -28,7 +28,8 @@ export default function App() {
             <Route path="/expedition" element={<ExpeditionPage />} />
             <Route path="/tejun-viewer" element={<TejunViewerPage />} />
             <Route path="/json-explorer" element={<JsonExplorerPage />} />
-            <Route path="/issue" element={<IssueVerifyPage mode="issue" />} />
+            <Route path="/issue" element={<Navigate to="/dojo/issuance" replace />} />
+            <Route path="/dojo/issuance" element={<IssueVerifyPage mode="issue" />} />
             <Route path="/verify" element={<KensaPage initialMode="menkyo" />} />
             <Route path="/issue-verify" element={<IssueVerifyPage />} />
             <Route path="/kensa" element={<KensaPage initialMode="enbu" />} />

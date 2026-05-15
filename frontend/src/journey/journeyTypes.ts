@@ -41,7 +41,7 @@ export function routeLearningWeight(pathname: string): { issuer: number; verifie
     return { issuer: 0.75, verifier: 1.45, wallet: 0.95 }
   }
   if (pathname.startsWith('/issue-verify')) return { issuer: 1.25, verifier: 1.35, wallet: 0.75 }
-  if (pathname === '/issue' || pathname.startsWith('/issue/')) {
+  if (pathname === '/dojo/issuance' || pathname.startsWith('/dojo/issuance/')) {
     return { issuer: 1.4, verifier: 0.85, wallet: 1.05 }
   }
   if (pathname.startsWith('/json-explorer')) return { issuer: 1.05, verifier: 1.12, wallet: 1.18 }

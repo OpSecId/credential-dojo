@@ -29,7 +29,7 @@ export type IssueCredentialTemplateMeta = {
   glyph: string
 }
 
-/** `/issue` — five demo Tehon-style shapes users can mint (browser-only JSON). */
+/** `/dojo/issuance` — five demo Tehon-style shapes users can mint (browser-only JSON). */
 export const ISSUE_CREDENTIAL_TEMPLATES: readonly IssueCredentialTemplateMeta[] = [
   {
     id: 'dojo-demo',
@@ -124,7 +124,7 @@ export function buildDemoMenkyo(persona: PersonaPublic, options?: BuildDemoMenky
   return buildDemoCredential(persona, 'dojo-demo', options)
 }
 
-/** Mint-shaped demo VC for the selected `/issue` template (same proof posture as Dojo demo). */
+/** Mint-shaped demo VC for the selected `/dojo/issuance` template (same proof posture as Dojo demo). */
 export function buildDemoCredential(
   persona: PersonaPublic,
   templateId: IssueCredentialTemplateId,

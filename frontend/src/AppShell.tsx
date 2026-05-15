@@ -102,7 +102,7 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
         <p className="app-shell__sectionLabel">Inspect &amp; explore</p>
         <ul className="app-shell__navList">
           <li className="app-shell__navItem">
-            <ShellNavLink to="/issue" onPick={onPick}>
+            <ShellNavLink to="/dojo/issuance" onPick={onPick}>
               {productTerminology.credentialFromTemplate.issueCredentialLabel}
             </ShellNavLink>
           </li>
@@ -275,7 +275,7 @@ export default function AppShell() {
           <span className="app-shell__mobileTabLabel">{productTerminology.wallet.name}</span>
         </NavLink>
         <NavLink
-          to="/issue"
+          to="/dojo/issuance"
           className={({ isActive }: { isActive: boolean }) =>
             `app-shell__mobileTab${isActive ? ' app-shell__mobileTab--active' : ''}`
           }

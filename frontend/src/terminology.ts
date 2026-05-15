@@ -17,7 +17,7 @@ export const productTerminology = {
   credentialFromTemplate: {
     name: 'Tehon の Menkyo',
     glyph: '手本の免許',
-    /** Shell rail, home links, /issue hero title. */
+    /** Shell rail, home links, /dojo/issuance hero title. */
     issueCredentialLabel: 'Tehon の Menkyo',
   },
   presentation: { name: 'Enbu', glyph: '演武' },

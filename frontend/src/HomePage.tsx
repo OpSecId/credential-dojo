@@ -368,7 +368,7 @@ export default function HomePage() {
             <nav className="dojo__calmActionCards" aria-label="Common flows">
               <Link
                 className="dojo__calmActionCard"
-                to="/issue"
+                to="/dojo/issuance"
                 title="Template (Tehon) to held credential (Menkyo)—issuance."
               >
                 <span className="dojo__calmActionCard-title">{productTerminology.credentialFromTemplate.name}</span>
@@ -400,7 +400,7 @@ export default function HomePage() {
                 <span className="dojo__calmDot" aria-hidden>
                   ·
                 </span>
-                <Link to="/issue">{productTerminology.credentialFromTemplate.issueCredentialLabel}</Link>
+                <Link to="/dojo/issuance">{productTerminology.credentialFromTemplate.issueCredentialLabel}</Link>
                 <span className="dojo__calmDot" aria-hidden>
                   ·
                 </span>

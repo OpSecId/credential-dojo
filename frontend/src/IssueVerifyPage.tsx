@@ -95,7 +95,7 @@ function truncateDid(s: string, lead = 14, tail = 10): string {
 }
 
 export type IssueVerifyPageProps = {
-  /** `issue` — issuance only (`/issue`). Default `both` is the combined Issue & verify page. */
+  /** `issue` — issuance only (`/dojo/issuance`). Default `both` is the combined Issue & verify page. */
   mode?: 'both' | 'issue'
 }
 
@@ -200,7 +200,7 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
       type: 'credential',
       title: tpl ? `Demo · ${tpl.title}${opSuffix}` : `Demo Menkyo · ${persona.label}${opSuffix}`,
       subtitle:
-        mode === 'issue' ? 'Issued from /issue (browser demo)' : 'Issued from Issue & verify (browser demo)',
+        mode === 'issue' ? 'Issued from /dojo/issuance (browser demo)' : 'Issued from Issue & verify (browser demo)',
       issuerOrSource: persona.label,
       status: 'ready',
       tags: [
