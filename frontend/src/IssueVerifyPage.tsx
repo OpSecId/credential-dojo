@@ -8,8 +8,11 @@ import {
   buildDemoMenkyo,
   ISSUE_CREDENTIAL_TEMPLATES,
   previewCredentialIdForTemplate,
+  type DojoIssuanceConfigure,
   type IssueCredentialTemplateId,
 } from './issueVerifyDemoVc'
+import { IssuanceConfigurePanel } from './IssuanceConfigurePanel'
+import { CRYPTOSUITES, type IssuanceConfigureSection } from './issuanceConstants'
 import { inspectJson } from './kensa/kensaInspect'
 import {
   NINJA_PROFILE_CHANGED_EVENT,
@@ -20,6 +23,19 @@ import { productTerminology } from './terminology'
 import { addWalletItem } from './walletInventory'
 
 const COMBINED_PREVIEW_CREDENTIAL_ID = previewCredentialIdForTemplate('dojo-demo')
+
+const DEFAULT_ISSUANCE_CONFIGURE: DojoIssuanceConfigure = {
+  protocols: [],
+  cryptosuite: 'eddsa-rdfc-2022',
+  didMethod: 'did:web',
+  validFromDate: '',
+  validUntilDate: '',
+  includeCredentialSchema: false,
+  includeRevocation: false,
+  includeSuspension: false,
+  includeTimestamp: false,
+  renderMethodTemplate: null,
+}
 
 type VcPreviewSummary = {
   headline: string
@@ -199,6 +215,9 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
   const [personas, setPersonas] = useState<readonly PersonaPublic[] | null>(null)
   const [ninjaProfile, setNinjaProfile] = useState<NinjaProfile | null>(() => readNinjaProfile())
   const [selectedTemplate, setSelectedTemplate] = useState<IssueCredentialTemplateId>('dojo-demo')
+  const [configure, setConfigure] = useState<DojoIssuanceConfigure>(DEFAULT_ISSUANCE_CONFIGURE)
+  const [configureSection, setConfigureSection] = useState<IssuanceConfigureSection | null>(null)
+  const [issuancePersonaId, setIssuancePersonaId] = useState<string | null>(null)
   const [rawJson, setRawJson] = useState('')
   const [appliedJson, setAppliedJson] = useState('')
   const [parseError, setParseError] = useState<string | null>(null)
@@ -233,20 +252,51 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
 
   const persona = list.find((p) => p.id === schoolId) ?? list[0]
 
+  useEffect(() => {
+    setIssuancePersonaId(null)
+  }, [schoolId])
+
+  const effectivePersona = useMemo(() => {
+    const id = issuancePersonaId ?? schoolId
+    return list.find((p) => p.id === id) ?? list[0]
+  }, [issuancePersonaId, schoolId, list])
+
+  const patchConfigure = useCallback((patch: Partial<DojoIssuanceConfigure>) => {
+    setConfigure((c) => ({ ...c, ...patch }))
+  }, [])
+
+  useEffect(() => {
+    if (!issueOnly) return
+    setConfigure((cur) => {
+      const allowed = new Set(effectivePersona.kataSamples)
+      if (allowed.has(cur.cryptosuite)) return cur
+      const next = CRYPTOSUITES.find((c) => allowed.has(c.value))?.value ?? CRYPTOSUITES[0]?.value
+      return next ? { ...cur, cryptosuite: next } : cur
+    })
+  }, [effectivePersona, issueOnly])
+
   const operatorCodename = ninjaProfile?.codename
 
   const previewVc = useMemo(() => {
     if (issueOnly) {
-      return buildDemoCredential(persona, selectedTemplate, {
+      return buildDemoCredential(effectivePersona, selectedTemplate, {
         operatorCodename,
         credentialId: previewCredentialIdForTemplate(selectedTemplate),
+        configure,
       })
     }
     return buildDemoMenkyo(persona, {
       operatorCodename,
       credentialId: COMBINED_PREVIEW_CREDENTIAL_ID,
     })
-  }, [issueOnly, persona, operatorCodename, selectedTemplate])
+  }, [
+    issueOnly,
+    effectivePersona,
+    persona,
+    operatorCodename,
+    selectedTemplate,
+    configure,
+  ])
 
   const previewText = useMemo(() => JSON.stringify(previewVc, null, 2), [previewVc])
 
@@ -258,9 +308,9 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
     () =>
       summarizeVcPreview(previewVc as Record<string, unknown>, {
         templateTitle: issueOnly ? selectedTemplateMeta?.title : 'Dojo demo',
-        personaLabel: persona.label,
+        personaLabel: issueOnly ? effectivePersona.label : persona.label,
       }),
-    [previewVc, issueOnly, selectedTemplateMeta?.title, persona.label],
+    [previewVc, issueOnly, selectedTemplateMeta?.title, effectivePersona.label, persona.label],
   )
 
   const copyPreview = useCallback(() => {
@@ -282,8 +332,9 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
   }, [appliedJson])
 
   const issueDemo = useCallback(() => {
+    const issuer = issueOnly ? effectivePersona : persona
     const vc = issueOnly
-      ? buildDemoCredential(persona, selectedTemplate, { operatorCodename })
+      ? buildDemoCredential(issuer, selectedTemplate, { operatorCodename, configure })
       : buildDemoMenkyo(persona, { operatorCodename })
     const text = JSON.stringify(vc, null, 2)
     setRawJson(text)
@@ -296,19 +347,27 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
       title: tpl ? `Demo · ${tpl.title}${opSuffix}` : `Demo Menkyo · ${persona.label}${opSuffix}`,
       subtitle:
         mode === 'issue' ? 'Issued from /dojo/issuance (browser demo)' : 'Issued from Issue & verify (browser demo)',
-      issuerOrSource: persona.label,
+      issuerOrSource: issuer.label,
       status: 'ready',
       tags: [
         'Menkyo',
         'Demo',
         mode === 'issue' ? 'Issue' : 'Issue-verify',
-        persona.proofSchool,
+        issuer.proofSchool,
         ...(tpl ? [tpl.title] : []),
       ],
       preview: text.slice(0, 180),
       bodyJson: text,
     })
-  }, [persona, operatorCodename, mode, issueOnly, selectedTemplate])
+  }, [
+    persona,
+    effectivePersona,
+    operatorCodename,
+    mode,
+    issueOnly,
+    selectedTemplate,
+    configure,
+  ])
 
   const runVerify = useCallback(() => {
     try {
@@ -368,42 +427,19 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
                   <h2 id="dojo-issuance-config-heading" className="issueVerify__augTitle">
                     Credential configuration
                   </h2>
-                  <div className="issueVerify__configureScroll">
-                    <div className="issueVerify__configureActions">
-                      <button type="button" className="issueVerify__btn issueVerify__btn--primary" onClick={issueDemo}>
-                        Issue selected template
-                      </button>
-                    </div>
-                    <p className="issueVerify__sectionBody issueVerify__sectionBody--configure">
-                      Pick one of the templates.
-                    </p>
-                    {!ninjaProfile ? (
-                      <p className="issueVerify__profileHint">
-                        Sign in from the profile menu to attach your codename—or stay signed out and use the default demo
-                        issuer.
-                      </p>
-                    ) : null}
-                    <div className="issueVerify__tplGrid" role="radiogroup" aria-label="Credential template">
-                      {ISSUE_CREDENTIAL_TEMPLATES.map((tpl) => (
-                        <button
-                          key={tpl.id}
-                          type="button"
-                          role="radio"
-                          aria-checked={selectedTemplate === tpl.id}
-                          className={`issueVerify__tplCard${
-                            selectedTemplate === tpl.id ? ' issueVerify__tplCard--selected' : ''
-                          }`}
-                          onClick={() => setSelectedTemplate(tpl.id)}
-                        >
-                          <span className="issueVerify__tplGlyph" aria-hidden>
-                            {tpl.glyph}
-                          </span>
-                          <span className="issueVerify__tplTitle">{tpl.title}</span>
-                          <span className="issueVerify__tplSubtitle">{tpl.subtitle}</span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                  <IssuanceConfigurePanel
+                    configure={configure}
+                    patchConfigure={patchConfigure}
+                    configureSection={configureSection}
+                    setConfigureSection={setConfigureSection}
+                    personas={list}
+                    issuancePersonaId={issuancePersonaId ?? schoolId}
+                    onIssuancePersonaId={setIssuancePersonaId}
+                    ninjaProfile={!!ninjaProfile}
+                    selectedTemplate={selectedTemplate}
+                    onSelectTemplate={setSelectedTemplate}
+                    onIssue={issueDemo}
+                  />
                 </section>
 
                 <section className="issueVerify__previewColumn" aria-label="Menkyo preview output">
