@@ -423,9 +423,11 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
                   data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
                   aria-labelledby="dojo-issuance-config-heading"
                 >
-                  <p className="issueVerify__augIndex">Configure</p>
+                  <p className="issueVerify__augIndex">
+                    {tTehon.name} <span lang="ja">({tTehon.glyph})</span>
+                  </p>
                   <h2 id="dojo-issuance-config-heading" className="issueVerify__augTitle">
-                    Credential configuration
+                    Issuer copybook
                   </h2>
                   <IssuanceConfigurePanel
                     configure={configure}
