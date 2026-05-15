@@ -94,6 +94,101 @@ function truncateDid(s: string, lead = 14, tail = 10): string {
   return `${s.slice(0, lead)}…${s.slice(-tail)}`
 }
 
+function MenkyoPreviewAside({
+  issueOnly,
+  stretchCard,
+  previewSummary,
+  previewText,
+  onCopy,
+}: {
+  issueOnly: boolean
+  stretchCard?: boolean
+  previewSummary: VcPreviewSummary
+  previewText: string
+  onCopy: () => void
+}) {
+  return (
+    <aside
+      className={`issueVerify__previewCard${stretchCard ? ' issueVerify__previewCard--stretch' : ''}`}
+      aria-labelledby="issue-verify-preview-title"
+    >
+      <div className="issueVerify__previewCard-head">
+        <div className="issueVerify__previewCard-titles">
+          <p className="issueVerify__previewCard-kicker">Menkyo preview</p>
+          <h3 className="issueVerify__previewCard-title" id="issue-verify-preview-title">
+            {previewSummary.headline}
+          </h3>
+          <p className="issueVerify__previewCard-sub">
+            {issueOnly
+              ? 'Shape for the selected template — same envelope your Issue button will mint.'
+              : 'Shape from your active Kasa — same envelope Issue will mint here.'}
+          </p>
+        </div>
+        <div className="issueVerify__previewCard-actions">
+          <span className="issueVerify__previewPill" title="Preview only; not yet written to the editor">
+            Read-only
+          </span>
+          <button type="button" className="issueVerify__previewCopy" onClick={onCopy}>
+            Copy JSON
+          </button>
+        </div>
+      </div>
+
+      {previewSummary.types.length > 0 ? (
+        <ul className="issueVerify__previewTypes" aria-label="Credential types">
+          {previewSummary.types.map((t) => (
+            <li key={t} className="issueVerify__previewTypeChip">
+              {t}
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
+      {previewSummary.subjectTeaser ? (
+        <p className="issueVerify__previewSubject">{previewSummary.subjectTeaser}</p>
+      ) : null}
+
+      <dl className="issueVerify__previewMeta">
+        <div className="issueVerify__previewMetaRow">
+          <dt>Issuer (did:key)</dt>
+          <dd className="issueVerify__previewMetaMono" title={previewSummary.issuer}>
+            {truncateDid(previewSummary.issuer)}
+          </dd>
+        </div>
+        <div className="issueVerify__previewMetaRow">
+          <dt>Cryptosuite</dt>
+          <dd className="issueVerify__previewMetaMono">{previewSummary.cryptosuite}</dd>
+        </div>
+        <div className="issueVerify__previewMetaRow">
+          <dt>Proof purpose</dt>
+          <dd>{previewSummary.proofPurpose}</dd>
+        </div>
+        {previewSummary.validFrom ? (
+          <div className="issueVerify__previewMetaRow">
+            <dt>Valid from</dt>
+            <dd className="issueVerify__previewMetaMono">{previewSummary.validFrom}</dd>
+          </div>
+        ) : null}
+        <div className="issueVerify__previewMetaRow">
+          <dt>Credential id</dt>
+          <dd className="issueVerify__previewMetaMono" title={previewSummary.credentialId}>
+            {truncateDid(previewSummary.credentialId, 22, 14)}
+          </dd>
+        </div>
+      </dl>
+
+      <div className="issueVerify__previewJson">
+        <div className="issueVerify__previewJson-bar">
+          <span className="issueVerify__previewJson-label">application/vc+json</span>
+        </div>
+        <pre className="issueVerify__preview" title="Read-only preview of the next Issue payload">
+          {previewText}
+        </pre>
+      </div>
+    </aside>
+  )
+}
+
 export type IssueVerifyPageProps = {
   /** `issue` — issuance only (`/dojo/issuance`). Default `both` is the combined Issue & verify page. */
   mode?: 'both' | 'issue'
@@ -234,253 +329,210 @@ export default function IssueVerifyPage({ mode = 'both' }: IssueVerifyPageProps)
 
   return (
     <DojoFlowPageShell>
-      <DojoFlowPageHero
-        title={
-          issueOnly ? productTerminology.credentialFromTemplate.issueCredentialLabel : <>Issue &amp; verify</>
-        }
-      >
-        {issueOnly ? (
-            <p className="dojo-flowPage__intro">
-              <strong>{tTehon.name}</strong> <span lang="ja">({tTehon.glyph})</span> — issuer copybook.
-              <br />
-              <strong>{tCred.name}</strong> <span lang="ja">({tCred.glyph})</span> — what you hold after issuance.
-              <br />
-              <strong>{tFromTemplate.name}</strong> <span lang="ja">({tFromTemplate.glyph})</span> is that thread:
-              Tehon into Menkyo. (Issuance)
-            </p>
-        ) : (
+      {!issueOnly ? (
+        <DojoFlowPageHero title={<>Issue &amp; verify</>}>
           <p className="dojo-flowPage__intro">
             Mint a <strong>{tCred.name}</strong>-shaped demo JSON from a proof school (<strong>{tKasa.name}</strong>
             ), then run the same structural checks as <strong>{tInspect.name}</strong> — still no cryptographic
             verification, only shape and field heuristics.
           </p>
-        )}
-      </DojoFlowPageHero>
+        </DojoFlowPageHero>
+      ) : null}
 
       <div className="dojo-flowPage__body">
-        <div className="issueVerify dojoZenPage dojoZenPage--wide">
-        <section
-        className="issueVerify__panel dojo-augmented dojo-augmented--panel"
-        data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
-      >
-        <div className={`issueVerify__grid${issueOnly ? ' issueVerify__grid--issueOnly' : ''}`}>
-          <div>
-            <h2 className="issueVerify__sectionTitle">Issue (demo)</h2>
-            {issueOnly ? (
-              <>
-                <p className="issueVerify__sectionBody">Pick one of the templates.</p>
-                {!ninjaProfile ? (
-                  <p className="issueVerify__profileHint">
-                    Sign in from the profile menu to attach your codename—or stay signed out and use the default demo
-                    issuer.
+        {issueOnly ? (
+          <div className="issueVerify issueVerify--issuanceCreddeck dojoZenPage dojoZenPage--wide">
+            <div className="issueVerify__issuanceRoot">
+              <div className="issueVerify__issuanceGrid">
+                <header className="issueVerify__issuanceMasthead">
+                  <p className="dojo-flowPage__eyebrow issueVerify__mastheadEyebrow">credential.ninja</p>
+                  <h1 className="dojo-flowPage__title issueVerify__mastheadTitle">
+                    {tFromTemplate.issueCredentialLabel}
+                  </h1>
+                  <p className="dojo-flowPage__intro issueVerify__mastheadIntro">
+                    <strong>{tTehon.name}</strong> <span lang="ja">({tTehon.glyph})</span> — issuer copybook.
+                    <br />
+                    <strong>{tCred.name}</strong> <span lang="ja">({tCred.glyph})</span> — what you hold after issuance.
+                    <br />
+                    <strong>{tFromTemplate.name}</strong> <span lang="ja">({tFromTemplate.glyph})</span> is that thread:
+                    Tehon into Menkyo. (Issuance)
                   </p>
-                ) : null}
-                <div className="issueVerify__tplGrid" role="radiogroup" aria-label="Credential template">
-                  {ISSUE_CREDENTIAL_TEMPLATES.map((tpl) => (
-                    <button
-                      key={tpl.id}
-                      type="button"
-                      role="radio"
-                      aria-checked={selectedTemplate === tpl.id}
-                      className={`issueVerify__tplCard${
-                        selectedTemplate === tpl.id ? ' issueVerify__tplCard--selected' : ''
-                      }`}
-                      onClick={() => setSelectedTemplate(tpl.id)}
-                    >
-                      <span className="issueVerify__tplGlyph" aria-hidden>
-                        {tpl.glyph}
-                      </span>
-                      <span className="issueVerify__tplTitle">{tpl.title}</span>
-                      <span className="issueVerify__tplSubtitle">{tpl.subtitle}</span>
-                    </button>
-                  ))}
-                </div>
-                <div className="issueVerify__actions">
-                  <button type="button" className="issueVerify__btn issueVerify__btn--primary" onClick={issueDemo}>
-                    Issue selected template
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="issueVerify__sectionBody">
-                  The demo issuer follows your <strong>active ninja profile</strong>: its <strong>Kasa</strong> (proof
-                  school), <strong>Kata</strong> flavor, and your codename on the subject. Change school or codename in{' '}
-                  <Link to="/create-ninja-profile">ninja profile</Link> or the shell profile menu. With no profile saved,
-                  we use the default <strong>Ed-ryū</strong> demo school and no operator name.
-                </p>
+                </header>
 
-                {!ninjaProfile ? (
-                  <p className="issueVerify__profileHint">
-                    No ninja profile in this browser —{' '}
-                    <Link to="/create-ninja-profile">create one</Link> to issue under your identity, or continue with the
-                    default demo issuer.
-                  </p>
-                ) : null}
-
-                <div className="issueVerify__actions">
-                  <button type="button" className="issueVerify__btn issueVerify__btn--primary" onClick={issueDemo}>
-                    Issue demo Menkyo
-                  </button>
-                </div>
-              </>
-            )}
-
-            <aside
-              className="issueVerify__previewCard"
-              aria-labelledby="issue-verify-preview-title"
-            >
-              <div className="issueVerify__previewCard-head">
-                <div className="issueVerify__previewCard-titles">
-                  <p className="issueVerify__previewCard-kicker">Menkyo preview</p>
-                  <h3 className="issueVerify__previewCard-title" id="issue-verify-preview-title">
-                    {previewSummary.headline}
-                  </h3>
-                  <p className="issueVerify__previewCard-sub">
-                    {issueOnly
-                      ? 'Shape for the selected template — same envelope your Issue button will mint.'
-                      : 'Shape from your active Kasa — same envelope Issue will mint here.'}
-                  </p>
-                </div>
-                <div className="issueVerify__previewCard-actions">
-                  <span className="issueVerify__previewPill" title="Preview only; not yet written to the editor">
-                    Read-only
-                  </span>
-                  <button type="button" className="issueVerify__previewCopy" onClick={copyPreview}>
-                    Copy JSON
-                  </button>
-                </div>
-              </div>
-
-              {previewSummary.types.length > 0 ? (
-                <ul className="issueVerify__previewTypes" aria-label="Credential types">
-                  {previewSummary.types.map((t) => (
-                    <li key={t} className="issueVerify__previewTypeChip">
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-
-              {previewSummary.subjectTeaser ? (
-                <p className="issueVerify__previewSubject">{previewSummary.subjectTeaser}</p>
-              ) : null}
-
-              <dl className="issueVerify__previewMeta">
-                <div className="issueVerify__previewMetaRow">
-                  <dt>Issuer (did:key)</dt>
-                  <dd className="issueVerify__previewMetaMono" title={previewSummary.issuer}>
-                    {truncateDid(previewSummary.issuer)}
-                  </dd>
-                </div>
-                <div className="issueVerify__previewMetaRow">
-                  <dt>Cryptosuite</dt>
-                  <dd className="issueVerify__previewMetaMono">{previewSummary.cryptosuite}</dd>
-                </div>
-                <div className="issueVerify__previewMetaRow">
-                  <dt>Proof purpose</dt>
-                  <dd>{previewSummary.proofPurpose}</dd>
-                </div>
-                {previewSummary.validFrom ? (
-                  <div className="issueVerify__previewMetaRow">
-                    <dt>Valid from</dt>
-                    <dd className="issueVerify__previewMetaMono">{previewSummary.validFrom}</dd>
+                <section
+                  className="issueVerify__configurePanel issueVerify__panel dojo-augmented dojo-augmented--panel"
+                  data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
+                  aria-labelledby="dojo-issuance-config-heading"
+                >
+                  <p className="issueVerify__augIndex">Configure</p>
+                  <h2 id="dojo-issuance-config-heading" className="issueVerify__augTitle">
+                    Credential configuration
+                  </h2>
+                  <div className="issueVerify__configureScroll">
+                    <div className="issueVerify__configureActions">
+                      <button type="button" className="issueVerify__btn issueVerify__btn--primary" onClick={issueDemo}>
+                        Issue selected template
+                      </button>
+                    </div>
+                    <p className="issueVerify__sectionBody issueVerify__sectionBody--configure">
+                      Pick one of the templates.
+                    </p>
+                    {!ninjaProfile ? (
+                      <p className="issueVerify__profileHint">
+                        Sign in from the profile menu to attach your codename—or stay signed out and use the default demo
+                        issuer.
+                      </p>
+                    ) : null}
+                    <div className="issueVerify__tplGrid" role="radiogroup" aria-label="Credential template">
+                      {ISSUE_CREDENTIAL_TEMPLATES.map((tpl) => (
+                        <button
+                          key={tpl.id}
+                          type="button"
+                          role="radio"
+                          aria-checked={selectedTemplate === tpl.id}
+                          className={`issueVerify__tplCard${
+                            selectedTemplate === tpl.id ? ' issueVerify__tplCard--selected' : ''
+                          }`}
+                          onClick={() => setSelectedTemplate(tpl.id)}
+                        >
+                          <span className="issueVerify__tplGlyph" aria-hidden>
+                            {tpl.glyph}
+                          </span>
+                          <span className="issueVerify__tplTitle">{tpl.title}</span>
+                          <span className="issueVerify__tplSubtitle">{tpl.subtitle}</span>
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                ) : null}
-                <div className="issueVerify__previewMetaRow">
-                  <dt>Credential id</dt>
-                  <dd className="issueVerify__previewMetaMono" title={previewSummary.credentialId}>
-                    {truncateDid(previewSummary.credentialId, 22, 14)}
-                  </dd>
-                </div>
-              </dl>
+                </section>
 
-              <div className="issueVerify__previewJson">
-                <div className="issueVerify__previewJson-bar">
-                  <span className="issueVerify__previewJson-label">application/vc+json</span>
-                </div>
-                <pre className="issueVerify__preview" title="Read-only preview of the next Issue payload">
-                  {previewText}
-                </pre>
+                <section className="issueVerify__previewColumn" aria-label="Menkyo preview output">
+                  <div className="issueVerify__offerBand">
+                    <h2 className="issueVerify__offerLabel">Menkyo</h2>
+                  </div>
+                  <div className="issueVerify__previewPane">
+                    <MenkyoPreviewAside
+                      issueOnly
+                      stretchCard
+                      previewSummary={previewSummary}
+                      previewText={previewText}
+                      onCopy={copyPreview}
+                    />
+                  </div>
+                </section>
               </div>
-            </aside>
-          </div>
 
-          {issueOnly ? null : (
-          <div>
-            <h2 className="issueVerify__sectionTitle">Verify (Menkyo path)</h2>
-            <p className="issueVerify__sectionBody">
-              After issuing, edit the JSON if you like, then run checks. Errors and warnings mirror the Kensa credential
-              tab.
-            </p>
-            <label className="issueVerify__label" htmlFor="issue-verify-json">
-              Credential JSON
-            </label>
-            <textarea
-              id="issue-verify-json"
-              className="issueVerify__textarea"
-              value={rawJson}
-              onChange={(e) => {
-                setRawJson(e.target.value)
-                setParseError(null)
-                setAppliedJson('')
-              }}
-              spellCheck={false}
-              placeholder='Click "Issue demo Menkyo" or paste a VerifiableCredential-shaped object.'
-            />
-            {parseError ? <p className="issueVerify__parseErr">{parseError}</p> : null}
-            <div className="issueVerify__actions" style={{ marginTop: '0.65rem' }}>
-              <button type="button" className="issueVerify__btn" onClick={runVerify}>
-                Run verify
-              </button>
-              <button
-                type="button"
-                className="issueVerify__btn"
-                onClick={() => {
-                  setRawJson('')
-                  setAppliedJson('')
-                  setParseError(null)
-                }}
-              >
-                Clear
-              </button>
-            </div>
-            {verifyResult ? (
-              <div
-                className={`issueVerify__result issueVerify__result--${verifyResult.level}`}
-                role="status"
-                aria-live="polite"
-              >
-                {verifyResult.lines.map((line, i) => (
-                  <p key={i}>{line}</p>
-                ))}
-              </div>
-            ) : (
-              <p className="issueVerify__empty">
-                {parseError
-                  ? 'Fix JSON and click Run verify.'
-                  : appliedJson.trim()
-                    ? 'Could not derive inspection output.'
-                    : 'Issue or paste JSON, then click Run verify.'}
+              <p className="issueVerify__footerNote">
+                This page is educational: proofs use a placeholder <code>proofValue</code>. For VP-shaped packages, use{' '}
+                <Link to="/kensa">Kensa · Enbu</Link>. For credential-shaped checks without issuing here, open{' '}
+                <Link to="/verify">{tInspect.name}</Link>.
               </p>
-            )}
+            </div>
           </div>
-          )}
-        </div>
+        ) : (
+          <div className="issueVerify dojoZenPage dojoZenPage--wide">
+            <section
+              className="issueVerify__panel dojo-augmented dojo-augmented--panel"
+              data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
+            >
+              <div className="issueVerify__grid">
+                <div>
+                  <h2 className="issueVerify__sectionTitle">Issue (demo)</h2>
+                  <p className="issueVerify__sectionBody">
+                    The demo issuer follows your <strong>active ninja profile</strong>: its <strong>Kasa</strong> (proof
+                    school), <strong>Kata</strong> flavor, and your codename on the subject. Change school or codename
+                    in <Link to="/create-ninja-profile">ninja profile</Link> or the shell profile menu. With no profile
+                    saved, we use the default <strong>Ed-ryū</strong> demo school and no operator name.
+                  </p>
 
-        <p className="issueVerify__footerNote">
-          This page is educational: proofs use a placeholder <code>proofValue</code>. For VP-shaped packages, use{' '}
-          <Link to="/kensa">Kensa · Enbu</Link>.
-          {issueOnly ? (
-            <>
-              {' '}
-              For credential-shaped checks without issuing here, open{' '}
-              <Link to="/verify">{tInspect.name}</Link>.
-            </>
-          ) : null}
-        </p>
-      </section>
-        </div>
+                  {!ninjaProfile ? (
+                    <p className="issueVerify__profileHint">
+                      No ninja profile in this browser —{' '}
+                      <Link to="/create-ninja-profile">create one</Link> to issue under your identity, or continue with
+                      the default demo issuer.
+                    </p>
+                  ) : null}
+
+                  <div className="issueVerify__actions">
+                    <button type="button" className="issueVerify__btn issueVerify__btn--primary" onClick={issueDemo}>
+                      Issue demo Menkyo
+                    </button>
+                  </div>
+                  <MenkyoPreviewAside
+                    issueOnly={false}
+                    previewSummary={previewSummary}
+                    previewText={previewText}
+                    onCopy={copyPreview}
+                  />
+                </div>
+
+                <div>
+                  <h2 className="issueVerify__sectionTitle">Verify (Menkyo path)</h2>
+                  <p className="issueVerify__sectionBody">
+                    After issuing, edit the JSON if you like, then run checks. Errors and warnings mirror the Kensa
+                    credential tab.
+                  </p>
+                  <label className="issueVerify__label" htmlFor="issue-verify-json">
+                    Credential JSON
+                  </label>
+                  <textarea
+                    id="issue-verify-json"
+                    className="issueVerify__textarea"
+                    value={rawJson}
+                    onChange={(e) => {
+                      setRawJson(e.target.value)
+                      setParseError(null)
+                      setAppliedJson('')
+                    }}
+                    spellCheck={false}
+                    placeholder='Click "Issue demo Menkyo" or paste a VerifiableCredential-shaped object.'
+                  />
+                  {parseError ? <p className="issueVerify__parseErr">{parseError}</p> : null}
+                  <div className="issueVerify__actions" style={{ marginTop: '0.65rem' }}>
+                    <button type="button" className="issueVerify__btn" onClick={runVerify}>
+                      Run verify
+                    </button>
+                    <button
+                      type="button"
+                      className="issueVerify__btn"
+                      onClick={() => {
+                        setRawJson('')
+                        setAppliedJson('')
+                        setParseError(null)
+                      }}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                  {verifyResult ? (
+                    <div
+                      className={`issueVerify__result issueVerify__result--${verifyResult.level}`}
+                      role="status"
+                      aria-live="polite"
+                    >
+                      {verifyResult.lines.map((line, i) => (
+                        <p key={i}>{line}</p>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="issueVerify__empty">
+                      {parseError
+                        ? 'Fix JSON and click Run verify.'
+                        : appliedJson.trim()
+                          ? 'Could not derive inspection output.'
+                          : 'Issue or paste JSON, then click Run verify.'}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <p className="issueVerify__footerNote">
+                This page is educational: proofs use a placeholder <code>proofValue</code>. For VP-shaped packages, use{' '}
+                <Link to="/kensa">Kensa · Enbu</Link>.
+              </p>
+            </section>
+          </div>
+        )}
       </div>
     </DojoFlowPageShell>
   )

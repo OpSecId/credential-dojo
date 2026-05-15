@@ -9,10 +9,191 @@
   max-width: min(88rem, calc(100vw - 1rem));
 }
 
-@media (min-width: 900px) {
-  .dojo-scene.dojo-scene--landing:has(.issueVerify) .issueVerify__grid--issueOnly {
-    grid-template-columns: minmax(0, min(56rem, 100%));
+.dojo-scene.dojo-scene--landing:has(.issueVerify--issuanceCreddeck) .dojo-flowPage {
+  max-width: min(88rem, calc(100% - 1rem));
+  padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+  padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+}
+
+.dojo-scene.dojo-scene--landing:has(.issueVerify--issuanceCreddeck)
+  .issueVerify.issueVerify--issuanceCreddeck.dojoZenPage--wide {
+  max-width: min(88rem, calc(100vw - 1rem));
+}
+
+/* Creddeck-style /issuance layout: configure (left, full height) · masthead + preview (right) */
+.issueVerify__issuanceRoot {
+  width: 100%;
+  max-width: min(72rem, 100%);
+  margin: 0 auto;
+  padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+  padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+  padding-top: clamp(0.35rem, 1.5vh, 1rem);
+  padding-bottom: 2.5rem;
+  box-sizing: border-box;
+}
+
+.issueVerify__issuanceGrid {
+  display: grid;
+  gap: 1.35rem;
+}
+
+.issueVerify__issuanceMasthead {
+  max-width: min(42rem, 100%);
+}
+
+.issueVerify__mastheadEyebrow,
+.issueVerify__mastheadTitle {
+  text-align: left;
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.issueVerify__mastheadIntro {
+  text-align: left;
+  margin-left: 0;
+  margin-right: 0;
+  max-width: min(36rem, 100%);
+  margin-bottom: 0;
+}
+
+@media (min-width: 1024px) {
+  .issueVerify__issuanceGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: 2.5rem;
+    row-gap: 2rem;
+    min-height: calc(100dvh - 9rem);
+    align-items: stretch;
   }
+
+  .issueVerify__issuanceMasthead {
+    grid-column: 2;
+    grid-row: 1;
+    max-width: none;
+  }
+
+  .issueVerify__configurePanel {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .issueVerify__previewColumn {
+    grid-column: 2;
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+}
+
+.issueVerify__configurePanel {
+  display: flex;
+  flex-direction: column;
+  min-height: min(22rem, 70vh);
+}
+
+@media (min-width: 1024px) {
+  .issueVerify__configurePanel {
+    min-height: calc(100dvh - 11rem);
+  }
+}
+
+.issueVerify__augIndex {
+  margin: 0 0 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(90, 232, 255, 0.72);
+}
+
+.issueVerify__augTitle {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-h);
+}
+
+.issueVerify__configureScroll {
+  margin-top: 0.65rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.2rem;
+  scrollbar-color: rgba(90, 232, 255, 0.35) rgba(0, 0, 0, 0.2);
+}
+
+.issueVerify__configureActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 0.35rem;
+}
+
+.issueVerify__sectionBody--configure {
+  margin-top: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.issueVerify__offerBand {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+  flex-shrink: 0;
+}
+
+.issueVerify__offerLabel {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.issueVerify__previewPane {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.issueVerify--issuanceCreddeck .issueVerify__previewPane .issueVerify__previewCard {
+  margin-top: 0;
+}
+
+.issueVerify__previewCard--stretch {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.issueVerify__previewCard--stretch > :not(.issueVerify__previewJson) {
+  flex-shrink: 0;
+}
+
+.issueVerify--issuanceCreddeck .issueVerify__previewCard--stretch .issueVerify__previewJson {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.issueVerify--issuanceCreddeck .issueVerify__previewCard--stretch .issueVerify__preview {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+}
+
+.issueVerify--issuanceCreddeck .issueVerify__footerNote {
+  margin-top: 1.75rem;
 }
 
 .issueVerify__panel {
@@ -28,11 +209,6 @@
   .issueVerify__grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
-  }
-
-  .issueVerify__grid--issueOnly {
-    grid-template-columns: minmax(0, min(40rem, 100%));
-    justify-content: center;
   }
 }
 
