@@ -43,10 +43,10 @@ export function DojoFlowPageShell({
   )
 }
 
-/** Centered masthead: eyebrow (default credential.ninja) + title + optional intro children. */
+/** Centered masthead: eyebrow (default DOJO) + title + optional intro children. */
 export function DojoFlowPageHero({
   title,
-  eyebrow = 'credential.ninja',
+  eyebrow = 'DOJO',
   children,
 }: {
   title: ReactNode

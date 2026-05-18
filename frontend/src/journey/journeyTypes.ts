@@ -41,11 +41,12 @@ export function routeLearningWeight(pathname: string): { issuer: number; verifie
     return { issuer: 0.75, verifier: 1.45, wallet: 0.95 }
   }
   if (pathname.startsWith('/issue-verify')) return { issuer: 1.25, verifier: 1.35, wallet: 0.75 }
-  if (pathname === '/dojo/issuance' || pathname.startsWith('/dojo/issuance/')) {
+  if (pathname === '/dojo' || pathname.startsWith('/dojo/')) {
     return { issuer: 1.4, verifier: 0.85, wallet: 1.05 }
   }
   if (pathname.startsWith('/json-explorer')) return { issuer: 1.05, verifier: 1.12, wallet: 1.18 }
   if (pathname.startsWith('/discover-kasa')) return { issuer: 1.4, verifier: 0.82, wallet: 0.96 }
+  if (pathname.startsWith('/journey')) return { issuer: 1.15, verifier: 1.1, wallet: 1.2 }
   if (pathname.startsWith('/lexicon')) return { issuer: 1.2, verifier: 1.2, wallet: 1.2 }
   if (pathname.startsWith('/create-ninja-profile')) return { issuer: 0.92, verifier: 0.74, wallet: 1.35 }
   return { issuer: 1.1, verifier: 1.0, wallet: 1.15 }

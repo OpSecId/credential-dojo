@@ -129,7 +129,7 @@
 
   @media (hover: hover) {
     .dojo__calmActionCard:hover {
-      transform: translateY(-4px);
+      transform: translateY(-3px);
     }
   }
 

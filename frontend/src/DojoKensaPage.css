@@ -275,3 +275,133 @@
   border: 1px solid rgba(255, 107, 74, 0.25);
   color: var(--accent-hot);
 }
+
+/* Enbu creddeck — match issuance workspace width and two-column creddeck */
+.dojo-scene.dojo-scene--landing:has(.kensa--enbuCreddeck) .dojo-flowPage {
+  max-width: min(88rem, calc(100% - 1rem));
+  padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+  padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+}
+
+.dojo-scene.dojo-scene--landing:has(.kensa--enbuCreddeck) .kensa.kensa--enbuCreddeck.dojoZenPage--wide {
+  max-width: min(88rem, calc(100vw - 1rem));
+}
+
+@media (hover: hover) {
+  .kensa--enbuCreddeck .issueVerify__configurePanel.issueVerify__panel,
+  .kensa--enbuCreddeck .issueVerify__configurePanel.dojo-augmented--panel[data-augmented-ui] {
+    transition: none;
+  }
+
+  .kensa--enbuCreddeck .issueVerify__configurePanel.issueVerify__panel:hover,
+  .kensa--enbuCreddeck .issueVerify__configurePanel.dojo-augmented--panel[data-augmented-ui]:hover {
+    transform: none;
+  }
+}
+
+.kensa--enbuCreddeck .kensa__enbuPreviewColumn {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.kensa__enbuWorkspace {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 0.85rem;
+}
+
+.kensa__enbuIntakeConfigure {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.kensa__enbuIntakeCopyBar {
+  flex-shrink: 0;
+}
+
+.kensa--enbuCreddeck .kensa__enbuIntakeConfigure .kensaIntake__drop {
+  min-height: 7.5rem;
+}
+
+.kensa__enbuToolActions {
+  margin-bottom: 0;
+}
+
+.kensa__enbuDropzone {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 6px;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.kensa__enbuDropzone--active {
+  outline: 1px dashed rgba(90, 232, 255, 0.35);
+  background: rgba(90, 232, 255, 0.04);
+}
+
+.kensa__enbuEditor {
+  flex: 1 1 auto;
+  min-height: 10rem;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0.55rem 0.65rem;
+  resize: none;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  white-space: pre;
+  overflow: auto;
+}
+
+.kensa__enbuEditor:focus {
+  outline: none;
+}
+
+.kensa--enbuCreddeck .kensa__dropHint {
+  flex-shrink: 0;
+  margin: 0.35rem 0 0;
+  padding: 0 0.1rem;
+}
+
+.kensa__enbuInspectCard {
+  flex-shrink: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.kensa__enbuInspectCard--fill {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+@media (min-width: 1024px) {
+  .kensa--enbuCreddeck .kensa__enbuWorkspace {
+    min-height: 0;
+  }
+
+  .kensa--enbuCreddeck .kensa__enbuInspectCard--fill {
+    max-height: 100%;
+  }
+}
+
+.kensa__enbuInspectLabel {
+  display: block;
+  margin: 0 0 0.5rem;
+}

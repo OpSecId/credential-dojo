@@ -2,7 +2,9 @@
 export const productTerminology = {
   wallet: { name: "Kinchaku", glyph: "巾着" },
   cryptosuites: { name: "Kata", glyph: "型" },
+  /** Proof school / issuer persona bucket (Discover Kasa, ninja profile school). */
   kasa: { name: "Kasa", glyph: "笠" },
+  /** Issuer-side definitions, offers, and blueprints — not an issued Menkyo. Plain-English gloss: issuer template. */
   template: { name: "Tehon", glyph: "手本" },
   /** Claim / credential structure (schemas, contexts)—形 vs Kata 型 (cryptosuites). */
   katachi: { name: "Katachi", glyph: "形" },

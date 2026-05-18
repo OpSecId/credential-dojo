@@ -18,11 +18,9 @@
   isolation: isolate;
 }
 
-/* In AppShell scroll column, full-viewport min-height stacks empty space above short routes */
-@media (max-width: 899px) {
-  .app-shell__mainInner .dojo-scene {
-    min-height: 0;
-  }
+/* In AppShell scroll column, full-viewport min-height stacks empty space (top nav is outside). */
+.app-shell__mainInner .dojo-scene {
+  min-height: 0;
 }
 
 .dojo-scene--night {
@@ -153,8 +151,10 @@
    Use .dojo-scene--landing.dojo-scene--calm so these beat
    .dojo-scene--landing.dojo-scene--night * (higher specificity than .dojo-scene--calm alone). */
 .dojo-scene--landing.dojo-scene--calm .dojo-scene__moon {
+  left: 50%;
+  right: auto;
   opacity: 0.12;
-  transform: scale(0.92);
+  transform: translateX(-50%) scale(0.92);
 }
 
 .dojo-scene--landing.dojo-scene--calm .dojo-scene__embers,
@@ -181,16 +181,14 @@
   }
 }
 
-/* Calm: hero + tools as one vertically centered stack; padding balances fixed chrome L/R */
+/* Calm: symmetric horizontal inset — Kinchaku FAB is fixed/overlaid, not in the column flow */
 .dojo-scene--landing.dojo-scene--calm .dojo.dojo--calmLanding {
+  width: 100%;
+  max-width: min(56rem, 100%);
+  margin-inline: auto;
   padding-left: max(1rem, env(safe-area-inset-left, 0px));
-  padding-right: max(1.25rem, env(safe-area-inset-right, 0px), calc(1rem + 2.5vw));
-}
-
-@media (min-width: 560px) {
-  .dojo-scene--landing.dojo-scene--calm .dojo.dojo--calmLanding {
-    padding-right: max(1.5rem, env(safe-area-inset-right, 0px), calc(1.25rem + 3.5vw));
-  }
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
+  box-sizing: border-box;
 }
 
 .dojo__calmStage {
@@ -203,6 +201,11 @@
   gap: clamp(1.5rem, 3.5vh, 2.5rem);
   padding-block: clamp(0.25rem, 2vh, 1.25rem);
   box-sizing: border-box;
+}
+
+/* Calm landing: natural height — do not stack min-height on top of AppShell chrome */
+.dojo-scene--landing.dojo-scene--calm .dojo__calmStage {
+  min-height: 0;
 }
 
 @media (max-width: 899px) {
@@ -227,19 +230,35 @@
 }
 
 .dojo__calmActionCards {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 0.75rem;
   width: 100%;
-  max-width: min(28rem, 100%);
-  margin: 0;
+  max-width: min(56rem, 100%);
+  margin-inline: auto;
   padding: 0;
 }
 
-@media (min-width: 520px) {
+@media (min-width: 720px) {
   .dojo__calmActionCards {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.85rem;
   }
+}
+
+@media (min-width: 520px) and (max-width: 719px) {
+  .dojo__calmActionCards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dojo__calmActionCards .dojo__calmActionCard--trials {
+    grid-column: 1 / -1;
+  }
+}
+
+.dojo__calmActionCards .dojo__calmActionCard {
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .dojo__calmActionCard {
@@ -257,7 +276,14 @@
   transition:
     border-color 0.18s ease,
     background 0.18s ease,
-    box-shadow 0.18s ease;
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+@media (hover: hover) {
+  .dojo__calmActionCard:hover {
+    transform: translateY(-3px);
+  }
 }
 
 .dojo-scene--night .dojo__calmActionCard {
@@ -304,22 +330,116 @@
 
 .dojo__calmActionCard-desc {
   margin: 0.15rem 0 0;
+  flex: 1 1 auto;
   font-size: 0.82rem;
   line-height: 1.45;
   color: var(--muted);
 }
 
+.dojo__calmActionCard-cta,
+.dojo__calmActionCard-foot {
+  margin-top: auto;
+}
+
 .dojo__calmActionCard-cta {
-  margin-top: 0.25rem;
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   color: var(--accent);
 }
 
+.dojo__calmActionCard-foot {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  width: 100%;
+}
+
+.dojo__calmActionCard-ctaBtn {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  cursor: pointer;
+  text-align: left;
+}
+
+.dojo__calmActionCard-ctaBtn:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.dojo__calmActionCard-ctaBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.dojo__calmActionCard-dismiss {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.dojo__calmActionCard-dismiss:hover {
+  color: var(--text-h);
+}
+
+.dojo__calmActionCard-dismiss:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 .dojo__calmActionCard:hover .dojo__calmActionCard-cta {
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.dojo__calmActionCard--credo,
+.dojo__calmActionCard--dojo,
+.dojo__calmActionCard--trials {
+  width: 100%;
+}
+
+.dojo-scene--night .dojo__calmActionCard--credo,
+.dojo-scene--night .dojo__calmActionCard--dojo,
+.dojo-scene--night .dojo__calmActionCard--trials {
+  border-color: rgba(90, 232, 255, 0.26);
+  box-shadow: 0 6px 26px rgba(0, 0, 0, 0.28);
+}
+
+.dojo-scene--day .dojo__calmActionCard--credo,
+.dojo-scene--day .dojo__calmActionCard--dojo,
+.dojo-scene--day .dojo__calmActionCard--trials {
+  border-color: rgba(196, 92, 38, 0.22);
+  box-shadow: 0 6px 22px rgba(60, 48, 32, 0.07);
+}
+
+.dojo-scene--night .dojo__calmActionCard--credo:hover,
+.dojo-scene--night .dojo__calmActionCard--dojo:hover,
+.dojo-scene--night .dojo__calmActionCard--trials:hover {
+  border-color: rgba(90, 232, 255, 0.42);
+}
+
+.dojo-scene--day .dojo__calmActionCard--credo:hover,
+.dojo-scene--day .dojo__calmActionCard--dojo:hover,
+.dojo-scene--day .dojo__calmActionCard--trials:hover {
+  border-color: rgba(196, 92, 38, 0.38);
 }
 
 /* Calm landing: single-column hero (training meter lives in AppShell top nav) */
@@ -419,6 +539,7 @@
   align-items: center;
   gap: 0.65rem;
   margin-top: 0;
+  margin-inline: auto;
   padding: 0 0.5rem 0.5rem;
   width: 100%;
   max-width: min(36rem, 100%);
@@ -438,8 +559,15 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 0.35rem 0.45rem;
+  gap: 0.4rem 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
   font-size: 0.84rem;
+}
+
+.dojo__calmEssentials li {
+  margin: 0;
 }
 
 .dojo__calmEssentials a {
@@ -457,11 +585,9 @@
   background: rgba(90, 232, 255, 0.05);
 }
 
-.dojo__calmDot {
-  color: var(--muted);
-  opacity: 0.35;
-  user-select: none;
-  font-size: 0.75rem;
+.dojo__calmEssentials a.dojo__calmEssentials-link--spotlight {
+  color: var(--text-h);
+  font-weight: 600;
 }
 
 .dojo__calmExpand {
@@ -526,6 +652,29 @@
   text-decoration: underline;
   text-underline-offset: 3px;
   margin-bottom: -0.5rem;
+}
+
+.dojo__testBanner {
+  margin: 0 0 1.25rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 10px;
+  border: 1px dashed rgba(232, 184, 74, 0.35);
+  background: rgba(232, 184, 74, 0.08);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--muted);
+  text-align: center;
+}
+
+.dojo__testBanner .dojo__calmCollapse {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  font-weight: 600;
+  vertical-align: baseline;
 }
 
 .dojo__calmCollapse:hover {
@@ -834,13 +983,13 @@
     justify-content: center;
   }
 
-  .dojo__header {
+  .dojo__header:not(.dojo__header--calm) {
     max-width: none;
     margin: 0;
     text-align: left;
   }
 
-  .dojo__title {
+  .dojo__title:not(.dojo__title--calm) {
     justify-content: flex-start;
   }
 }
@@ -1264,6 +1413,14 @@
   text-shadow: 0 4px 28px rgba(0, 0, 0, 0.35);
 }
 
+.dojo__titleLine--wayLead {
+  color: var(--text-h);
+}
+
+.dojo-scene--night .dojo__titleLine--wayLead {
+  color: #ffffff;
+}
+
 .dojo-scene--night .dojo__titleLine {
   text-shadow:
     0 0 32px rgba(90, 232, 255, 0.12),
@@ -1497,6 +1654,11 @@
 .dojo__ninjaBar {
   margin: 0 0 1rem;
   padding: 0.55rem 0.85rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem 1rem;
   border-radius: 10px;
   border: 1px solid rgba(232, 184, 74, 0.28);
   background: rgba(0, 0, 0, 0.2);
@@ -1574,59 +1736,6 @@
   outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: 4px;
-}
-
-.dojo__journeyStart {
-  margin: -0.4rem 0 1rem;
-  padding: 0.6rem 0.8rem;
-  border-radius: 10px;
-  border: 1px solid rgba(232, 184, 74, 0.28);
-  background: rgba(0, 0, 0, 0.22);
-  font-size: 0.84rem;
-  line-height: 1.45;
-  color: var(--text);
-  text-align: center;
-}
-
-.dojo__journeyStart-label {
-  color: var(--accent);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: 0.68rem;
-}
-
-.dojo__journeyStart-btn {
-  margin-left: 0.55rem;
-  border: 1px solid rgba(232, 184, 74, 0.48);
-  background: rgba(232, 184, 74, 0.14);
-  color: var(--text-h);
-  padding: 0.25rem 0.55rem;
-  border-radius: 999px;
-  font: inherit;
-  font-size: 0.76rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.dojo__journeyStart-dismiss {
-  margin-left: 0.45rem;
-  border: none;
-  background: transparent;
-  color: var(--muted);
-  text-decoration: underline;
-  font: inherit;
-  font-size: 0.74rem;
-  cursor: pointer;
-}
-
-.dojo__headerActions {
-  margin: 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem 1rem;
 }
 
 .dojo__linkNav {

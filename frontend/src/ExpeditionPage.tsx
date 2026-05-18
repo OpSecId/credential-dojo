@@ -132,7 +132,7 @@ export default function ExpeditionPage() {
 
       <div className="expedition dojoZenPage dojoZenPage--wide">
         <header className="dojoZenPage__header">
-          <p className="dojoZenPage__eyebrow">Credential Dojo</p>
+          <p className="dojoZenPage__eyebrow">Dojo</p>
           <h1 className="dojoZenPage__title">Dojo Expedition</h1>
           <p className="dojoZenPage__intro">
             Story adventure: march through a credential-combat campaign—earn Menkyo, answer Shōkan challenges, and keep

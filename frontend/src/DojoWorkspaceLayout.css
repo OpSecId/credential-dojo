@@ -1,0 +1,56 @@
+/* Dojo workspace body tweaks (floating nav lives in floatingWorkspaceNav.css). */
+.dojo-flowPage__body--workspace {
+  padding-bottom: clamp(3.5rem, 10vh, 5.5rem);
+}
+
+/* Issuer (/dojo): fixed viewport height on desktop — panels scroll, page does not. */
+@media (min-width: 1024px) {
+  .app-shell__mainInner:has(.issueVerify--issuanceCreddeck) {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .app-shell__mainInner:has(.issueVerify--issuanceCreddeck) .app-shell__stage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .dojo-scene--dojoWorkspace:has(.issueVerify--issuanceCreddeck) {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .dojo-scene--dojoWorkspace:has(.issueVerify--issuanceCreddeck) .dojo.dojo-flowPage {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding-bottom: 0;
+  }
+
+  .dojo-scene--dojoWorkspace:has(.issueVerify--issuanceCreddeck) .dojo-flowPage__stage {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dojo-scene--dojoWorkspace:has(.issueVerify--issuanceCreddeck) .dojo-flowPage__body--workspace {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0.25rem;
+  }
+}

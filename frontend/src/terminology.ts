@@ -4,7 +4,7 @@ export const productTerminology = {
   cryptosuites: { name: 'Kata', glyph: '型' },
   /** Proof school / issuer persona bucket (Discover Kasa, ninja profile school). */
   kasa: { name: 'Kasa', glyph: '笠' },
-  /** Issuer-side definitions, offers, and blueprints — not an issued Menkyo. */
+  /** Issuer-side definitions, offers, and blueprints — not an issued Menkyo. Plain-English gloss: issuer template. */
   template: { name: 'Tehon', glyph: '手本' },
   /**
    * Claim / credential structure (schemas, JSON-LD constraints)—the form data must take.
@@ -17,7 +17,7 @@ export const productTerminology = {
   credentialFromTemplate: {
     name: 'Tehon の Menkyo',
     glyph: '手本の免許',
-    /** Shell rail, home links, /dojo/issuance hero title. */
+    /** Shell rail, home links, /dojo issuance hero title. */
     issueCredentialLabel: 'Tehon の Menkyo',
   },
   presentation: { name: 'Enbu', glyph: '演武' },

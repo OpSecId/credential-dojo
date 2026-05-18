@@ -1,7 +1,14 @@
-import { useRef } from 'react'
-import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import './App.css'
 import './AppShell.css'
+import DojoWorkspaceFooterNav from './DojoWorkspaceFooterNav'
+import {
+  DojoWorkspaceProvider,
+  dojoToolFromLocationState,
+  type DojoWorkspaceTool,
+} from './DojoWorkspaceContext'
+import KinchakuWorkspaceFooterNav from './KinchakuWorkspaceFooterNav'
 import NinjaProfileMenu from './NinjaProfileMenu'
 import { useNinjaProfileSnapshot } from './useNinjaProfileSnapshot'
 import { productTerminology } from './terminology'
@@ -20,7 +27,7 @@ function HomeLogoLink({
       to="/"
       className={className}
       title="Back home"
-      aria-label="Home — Credential Dojo"
+      aria-label="Home — Dojo"
       onClick={onNavigate}
     >
       <img src={BRAND_MARK_SRC} alt="" width={28} height={27} decoding="async" className="app-shell__homeMarkImg" />
@@ -76,11 +83,6 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
         <p className="app-shell__sectionLabel">Dojo</p>
         <ul className="app-shell__navList">
           <li className="app-shell__navItem">
-            <ShellNavLink to="/kinchaku" onPick={onPick}>
-              {productTerminology.wallet.name} (wallet)
-            </ShellNavLink>
-          </li>
-          <li className="app-shell__navItem">
             <ShellNavLink to="/" end onPick={onPick}>
               Home
             </ShellNavLink>
@@ -98,17 +100,34 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
         </ul>
       </section>
 
+      {/* Learn before the long tools list so FAQ / lexicon stay inside the short mobile rail viewport */}
+      <section className="app-shell__section" aria-label="Reference">
+        <p className="app-shell__sectionLabel">Learn</p>
+        <ul className="app-shell__navList">
+          <li className="app-shell__navItem">
+            <ShellNavLink to="/journey" onPick={onPick}>
+              Journey (learn)
+            </ShellNavLink>
+          </li>
+          <li className="app-shell__navItem">
+            <ShellNavLink to="/lexicon" onPick={onPick}>
+              Full lexicon
+            </ShellNavLink>
+          </li>
+          <li className="app-shell__navItem">
+            <ShellNavLink to="/faq" onPick={onPick}>
+              FAQ
+            </ShellNavLink>
+          </li>
+        </ul>
+      </section>
+
       <section className="app-shell__section" aria-label="Tools">
         <p className="app-shell__sectionLabel">Inspect &amp; explore</p>
         <ul className="app-shell__navList">
           <li className="app-shell__navItem">
-            <ShellNavLink to="/dojo/issuance" onPick={onPick}>
+            <ShellNavLink to="/dojo" onPick={onPick}>
               {productTerminology.credentialFromTemplate.issueCredentialLabel}
-            </ShellNavLink>
-          </li>
-          <li className="app-shell__navItem">
-            <ShellNavLink to="/verify" onPick={onPick}>
-              Menkyo の Kensa (Verify Credential)
             </ShellNavLink>
           </li>
           <li className="app-shell__navItem">
@@ -117,8 +136,8 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
             </ShellNavLink>
           </li>
           <li className="app-shell__navItem">
-            <ShellNavLink to="/kensa" onPick={onPick}>
-              Kensa
+            <ShellNavLink to="/trials" onPick={onPick}>
+              Trials (conformance)
             </ShellNavLink>
           </li>
           <li className="app-shell__navItem">
@@ -132,29 +151,8 @@ function NavBlocks({ onPick }: { onPick?: () => void }) {
             </ShellNavLink>
           </li>
           <li className="app-shell__navItem">
-            <ShellNavLink to="/kinchaku-oid4vci" onPick={onPick}>
-              Kinchaku · OID4VCI
-            </ShellNavLink>
-          </li>
-          <li className="app-shell__navItem">
-            <ShellNavLink to="/expedition" onPick={onPick}>
-              Expedition
-            </ShellNavLink>
-          </li>
-          <li className="app-shell__navItem">
             <ShellNavLink to="/tejun-viewer" onPick={onPick}>
               Tejun viewer
-            </ShellNavLink>
-          </li>
-        </ul>
-      </section>
-
-      <section className="app-shell__section" aria-label="Reference">
-        <p className="app-shell__sectionLabel">Learn</p>
-        <ul className="app-shell__navList">
-          <li className="app-shell__navItem">
-            <ShellNavLink to="/lexicon" onPick={onPick}>
-              Full lexicon
             </ShellNavLink>
           </li>
         </ul>
@@ -198,10 +196,106 @@ function IconNavMenu({ className }: { className?: string }) {
   )
 }
 
+function IconKinchakuBack({ className }: { className?: string }) {
+  return (
+    <svg className={className} width={22} height={22} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M14.5 6.5 9 12l5.5 5.5"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+function isKinchakuPath(pathname: string): boolean {
+  return (
+    pathname === '/kinchaku' ||
+    pathname.startsWith('/kinchaku/') ||
+    pathname.startsWith('/kinchaku-')
+  )
+}
+
+function isKinchakuWorkspacePath(pathname: string): boolean {
+  return pathname === '/kinchaku' || pathname.startsWith('/kinchaku/')
+}
+
+const KINCHAKU_HUB_PATH = '/kinchaku/wallet'
+
+function KinchakuFab() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const wallet = productTerminology.wallet
+  const onKinchaku = isKinchakuPath(location.pathname)
+  const lastOutsideKinchakuRef = useRef('/')
+
+  useEffect(() => {
+    if (!onKinchaku) {
+      lastOutsideKinchakuRef.current = `${location.pathname}${location.search}${location.hash}`
+    }
+  }, [location.pathname, location.search, location.hash, onKinchaku])
+
+  const returnToKinchakuHub = onKinchaku && location.pathname !== KINCHAKU_HUB_PATH
+
+  const handleClick = () => {
+    if (!onKinchaku) {
+      navigate(KINCHAKU_HUB_PATH)
+      return
+    }
+    if (returnToKinchakuHub) {
+      navigate(KINCHAKU_HUB_PATH)
+      return
+    }
+    navigate(lastOutsideKinchakuRef.current || '/')
+  }
+
+  const returnTitle = returnToKinchakuHub
+    ? `Back to ${wallet.name}`
+    : 'Back to previous page'
+
+  return (
+    <button
+      type="button"
+      className={`app-shell__kinchakuFab app-shell__kinchakuFab--inFoot${
+        onKinchaku ? ' app-shell__kinchakuFab--return' : ''
+      }${onKinchaku ? ' app-shell__mobileTab--active' : ''}`}
+      onClick={handleClick}
+      title={onKinchaku ? returnTitle : `${wallet.name} — stored Menkyo & artifacts`}
+      aria-label={onKinchaku ? returnTitle : `Open ${wallet.name} wallet`}
+    >
+      {onKinchaku ? (
+        <IconKinchakuBack className="app-shell__kinchakuFabBack app-shell__mobileTabIcon" />
+      ) : (
+        <span className="app-shell__kinchakuFabGlyph app-shell__mobileTabIcon" lang="ja">
+          {wallet.glyph}
+        </span>
+      )}
+      <span className="app-shell__mobileTabLabel">{wallet.name}</span>
+    </button>
+  )
+}
+
 export default function AppShell() {
+  const { pathname, state: locationState } = useLocation()
   const profile = useNinjaProfileSnapshot()
   const hasProfile = Boolean(profile)
   const railRef = useRef<HTMLElement>(null)
+  const calmHome = pathname === '/'
+  const dojoWorkspace =
+    pathname === '/dojo' || pathname.startsWith('/dojo/')
+  const kinchakuWorkspace = isKinchakuWorkspacePath(pathname)
+  const workspaceFoot = dojoWorkspace || kinchakuWorkspace
+
+  const [dojoTool, setDojoTool] = useState<DojoWorkspaceTool>(() => dojoToolFromLocationState(locationState))
+
+  useEffect(() => {
+    if (!dojoWorkspace) return
+    if (dojoToolFromLocationState(locationState) === 'enbu') {
+      setDojoTool('enbu')
+    }
+  }, [dojoWorkspace, locationState])
 
   const railFootHint = hasProfile ? (
     <span>Use the profile menu in the top bar to switch profiles, sign out, or edit.</span>
@@ -209,8 +303,12 @@ export default function AppShell() {
     <span>Open the profile menu in the top bar to create a ninja profile or sign in.</span>
   )
 
-  return (
-    <div className={`app-shell app-shell--authed${hasProfile ? '' : ' app-shell--guest'}`}>
+  const shell = (
+    <div
+      className={`app-shell app-shell--authed${hasProfile ? '' : ' app-shell--guest'}${calmHome ? ' app-shell--calmHome' : ''}${
+        workspaceFoot ? ' app-shell--workspaceFoot' : ''
+      }${dojoWorkspace ? ' app-shell--dojoWorkspace' : ''}${kinchakuWorkspace ? ' app-shell--kinchakuWorkspace' : ''}`}
+    >
       <a className="app-shell__skip" href="#app-shell-main">
         Skip to content
       </a>
@@ -218,17 +316,6 @@ export default function AppShell() {
       <header className="app-shell__topNav" aria-label="Site">
         <div className="app-shell__topNavLeft">
           <HomeLogoLink className="app-shell__homeLogo" />
-          <Link
-            to="/kinchaku"
-            className="app-shell__walletPill app-shell__walletPill--topNav"
-            title={`${productTerminology.wallet.name} — stored Menkyo & artifacts`}
-            aria-label={`Open ${productTerminology.wallet.name} wallet`}
-          >
-            <span className="app-shell__walletPillGlyph" lang="ja">
-              {productTerminology.wallet.glyph}
-            </span>
-            <span className="app-shell__walletPillLabel">{productTerminology.wallet.name}</span>
-          </Link>
         </div>
         <div className="app-shell__topNavRight">
           <NinjaProfileMenu />
@@ -250,50 +337,75 @@ export default function AppShell() {
         </div>
       </div>
 
-      <nav className="app-shell__mobileTabBar" aria-label="Quick actions">
-        <NavLink
-          to="/"
-          end
-          className={({ isActive }: { isActive: boolean }) =>
-            `app-shell__mobileTab${isActive ? ' app-shell__mobileTab--active' : ''}`
+      <footer className="app-shell__stickyFoot">
+        <nav
+          className={`app-shell__mobileTabBar${
+            workspaceFoot ? ' app-shell__mobileTabBar--workspaceFoot' : ''
+          }`}
+          aria-label={
+            dojoWorkspace ? 'Dojo workspace' : kinchakuWorkspace ? 'Kinchaku workspace' : 'Quick actions'
           }
         >
-          <IconHome className="app-shell__mobileTabIcon" />
-          <span className="app-shell__mobileTabLabel">Home</span>
-        </NavLink>
-        <NavLink
-          to="/kinchaku"
-          className={({ isActive }: { isActive: boolean }) =>
-            `app-shell__mobileTab app-shell__mobileTab--wallet${isActive ? ' app-shell__mobileTab--active' : ''}`
-          }
-          title={`${productTerminology.wallet.name} — stored Menkyo & artifacts`}
-          aria-label={`Open ${productTerminology.wallet.name} wallet`}
-        >
-          <span className="app-shell__mobileTabGlyph" lang="ja">
-            {productTerminology.wallet.glyph}
-          </span>
-          <span className="app-shell__mobileTabLabel">{productTerminology.wallet.name}</span>
-        </NavLink>
-        <NavLink
-          to="/dojo/issuance"
-          className={({ isActive }: { isActive: boolean }) =>
-            `app-shell__mobileTab${isActive ? ' app-shell__mobileTab--active' : ''}`
-          }
-        >
-          <IconIssue className="app-shell__mobileTabIcon" />
-          <span className="app-shell__mobileTabLabel">Issue</span>
-        </NavLink>
-        <button
-          type="button"
-          className="app-shell__mobileTab app-shell__mobileTab--button"
-          onClick={() => railRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })}
-          aria-controls="app-shell-rail"
-          aria-label="Scroll to site navigation"
-        >
-          <IconNavMenu className="app-shell__mobileTabIcon" />
-          <span className="app-shell__mobileTabLabel">Nav</span>
-        </button>
-      </nav>
+          {dojoWorkspace ? (
+            <>
+              <div className="app-shell__footerWorkspace">
+                <DojoWorkspaceFooterNav />
+              </div>
+              <KinchakuFab />
+            </>
+          ) : kinchakuWorkspace ? (
+            <>
+              <div className="app-shell__footerWorkspace">
+                <KinchakuWorkspaceFooterNav />
+              </div>
+              <KinchakuFab />
+            </>
+          ) : (
+            <>
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }: { isActive: boolean }) =>
+                  `app-shell__mobileTab${isActive ? ' app-shell__mobileTab--active' : ''}`
+                }
+              >
+                <IconHome className="app-shell__mobileTabIcon" />
+                <span className="app-shell__mobileTabLabel">Home</span>
+              </NavLink>
+              <NavLink
+                to="/dojo"
+                className={({ isActive }: { isActive: boolean }) =>
+                  `app-shell__mobileTab${isActive ? ' app-shell__mobileTab--active' : ''}`
+                }
+              >
+                <IconIssue className="app-shell__mobileTabIcon" />
+                <span className="app-shell__mobileTabLabel">Issue</span>
+              </NavLink>
+              <button
+                type="button"
+                className="app-shell__mobileTab app-shell__mobileTab--button"
+                onClick={() => railRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })}
+                aria-controls="app-shell-rail"
+                aria-label="Scroll to site navigation"
+              >
+                <IconNavMenu className="app-shell__mobileTabIcon" />
+                <span className="app-shell__mobileTabLabel">Nav</span>
+              </button>
+              <KinchakuFab />
+            </>
+          )}
+        </nav>
+      </footer>
     </div>
   )
+
+  if (dojoWorkspace) {
+    return (
+      <DojoWorkspaceProvider tool={dojoTool} setTool={setDojoTool}>
+        {shell}
+      </DojoWorkspaceProvider>
+    )
+  }
+
+  return shell
 }

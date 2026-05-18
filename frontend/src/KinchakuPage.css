@@ -1,27 +1,34 @@
-/* Kinchaku (wallet) — same zen scene + panel rhythm as Kinchaku OID4VCI / Shinbi */
+/* Kinchaku (wallet) — mobile-first inventory + detail */
 
-.dojo-scene.kinchaku-page {
-  min-height: calc(100dvh - 2rem);
+.kinchaku-page .dojo-flowPage__body {
+  text-align: left;
 }
 
-.kinchaku-page__panel {
-  margin-top: 1.25rem;
+.kinchaku-page .kinchakuPage__body {
+  width: 100%;
+  max-width: min(48rem, 100%);
+  margin-inline: auto;
+}
+
+.kinchakuPage__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.kinchakuPage__card {
   border: 1px solid var(--border);
   border-radius: 12px;
   background: rgba(11, 18, 34, 0.86);
   padding: 1rem 1rem 1.1rem;
 }
 
-.dojo-scene--day .kinchaku-page__panel {
+.dojo-scene--day .kinchakuPage__card {
   background: rgba(255, 252, 246, 0.88);
 }
 
-.kinchaku-page__inventoryPanel {
-  margin-top: 1.1rem;
-}
-
-.kinchaku-page__panelLabel {
-  margin: 0 0 0.55rem;
+.kinchakuPage__panelLabel {
+  margin: 0 0 0.65rem;
   font-size: 0.68rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -29,243 +36,263 @@
   color: var(--muted);
 }
 
-.kinchaku-page__inventoryHeading {
-  margin: 0 0 0.85rem;
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  color: var(--text-h);
-}
-
-.kinchaku-page__walletCta {
+.kinchakuPage__heroLinks {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
 
-.kinchaku-page__walletCtaPrimary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.52rem 1rem;
-  border-radius: 12px;
-  border: 1px solid rgba(232, 184, 74, 0.45);
-  background: rgba(232, 184, 74, 0.14);
-  color: var(--accent);
-  font-size: 0.9rem;
-  font-weight: 800;
-  text-decoration: none;
-}
-
-.kinchaku-page__walletCtaPrimary:hover {
-  border-color: rgba(232, 184, 74, 0.65);
-  background: rgba(232, 184, 74, 0.22);
-}
-
-.kinchaku-page__scanQr {
+.kinchakuPage__btn {
   font: inherit;
   font-size: 0.88rem;
   font-weight: 800;
-  padding: 0.5rem 0.95rem;
+  padding: 0.52rem 0.95rem;
   border-radius: 12px;
   border: 1px solid rgba(90, 232, 255, 0.35);
   background: rgba(90, 232, 255, 0.08);
   color: var(--text-h);
   cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
 }
 
-.kinchaku-page__scanQr:hover {
+.kinchakuPage__btn:hover {
   border-color: rgba(90, 232, 255, 0.55);
   background: rgba(90, 232, 255, 0.12);
 }
 
-.kinchaku-page__scanQr--nav {
-  padding: 0.35rem 0.72rem;
-  font-size: 0.82rem;
-  border-radius: 10px;
+.kinchakuPage__btn--primary {
+  border-color: rgba(232, 184, 74, 0.45);
+  background: rgba(232, 184, 74, 0.14);
+  color: var(--accent);
 }
 
-.dojo-scene--day .kinchaku-page__scanQr {
+.kinchakuPage__btn--primary:hover {
+  border-color: rgba(232, 184, 74, 0.65);
+  background: rgba(232, 184, 74, 0.22);
+}
+
+.kinchakuPage__inventoryHeading {
+  margin: 0 0 0.85rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
   color: var(--text-h);
 }
 
-.kinchaku-page__stats {
+.kinchakuPage__stats {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.7rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.9rem;
 }
 
-.kinchaku-page__statCard {
+.kinchakuPage__statCard {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 0.7rem 0.85rem;
   background: rgba(9, 16, 31, 0.76);
 }
 
-.dojo-scene--day .kinchaku-page__statCard {
+.dojo-scene--day .kinchakuPage__statCard {
   background: rgba(255, 255, 255, 0.55);
 }
 
-.kinchaku-page__statLabel {
+.kinchakuPage__statLabel {
   margin: 0;
   color: var(--muted);
   font-size: 0.77rem;
+  font-weight: 700;
 }
 
-.kinchaku-page__statValue {
-  margin: 0.18rem 0 0;
+.kinchakuPage__statValue {
+  margin: 0.22rem 0 0;
   font-size: 1.42rem;
-  font-weight: 800;
+  font-weight: 900;
   color: var(--text-h);
 }
 
-.kinchaku-page__workspace {
+.kinchakuPage__layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-  gap: 0.8rem;
+  grid-template-columns: 1fr;
+  gap: 0.85rem;
 }
 
-.kinchaku-page__listCard,
-.kinchaku-page__detailCard {
+@media (min-width: 860px) {
+  .kinchakuPage__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  }
+}
+
+.kinchakuPage__listCard,
+.kinchakuPage__detailCard {
   border: 1px solid var(--border);
   border-radius: 12px;
   background: rgba(11, 18, 34, 0.86);
   padding: 0.85rem;
+  box-sizing: border-box;
 }
 
-.dojo-scene--day .kinchaku-page__listCard,
-.dojo-scene--day .kinchaku-page__detailCard {
+.dojo-scene--day .kinchakuPage__listCard,
+.dojo-scene--day .kinchakuPage__detailCard {
   background: rgba(255, 252, 246, 0.72);
 }
 
-.kinchaku-page__tabs {
+.kinchakuPage__filters {
   display: flex;
-  gap: 0.35rem;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0 0 0.8rem;
 }
 
-.kinchaku-page__tab {
+.kinchakuPage__filterBtn {
   border: 1px solid var(--border);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.03);
   color: var(--muted);
-  padding: 0.3rem 0.72rem;
-  font-size: 0.8rem;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
 
-.kinchaku-page__tab--active {
+.kinchakuPage__filterBtn--active {
   color: var(--text-h);
   border-color: var(--accent-border);
   background: var(--accent-soft);
 }
 
-.kinchaku-page__list {
+.kinchakuPage__list {
   list-style: none;
-  margin: 0.75rem 0 0;
+  margin: 0;
   padding: 0;
-  display: grid;
-  gap: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.kinchaku-page__item {
+.kinchakuPage__item {
   width: 100%;
   text-align: left;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.02);
-  padding: 0.6rem 0.7rem;
+  padding: 0.7rem 0.75rem;
   color: inherit;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
 }
 
-.kinchaku-page__item--active {
+.kinchakuPage__item:hover {
+  border-color: rgba(90, 232, 255, 0.25);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.kinchakuPage__item--active {
   border-color: var(--accent-border);
   background: rgba(255, 255, 255, 0.06);
 }
 
-.kinchaku-page__itemTitle {
-  margin: 0;
-  font-weight: 700;
+.kinchakuPage__itemTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.35rem;
 }
 
-.kinchaku-page__itemMeta {
-  margin: 0.24rem 0 0;
+.kinchakuPage__itemType {
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--muted);
-  font-size: 0.8rem;
 }
 
-.kinchaku-page__detailType {
+.kinchakuPage__itemStatus {
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: var(--text-h);
+  opacity: 0.85;
+}
+
+.kinchakuPage__itemTitle {
+  font-weight: 900;
+  color: var(--text-h);
+}
+
+.kinchakuPage__itemMeta {
+  margin-top: 0.25rem;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.kinchakuPage__detailType {
   margin: 0;
   color: var(--muted);
   font-size: 0.78rem;
+  font-weight: 800;
 }
 
-.kinchaku-page__detailTitle {
+.kinchakuPage__detailTitle {
   margin: 0.25rem 0 0;
   font-size: clamp(1.1rem, 2.5vw, 1.35rem);
-  font-weight: 800;
+  font-weight: 900;
   font-family: var(--font-display);
   color: var(--text-h);
 }
 
-.kinchaku-page__detailSubtitle {
+.kinchakuPage__detailSubtitle {
   margin: 0.38rem 0 0;
   color: var(--muted);
+  font-size: 0.9rem;
 }
 
-.kinchaku-page__detailRow {
+.kinchakuPage__detailRow {
   margin: 0.48rem 0 0;
   font-size: 0.86rem;
+  color: var(--text);
 }
 
-.kinchaku-page__tags {
-  margin-top: 0.65rem;
+.kinchakuPage__tags {
+  margin-top: 0.7rem;
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
 }
 
-.kinchaku-page__tag {
+.kinchakuPage__tag {
   border: 1px solid var(--border);
   border-radius: 999px;
   padding: 0.22rem 0.55rem;
   font-size: 0.75rem;
   color: var(--muted);
+  background: rgba(255, 255, 255, 0.02);
 }
 
-.kinchaku-page__preview {
-  margin-top: 0.7rem;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 0.65rem;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  white-space: pre-wrap;
-  background: rgba(6, 10, 20, 0.9);
-  color: var(--text-h);
-}
-
-.dojo-scene--day .kinchaku-page__preview {
-  background: rgba(255, 255, 255, 0.85);
-}
-
-.kinchaku-page__jsonLabel {
+.kinchakuPage__jsonLabel {
   margin: 0.75rem 0 0.35rem;
   font-size: 0.68rem;
-  font-weight: 700;
+  font-weight: 900;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);
 }
 
-.kinchaku-page__jsonHint {
+.kinchakuPage__jsonHint {
   margin: 0.75rem 0 0.35rem;
   font-size: 0.78rem;
   color: var(--muted);
 }
 
-.kinchaku-page__bodyJson {
+.kinchakuPage__bodyJson {
   margin: 0;
   margin-top: 0.35rem;
   max-height: min(32rem, 52vh);
@@ -283,23 +310,115 @@
   scrollbar-color: rgba(90, 232, 255, 0.35) rgba(0, 0, 0, 0.2);
 }
 
-.dojo-scene--day .kinchaku-page__bodyJson {
+.dojo-scene--day .kinchakuPage__bodyJson {
   background: rgba(255, 255, 255, 0.72);
   color: var(--text-h);
   border-color: rgba(40, 32, 20, 0.14);
 }
 
-.kinchaku-page__empty {
-  margin: 0;
+.kinchakuPage__preview {
+  margin: 0.7rem 0 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+  background: rgba(6, 10, 20, 0.9);
+  color: var(--text-h);
+}
+
+.dojo-scene--day .kinchakuPage__preview {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.kinchakuPage__workflowsHint {
+  margin: 0 0 0.85rem;
+  font-size: 0.88rem;
+  line-height: 1.5;
   color: var(--muted);
 }
 
-@media (max-width: 900px) {
-  .kinchaku-page__stats {
-    grid-template-columns: 1fr;
-  }
+.kinchakuPage__workflowStarts {
+  margin: 0 0 1rem;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
 
-  .kinchaku-page__workspace {
+.kinchakuPage__workflowStart {
+  display: inline-flex;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(90, 232, 255, 0.28);
+  background: rgba(90, 232, 255, 0.08);
+  color: var(--text-h);
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.kinchakuPage__workflowStart:hover {
+  border-color: rgba(90, 232, 255, 0.45);
+  background: rgba(90, 232, 255, 0.14);
+}
+
+.kinchakuPage__list--workflows {
+  margin-top: 0.25rem;
+}
+
+.kinchakuPage__workflowCard {
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid rgba(120, 200, 255, 0.14);
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.dojo-scene--day .kinchakuPage__workflowCard {
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.kinchakuPage__workflowTitle {
+  margin: 0.35rem 0 0.2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+.kinchakuPage__workflowUpdated {
+  margin: 0.35rem 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.kinchakuPage__scanCard .kinchaku-qr-panel {
+  margin-top: 0.25rem;
+}
+
+.kinchakuPage__scanCard .kinchaku-qr-modal__video {
+  width: 100%;
+  max-height: min(52vh, 20rem);
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.kinchakuPage__btn--ghost {
+  margin-top: 0.85rem;
+  background: transparent;
+  border-color: rgba(120, 200, 255, 0.2);
+  font-weight: 600;
+}
+
+.kinchakuPage__empty {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+@media (max-width: 560px) {
+  .kinchakuPage__stats {
     grid-template-columns: 1fr;
   }
 }

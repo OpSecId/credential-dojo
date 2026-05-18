@@ -1,19 +1,19 @@
-import type { Dispatch, ReactNode, SetStateAction } from 'react'
+import { useCallback, useMemo, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import type { PersonaPublic } from './demoPersonas'
 import {
-  CRYPTOSUITES,
   DID_METHODS,
-  PROTOCOLS,
   RENDER_SUITE_TOGGLES,
+  SCHEMA_FORMAT_TOGGLES,
+  STATUS_LIST_TOGGLES,
+  type CredentialSchemaFormat,
   type DidMethod,
-  type IssuanceConfigureSection,
-  type IssuanceProtocol,
+  type StatusListPurpose,
   type RenderMethodTemplate,
-  credentialFormatLabel,
 } from './issuanceConstants'
 import type { DojoIssuanceConfigure } from './issueVerifyDemoVc'
-import { ISSUE_CREDENTIAL_TEMPLATES, type IssueCredentialTemplateId } from './issueVerifyDemoVc'
+import { issueCredentialTemplatesForIssuer, type IssueCredentialTemplateId } from './issueVerifyDemoVc'
+import { IssuanceDatePicker } from './IssuanceDatePicker'
 
 function StatusToggle({
   id,
@@ -50,130 +50,142 @@ function StatusToggle({
   )
 }
 
-function DisclosureBlock({
-  id,
-  activeSection,
-  onToggle,
+export function ConfigSection({
   hint,
   label,
-  controlsId,
   children,
 }: {
-  id: IssuanceConfigureSection
-  activeSection: IssuanceConfigureSection | null
-  onToggle: (next: IssuanceConfigureSection) => void
-  hint: ReactNode
+  hint?: ReactNode
   label: string
-  controlsId: string
   children: ReactNode
 }) {
-  const open = activeSection === id
   return (
-    <div className="issuanceCfg__disclosure">
-      <div className="issuanceCfg__disclosureRow">
-        <div className="issuanceCfg__disclosureHint">{hint}</div>
-        <button
-          type="button"
-          className={`issuanceCfg__disclosureBtn${open ? ' issuanceCfg__disclosureBtn--open' : ''}`}
-          aria-expanded={open}
-          aria-controls={controlsId}
-          onClick={() => onToggle(id)}
-        >
-          <span className="issuanceCfg__disclosureChevron" aria-hidden>
-            ▾
-          </span>
-          {label}
-        </button>
+    <section className="issuanceCfg__section">
+      <div className="issuanceCfg__sectionHead">
+        <h3 className="issuanceCfg__sectionLabel">{label}</h3>
+        {hint ? <div className="issuanceCfg__sectionHint">{hint}</div> : null}
       </div>
-      {open ? (
-        <div id={controlsId} className="issuanceCfg__disclosureBody">
-          {children}
-        </div>
-      ) : null}
-    </div>
+      <div className="issuanceCfg__sectionBody">{children}</div>
+    </section>
   )
 }
 
 export type IssuanceConfigurePanelProps = {
   configure: DojoIssuanceConfigure
   patchConfigure: (patch: Partial<DojoIssuanceConfigure>) => void
-  configureSection: IssuanceConfigureSection | null
-  setConfigureSection: Dispatch<SetStateAction<IssuanceConfigureSection | null>>
   personas: readonly PersonaPublic[]
   issuancePersonaId: string
   onIssuancePersonaId: (id: string) => void
   ninjaProfile: boolean
   selectedTemplate: IssueCredentialTemplateId
   onSelectTemplate: (id: IssueCredentialTemplateId) => void
-  onIssue: () => void
 }
 
 export function IssuanceConfigurePanel({
   configure,
   patchConfigure,
-  configureSection,
-  setConfigureSection,
   personas,
   issuancePersonaId,
   onIssuancePersonaId,
   ninjaProfile,
   selectedTemplate,
   onSelectTemplate,
-  onIssue,
 }: IssuanceConfigurePanelProps) {
-  const toggleSection = (id: IssuanceConfigureSection) => {
-    setConfigureSection((cur) => (cur === id ? null : id))
-  }
+  const issuanceIssuer = useMemo(
+    () => personas.find((p) => p.id === issuancePersonaId) ?? personas[0],
+    [personas, issuancePersonaId],
+  )
 
-  const handleProtocolToggle = (p: IssuanceProtocol, checked: boolean) => {
-    const set = new Set(configure.protocols)
-    if (checked) set.add(p)
-    else set.delete(p)
+  const templatesForIssuer = useMemo(
+    () => (issuanceIssuer ? issueCredentialTemplatesForIssuer(issuanceIssuer) : []),
+    [issuanceIssuer],
+  )
+
+  const handleRenderMethodPick = (kind: RenderMethodTemplate) => {
     patchConfigure({
-      protocols: PROTOCOLS.map((x) => x.value).filter((v) => set.has(v)),
+      renderMethodTemplate: configure.renderMethodTemplate === kind ? null : kind,
     })
   }
 
-  const handleRenderToggle = (kind: RenderMethodTemplate, on: boolean) => {
-    if (on) patchConfigure({ renderMethodTemplate: kind })
-    else if (configure.renderMethodTemplate === kind) patchConfigure({ renderMethodTemplate: null })
+  const handleSchemaFormatPick = (_format: CredentialSchemaFormat) => {
+    patchConfigure({ includeCredentialSchema: !configure.includeCredentialSchema })
   }
+
+  const handleStatusListToggle = (purpose: StatusListPurpose) => {
+    if (purpose === 'revocation') {
+      patchConfigure({ includeRevocation: !configure.includeRevocation })
+    } else {
+      patchConfigure({ includeSuspension: !configure.includeSuspension })
+    }
+  }
+
+  const isStatusListSelected = (purpose: StatusListPurpose) =>
+    purpose === 'revocation' ? configure.includeRevocation : configure.includeSuspension
+
+  const issuerIndex = useMemo(() => {
+    const idx = personas.findIndex((p) => p.id === issuancePersonaId)
+    return idx >= 0 ? idx : 0
+  }, [personas, issuancePersonaId])
+
+  const activeIssuer = personas[issuerIndex] ?? personas[0]
+
+  const cycleIssuer = useCallback(
+    (delta: -1 | 1) => {
+      if (!personas.length) return
+      const next = (issuerIndex + delta + personas.length) % personas.length
+      onIssuancePersonaId(personas[next]!.id)
+    },
+    [issuerIndex, personas, onIssuancePersonaId],
+  )
 
   return (
     <div className="issueVerify__configureScroll">
-      <div className="issueVerify__configureActions">
-        <button type="button" className="issueVerify__btn issueVerify__btn--primary" onClick={onIssue}>
-          Issue selected template
-        </button>
-      </div>
 
-      <div className="issuanceCfg__field">
-        <label htmlFor="dojo-issuance-issuer" className="issuanceCfg__fieldLabel">
-          Issuer
-        </label>
-        <div className="issuanceCfg__issuerRow">
-          <span className="issuanceCfg__personaAvatar" aria-hidden>
-            {personas.find((p) => p.id === issuancePersonaId)?.labelJa.slice(0, 1) ?? '忍'}
-          </span>
-          <select
-            id="dojo-issuance-issuer"
-            className="issuanceCfg__select"
-            value={issuancePersonaId}
-            onChange={(e) => onIssuancePersonaId(e.target.value)}
-          >
-            {personas.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.label} — {p.proofSchool}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+      <ConfigSection label="Issuer">
+        {activeIssuer ? (
+          <div className="issuanceCfg__issuerCycle" role="group" aria-label="Issuer">
+            <button
+              type="button"
+              className="issuanceCfg__issuerCycleBtn"
+              onClick={() => cycleIssuer(-1)}
+              aria-label="Previous issuer"
+              title="Previous proof school"
+            >
+              ‹
+            </button>
+            <div
+              className="issuanceCfg__issuerCycleCard"
+              title={`${activeIssuer.labelJa} (${activeIssuer.label}) — ${activeIssuer.description}`}
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              <span className="issuanceCfg__issuerCycleText">
+                <span className="issuanceCfg__issuerCycleLabel" lang="ja">
+                  {activeIssuer.labelJa}
+                </span>
+                <span className="issuanceCfg__issuerCycleKeytype">{activeIssuer.proofSchool}</span>
+              </span>
+              <span className="issuanceCfg__issuerCycleCount" aria-hidden>
+                {issuerIndex + 1}/{personas.length}
+              </span>
+            </div>
+            <button
+              type="button"
+              className="issuanceCfg__issuerCycleBtn"
+              onClick={() => cycleIssuer(1)}
+              aria-label="Next issuer"
+              title="Next proof school"
+            >
+              ›
+            </button>
+          </div>
+        ) : null}
+      </ConfigSection>
 
       <fieldset className="issuanceCfg__fieldset">
-        <legend className="issuanceCfg__fieldLabel">Credential template</legend>
-        <div className="issuanceCfg__tplRow" role="radiogroup" aria-label="Credential template">
-          {ISSUE_CREDENTIAL_TEMPLATES.map((tpl) => (
+        <legend className="issuanceCfg__fieldLabel">Credential</legend>
+        <div className="issuanceCfg__tplRow" role="radiogroup" aria-label="Credential">
+          {templatesForIssuer.map((tpl) => (
             <label
               key={tpl.id}
               htmlFor={`dojo-tpl-${tpl.id}`}
@@ -195,7 +207,6 @@ export function IssuanceConfigurePanel({
               </span>
               <span className="issuanceCfg__tplHorizText">
                 <span className="issuanceCfg__tplHorizTitle">{tpl.title}</span>
-                <span className="issuanceCfg__tplHorizFormat">{credentialFormatLabel(tpl.formatType)}</span>
                 <span className="issuanceCfg__tplHorizDesc">{tpl.subtitle}</span>
               </span>
             </label>
@@ -210,200 +221,149 @@ export function IssuanceConfigurePanel({
         </p>
       ) : null}
 
-      <div className="issuanceCfg__dateGrid">
-        <div>
-          <label htmlFor="dojo-valid-from" className="issuanceCfg__fieldLabel">
-            validFrom
-          </label>
-          <input
-            id="dojo-valid-from"
-            type="date"
-            className="issuanceCfg__dateInput"
-            value={configure.validFromDate}
-            onChange={(e) => patchConfigure({ validFromDate: e.target.value })}
-          />
+      <ConfigSection label="Validity">
+        <div className="issuanceCfg__dateGrid">
+          <div className="issuanceCfg__dateField">
+            <label id="dojo-valid-from-label" htmlFor="dojo-valid-from" className="issuanceCfg__subLabel">
+              From
+            </label>
+            <IssuanceDatePicker
+              id="dojo-valid-from"
+              fieldLabelId="dojo-valid-from-label"
+              value={configure.validFromDate}
+              onCommit={(iso) => patchConfigure({ validFromDate: iso })}
+            />
+          </div>
+          <div className="issuanceCfg__dateField">
+            <label id="dojo-valid-until-label" htmlFor="dojo-valid-until" className="issuanceCfg__subLabel">
+              Until
+            </label>
+            <IssuanceDatePicker
+              id="dojo-valid-until"
+              fieldLabelId="dojo-valid-until-label"
+              value={configure.validUntilDate}
+              onCommit={(iso) => patchConfigure({ validUntilDate: iso })}
+            />
+          </div>
         </div>
-        <div>
-          <label htmlFor="dojo-valid-until" className="issuanceCfg__fieldLabel">
-            validUntil
-          </label>
-          <input
-            id="dojo-valid-until"
-            type="date"
-            className="issuanceCfg__dateInput"
-            value={configure.validUntilDate}
-            onChange={(e) => patchConfigure({ validUntilDate: e.target.value })}
-          />
-        </div>
-      </div>
+      </ConfigSection>
 
-      <DisclosureBlock
-        id="schema"
-        activeSection={configureSection}
-        onToggle={toggleSection}
-        hint={
-          <span title="Optional credentialSchema (JsonSchema) on the issuance profile when enabled.">
-            Optional <code>credentialSchema</code> (JsonSchema) on the issuance profile when enabled.
-          </span>
-        }
-        label="Schema"
-        controlsId="dojo-issuance-schema-options"
-      >
-        <StatusToggle
-          compact
-          id="dojo-issuance-credential-schema"
-          title="Include"
-          checked={configure.includeCredentialSchema}
-          onCheckedChange={(v) => patchConfigure({ includeCredentialSchema: v })}
-        />
-      </DisclosureBlock>
-
-      <DisclosureBlock
-        id="render"
-        activeSection={configureSection}
-        onToggle={toggleSection}
-        hint={
-          <span title="Optional renderMethod using TemplateRenderMethod — pick one template format.">
-            Optional <code>renderMethod</code> using <code>TemplateRenderMethod</code> — pick one template format (SVG,
-            PDF, or HTML).
-          </span>
-        }
-        label="Render Method"
-        controlsId="dojo-issuance-render-radios"
-      >
-        <ul className="issuanceCfg__toggleList">
-          {RENDER_SUITE_TOGGLES.map((t) => (
-            <li key={t.value}>
-              <StatusToggle
-                compact
-                id={t.id}
-                title={t.title}
-                checked={configure.renderMethodTemplate === t.value}
-                onCheckedChange={(on) => handleRenderToggle(t.value, on)}
-              />
-            </li>
-          ))}
-        </ul>
-      </DisclosureBlock>
-
-      <DisclosureBlock
-        id="status"
-        activeSection={configureSection}
-        onToggle={toggleSection}
-        hint={
-          <span title="Optional credentialStatus entries using BitstringStatusListEntry.">
-            Optional <code>credentialStatus</code> entries using <code>BitstringStatusListEntry</code> for revocation
-            and/or suspension hints in the profile.
-          </span>
-        }
-        label="Status lists"
-        controlsId="dojo-issuance-status-lists"
-      >
-        <StatusToggle
-          compact
-          id="dojo-issuance-status-revocation"
-          title="Revocation"
-          checked={configure.includeRevocation}
-          onCheckedChange={(v) => patchConfigure({ includeRevocation: v })}
-        />
-        <StatusToggle
-          compact
-          id="dojo-issuance-status-suspension"
-          title="Suspension"
-          checked={configure.includeSuspension}
-          onCheckedChange={(v) => patchConfigure({ includeSuspension: v })}
-        />
-      </DisclosureBlock>
-
-      <DisclosureBlock
-        id="proof"
-        activeSection={configureSection}
-        onToggle={toggleSection}
-        hint={
-          <span title="Verification method (did:web or did:key), DataIntegrityProof cryptosuite, and optional issuedAt on the issuance profile.">
-            Verification method (did:web or did:key), DataIntegrityProof cryptosuite, and optional{' '}
-            <code>issuedAt</code> on the issuance profile for this demo build.
-          </span>
-        }
-        label="Data Integrity Proof"
-        controlsId="dojo-issuance-proof-options"
-      >
+      <ConfigSection label="Schema">
         <fieldset className="issuanceCfg__fieldset issuanceCfg__fieldset--plain">
-          <legend className="issuanceCfg__srOnly">Verification method</legend>
-          <div className="issuanceCfg__didSeg" role="radiogroup" aria-label="DID method">
+          <legend className="issuanceCfg__srOnly">Schema format</legend>
+          <div className="issuanceCfg__didSeg" role="group" aria-label="Schema format">
             <span className="issuanceCfg__didSegGlow" aria-hidden />
-            {DID_METHODS.map((m) => {
-              const selected = configure.didMethod === m.value
+            {SCHEMA_FORMAT_TOGGLES.map((t) => {
+              const selected = configure.includeCredentialSchema
               return (
                 <button
-                  key={m.value}
+                  key={t.value}
                   type="button"
-                  role="radio"
-                  aria-checked={selected}
-                  title={m.label}
+                  aria-pressed={selected}
+                  title={`JsonSchema — ${t.title}. Click again to clear.`}
                   className={`issuanceCfg__didSegBtn${selected ? ' issuanceCfg__didSegBtn--selected' : ''}`}
-                  onClick={() => patchConfigure({ didMethod: m.value as DidMethod })}
+                  onClick={() => handleSchemaFormatPick(t.value)}
                 >
-                  <span className="issuanceCfg__didSegMono">{m.value}</span>
+                  <span className="issuanceCfg__didSegMono">{t.title}</span>
                 </button>
               )
             })}
           </div>
         </fieldset>
+      </ConfigSection>
 
-        <div className="issuanceCfg__field issuanceCfg__field--tight">
-          <label htmlFor="dojo-cryptosuite" className="issuanceCfg__srOnly">
-            Cryptosuite
-          </label>
-          <select
-            id="dojo-cryptosuite"
-            className="issuanceCfg__select issuanceCfg__select--full"
-            value={configure.cryptosuite}
-            onChange={(e) => patchConfigure({ cryptosuite: e.target.value })}
-          >
-            {CRYPTOSUITES.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
-              </option>
-            ))}
-          </select>
+      <ConfigSection label="Render Method">
+        <fieldset className="issuanceCfg__fieldset issuanceCfg__fieldset--plain">
+          <legend className="issuanceCfg__srOnly">Template render format</legend>
+          <div className="issuanceCfg__didSeg issuanceCfg__didSeg--render" role="group" aria-label="Render method">
+            <span className="issuanceCfg__didSegGlow" aria-hidden />
+            {RENDER_SUITE_TOGGLES.map((t) => {
+              const selected = configure.renderMethodTemplate === t.value
+              return (
+                <button
+                  key={t.value}
+                  type="button"
+                  aria-pressed={selected}
+                  title={`TemplateRenderMethod — ${t.title}. Click again to clear.`}
+                  className={`issuanceCfg__didSegBtn${selected ? ' issuanceCfg__didSegBtn--selected' : ''}`}
+                  onClick={() => handleRenderMethodPick(t.value)}
+                >
+                  <span className="issuanceCfg__didSegMono">{t.title}</span>
+                </button>
+              )
+            })}
+          </div>
+        </fieldset>
+      </ConfigSection>
+
+      <ConfigSection label="Status lists">
+        <fieldset className="issuanceCfg__fieldset issuanceCfg__fieldset--plain">
+          <legend className="issuanceCfg__srOnly">Status list purposes</legend>
+          <div className="issuanceCfg__didSeg" role="group" aria-label="Status lists">
+            <span className="issuanceCfg__didSegGlow" aria-hidden />
+            {STATUS_LIST_TOGGLES.map((t) => {
+              const selected = isStatusListSelected(t.value)
+              return (
+                <button
+                  key={t.value}
+                  type="button"
+                  aria-pressed={selected}
+                  title={`BitstringStatusListEntry — ${t.title}. Click again to clear.`}
+                  className={`issuanceCfg__didSegBtn${selected ? ' issuanceCfg__didSegBtn--selected' : ''}`}
+                  onClick={() => handleStatusListToggle(t.value)}
+                >
+                  <span className="issuanceCfg__didSegMono">{t.title}</span>
+                </button>
+              )
+            })}
+          </div>
+        </fieldset>
+      </ConfigSection>
+
+      <ConfigSection label="Data Integrity Proof">
+        <div className="issuanceCfg__proofStack">
+          <StatusToggle
+            compact
+            id="dojo-issuance-proof-created"
+            title="proof.created"
+            checked={configure.includeProofCreated}
+            onCheckedChange={(v) => patchConfigure({ includeProofCreated: v })}
+          />
+
+          <div className="issuanceCfg__proofField">
+            <p className="issuanceCfg__subLabel" id="dojo-proof-did-method-label">
+              Verification method
+            </p>
+            <fieldset className="issuanceCfg__fieldset issuanceCfg__fieldset--plain">
+              <legend className="issuanceCfg__srOnly">Verification method</legend>
+              <div
+                className="issuanceCfg__didSeg"
+                role="radiogroup"
+                aria-labelledby="dojo-proof-did-method-label"
+              >
+                <span className="issuanceCfg__didSegGlow" aria-hidden />
+                {DID_METHODS.map((m) => {
+                  const selected = configure.didMethod === m.value
+                  return (
+                    <button
+                      key={m.value}
+                      type="button"
+                      role="radio"
+                      aria-checked={selected}
+                      title={m.label}
+                      className={`issuanceCfg__didSegBtn${selected ? ' issuanceCfg__didSegBtn--selected' : ''}`}
+                      onClick={() => patchConfigure({ didMethod: m.value as DidMethod })}
+                    >
+                      <span className="issuanceCfg__didSegMono">{m.value}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </fieldset>
+          </div>
+
         </div>
-
-        <StatusToggle
-          compact
-          id="dojo-issuance-proof-timestamp"
-          title="Include timestamp"
-          checked={configure.includeTimestamp}
-          onCheckedChange={(v) => patchConfigure({ includeTimestamp: v })}
-        />
-      </DisclosureBlock>
-
-      <DisclosureBlock
-        id="protocols"
-        activeSection={configureSection}
-        onToggle={toggleSection}
-        hint={
-          <span title="Select which exchange protocols to include in the issuance profile.">
-            Select which exchange protocols to include in the issuance profile (demo metadata on the VC).
-          </span>
-        }
-        label="Exchange protocols"
-        controlsId="dojo-issuance-exchange-protocols"
-      >
-        <ul className="issuanceCfg__toggleList">
-          {PROTOCOLS.map((p) => (
-            <li key={p.value}>
-              <StatusToggle
-                compact
-                id={`dojo-issuance-protocol-${p.value}`}
-                title={p.label.split(' — ')[0] ?? p.label}
-                checked={configure.protocols.includes(p.value)}
-                onCheckedChange={(on) => handleProtocolToggle(p.value, on)}
-              />
-            </li>
-          ))}
-        </ul>
-      </DisclosureBlock>
+      </ConfigSection>
     </div>
   )
 }

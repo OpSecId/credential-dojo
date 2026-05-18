@@ -1,0 +1,13 @@
+/* Kinchaku workspace: centered column in the app-shell stage (symmetric inset, no FAB offset). */
+.kinchaku-page.dojo-scene--landing .dojo.dojo--calmLanding.dojo-flowPage {
+  width: 100%;
+  max-width: min(56rem, 100%);
+  margin-inline: auto;
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
+  box-sizing: border-box;
+}
+
+.kinchaku-page .dojo-flowPage__stage {
+  align-items: center;
+}

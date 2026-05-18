@@ -1,6 +1,6 @@
 # credential-dojo
 
-**The Credential Dojo** — a **credential management platform** (CRMS) focused on **W3C Verifiable Credentials**: web UI plus API for operating standards-aligned VCs across their lifecycle—credential definitions, issuance, holders, verification, and registry-style discovery—hosted at [credential.ninja](https://credential.ninja).
+**The Credential Dojo** — a **credential management platform** (CRMS) focused on **W3C Verifiable Credentials**: web UI plus API for operating standards-aligned VCs across their lifecycle—credential definitions, issuance, holders, verification, and registry-style discovery—hosted as **[DOJO](https://credential.ninja)** (Credential Dojo).
 
 ## Product terminology
 
@@ -93,7 +93,7 @@ In **The Credential Dojo**, **Kata** names the metaphor for **cryptosuites** (an
 ## Structure
 
 - `frontend/` — Vite + React + TypeScript (operator console for the CRMS; VC-centric UX)
-- `backend/` — Express + TypeScript (platform `/api/*` for W3C VC flows; CORS for `credential.ninja` and local dev)
+- `backend/` — Express + TypeScript (platform `/api/*` for W3C VC flows; CORS for `https://credential.ninja` and local dev)
 
 ## Prerequisites
 

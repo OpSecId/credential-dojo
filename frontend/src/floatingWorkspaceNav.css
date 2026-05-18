@@ -1,0 +1,116 @@
+/* Workspace tabs embedded in `app-shell__stickyFoot` (same bar as wallet). */
+.floatingWorkspaceNav--inShellFoot {
+  max-width: min(calc(100vw - 5.5rem), 22rem);
+  padding: 0.28rem 0.38rem;
+  box-shadow: none;
+}
+
+.floatingWorkspaceNav--inShellFoot.floatingWorkspaceNav--equalTabs {
+  max-width: min(calc(100vw - 5.5rem), 26rem);
+  width: 100%;
+}
+
+.floatingWorkspaceNav {
+  position: static;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.2rem;
+  max-width: min(96vw, 32rem);
+  padding: 0.35rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(12, 14, 22, 0.98);
+  border: 1px solid color-mix(in srgb, var(--dojo-mist, #8fa3c4) 22%, transparent);
+  box-shadow:
+    0 0.35rem 1.25rem color-mix(in srgb, #000 45%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #fff 6%, transparent);
+}
+
+.floatingWorkspaceNav__tab {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.05rem;
+  padding: 0.45rem 0.85rem;
+  min-width: 0;
+  border-radius: 999px;
+  font: inherit;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  color: color-mix(in srgb, var(--dojo-mist, #c8d4e8) 72%, transparent);
+  border: 1px solid transparent;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.floatingWorkspaceNav__tab:hover {
+  color: var(--dojo-mist, #e8eef8);
+  background: color-mix(in srgb, #fff 6%, transparent);
+}
+
+.floatingWorkspaceNav__tab--active {
+  color: var(--dojo-mist, #f0f4fc);
+  background: color-mix(in srgb, var(--dojo-accent, #6b9fff) 28%, transparent);
+  border-color: color-mix(in srgb, var(--dojo-accent, #6b9fff) 45%, transparent);
+}
+
+.floatingWorkspaceNav__tabJa {
+  font-size: 0.62rem;
+  font-weight: 500;
+  opacity: 0.88;
+  line-height: 1.1;
+}
+
+.floatingWorkspaceNav__tabEn {
+  font-size: 0.7rem;
+  line-height: 1.15;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .floatingWorkspaceNav__tab {
+    padding: 0.4rem 0.65rem;
+    font-size: 0.68rem;
+  }
+
+  .floatingWorkspaceNav__tabJa {
+    display: none;
+  }
+}
+
+/* Kinchaku: Workflows · Scan · Wallet — equal-width segments */
+.floatingWorkspaceNav--equalTabs {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: min(96vw, 22rem);
+  max-width: min(96vw, 22rem);
+}
+
+.floatingWorkspaceNav--equalTabs .floatingWorkspaceNav__tab {
+  width: 100%;
+  justify-content: center;
+  box-sizing: border-box;
+  padding-left: 0.35rem;
+  padding-right: 0.35rem;
+}
+
+/* Dojo / Kinchaku workspace: single app-shell footer (nav + wallet). */
+.floatingWorkspaceNav__bodyPad {
+  padding-bottom: var(--app-shell-foot-height, calc(3.15rem + env(safe-area-inset-bottom, 0px)));
+}
+
+@media (min-width: 900px) {
+  .floatingWorkspaceNav__bodyPad {
+    padding-bottom: var(--app-shell-foot-height, calc(4.35rem + env(safe-area-inset-bottom, 0px)));
+  }
+}

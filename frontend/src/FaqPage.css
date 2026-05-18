@@ -1,0 +1,75 @@
+.faq {
+  width: 100%;
+  max-width: min(42rem, 100%);
+  margin: 0 auto;
+  padding-bottom: 2rem;
+}
+
+.faq__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.faq__item {
+  margin: 0 0 1.15rem;
+  padding: 1rem 1.15rem 1.1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--panel-bg);
+  backdrop-filter: blur(8px);
+}
+
+.faq__item:last-child {
+  margin-bottom: 0;
+}
+
+#faq-dojo-journey {
+  scroll-margin-top: 5.5rem;
+}
+
+.faq__q {
+  margin: 0 0 0.55rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text-h);
+  line-height: 1.35;
+}
+
+.faq__a {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.faq__a p {
+  margin: 0 0 0.65rem;
+}
+
+.faq__a p:last-child {
+  margin-bottom: 0;
+}
+
+.faq__a a {
+  color: var(--accent);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+.faq__a a:hover {
+  color: var(--text-h);
+}
+
+.faq__a code {
+  font-size: 0.86em;
+  padding: 0.1em 0.35em;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.dojo-scene--day .faq__a code {
+  background: rgba(40, 32, 20, 0.08);
+}

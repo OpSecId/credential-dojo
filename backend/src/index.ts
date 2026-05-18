@@ -4,6 +4,7 @@ import swaggerUi from "swagger-ui-express";
 import { debugLog } from "./debugLog.js";
 import { openApiDocument } from "./openapi.js";
 import { listDemoPersonas } from "./personas.js";
+import { handleRootPost } from "./root/handleRootPost.js";
 import { processOid4vciOfferBody } from "./oid4vci/processOffer.js";
 import { productTerminology } from "./terminology.js";
 
@@ -106,6 +107,13 @@ app.get("/api/hello", (_req, res) => {
     terminology: productTerminology,
   });
 });
+
+/**
+ * Platform root — one operation per request (issue / sign / verify).
+ * Body uses exactly one of: credential, verifiableCredential, presentation, verifiablePresentation.
+ */
+app.post("/", handleRootPost);
+app.post("/api", handleRootPost);
 
 app.post("/api/oid4vci/process-offer", async (req, res) => {
   const t0 = Date.now();

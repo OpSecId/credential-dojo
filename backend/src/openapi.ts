@@ -9,16 +9,85 @@ export const openApiDocument = {
       "CRMS platform API for W3C Verifiable Credentials. Product terminology: Tehon, Katachi, Menkyo, Tehon の Menkyo, Shōkan, Enbu, Shinbi (render), Kensa, Randori, Teawase, Tejun (workflows), Kinchaku, Kata, Kasa — see `terminology` in responses and the project README.",
     version: "0.1.0",
     contact: {
-      name: "credential.ninja",
+      name: "DOJO",
       url: "https://credential.ninja",
     },
   },
   servers: [{ url: "/", description: "Current host (same origin as this request)" }],
   tags: [
-    { name: "Platform", description: "Health and introspection" },
+    { name: "Platform", description: "Health, issue, sign, verify (demo — no real cryptography)" },
     { name: "Demo", description: "Deterministic demo data (not production)" },
   ],
   paths: {
+    "/api": {
+      post: {
+        tags: ["Platform"],
+        summary: "Platform root (issue · sign · verify)",
+        description:
+          "Exactly **one** top-level key selects the operation: `credential` (issue Menkyo), `verifiableCredential` (verify VC), `presentation` (sign VP), or `verifiablePresentation` (verify VP or Shōkan request). Optional `requestProtocol` when verifying presentation requests. Legacy `{ mode, document }` bodies still work. Same behavior as POST `/`.",
+        operationId: "postPlatformRootApi",
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/RootPostRequest" },
+            },
+          },
+        },
+        responses: {
+          "200": {
+            description: "Operation completed",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/RootPostResponse" },
+              },
+            },
+          },
+          "422": {
+            description: "Invalid request",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/RootPostErrorResponse" },
+              },
+            },
+          },
+        },
+      },
+    },
+    "/": {
+      post: {
+        tags: ["Platform"],
+        summary: "Platform root (direct listener)",
+        description: "Same as POST `/api`. Prefer `/api` on the web origin behind nginx.",
+        operationId: "postPlatformRoot",
+        requestBody: {
+          required: true,
+          content: {
+            "application/json": {
+              schema: { $ref: "#/components/schemas/RootPostRequest" },
+            },
+          },
+        },
+        responses: {
+          "200": {
+            description: "Operation completed",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/RootPostResponse" },
+              },
+            },
+          },
+          "422": {
+            description: "Invalid request",
+            content: {
+              "application/json": {
+                schema: { $ref: "#/components/schemas/RootPostErrorResponse" },
+              },
+            },
+          },
+        },
+      },
+    },
     "/api/health": {
       get: {
         tags: ["Platform"],
@@ -256,6 +325,113 @@ export const openApiDocument = {
           workflowMetaphor: { type: "string" },
           standardsFocus: { type: "string" },
           terminology: { $ref: "#/components/schemas/ProductTerminology" },
+        },
+      },
+      RootPostRequest: {
+        description:
+          "Use exactly one operation property. Optional requestProtocol for Shōkan-shaped verifiablePresentation payloads.",
+        oneOf: [
+          {
+            type: "object",
+            required: ["credential"],
+            properties: {
+              credential: { $ref: "#/components/schemas/IssueCredentialRequest" },
+            },
+          },
+          {
+            type: "object",
+            required: ["verifiableCredential"],
+            properties: {
+              verifiableCredential: { type: "object", description: "VC JSON to inspect (Menkyo の Kensa)." },
+              requestProtocol: { $ref: "#/components/schemas/RequestProtocol" },
+            },
+          },
+          {
+            type: "object",
+            required: ["presentation"],
+            properties: {
+              presentation: { $ref: "#/components/schemas/SignPresentationRequest" },
+            },
+          },
+          {
+            type: "object",
+            required: ["verifiablePresentation"],
+            properties: {
+              verifiablePresentation: {
+                type: "object",
+                description: "VP or presentation-request JSON (Enbu の Kensa).",
+              },
+              requestProtocol: { $ref: "#/components/schemas/RequestProtocol" },
+            },
+          },
+        ],
+      },
+      RequestProtocol: {
+        type: "string",
+        enum: ["oid4vp", "didcomm", "chapi", "custom"],
+      },
+      IssueCredentialRequest: {
+        type: "object",
+        properties: {
+          personaId: { type: "string", example: "ed-ryu" },
+          templateId: {
+            type: "string",
+            enum: ["university-degree", "employment-offer", "training-milestone", "event-access"],
+          },
+          operatorCodename: { type: "string" },
+          credentialId: { type: "string" },
+          configure: { $ref: "#/components/schemas/DojoIssuanceConfigure" },
+        },
+      },
+      DojoIssuanceConfigure: {
+        type: "object",
+        properties: {
+          didMethod: { type: "string", enum: ["did:key", "did:web"] },
+          validFromDate: { type: "string", format: "date" },
+          validUntilDate: { type: "string", format: "date" },
+          includeCredentialSchema: { type: "boolean" },
+          includeRevocation: { type: "boolean" },
+          includeSuspension: { type: "boolean" },
+          includeProofCreated: { type: "boolean" },
+          renderMethodTemplate: { type: "string", enum: ["svg", "pdf", "html", null] },
+        },
+      },
+      SignPresentationRequest: {
+        type: "object",
+        properties: {
+          holderDid: { type: "string" },
+          verifiableCredential: {
+            description: "Credential object or array to embed.",
+          },
+          credentials: { description: "Alias for verifiableCredential." },
+          challenge: { type: "string" },
+          domain: { type: "string" },
+        },
+      },
+      RootPostResponse: {
+        type: "object",
+        required: ["ok", "operation"],
+        properties: {
+          ok: { type: "boolean", example: true },
+          operation: {
+            type: "string",
+            enum: ["credential", "verifiableCredential", "presentation", "verifiablePresentation"],
+          },
+          verifiableCredential: { type: "object" },
+          verifiablePresentation: { type: "object" },
+          level: { type: "string", enum: ["ok", "warn", "error"] },
+          lines: { type: "array", items: { type: "string" } },
+          note: { type: "string" },
+          requestProtocol: { $ref: "#/components/schemas/RequestProtocol" },
+        },
+      },
+      RootPostErrorResponse: {
+        type: "object",
+        required: ["ok", "error"],
+        properties: {
+          ok: { type: "boolean", example: false },
+          error: { type: "string" },
+          operation: { type: "string", nullable: true },
         },
       },
     },

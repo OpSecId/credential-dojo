@@ -166,16 +166,17 @@ export default function DojoProgressHub({ showFab = true }: DojoProgressHubProps
             )}
           </section>
 
-          <section className="dojo-hub__journey" aria-label="Learning journey">
+          <section className="dojo-hub__journey" aria-label="DOJO journey">
             <h3 className="dojo-hub__h3">Parallel journey</h3>
             {!journeyState.started ? (
               <div className="dojo-hub__journeyStart">
                 <p>
                   Grow issuer, verifier, and cloud wallet <strong>resources</strong> in the background while you use the
-                  dojo. This is separate from insight rank — both reward showing up on learning routes.
+                  dojo—think of them as quiet <strong>trials</strong> inside the broader DOJO Journey. This is separate
+                  from insight rank — both reward showing up on learning routes.
                 </p>
                 <button type="button" className="dojo-hub__btn" onClick={onStartJourney}>
-                  Start journey
+                  Start DOJO journey
                 </button>
               </div>
             ) : (
@@ -204,8 +205,8 @@ export default function DojoProgressHub({ showFab = true }: DojoProgressHubProps
           <section className="dojo-hub__tracks" aria-label="Practice tracks">
             <h3 className="dojo-hub__h3">Practice tracks</h3>
             <p className="dojo-hub__tracksIntro">
-              Tutorial-style paths — level up by issuing, verifying, and moving credentials through Kinchaku-style
-              flows.
+              Tutorial-style paths—bite-sized <strong>trials</strong> as you issue, verify, and move credentials through
+              Kinchaku-style flows.
             </p>
 
             <article className="dojo-hub-track">

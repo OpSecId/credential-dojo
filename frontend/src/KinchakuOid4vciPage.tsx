@@ -187,7 +187,7 @@ export default function KinchakuOid4vciPage() {
       <div className="dojo-scene__grid" aria-hidden />
       <main className="dojoZenPage dojoZenPage--wide">
         <header className="dojoZenPage__header">
-          <p className="dojoZenPage__eyebrow">Credential Dojo</p>
+          <p className="dojoZenPage__eyebrow">Dojo</p>
           <h1 className="dojoZenPage__title">
             {wallet.name} <span lang="ja">{wallet.glyph}</span> · OID4VCI offer
           </h1>
@@ -198,7 +198,7 @@ export default function KinchakuOid4vciPage() {
             <strong>Process offer (API)</strong> runs the OID4VCI demo client on the Dojo backend (same-origin{' '}
             <code>/api</code> in dev) so it can fetch metadata, exchange a <code>pre-authorized_code</code>, and request
             a credential without browser CORS limits. Issued credentials are appended to{' '}
-            <Link to="/kinchaku">{wallet.name}</Link> when the credential endpoint returns JSON. Verbose browser logs:{' '}
+            <Link to="/kinchaku/wallet">{wallet.name}</Link> when the credential endpoint returns JSON. Verbose browser logs:{' '}
             <code>localStorage.setItem('credential-dojo-debug','1')</code> then reload, or set <code>VITE_DEBUG=true</code>{' '}
             at build time.
           </p>
@@ -206,7 +206,7 @@ export default function KinchakuOid4vciPage() {
             <Link className="dojoZenPage__back" to="/">
               ← Home
             </Link>
-            <Link className="dojoZenPage__back" to="/kinchaku">
+            <Link className="dojoZenPage__back" to="/kinchaku/wallet">
               {wallet.name} inventory
             </Link>
           </nav>

@@ -1,5 +1,11 @@
-import type { PersonaPublic } from './demoPersonas'
-import { ISSUANCE_DEMO_VCI_BASE, type IssuanceProtocol } from './issuanceConstants'
+import type { PersonaPublic, ProofSchool } from './demoPersonas'
+import {
+  ISSUANCE_DEMO_DID_WEB_ISSUER,
+  ISSUANCE_DEMO_DID_WEB_VERIFICATION_METHOD,
+  ISSUANCE_DEMO_VCI_BASE,
+  VC_DEMO_CONTEXTS,
+  type DidMethod,
+} from './issuanceConstants'
 
 /** Demo holder `did:key` — not tied to a live wallet; for sample Menkyo only. */
 export const ISSUE_VERIFY_DEMO_HOLDER_DID = 'did:key:z6MkHolderExampleDemoDojo000000000000000'
@@ -13,17 +19,16 @@ export type BuildDemoMenkyoOptions = {
   credentialId?: string
 }
 
-/** Issuance deck options (Creddeck-style) applied when building `/dojo/issuance` demo VCs. */
+/** Issuance deck options (Creddeck-style) applied when building `/dojo` demo VCs. */
 export type DojoIssuanceConfigure = {
-  protocols: readonly IssuanceProtocol[]
-  cryptosuite: string
   didMethod: 'did:key' | 'did:web'
   validFromDate: string
   validUntilDate: string
   includeCredentialSchema: boolean
   includeRevocation: boolean
   includeSuspension: boolean
-  includeTimestamp: boolean
+  /** When true, set `proof.created` on the Data Integrity proof (not credential issuanceDate). */
+  includeProofCreated: boolean
   renderMethodTemplate: 'svg' | 'pdf' | 'html' | null
 }
 
@@ -32,7 +37,6 @@ export type BuildDemoCredentialOptions = BuildDemoMenkyoOptions & {
 }
 
 export type IssueCredentialTemplateId =
-  | 'dojo-demo'
   | 'university-degree'
   | 'employment-offer'
   | 'training-milestone'
@@ -46,22 +50,17 @@ export type IssueCredentialTemplateMeta = {
   subtitle: string
   /** Decorative mark (emoji or single character) */
   glyph: string
-  /** Technology label for issuanceProfile.credential_configuration.type */
+  /** Technology label for credential_configuration-style hints (not embedded on VC). */
   formatType: string
-  /** Stable id for issuanceProfile.credential_configuration.id */
+  /** Stable id for render/schema paths in this demo. */
   configurationId: string
 }
 
-/** `/dojo/issuance` — five demo Tehon-style shapes users can mint (browser-only JSON). */
+/** Fallback Tehon id when issuer mapping has no entry (browser demo only). */
+export const DEFAULT_ISSUE_TEMPLATE_ID: IssueCredentialTemplateId = 'university-degree'
+
+/** `/dojo` — demo Tehon-style shapes users can mint (browser-only JSON). */
 export const ISSUE_CREDENTIAL_TEMPLATES: readonly IssueCredentialTemplateMeta[] = [
-  {
-    id: 'dojo-demo',
-    title: 'Dojo demo',
-    subtitle: 'Baseline Menkyo · Dojo path',
-    glyph: '忍',
-    formatType: 'jwt_vc_json',
-    configurationId: 'dojo-demo',
-  },
   {
     id: 'university-degree',
     title: 'University degree',
@@ -96,8 +95,42 @@ export const ISSUE_CREDENTIAL_TEMPLATES: readonly IssueCredentialTemplateMeta[] 
   },
 ]
 
+/**
+ * Creddeck-style: one primary demo Tehon (template) per proof-school issuer.
+ * Unknown persona ids fall back by `proofSchool`, then to `DEFAULT_ISSUE_TEMPLATE_ID`.
+ */
+const ISSUE_CREDENTIAL_PRIMARY_TEMPLATE_BY_PERSONA_ID: Readonly<
+  Record<string, IssueCredentialTemplateId>
+> = {
+  'ed-ryu': 'university-degree',
+  'ec-ryu': 'university-degree',
+  'ec-sd-ryu': 'employment-offer',
+  'bbs-ryu': 'event-access',
+  'cl-ryu': 'training-milestone',
+  'ml-ryu': 'university-degree',
+}
+
+const PRIMARY_TEMPLATE_BY_PROOF_SCHOOL: Readonly<Record<ProofSchool, IssueCredentialTemplateId>> = {
+  ed25519: 'university-degree',
+  ecdsa: 'university-degree',
+  bbs: 'event-access',
+  anoncreds: 'training-milestone',
+  mldsa: 'university-degree',
+}
+
+export function issueCredentialTemplatesForIssuer(
+  persona: PersonaPublic,
+): readonly IssueCredentialTemplateMeta[] {
+  const id =
+    ISSUE_CREDENTIAL_PRIMARY_TEMPLATE_BY_PERSONA_ID[persona.id] ??
+    PRIMARY_TEMPLATE_BY_PROOF_SCHOOL[persona.proofSchool] ??
+    DEFAULT_ISSUE_TEMPLATE_ID
+  const meta = ISSUE_CREDENTIAL_TEMPLATES.find((t) => t.id === id)
+  if (!meta) throw new Error(`Missing issue template meta for id: ${id}`)
+  return [meta]
+}
+
 const PREVIEW_CREDENTIAL_IDS: Record<IssueCredentialTemplateId, string> = {
-  'dojo-demo': 'urn:uuid:00000000-0000-4000-8000-000000000001',
   'university-degree': 'urn:uuid:00000000-0000-4000-8000-000000000002',
   'employment-offer': 'urn:uuid:00000000-0000-4000-8000-000000000003',
   'training-milestone': 'urn:uuid:00000000-0000-4000-8000-000000000004',
@@ -108,26 +141,55 @@ export function previewCredentialIdForTemplate(templateId: IssueCredentialTempla
   return PREVIEW_CREDENTIAL_IDS[templateId]
 }
 
-function proofBlock(persona: PersonaPublic, isoNow: string, cryptosuiteOverride?: string): Record<string, unknown> {
-  const suite =
-    cryptosuiteOverride?.trim() || (persona.kataSamples[0] ?? 'eddsa-rdfc-2022')
-  const vmFragment = persona.didKey.startsWith('did:key:')
-    ? persona.didKey.slice('did:key:'.length)
-    : persona.didKey
+export function issuerDidForMethod(persona: PersonaPublic, didMethod: DidMethod = 'did:key'): string {
+  if (didMethod === 'did:web') return ISSUANCE_DEMO_DID_WEB_ISSUER
+  return persona.didKey
+}
+
+function verificationMethodForIssuer(persona: PersonaPublic, didMethod: DidMethod = 'did:key'): string {
+  if (didMethod === 'did:web') return ISSUANCE_DEMO_DID_WEB_VERIFICATION_METHOD
+  const issuerDid = persona.didKey
+  const vmFragment = issuerDid.startsWith('did:key:') ? issuerDid.slice('did:key:'.length) : issuerDid
+  return `${issuerDid}#${vmFragment}`
+}
+
+function issuerBlock(persona: PersonaPublic, didMethod: DidMethod = 'did:key'): Record<string, unknown> {
   return {
+    id: issuerDidForMethod(persona, didMethod),
+    name: persona.label,
+    description: persona.description,
+  }
+}
+
+function proofBlock(
+  persona: PersonaPublic,
+  isoNow: string,
+  didMethod: DidMethod,
+  includeCreated: boolean,
+): Record<string, unknown> {
+  const suite = persona.kataSamples[0] ?? 'eddsa-rdfc-2022'
+  const proof: Record<string, unknown> = {
     type: 'DataIntegrityProof',
     cryptosuite: suite,
-    verificationMethod: `${persona.didKey}#${vmFragment}`,
+    verificationMethod: verificationMethodForIssuer(persona, didMethod),
     proofPurpose: 'assertionMethod',
-    created: isoNow,
     proofValue: 'z58DEMODOJOPLACEHOLDERNOTAVERIFIEDSIGNATURE',
   }
+  if (includeCreated) {
+    proof.created = isoNow
+  }
+  return proof
 }
 
 function subjectWithOperator(base: Record<string, unknown>, operatorCodename?: string | null): Record<string, unknown> {
   const op = operatorCodename?.trim()
   if (!op) return base
   return { ...base, issuerOperator: op }
+}
+
+/** ISO 8601 UTC without fractional seconds (e.g. `2026-05-06T00:00:00Z`). */
+function isoUtcNoMs(d: Date = new Date()): string {
+  return d.toISOString().replace(/\.\d{3}Z$/, 'Z')
 }
 
 function bitstringStatusEntry(purpose: 'revocation' | 'suspension', index: string): Record<string, unknown> {
@@ -141,80 +203,6 @@ function bitstringStatusEntry(purpose: 'revocation' | 'suspension', index: strin
   }
 }
 
-function buildIssuanceProfileBlock(
-  meta: IssueCredentialTemplateMeta,
-  cfg: DojoIssuanceConfigure,
-  isoNow: string,
-): Record<string, unknown> {
-  const base = ISSUANCE_DEMO_VCI_BASE.replace(/\/$/, '')
-  const profile: Record<string, unknown> = {
-    protocols: [...cfg.protocols],
-    cryptosuite: cfg.cryptosuite,
-    did_method: cfg.didMethod,
-    credential_configuration: {
-      id: meta.configurationId,
-      name: meta.title,
-      type: meta.formatType,
-      description: meta.subtitle,
-    },
-  }
-  if (cfg.validFromDate.trim()) {
-    profile.validFrom = `${cfg.validFromDate.trim()}T00:00:00.000Z`
-  }
-  if (cfg.validUntilDate.trim()) {
-    profile.validUntil = `${cfg.validUntilDate.trim()}T23:59:59.999Z`
-  }
-
-  const statusEntries: Record<string, unknown>[] = []
-  if (cfg.includeRevocation) statusEntries.push(bitstringStatusEntry('revocation', '0'))
-  if (cfg.includeSuspension) statusEntries.push(bitstringStatusEntry('suspension', '0'))
-  if (statusEntries.length > 0) {
-    profile.credentialStatus = statusEntries
-  }
-
-  if (cfg.includeCredentialSchema) {
-    profile.credentialSchema = [
-      {
-        id: `${base}/schemas/${meta.configurationId}.json`,
-        type: 'JsonSchema',
-        jsonSchema: {
-          $schema: 'https://json-schema.org/draft/2020-12/schema',
-          title: meta.title,
-          description: meta.subtitle,
-          type: 'object',
-          properties: {
-            credentialSubject: {
-              type: 'object',
-              description: 'Claims about the subject; shape is illustrative for Dojo mock issuance.',
-            },
-          },
-          required: ['credentialSubject'],
-        },
-      },
-    ]
-  }
-
-  if (cfg.includeTimestamp) {
-    profile.issuedAt = isoNow
-  }
-
-  if (cfg.renderMethodTemplate) {
-    const t = cfg.renderMethodTemplate
-    const templateMediaType =
-      t === 'svg' ? 'image/svg+xml' : t === 'pdf' ? 'application/pdf' : 'text/html'
-    profile.renderMethod = [
-      {
-        id: `${base}/render-methods/${meta.configurationId}-${t}`,
-        type: 'TemplateRenderMethod',
-        template: `${base}/render-templates/${meta.configurationId}.${t}`,
-        templateMediaType,
-      },
-    ]
-  }
-
-  return profile
-}
-
 function vcEnvelope(
   persona: PersonaPublic,
   options: BuildDemoCredentialOptions | undefined,
@@ -225,25 +213,29 @@ function vcEnvelope(
     templateMeta: IssueCredentialTemplateMeta
   },
 ): Record<string, unknown> {
-  const isoNow = new Date().toISOString()
+  const isoNow = isoUtcNoMs()
   const credentialId = options?.credentialId ?? `urn:uuid:${crypto.randomUUID()}`
   const cfg = options?.configure
-
-  let validFrom = isoNow
-  if (cfg?.validFromDate?.trim()) {
-    validFrom = `${cfg.validFromDate.trim()}T00:00:00.000Z`
-  }
+  const didMethod: DidMethod = cfg?.didMethod ?? 'did:key'
 
   const includeRootSchema = !cfg || cfg.includeCredentialSchema
 
   const out: Record<string, unknown> = {
-    '@context': ['https://www.w3.org/ns/credentials/v2'],
+    '@context': [...VC_DEMO_CONTEXTS],
     id: credentialId,
     type: params.types,
-    issuer: persona.didKey,
-    validFrom,
+    name: params.templateMeta.title,
+    description: params.templateMeta.subtitle,
+    issuer: issuerBlock(persona, didMethod),
     credentialSubject: params.credentialSubject,
-    proof: proofBlock(persona, isoNow, cfg?.cryptosuite),
+    proof: proofBlock(persona, isoNow, didMethod, cfg ? cfg.includeProofCreated : true),
+  }
+
+  const validFromTrimmed = cfg?.validFromDate?.trim()
+  if (validFromTrimmed) {
+    out.validFrom = `${validFromTrimmed}T00:00:00Z`
+  } else if (!cfg) {
+    out.validFrom = isoNow
   }
 
   if (includeRootSchema) {
@@ -251,7 +243,7 @@ function vcEnvelope(
   }
 
   if (cfg?.validUntilDate?.trim()) {
-    out.validUntil = `${cfg.validUntilDate.trim()}T23:59:59.999Z`
+    out.validUntil = `${cfg.validUntilDate.trim()}T23:59:59Z`
   }
 
   if (cfg && (cfg.includeRevocation || cfg.includeSuspension)) {
@@ -276,25 +268,21 @@ function vcEnvelope(
     ]
   }
 
-  if (cfg) {
-    out.issuanceProfile = buildIssuanceProfileBlock(params.templateMeta, cfg, isoNow)
-  }
-
   return out
 }
 
 /** Build a VC-shaped demo Menkyo for UI / Kensa-style checks (proof value is not real crypto). */
 export function buildDemoMenkyo(persona: PersonaPublic, options?: BuildDemoMenkyoOptions): Record<string, unknown> {
-  return buildDemoCredential(persona, 'dojo-demo', options)
+  return buildDemoCredential(persona, DEFAULT_ISSUE_TEMPLATE_ID, options)
 }
 
-/** Mint-shaped demo VC for the selected `/dojo/issuance` template (same proof posture as Dojo demo). */
+/** Mint-shaped demo VC for the selected `/dojo` template (browser demo). */
 export function buildDemoCredential(
   persona: PersonaPublic,
   templateId: IssueCredentialTemplateId,
   options?: BuildDemoCredentialOptions,
 ): Record<string, unknown> {
-  const isoNow = new Date().toISOString()
+  const isoNow = isoUtcNoMs()
   const op = options?.operatorCodename?.trim()
   const templateMeta = ISSUE_CREDENTIAL_TEMPLATES.find((t) => t.id === templateId)
   if (!templateMeta) {
@@ -302,21 +290,6 @@ export function buildDemoCredential(
   }
 
   switch (templateId) {
-    case 'dojo-demo':
-      return vcEnvelope(persona, options, {
-        types: ['VerifiableCredential', 'DojoDemoCredential'],
-        schemaId: 'https://credential.ninja/schemas/dojo-demo-v1',
-        templateMeta,
-        credentialSubject: subjectWithOperator(
-          {
-            id: ISSUE_VERIFY_DEMO_HOLDER_DID,
-            note: `Demo Menkyo for proof school ${persona.label} (${persona.proofSchool}).`,
-            pathway: 'Credential Dojo · Issue',
-          },
-          op,
-        ),
-      })
-
     case 'university-degree':
       return vcEnvelope(persona, options, {
         types: ['VerifiableCredential', 'UniversityDegreeCredential'],

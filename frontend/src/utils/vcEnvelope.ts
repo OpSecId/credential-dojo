@@ -35,6 +35,16 @@ export const VC_ROOT_SLOTS: readonly VcRootSlot[] = [
     core: true,
   },
   {
+    key: 'name',
+    label: 'name',
+    blurb: 'Human-readable credential title.',
+  },
+  {
+    key: 'description',
+    label: 'description',
+    blurb: 'Short summary of what this credential represents.',
+  },
+  {
     key: 'validFrom',
     label: 'validFrom',
     blurb: 'VC 2.0: earliest instant the credential is valid (ISO 8601).',

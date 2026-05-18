@@ -1,0 +1,365 @@
+.kensaIntake {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.kensaIntake__drop {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 9.5rem;
+  padding: 1.1rem 1rem 0.95rem;
+  border-radius: 12px;
+  border: 1px dashed rgba(90, 232, 255, 0.28);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(90, 232, 255, 0.1) 0%, transparent 55%),
+    rgba(0, 0, 0, 0.22);
+  text-align: center;
+  overflow: hidden;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.kensaIntake__dropGlow {
+  position: absolute;
+  inset: -40%;
+  background: conic-gradient(
+    from 120deg at 50% 50%,
+    transparent 0deg,
+    rgba(90, 232, 255, 0.14) 80deg,
+    transparent 160deg,
+    rgba(232, 184, 74, 0.1) 240deg,
+    transparent 360deg
+  );
+  opacity: 0;
+  animation: kensaIntakeSpin 12s linear infinite;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.kensaIntake__drop--active {
+  border-color: rgba(90, 232, 255, 0.55);
+  border-style: solid;
+  box-shadow:
+    0 0 0 1px rgba(90, 232, 255, 0.12),
+    0 0 32px rgba(90, 232, 255, 0.18);
+  background:
+    radial-gradient(ellipse 90% 70% at 50% 20%, rgba(90, 232, 255, 0.16) 0%, transparent 60%),
+    rgba(90, 232, 255, 0.05);
+}
+
+.kensaIntake__drop--active .kensaIntake__dropGlow {
+  opacity: 1;
+}
+
+@keyframes kensaIntakeSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.kensaIntake__dropIcon {
+  position: relative;
+  z-index: 1;
+  color: rgba(90, 232, 255, 0.85);
+  filter: drop-shadow(0 0 10px rgba(90, 232, 255, 0.35));
+}
+
+.kensaIntake__dropTitle {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-family: var(--font-display, serif);
+  font-size: 1.02rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #f4f7ff;
+}
+
+.kensaIntake__dropHint {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  max-width: 16rem;
+  line-height: 1.35;
+}
+
+.kensaIntake__browse {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.15rem;
+  padding: 0.38rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(90, 232, 255, 0.35);
+  background: rgba(90, 232, 255, 0.1);
+  color: #e8f4ff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.kensaIntake__browse:hover {
+  background: rgba(90, 232, 255, 0.16);
+  border-color: rgba(90, 232, 255, 0.5);
+}
+
+.kensaIntake__fileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.kensaIntake__uploadMode {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  gap: 0.25rem;
+  margin-top: 0.45rem;
+  padding: 0.2rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.kensaIntake__modePill {
+  border: none;
+  border-radius: 999px;
+  padding: 0.28rem 0.62rem;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+.kensaIntake__modePill--on {
+  color: #0a0d14;
+  background: rgba(90, 232, 255, 0.88);
+}
+
+.kensaIntake__divider {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.kensaIntake__divider::before,
+.kensaIntake__divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(90, 232, 255, 0.22), transparent);
+}
+
+.kensaIntake__lane {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.kensaIntake__laneLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(90, 232, 255, 0.72);
+}
+
+.kensaIntake__laneRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.45rem;
+  align-items: stretch;
+}
+
+.kensaIntake__laneRow--url {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.kensaIntake__snippet,
+.kensaIntake__url,
+.kensaIntake__editor {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--text-h);
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  resize: vertical;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.kensaIntake__url {
+  resize: none;
+  min-height: 2.35rem;
+}
+
+.kensaIntake__snippet {
+  min-height: 3.2rem;
+  max-height: 6rem;
+}
+
+.kensaIntake__snippet:focus,
+.kensaIntake__url:focus,
+.kensaIntake__editor:focus {
+  outline: none;
+  border-color: rgba(90, 232, 255, 0.45);
+  box-shadow: 0 0 0 2px rgba(90, 232, 255, 0.12);
+}
+
+.kensaIntake__urlIconWrap {
+  display: grid;
+  place-items: center;
+  width: 2.35rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.28);
+  color: rgba(90, 232, 255, 0.75);
+}
+
+.kensaIntake__laneBtn {
+  align-self: stretch;
+  padding: 0 0.85rem;
+  min-width: 4.1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(90, 232, 255, 0.32);
+  background: rgba(90, 232, 255, 0.1);
+  color: #e8f4ff;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.kensaIntake__laneBtn:hover:not(:disabled) {
+  background: rgba(90, 232, 255, 0.18);
+  border-color: rgba(90, 232, 255, 0.48);
+}
+
+.kensaIntake__laneBtn:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.kensaIntake__laneBtn--fetch {
+  min-width: 4.5rem;
+}
+
+.kensaIntake__laneErr {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--accent-hot);
+  line-height: 1.35;
+}
+
+.kensaIntake__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.75rem;
+  padding-top: 0.15rem;
+}
+
+.kensaIntake__note,
+.kensaIntake__summary {
+  margin: 0;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.kensaIntake__summary {
+  color: rgba(90, 232, 255, 0.75);
+}
+
+.kensaIntake__footActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  margin-left: auto;
+}
+
+.kensaIntake__linkBtn {
+  border: none;
+  padding: 0;
+  background: none;
+  color: rgba(90, 232, 255, 0.88);
+  font: inherit;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.kensaIntake__linkBtn--muted {
+  color: var(--muted);
+}
+
+.kensaIntake__linkBtn:hover {
+  color: #f4f7ff;
+}
+
+.kensaIntake__editorWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid rgba(90, 232, 255, 0.1);
+}
+
+.kensaIntake__editor {
+  min-height: 8rem;
+  max-height: 22rem;
+}
+
+.dojo-scene--day .kensaIntake__drop {
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(40, 120, 160, 0.08) 0%, transparent 55%),
+    rgba(255, 255, 255, 0.65);
+  border-color: rgba(40, 100, 130, 0.28);
+}
+
+.dojo-scene--day .kensaIntake__snippet,
+.dojo-scene--day .kensaIntake__url,
+.dojo-scene--day .kensaIntake__editor {
+  background: rgba(255, 255, 255, 0.9);
+}

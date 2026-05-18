@@ -1,0 +1,2037 @@
+/* Wider workspace than other flow pages (Kensa, Lexicon stay at default flow width). */
+.dojo-scene.dojo-scene--landing:has(.issueVerify) .dojo-flowPage {
+  max-width: min(88rem, calc(100% - 1rem));
+  padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+  padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+}
+
+.dojo-scene.dojo-scene--landing:has(.issueVerify) .issueVerify.dojoZenPage--wide {
+  max-width: min(88rem, calc(100vw - 1rem));
+}
+
+.dojo-scene.dojo-scene--landing:has(.issueVerify--issuanceCreddeck) .dojo-flowPage {
+  max-width: min(88rem, calc(100% - 1rem));
+  padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+  padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+}
+
+.dojo-scene.dojo-scene--landing:has(.issueVerify--issuanceCreddeck)
+  .issueVerify.issueVerify--issuanceCreddeck.dojoZenPage--wide {
+  max-width: min(88rem, calc(100vw - 1rem));
+}
+
+/* Creddeck-style /issuance: full-width page masthead, then configure (left) · preview (right) */
+.issueVerify__issuanceRoot {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: min(72rem, 100%);
+  margin: 0 auto;
+  padding-left: max(0.75rem, env(safe-area-inset-left, 0px));
+  padding-right: max(0.75rem, env(safe-area-inset-right, 0px));
+  padding-top: clamp(0.35rem, 1.5vh, 1rem);
+  padding-bottom: 2.5rem;
+  box-sizing: border-box;
+}
+
+.issueVerify__issuanceGrid {
+  display: grid;
+  gap: 1.35rem;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.issueVerify--issuanceCreddeck .issueVerify__previewColumn {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.issueVerify__issuanceMasthead {
+  flex-shrink: 0;
+  width: 100%;
+  max-width: min(48rem, 100%);
+  margin: 0 0 1.15rem;
+  padding-bottom: 0.15rem;
+  text-align: left;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.issueVerify__mastheadEyebrow,
+.issueVerify__mastheadTitle,
+.issueVerify__mastheadIntro {
+  text-align: left;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.issueVerify__mastheadIntro {
+  max-width: min(40rem, 100%);
+  margin-bottom: 0;
+}
+
+@media (min-width: 1024px) {
+  .issueVerify--issuanceCreddeck {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .issueVerify__issuanceRoot {
+    flex: 1;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+    padding-bottom: 0;
+  }
+
+  .issueVerify__issuanceGrid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+    grid-template-rows: minmax(0, 1fr);
+    column-gap: 2.5rem;
+    row-gap: 1.15rem;
+    align-items: stretch;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .issueVerify__configurePanel {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  .issueVerify__previewColumn {
+    grid-column: 2;
+    grid-row: 1;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+  }
+
+  .issueVerify--issuanceCreddeck .issueVerify__previewPane {
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
+/* Mobile / tablet: natural page scroll, stacked columns */
+@media (max-width: 1023px) {
+  .issueVerify--issuanceCreddeck .issueVerify__issuanceRoot {
+    padding-bottom: 1.5rem;
+  }
+
+  .issueVerify--issuanceCreddeck .issueVerify__issuanceGrid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  .issueVerify--issuanceCreddeck .issueVerify__configurePanel {
+    min-height: 0;
+  }
+
+  .issueVerify--issuanceCreddeck .issueVerify__configureScroll {
+    flex: none;
+    min-height: 0;
+    overflow: visible;
+    max-height: none;
+  }
+
+  .issueVerify--issuanceCreddeck .issueVerify__previewCard--stretch {
+    flex: none;
+    min-height: 0;
+  }
+
+  .issueVerify--issuanceCreddeck .issueVerify__previewCard--stretch .issueVerify__previewJson {
+    flex: none;
+    min-height: 0;
+  }
+
+  .issueVerify--issuanceCreddeck .issueVerify__preview--dojoIssuanceScroll {
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+.issueVerify__configurePanel {
+  display: flex;
+  flex-direction: column;
+  min-height: min(22rem, 70vh);
+}
+
+@media (min-width: 1024px) {
+  .issueVerify--issuanceCreddeck .issueVerify__configurePanel {
+    min-height: 0;
+  }
+}
+
+/* Tehon / issuer configure panel: disable global augmented-panel hover lift (dojoMotion.css loads after this file). */
+@media (hover: hover) {
+  .issueVerify--issuanceCreddeck .issueVerify__configurePanel.issueVerify__panel,
+  .issueVerify--issuanceCreddeck .issueVerify__configurePanel.dojo-augmented--panel[data-augmented-ui] {
+    transition: none;
+  }
+
+  .issueVerify--issuanceCreddeck .issueVerify__configurePanel.issueVerify__panel:hover,
+  .issueVerify--issuanceCreddeck .issueVerify__configurePanel.dojo-augmented--panel[data-augmented-ui]:hover {
+    transform: none;
+  }
+}
+
+.issueVerify__augIndex {
+  margin: 0 0 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(90, 232, 255, 0.72);
+}
+
+.issueVerify__augTitle {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--text-h);
+}
+
+/* Tehon index + Issuer template title (left) · Issue action (right) */
+.issueVerify__configureHeadRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1.25rem;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: 0 0 0.65rem;
+  text-align: left;
+}
+
+.issueVerify__configureHeadRow .issueVerify__configureActions--masthead {
+  align-self: center;
+}
+
+.issueVerify__configureHeadText {
+  flex: 1 1 12rem;
+  min-width: 0;
+  text-align: left;
+}
+
+.issueVerify__configureHeadText .issueVerify__augIndex {
+  margin: 0 0 0.22rem;
+}
+
+.issueVerify__configureHeadText .issueVerify__augTitle {
+  margin: 0;
+}
+
+.issueVerify__configurePanel .issueVerify__configureHeadRow {
+  text-align: left;
+  width: 100%;
+}
+
+.issueVerify__configurePanel .issueVerify__configureHeadText {
+  text-align: left;
+}
+
+.issueVerify__configureScroll {
+  margin-top: 0.65rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 0.2rem;
+  scrollbar-color: rgba(90, 232, 255, 0.35) rgba(0, 0, 0, 0.2);
+}
+
+.issueVerify__configureActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-bottom: 0.35rem;
+  justify-content: flex-start;
+}
+
+.issueVerify__configureActions.issueVerify__configureActions--masthead {
+  margin: 0;
+  margin-bottom: 0;
+  flex-shrink: 0;
+  justify-content: flex-end;
+}
+
+.issueVerify__previewPane {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.issueVerify--issuanceCreddeck .issueVerify__previewPane .issueVerify__previewCard {
+  margin-top: 0;
+}
+
+.issueVerify__previewCard--stretch {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.issueVerify__previewCard--stretch > :not(.issueVerify__previewJson) {
+  flex-shrink: 0;
+}
+
+.issueVerify--issuanceCreddeck .issueVerify__previewCard--stretch .issueVerify__previewJson {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.issueVerify--issuanceCreddeck .issueVerify__previewCard--stretch:not(.issueVerify__previewCard--issuanceCompact) .issueVerify__preview {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+}
+
+.issueVerify--issuanceCreddeck .issueVerify__previewCard--stretch.issueVerify__previewCard--issuanceCompact .issueVerify__previewJson {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin-top: 0.35rem;
+}
+
+.issueVerify--issuanceCreddeck .issueVerify__previewCard--stretch.issueVerify__previewCard--issuanceCompact .issueVerify__previewJson-bar {
+  flex-shrink: 0;
+}
+
+.issueVerify--issuanceCreddeck .issueVerify__previewCard--stretch.issueVerify__previewCard--issuanceCompact .issueVerify__previewJson .issueVerify__preview {
+  max-height: none;
+}
+
+.issueVerify--issuanceCreddeck .issueVerify__previewCard--stretch.issueVerify__previewCard--issuanceCompact .issueVerify__preview--dojoIssuanceScroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  max-height: none;
+  overflow: auto;
+  text-align: left;
+  tab-size: 2;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(90, 232, 255, 0.5) rgba(0, 0, 0, 0.32);
+}
+
+.issueVerify__preview--dojoIssuanceScroll::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+.issueVerify__preview--dojoIssuanceScroll::-webkit-scrollbar-track {
+  margin: 4px 0;
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 999px;
+}
+
+.issueVerify__preview--dojoIssuanceScroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(90, 232, 255, 0.55), rgba(90, 232, 255, 0.22));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.issueVerify__preview--dojoIssuanceScroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(120, 220, 255, 0.75), rgba(90, 232, 255, 0.35));
+  background-clip: padding-box;
+}
+
+/* Issuance right column — compact preview stack */
+.issueVerify__previewCard--issuanceCompact {
+  padding: 0.75rem 0.85rem 0.85rem;
+}
+
+.issueVerify__previewCard-head--compact {
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.65rem;
+  margin-bottom: 0.55rem;
+}
+
+.issueVerify__previewCard-head--compact .issueVerify__previewCard-titles {
+  min-width: 0;
+  text-align: left;
+  width: 100%;
+}
+
+.issueVerify__previewCard--issuanceCompact .issueVerify__previewCard-kicker,
+.issueVerify__previewCard--issuanceCompact .issueVerify__previewCard-title {
+  text-align: left;
+}
+
+.issueVerify__previewCard-head--compact .issueVerify__previewCard-title {
+  font-size: clamp(0.95rem, 2vw, 1.08rem);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.issueVerify__panel {
+  padding: 1.35rem 1.25rem 1.5rem;
+}
+
+.issueVerify__grid {
+  display: grid;
+  gap: 1.35rem;
+}
+
+@media (min-width: 900px) {
+  .issueVerify__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.issueVerify__sectionTitle {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+.issueVerify__sectionBody {
+  margin: 0 0 1rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+.issueVerify__profileHint {
+  margin: 0 0 1rem;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.issueVerify__profileHint a {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* --- Issuance preview card --- */
+.issueVerify__previewCard {
+  margin-top: 1.35rem;
+  padding: 1.1rem 1.1rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(90, 232, 255, 0.14);
+  background:
+    linear-gradient(155deg, rgba(90, 232, 255, 0.06) 0%, transparent 42%),
+    linear-gradient(180deg, rgba(12, 18, 32, 0.92) 0%, rgba(8, 11, 18, 0.88) 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04) inset,
+    0 18px 40px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+}
+
+.issueVerify__previewCard-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.issueVerify__previewCard-titles {
+  min-width: min(100%, 14rem);
+  flex: 1;
+  text-align: left;
+}
+
+.issueVerify__previewCard-kicker {
+  margin: 0 0 0.35rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(90, 232, 255, 0.75);
+}
+
+.issueVerify__previewCard-title {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.02rem, 2.6vw, 1.2rem);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.25;
+  color: var(--text-h);
+}
+
+.issueVerify__previewCard-sub {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--muted);
+  max-width: 36rem;
+}
+
+.issueVerify__previewCard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
+
+.issueVerify__previewPill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(184, 192, 212, 0.95);
+  border: 1px solid rgba(120, 200, 255, 0.18);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.issueVerify__previewTypes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.issueVerify__previewTypeChip {
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+  color: var(--text-h);
+  border: 1px solid rgba(90, 232, 255, 0.22);
+  background: rgba(90, 232, 255, 0.07);
+}
+
+.issueVerify__previewSubject {
+  margin: 0 0 0.85rem;
+  padding: 0.55rem 0.72rem;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 184, 74, 0.2);
+  background: rgba(232, 184, 74, 0.06);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--text);
+  text-align: left;
+}
+
+.issueVerify__previewMeta {
+  margin: 0 0 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.issueVerify__previewMetaRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  padding: 0.42rem 0;
+  border-bottom: 1px solid rgba(120, 200, 255, 0.08);
+}
+
+@media (min-width: 520px) {
+  .issueVerify__previewMetaRow {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.85rem;
+  }
+
+  .issueVerify__previewMetaRow dt {
+    flex: 0 0 7.75rem;
+  }
+
+  .issueVerify__previewMetaRow dd {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+.issueVerify__previewMetaRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.issueVerify__previewMetaRow dt {
+  margin: 0;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.issueVerify__previewMetaRow dd {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: var(--text);
+  word-break: break-word;
+}
+
+.issueVerify__previewMetaMono {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text-h);
+}
+
+.issueVerify__previewJson {
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.28);
+}
+
+.issueVerify__previewJson-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.38rem 0.65rem;
+  border-bottom: 1px solid rgba(120, 200, 255, 0.12);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(10, 14, 22, 0.85) 100%);
+}
+
+.issueVerify__previewJson-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(184, 192, 212, 0.85);
+  font-family: var(--font-mono);
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.issueVerify__previewJson-copy {
+  font: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28rem;
+  flex-shrink: 0;
+  padding: 0.22rem 0.34rem;
+  margin: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(232, 184, 74, 0.35);
+  background: rgba(232, 184, 74, 0.1);
+  color: var(--accent);
+  cursor: pointer;
+  line-height: 1;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.issueVerify__previewJson-copy:hover {
+  border-color: rgba(232, 184, 74, 0.55);
+  background: rgba(232, 184, 74, 0.16);
+  color: var(--text-h);
+}
+
+.issueVerify__previewJson-copy:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.issueVerify__previewJson-copy svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.issueVerify__previewJson-copyLabel {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.issueVerify__previewJson-copy--ok {
+  border-color: rgba(127, 240, 162, 0.55);
+  background: rgba(127, 240, 162, 0.14);
+  color: #9dffc0;
+  box-shadow: 0 0 14px rgba(127, 240, 162, 0.22);
+}
+
+.issueVerify__previewJson-copy--ok:hover {
+  border-color: rgba(127, 240, 162, 0.7);
+  background: rgba(127, 240, 162, 0.2);
+  color: #c8ffd8;
+}
+
+.dojo-scene--day .issueVerify__previewJson-copy--ok {
+  border-color: rgba(34, 120, 62, 0.45);
+  background: rgba(34, 120, 62, 0.12);
+  color: #166534;
+  box-shadow: 0 0 10px rgba(34, 120, 62, 0.12);
+}
+
+.dojo-scene--day .issueVerify__previewJson-copy--ok:hover {
+  border-color: rgba(34, 120, 62, 0.58);
+  background: rgba(34, 120, 62, 0.18);
+  color: #14532d;
+}
+
+.issueVerify__previewJson .issueVerify__preview {
+  margin: 0;
+  max-height: min(22rem, 52vh);
+  overflow: auto;
+  padding: 0.75rem 0.85rem;
+  border-radius: 0;
+  border: none;
+  background: rgba(0, 0, 0, 0.42);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: rgba(240, 244, 255, 0.94);
+  white-space: pre;
+  word-break: normal;
+  text-align: left;
+  tab-size: 2;
+  scrollbar-color: rgba(90, 232, 255, 0.35) rgba(0, 0, 0, 0.2);
+}
+
+.dojo-scene--day .issueVerify__previewCard {
+  border-color: rgba(40, 32, 20, 0.14);
+  background:
+    linear-gradient(155deg, rgba(196, 92, 38, 0.08) 0%, transparent 45%),
+    linear-gradient(180deg, rgba(255, 252, 246, 0.94) 0%, rgba(252, 248, 240, 0.9) 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.65) inset,
+    0 14px 32px rgba(60, 48, 32, 0.08);
+}
+
+.dojo-scene--day .issueVerify__previewCard-kicker {
+  color: rgba(139, 69, 20, 0.75);
+}
+
+.dojo-scene--day .issueVerify__previewPill {
+  color: rgba(74, 67, 56, 0.9);
+  border-color: rgba(40, 32, 20, 0.14);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.dojo-scene--day .issueVerify__previewTypeChip {
+  border-color: rgba(40, 32, 20, 0.14);
+  background: rgba(255, 255, 255, 0.65);
+  color: var(--text-h);
+}
+
+.dojo-scene--day .issueVerify__previewSubject {
+  border-color: rgba(139, 69, 20, 0.2);
+  background: rgba(139, 69, 20, 0.06);
+}
+
+.dojo-scene--day .issueVerify__previewMetaRow {
+  border-bottom-color: rgba(40, 32, 20, 0.1);
+}
+
+.dojo-scene--day .issueVerify__previewJson {
+  border-color: rgba(40, 32, 20, 0.12);
+  box-shadow: 0 10px 24px rgba(60, 48, 32, 0.06);
+}
+
+.dojo-scene--day .issueVerify__previewJson-bar {
+  border-bottom-color: rgba(40, 32, 20, 0.12);
+  background: linear-gradient(180deg, rgba(255, 252, 246, 0.95) 0%, rgba(248, 242, 232, 0.92) 100%);
+}
+
+.dojo-scene--day .issueVerify__previewJson-label {
+  color: rgba(107, 100, 88, 0.95);
+}
+
+.dojo-scene--day .issueVerify__previewJson .issueVerify__preview {
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--text-h);
+  scrollbar-color: rgba(139, 69, 20, 0.35) rgba(0, 0, 0, 0.06);
+}
+
+.dojo-scene--day .issueVerify__preview--dojoIssuanceScroll {
+  scrollbar-color: rgba(196, 92, 38, 0.42) rgba(0, 0, 0, 0.06);
+}
+
+.dojo-scene--day .issueVerify__preview--dojoIssuanceScroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.dojo-scene--day .issueVerify__preview--dojoIssuanceScroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(196, 92, 38, 0.55), rgba(196, 92, 38, 0.22));
+  background-clip: padding-box;
+}
+
+.dojo-scene--day .issueVerify__preview--dojoIssuanceScroll::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(196, 92, 38, 0.72), rgba(196, 92, 38, 0.32));
+  background-clip: padding-box;
+}
+
+.issueVerify__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.issueVerify__btn {
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  padding: 0.5rem 0.95rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.28);
+  color: var(--text-h);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.issueVerify__btn:hover {
+  border-color: rgba(90, 232, 255, 0.4);
+  background: rgba(90, 232, 255, 0.08);
+}
+
+.issueVerify__btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.issueVerify__btn--primary {
+  border-color: rgba(232, 184, 74, 0.45);
+  background: rgba(232, 184, 74, 0.12);
+  color: var(--accent);
+}
+
+.issueVerify__label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.issueVerify__textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 14rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.45;
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text-h);
+  resize: vertical;
+}
+
+.issueVerify__textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.issueVerify__parseErr {
+  margin: 0.5rem 0 0;
+  font-size: 0.88rem;
+  color: var(--accent-hot);
+}
+
+.issueVerify__result {
+  margin-top: 0.75rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.issueVerify__result--ok {
+  border-color: rgba(90, 232, 255, 0.28);
+  background: rgba(90, 232, 255, 0.06);
+}
+
+.issueVerify__result--warn {
+  border-color: rgba(232, 184, 74, 0.35);
+  background: rgba(232, 184, 74, 0.08);
+}
+
+.issueVerify__result--error {
+  border-color: rgba(255, 107, 74, 0.4);
+  background: rgba(255, 107, 74, 0.08);
+}
+
+.issueVerify__result p {
+  margin: 0 0 0.35rem;
+}
+
+.issueVerify__result p:last-child {
+  margin-bottom: 0;
+}
+
+.issueVerify__empty {
+  margin: 0.5rem 0 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+/* /dojo — selectable Tehon-style template cards */
+.issueVerify__tplGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9.25rem, 1fr));
+  gap: 0.65rem;
+  margin: 0.75rem 0 1rem;
+  width: 100%;
+}
+
+@media (min-width: 720px) {
+  .issueVerify__tplGrid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.issueVerify__tplCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.28rem;
+  padding: 0.65rem 0.72rem 0.72rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.32);
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  min-height: 5.5rem;
+  box-sizing: border-box;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.issueVerify__tplCard:hover {
+  border-color: rgba(90, 232, 255, 0.35);
+  background: rgba(90, 232, 255, 0.06);
+}
+
+.issueVerify__tplCard:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.issueVerify__tplCard--selected {
+  border-color: rgba(232, 184, 74, 0.5);
+  background: rgba(232, 184, 74, 0.1);
+  box-shadow: 0 0 0 1px rgba(232, 184, 74, 0.12);
+}
+
+.issueVerify__tplGlyph {
+  font-size: 1.45rem;
+  line-height: 1;
+  opacity: 0.92;
+}
+
+.issueVerify__tplTitle {
+  font-weight: 700;
+  font-size: 0.84rem;
+  color: var(--text-h);
+  letter-spacing: 0.01em;
+}
+
+.issueVerify__tplSubtitle {
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+/* ---- Issuance configure (Creddeck-style subsections, Dojo tokens) ---- */
+.issuanceCfg__field {
+  margin-top: 1rem;
+}
+
+.issuanceCfg__field--tight {
+  margin-top: 0.85rem;
+}
+
+.issuanceCfg__fieldLabel {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: left;
+}
+
+.issuanceCfg__fieldset > legend.issuanceCfg__fieldLabel {
+  padding: 0;
+  width: 100%;
+}
+
+/* Issuer: cycle with ‹ › (one school at a time). */
+.issuanceCfg__issuerCycle {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 0.45rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.issuanceCfg__issuerCycleBtn {
+  flex-shrink: 0;
+  width: 2.15rem;
+  min-height: 2.85rem;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid rgba(90, 232, 255, 0.28);
+  background: rgba(0, 0, 0, 0.32);
+  color: rgba(90, 232, 255, 0.92);
+  font: inherit;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.issuanceCfg__issuerCycleBtn:hover {
+  border-color: rgba(90, 232, 255, 0.48);
+  background: rgba(90, 232, 255, 0.1);
+  color: var(--text-h);
+  box-shadow: 0 0 18px rgba(90, 232, 255, 0.12);
+}
+
+.issuanceCfg__issuerCycleBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.issuanceCfg__issuerCycleCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.55rem;
+  min-width: 0;
+  padding: 0.55rem 0.7rem;
+  border-radius: 10px;
+  border: 1px solid rgba(232, 184, 74, 0.42);
+  background:
+    radial-gradient(ellipse 90% 80% at 20% 0%, rgba(90, 232, 255, 0.08) 0%, transparent 55%),
+    rgba(232, 184, 74, 0.08);
+  box-shadow: 0 0 0 1px rgba(232, 184, 74, 0.1);
+}
+
+.issuanceCfg__issuerCycleText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+  flex: 1;
+  text-align: left;
+}
+
+.issuanceCfg__issuerCycleLabel {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-h);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.issuanceCfg__issuerCycleKeytype {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(90, 232, 255, 0.78);
+}
+
+.issuanceCfg__issuerCycleCount {
+  flex-shrink: 0;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  opacity: 0.85;
+}
+
+.dojo-scene--day .issuanceCfg__issuerCycleBtn {
+  border-color: rgba(196, 92, 38, 0.22);
+  background: rgba(255, 252, 246, 0.75);
+  color: rgba(139, 69, 20, 0.88);
+}
+
+.dojo-scene--day .issuanceCfg__issuerCycleBtn:hover {
+  border-color: rgba(196, 92, 38, 0.42);
+  background: rgba(255, 248, 236, 0.95);
+  color: var(--text-h);
+}
+
+.dojo-scene--day .issuanceCfg__issuerCycleCard {
+  border-color: rgba(196, 92, 38, 0.38);
+  background: rgba(255, 220, 180, 0.28);
+  box-shadow: 0 0 0 1px rgba(196, 92, 38, 0.1);
+}
+
+.dojo-scene--day .issuanceCfg__issuerCycleKeytype {
+  color: rgba(139, 69, 20, 0.72);
+}
+
+.issuanceCfg__select {
+  flex: 1;
+  min-width: 0;
+  margin-top: 0.12rem;
+  padding: 0.45rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid rgba(120, 200, 255, 0.18);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 0.84rem;
+}
+
+.issuanceCfg__select--full {
+  width: 100%;
+  margin-top: 0;
+}
+
+.issuanceCfg__fieldset {
+  margin: 1rem 0 0;
+  padding: 0;
+  border: none;
+}
+
+.issuanceCfg__fieldset--plain {
+  margin-top: 0;
+}
+
+.issuanceCfg__tplRow {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  margin-top: 0.45rem;
+  overflow-x: visible;
+  padding-bottom: 0;
+}
+
+.issuanceCfg__tplHoriz {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.55rem;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  padding: 0.55rem 0.65rem;
+  border-radius: 10px;
+  border: 1px solid rgba(120, 200, 255, 0.12);
+  background: rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.issuanceCfg__tplHoriz:hover {
+  border-color: rgba(90, 232, 255, 0.32);
+  background: rgba(90, 232, 255, 0.06);
+}
+
+.issuanceCfg__tplHoriz--selected {
+  border-color: rgba(232, 184, 74, 0.48);
+  background: rgba(232, 184, 74, 0.1);
+  box-shadow: 0 0 0 1px rgba(232, 184, 74, 0.12);
+}
+
+.issuanceCfg__tplRadio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.issuanceCfg__tplGlyphAvatar {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(155deg, rgba(90, 232, 255, 0.14), rgba(12, 18, 32, 0.92));
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--text-h);
+}
+
+.issuanceCfg__tplHorizText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  min-width: 0;
+  flex: 1;
+  text-align: left;
+}
+
+.issuanceCfg__tplHorizTitle {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+  color: var(--text-h);
+  text-align: left;
+}
+
+.issuanceCfg__tplHorizDesc {
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  color: var(--muted);
+  text-align: left;
+}
+
+.issuanceCfg__dateGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.issuanceCfg__sectionBody > .issuanceCfg__dateGrid {
+  margin-top: 0;
+}
+
+.issuanceCfg__dateField {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.issuanceCfg__dateField .issuanceCfg__dateShell {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 520px) {
+  .issuanceCfg__dateGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Gradient bezel + glow — wraps native date input (WebKit picks up padding for the calendar icon). */
+.issuanceCfg__dateShell {
+  position: relative;
+  margin-top: 0.12rem;
+  padding: 1px;
+  border-radius: 11px;
+  background: linear-gradient(
+    125deg,
+    rgba(90, 232, 255, 0.55) 0%,
+    rgba(90, 232, 255, 0.06) 38%,
+    rgba(232, 184, 74, 0.28) 100%
+  );
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 10px 32px rgba(0, 0, 0, 0.38);
+  transition:
+    box-shadow 0.22s ease,
+    filter 0.22s ease;
+}
+
+.issuanceCfg__dateShell:hover {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.08) inset,
+    0 12px 36px rgba(0, 0, 0, 0.42),
+    0 0 28px rgba(90, 232, 255, 0.12);
+}
+
+.issuanceCfg__dateShell:focus-within {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.09) inset,
+    0 14px 40px rgba(0, 0, 0, 0.48),
+    0 0 0 1px rgba(90, 232, 255, 0.35),
+    0 0 36px rgba(90, 232, 255, 0.16);
+}
+
+.issuanceCfg__dateInput {
+  display: block;
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  padding: 0.44rem 0.52rem;
+  padding-inline-end: 2.2rem;
+  border-radius: 10px;
+  border: none;
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgba(90, 232, 255, 0.09), transparent 55%),
+    linear-gradient(180deg, rgba(22, 28, 44, 0.98) 0%, rgba(10, 12, 22, 0.94) 100%);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  color-scheme: dark;
+  accent-color: rgba(90, 232, 255, 0.95);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35);
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.issuanceCfg__dateInput:not(.issuanceCfg__dateInput--pickerBtn):hover {
+  background:
+    radial-gradient(120% 90% at 0% 0%, rgba(90, 232, 255, 0.14), transparent 52%),
+    linear-gradient(180deg, rgba(26, 34, 52, 0.99) 0%, rgba(12, 14, 26, 0.96) 100%);
+}
+
+.issuanceCfg__dateInput:not(.issuanceCfg__dateInput--pickerBtn):focus {
+  outline: none;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(232, 184, 74, 0.1), transparent 50%),
+    linear-gradient(180deg, rgba(28, 36, 54, 1) 0%, rgba(14, 16, 28, 0.98) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.issuanceCfg__dateInput::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.92;
+  padding: 0.4rem;
+  margin-inline-end: -0.2rem;
+  filter: invert(0.88) sepia(0.45) saturate(5) hue-rotate(155deg) brightness(1.08);
+  transition:
+    transform 0.18s ease,
+    filter 0.18s ease,
+    opacity 0.18s ease;
+}
+
+.issuanceCfg__dateInput:hover::-webkit-calendar-picker-indicator {
+  opacity: 1;
+  filter: invert(0.92) sepia(0.5) saturate(6) hue-rotate(150deg) brightness(1.15);
+  transform: scale(1.07);
+}
+
+.issuanceCfg__dateInput:focus::-webkit-calendar-picker-indicator {
+  filter: invert(0.95) sepia(0.55) saturate(5.5) hue-rotate(145deg) brightness(1.2)
+    drop-shadow(0 0 6px rgba(90, 232, 255, 0.45));
+}
+
+.issuanceCfg__dateInput::-webkit-datetime-edit {
+  padding: 0;
+}
+
+.issuanceCfg__dateInput::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+
+.issuanceCfg__dateInput::-webkit-datetime-edit-text {
+  color: rgba(160, 188, 212, 0.78);
+  padding-inline: 0.12em;
+}
+
+.issuanceCfg__dateInput::-webkit-datetime-edit-month-field,
+.issuanceCfg__dateInput::-webkit-datetime-edit-day-field,
+.issuanceCfg__dateInput::-webkit-datetime-edit-year-field {
+  color: var(--text-h);
+  padding: 0.08rem 0.22rem;
+  border-radius: 6px;
+}
+
+.issuanceCfg__dateInput::-webkit-datetime-edit-month-field:focus,
+.issuanceCfg__dateInput::-webkit-datetime-edit-day-field:focus,
+.issuanceCfg__dateInput::-webkit-datetime-edit-year-field:focus {
+  background: rgba(90, 232, 255, 0.18);
+  color: var(--text-h);
+  outline: none;
+}
+
+.dojo-scene--day .issuanceCfg__dateShell {
+  background: linear-gradient(
+    128deg,
+    rgba(196, 92, 38, 0.45) 0%,
+    rgba(255, 220, 180, 0.35) 42%,
+    rgba(90, 140, 180, 0.22) 100%
+  );
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 8px 26px rgba(62, 48, 32, 0.12);
+}
+
+.dojo-scene--day .issuanceCfg__dateShell:hover {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.92) inset,
+    0 10px 30px rgba(62, 48, 32, 0.16),
+    0 0 20px rgba(196, 92, 38, 0.1);
+}
+
+.dojo-scene--day .issuanceCfg__dateShell:focus-within {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 12px 34px rgba(62, 48, 32, 0.18),
+    0 0 0 1px rgba(196, 92, 38, 0.38),
+    0 0 28px rgba(196, 92, 38, 0.12);
+}
+
+.dojo-scene--day .issuanceCfg__dateInput {
+  color-scheme: light;
+  accent-color: rgba(196, 92, 38, 0.95);
+  background:
+    radial-gradient(110% 85% at 10% 0%, rgba(255, 248, 236, 0.95), transparent 50%),
+    linear-gradient(180deg, rgba(255, 253, 248, 0.99) 0%, rgba(252, 246, 236, 0.96) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 -1px 0 rgba(62, 48, 32, 0.06);
+}
+
+.dojo-scene--day .issuanceCfg__dateInput:not(.issuanceCfg__dateInput--pickerBtn):hover {
+  background:
+    radial-gradient(110% 85% at 10% 0%, rgba(255, 252, 244, 1), transparent 48%),
+    linear-gradient(180deg, rgba(255, 255, 252, 1) 0%, rgba(252, 248, 238, 0.98) 100%);
+}
+
+.dojo-scene--day .issuanceCfg__dateInput:not(.issuanceCfg__dateInput--pickerBtn):focus {
+  background:
+    radial-gradient(100% 80% at 100% 0%, rgba(255, 230, 200, 0.5), transparent 45%),
+    linear-gradient(180deg, rgba(255, 255, 252, 1) 0%, rgba(252, 246, 236, 0.99) 100%);
+}
+
+.dojo-scene--day .issuanceCfg__dateInput::-webkit-calendar-picker-indicator {
+  filter: invert(0.28) sepia(0.6) saturate(6) hue-rotate(345deg) brightness(0.98);
+  opacity: 0.9;
+}
+
+.dojo-scene--day .issuanceCfg__dateInput:hover::-webkit-calendar-picker-indicator {
+  filter: invert(0.22) sepia(0.65) saturate(6.5) hue-rotate(340deg) brightness(1.02);
+  transform: scale(1.07);
+}
+
+.dojo-scene--day .issuanceCfg__dateInput:focus::-webkit-calendar-picker-indicator {
+  filter: invert(0.18) sepia(0.7) saturate(7) hue-rotate(335deg) brightness(1.05)
+    drop-shadow(0 0 5px rgba(196, 92, 38, 0.35));
+}
+
+.dojo-scene--day .issuanceCfg__dateInput::-webkit-datetime-edit-text {
+  color: rgba(90, 82, 68, 0.62);
+}
+
+.dojo-scene--day .issuanceCfg__dateInput::-webkit-datetime-edit-month-field,
+.dojo-scene--day .issuanceCfg__dateInput::-webkit-datetime-edit-day-field,
+.dojo-scene--day .issuanceCfg__dateInput::-webkit-datetime-edit-year-field {
+  color: var(--text-h);
+}
+
+.dojo-scene--day .issuanceCfg__dateInput::-webkit-datetime-edit-month-field:focus,
+.dojo-scene--day .issuanceCfg__dateInput::-webkit-datetime-edit-day-field:focus,
+.dojo-scene--day .issuanceCfg__dateInput::-webkit-datetime-edit-year-field:focus {
+  background: rgba(196, 92, 38, 0.14);
+}
+
+/* Custom calendar popover (native date popup is not styleable in browsers). */
+.issuanceCfg__dateShell--picker[data-calendar-open] {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.09) inset,
+    0 14px 40px rgba(0, 0, 0, 0.48),
+    0 0 0 1px rgba(90, 232, 255, 0.35),
+    0 0 36px rgba(90, 232, 255, 0.16);
+}
+
+.dojo-scene--day .issuanceCfg__dateShell--picker[data-calendar-open] {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 12px 34px rgba(62, 48, 32, 0.18),
+    0 0 0 1px rgba(196, 92, 38, 0.38),
+    0 0 28px rgba(196, 92, 38, 0.12);
+}
+
+.issuanceCfg__dateInput--pickerBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  padding-inline-end: 2.5rem;
+  background-image:
+    radial-gradient(120% 90% at 0% 0%, rgba(90, 232, 255, 0.09), transparent 55%),
+    linear-gradient(180deg, rgba(22, 28, 44, 0.98) 0%, rgba(10, 12, 22, 0.94) 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% 100%;
+  background-position: 0 0, 0 0;
+}
+
+.issuanceCfg__dateInput--pickerBtn:hover {
+  background-image:
+    radial-gradient(120% 90% at 0% 0%, rgba(90, 232, 255, 0.14), transparent 52%),
+    linear-gradient(180deg, rgba(26, 34, 52, 0.99) 0%, rgba(12, 14, 26, 0.96) 100%);
+}
+
+.issuanceCfg__dateInput--pickerBtn:focus {
+  background-image:
+    radial-gradient(120% 90% at 100% 0%, rgba(232, 184, 74, 0.1), transparent 50%),
+    linear-gradient(180deg, rgba(28, 36, 54, 1) 0%, rgba(14, 16, 28, 0.98) 100%);
+}
+
+.issuanceCfg__dateInput-icon {
+  position: absolute;
+  top: 50%;
+  right: 0.34rem;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(90, 232, 255, 0.55);
+  background: rgba(90, 232, 255, 0.2);
+  color: #d4fcff;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.25) inset,
+    0 0 12px rgba(90, 232, 255, 0.22);
+  pointer-events: none;
+}
+
+.issuanceCfg__dateInput-icon svg {
+  display: block;
+}
+
+.issuanceCfg__dateInput--pickerBtn:hover .issuanceCfg__dateInput-icon {
+  border-color: rgba(120, 248, 255, 0.75);
+  background: rgba(90, 232, 255, 0.28);
+  color: #f0feff;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.2) inset,
+    0 0 16px rgba(90, 232, 255, 0.35);
+}
+
+.issuanceCfg__dateInput--pickerBtn:focus .issuanceCfg__dateInput-icon {
+  border-color: rgba(232, 184, 74, 0.7);
+  background: rgba(232, 184, 74, 0.18);
+  color: #ffe9a8;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.2) inset,
+    0 0 14px rgba(232, 184, 74, 0.28);
+}
+
+.issuanceCfg__dateInput-display {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dojo-scene--day .issuanceCfg__dateInput--pickerBtn {
+  background-image:
+    radial-gradient(110% 85% at 10% 0%, rgba(255, 248, 236, 0.95), transparent 50%),
+    linear-gradient(180deg, rgba(255, 253, 248, 0.99) 0%, rgba(252, 246, 236, 0.96) 100%);
+}
+
+.dojo-scene--day .issuanceCfg__dateInput--pickerBtn:hover {
+  background-image:
+    radial-gradient(110% 85% at 10% 0%, rgba(255, 252, 244, 1), transparent 48%),
+    linear-gradient(180deg, rgba(255, 255, 252, 1) 0%, rgba(252, 248, 238, 0.98) 100%);
+}
+
+.dojo-scene--day .issuanceCfg__dateInput--pickerBtn:focus {
+  background-image:
+    radial-gradient(100% 80% at 100% 0%, rgba(255, 230, 200, 0.5), transparent 45%),
+    linear-gradient(180deg, rgba(255, 255, 252, 1) 0%, rgba(252, 246, 236, 0.99) 100%);
+}
+
+.dojo-scene--day .issuanceCfg__dateInput-icon {
+  border-color: rgba(196, 92, 38, 0.55);
+  background: rgba(196, 92, 38, 0.14);
+  color: #c2410c;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.65) inset,
+    0 0 10px rgba(196, 92, 38, 0.18);
+}
+
+.dojo-scene--day .issuanceCfg__dateInput--pickerBtn:hover .issuanceCfg__dateInput-icon {
+  border-color: rgba(196, 92, 38, 0.72);
+  background: rgba(196, 92, 38, 0.22);
+  color: #9a3412;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.75) inset,
+    0 0 12px rgba(196, 92, 38, 0.24);
+}
+
+.dojo-scene--day .issuanceCfg__dateInput--pickerBtn:focus .issuanceCfg__dateInput-icon {
+  border-color: rgba(180, 72, 20, 0.8);
+  background: rgba(232, 184, 74, 0.25);
+  color: #7c2d12;
+}
+
+.issuanceCfg__datePopover {
+  position: fixed;
+  z-index: 4000;
+  box-sizing: border-box;
+  padding: 0.5rem 0.55rem 0.58rem;
+  border-radius: 12px;
+  border: 1px solid rgba(90, 232, 255, 0.28);
+  background:
+    linear-gradient(155deg, rgba(90, 232, 255, 0.12) 0%, transparent 42%),
+    linear-gradient(180deg, rgba(18, 22, 34, 0.98) 0%, rgba(8, 10, 18, 0.97) 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 24px 56px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(0, 0, 0, 0.35),
+    0 0 48px rgba(90, 232, 255, 0.12);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.issuanceCfg__datePopover-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  margin-bottom: 0.32rem;
+}
+
+.issuanceCfg__datePopover-title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-h);
+}
+
+.issuanceCfg__datePopover-nav {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 0;
+  border-radius: 8px;
+  border: 1px solid rgba(90, 232, 255, 0.22);
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(90, 232, 255, 0.92);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.issuanceCfg__datePopover-nav:hover {
+  border-color: rgba(90, 232, 255, 0.45);
+  background: rgba(90, 232, 255, 0.1);
+  color: var(--text-h);
+}
+
+.issuanceCfg__datePopover-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.1rem;
+  margin-bottom: 0.18rem;
+}
+
+.issuanceCfg__datePopover-wd {
+  text-align: center;
+  font-size: 0.54rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(160, 188, 212, 0.72);
+}
+
+.issuanceCfg__datePopover-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.14rem;
+}
+
+.issuanceCfg__datePopover-cell--pad {
+  min-height: 1.75rem;
+}
+
+.issuanceCfg__datePopover-cell--day {
+  min-height: 1.75rem;
+  margin: 0;
+  padding: 0;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: rgba(0, 0, 0, 0.22);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.issuanceCfg__datePopover-cell--day:hover {
+  border-color: rgba(90, 232, 255, 0.35);
+  background: rgba(90, 232, 255, 0.1);
+}
+
+.issuanceCfg__datePopover-cell--day[aria-selected='true'] {
+  border-color: rgba(232, 184, 74, 0.55);
+  background: rgba(232, 184, 74, 0.14);
+  box-shadow: 0 0 0 1px rgba(232, 184, 74, 0.15);
+  color: var(--text-h);
+}
+
+.dojo-scene--day .issuanceCfg__datePopover {
+  border-color: rgba(196, 92, 38, 0.28);
+  background:
+    linear-gradient(155deg, rgba(196, 92, 38, 0.1) 0%, transparent 42%),
+    linear-gradient(180deg, rgba(255, 252, 246, 0.98) 0%, rgba(252, 246, 236, 0.96) 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 18px 44px rgba(62, 48, 32, 0.14),
+    0 0 0 1px rgba(62, 48, 32, 0.08);
+}
+
+.dojo-scene--day .issuanceCfg__datePopover-wd {
+  color: rgba(90, 82, 68, 0.62);
+}
+
+.dojo-scene--day .issuanceCfg__datePopover-nav {
+  border-color: rgba(196, 92, 38, 0.22);
+  background: rgba(255, 252, 246, 0.75);
+  color: rgba(139, 69, 20, 0.88);
+}
+
+.dojo-scene--day .issuanceCfg__datePopover-nav:hover {
+  border-color: rgba(196, 92, 38, 0.42);
+  background: rgba(255, 248, 236, 0.95);
+  color: var(--text-h);
+}
+
+.dojo-scene--day .issuanceCfg__datePopover-cell--day {
+  background: rgba(255, 255, 255, 0.45);
+  color: var(--text-h);
+}
+
+.dojo-scene--day .issuanceCfg__datePopover-cell--day:hover {
+  border-color: rgba(196, 92, 38, 0.35);
+  background: rgba(255, 236, 210, 0.55);
+}
+
+.dojo-scene--day .issuanceCfg__datePopover-cell--day[aria-selected='true'] {
+  border-color: rgba(196, 92, 38, 0.55);
+  background: rgba(255, 220, 180, 0.45);
+  box-shadow: 0 0 0 1px rgba(196, 92, 38, 0.12);
+}
+
+.issuanceCfg__section {
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(120, 200, 255, 0.1);
+}
+
+.issuanceCfg__sectionHead {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0.35rem;
+}
+
+.issuanceCfg__sectionLabel {
+  margin: 0;
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-h);
+}
+
+.issuanceCfg__sectionHint {
+  flex: none;
+  width: 100%;
+  min-width: 0;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--muted);
+  text-align: left;
+}
+
+.issuanceCfg__sectionHint code {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: rgba(90, 232, 255, 0.88);
+}
+
+.issuanceCfg__sectionBody {
+  margin-top: 0.65rem;
+  padding-left: 0.1rem;
+}
+
+.issuanceCfg__proofStack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.issuanceCfg__proofField {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.28rem;
+  width: 100%;
+}
+
+.issuanceCfg__subLabel {
+  display: block;
+  width: 100%;
+  margin: 0;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: left;
+  align-self: flex-start;
+  color: var(--muted);
+}
+
+.issuanceCfg__proofField .issuanceCfg__fieldset--plain,
+.issuanceCfg__proofField .issuanceCfg__didSeg,
+.issuanceCfg__proofField .issuanceCfg__select--full {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.issuanceCfg__proofStack .issuanceCfg__fieldset--plain {
+  margin: 0;
+}
+
+.issuanceCfg__proofStack .issuanceCfg__check--compact {
+  padding: 0;
+}
+
+.issuanceCfg__toggleList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.issuanceCfg__check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.issuanceCfg__check--compact {
+  padding: 0.15rem 0;
+}
+
+.issuanceCfg__checkSwitch {
+  position: relative;
+  flex-shrink: 0;
+  width: 2.35rem;
+  height: 1.25rem;
+}
+
+.issuanceCfg__checkInput {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.issuanceCfg__checkRail {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(120, 200, 255, 0.2);
+  box-sizing: border-box;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.issuanceCfg__checkThumb {
+  position: absolute;
+  top: 50%;
+  left: 0.12rem;
+  width: 0.95rem;
+  height: 0.95rem;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #e8ecf4, #b8c0d4);
+  transform: translateY(-50%);
+  transition: transform 0.15s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.issuanceCfg__checkInput:checked + .issuanceCfg__checkRail {
+  border-color: rgba(232, 184, 74, 0.45);
+  background: rgba(232, 184, 74, 0.12);
+}
+
+.issuanceCfg__checkInput:checked + .issuanceCfg__checkRail .issuanceCfg__checkThumb {
+  transform: translate(1.05rem, -50%);
+}
+
+.issuanceCfg__checkTitle {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  padding-top: 0.05rem;
+}
+
+.issuanceCfg__didSeg {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.12rem;
+  padding: 0.12rem;
+  border-radius: 10px;
+  border: 1px solid rgba(90, 232, 255, 0.14);
+  background: linear-gradient(180deg, rgba(18, 24, 40, 0.9), rgba(8, 10, 18, 0.95));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.03),
+    0 4px 16px rgba(0, 0, 0, 0.28);
+}
+
+.issuanceCfg__didSeg--render {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.issuanceCfg__didSegGlow {
+  pointer-events: none;
+  position: absolute;
+  inset: 0.12rem 0.5rem auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(90, 232, 255, 0.22), transparent);
+}
+
+.issuanceCfg__didSegBtn {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.35rem;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  color: var(--muted);
+  font: inherit;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.issuanceCfg__didSegBtn:hover {
+  background: rgba(90, 232, 255, 0.06);
+  color: var(--text);
+}
+
+.issuanceCfg__didSegBtn--selected {
+  color: var(--text-h);
+  background: linear-gradient(180deg, rgba(90, 232, 255, 0.12), rgba(8, 10, 18, 0.5));
+  box-shadow:
+    0 0 0 1px rgba(90, 232, 255, 0.22),
+    0 0 12px rgba(90, 232, 255, 0.08);
+}
+
+.issuanceCfg__didSegMono {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.issuanceCfg__srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

@@ -180,3 +180,8 @@ export function listDemoPersonas(): readonly PersonaPublic[] {
   }
   return cached;
 }
+
+export function findDemoPersona(personaId?: string): PersonaPublic | undefined {
+  const id = personaId?.trim() || "ed-ryu";
+  return listDemoPersonas().find((p) => p.id === id);
+}

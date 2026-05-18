@@ -133,7 +133,7 @@ export default function CreateNinjaProfilePage() {
 
       <div className="ninjaProfile dojoZenPage dojoZenPage--calm">
         <header className="dojoZenPage__header">
-          <p className="dojoZenPage__eyebrow">credential.ninja</p>
+          <p className="dojoZenPage__eyebrow">DOJO</p>
           <h1 className="dojoZenPage__title">
             {isNewProfile ? 'Add ninja profile' : existing ? 'Update ninja profile' : 'Create ninja profile'}
           </h1>

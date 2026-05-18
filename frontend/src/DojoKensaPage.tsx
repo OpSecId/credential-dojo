@@ -1,13 +1,18 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import './KensaPage.css'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import './DojoKensaPage.css'
+import './DojoIssuancePage.css'
 import { DojoFlowPageHero, DojoFlowPageShell } from './dojoFlowPage'
+import { ConfigSection } from './IssuanceConfigurePanel'
 import { productTerminology } from './terminology'
 import {
   inspectJson,
   inspectPresentationRequest,
+  type InspectLevel,
   type InspectMode,
   type RequestProtocol,
 } from './kensa/kensaInspect'
+import { KensaPayloadIntake } from './kensa/KensaPayloadIntake'
+import { platformVerifyCredential, platformVerifyPresentation } from './platformApi'
 import { addWalletItem } from './walletInventory'
 
 type EnbuArtifact = 'response' | 'request'
@@ -161,40 +166,94 @@ const SAMPLE_REQ_CUSTOM = `{
   }
 }`
 
-export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: InspectMode }) {
+function IconCopyJson({ className }: { className?: string }) {
+  return (
+    <svg className={className} width={16} height={16} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M8 5.5h10a1.5 1.5 0 0 1 1.5 1.5v11a1.5 1.5 0 0 1-1.5 1.5H8A1.5 1.5 0 0 1 6.5 18V7A1.5 1.5 0 0 1 8 5.5Z"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M6 5.5V4.25A1.25 1.25 0 0 1 7.25 3h5.5A1.25 1.25 0 0 1 14 4.25V5.5"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+}
+
+function IconCopyOk({ className }: { className?: string }) {
+  return (
+    <svg className={className} width={16} height={16} viewBox="0 0 24 24" fill="none" aria-hidden>
+      <path
+        d="M6.5 12.5 10 16l7.5-8"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  )
+}
+
+export type DojoKensaPageProps = {
+  initialMode?: InspectMode
+  /** Omit outer `DojoFlowPageShell` / hero / body chrome (nested under `DojoWorkspaceLayout`). */
+  embedded?: boolean
+  /** With `embedded`: Enbu presentation inspection only (hide Menkyo tab). */
+  enbuOnly?: boolean
+}
+
+export default function DojoKensaPage({
+  initialMode = 'enbu',
+  embedded = false,
+  enbuOnly = false,
+}: DojoKensaPageProps) {
   const [mode, setMode] = useState<InspectMode>(initialMode)
   const [enbuArtifact, setEnbuArtifact] = useState<EnbuArtifact>('response')
   const [requestProtocol, setRequestProtocol] = useState<RequestProtocol>('oid4vp')
   const [raw, setRaw] = useState('')
-  const [applied, setApplied] = useState('')
   const [parseError, setParseError] = useState<string | null>(null)
   const [isDragOver, setIsDragOver] = useState(false)
   const [uploadMode, setUploadMode] = useState<'replace' | 'append'>('replace')
   const [lastUploadNote, setLastUploadNote] = useState<string | null>(null)
+  const [jsonCopied, setJsonCopied] = useState(false)
+  const jsonCopyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [inspectResult, setInspectResult] = useState<{ level: InspectLevel; lines: string[] } | null>(null)
+  const [inspecting, setInspecting] = useState(false)
 
-  const parsed = useMemo(() => {
-    if (!applied) return null
-    try {
-      return JSON.parse(applied) as unknown
-    } catch {
-      return null
-    }
-  }, [applied])
-
-  const result = useMemo(() => {
-    if (!applied || parseError) return null
-    if (parsed === null) return null
-    if (mode === 'enbu' && enbuArtifact === 'request') {
-      return inspectPresentationRequest(parsed, requestProtocol)
-    }
-    return inspectJson(parsed, mode)
-  }, [applied, parsed, parseError, mode, enbuArtifact, requestProtocol])
-
-  const apply = useCallback(() => {
-    try {
-      JSON.parse(raw)
+  const runInspection = useCallback(
+    async (jsonText: string) => {
+      let parsed: unknown
+      try {
+        parsed = JSON.parse(jsonText)
+      } catch (e) {
+        setParseError(e instanceof Error ? e.message : 'Invalid JSON')
+        setInspectResult(null)
+        return
+      }
       setParseError(null)
-      setApplied(raw)
+      setInspecting(true)
+      setInspectResult(null)
+
+      const localFallback = () => {
+        if (mode === 'enbu' && enbuArtifact === 'request') {
+          return inspectPresentationRequest(parsed, requestProtocol)
+        }
+        return inspectJson(parsed, mode)
+      }
+
+      const api =
+        mode === 'menkyo'
+          ? await platformVerifyCredential(parsed)
+          : await platformVerifyPresentation(parsed, requestProtocol)
+
+      setInspectResult(api.ok ? { level: api.level, lines: api.lines } : localFallback())
+      setInspecting(false)
+
       addWalletItem({
         type: mode === 'menkyo' ? 'credential' : 'artifact',
         title:
@@ -211,13 +270,16 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
           mode === 'menkyo' ? 'Menkyo' : enbuArtifact === 'request' ? 'Shokan' : 'Enbu',
           requestProtocol.toUpperCase(),
         ],
-        preview: raw.slice(0, 180),
-        bodyJson: raw,
+        preview: jsonText.slice(0, 180),
+        bodyJson: jsonText,
       })
-    } catch (e) {
-      setParseError(e instanceof Error ? e.message : 'Invalid JSON')
-    }
-  }, [raw, mode, enbuArtifact, requestProtocol])
+    },
+    [mode, enbuArtifact, requestProtocol],
+  )
+
+  const apply = useCallback(() => {
+    void runInspection(raw)
+  }, [raw, runInspection])
 
   const loadJsonFiles = useCallback(
     async (files: readonly File[], modeForLoad: 'replace' | 'append') => {
@@ -237,6 +299,18 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
     },
     [],
   )
+
+  const enbuJsonPlaceholder =
+    enbuArtifact === 'request'
+      ? '{ "client_id": "https://verifier.example", "nonce": "…" }'
+      : '{ "type": ["VerifiablePresentation"], … }'
+
+  const clearPayload = useCallback(() => {
+    setRaw('')
+    setParseError(null)
+    setLastUploadNote(null)
+    setInspectResult(null)
+  }, [])
 
   const onPickFile = useCallback(
     async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -282,9 +356,9 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
       else sample = SAMPLE_REQ_CUSTOM
     }
     setRaw(sample)
-    setApplied(sample)
     setParseError(null)
     setLastUploadNote('Sample loaded')
+    void runInspection(sample)
     addWalletItem({
       type: mode === 'menkyo' ? 'credential' : 'artifact',
       title: mode === 'menkyo' ? 'Sample Menkyo loaded' : 'Sample payload loaded',
@@ -295,30 +369,199 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
       preview: sample.slice(0, 180),
       bodyJson: sample,
     })
-  }, [mode, enbuArtifact, requestProtocol])
+  }, [mode, enbuArtifact, requestProtocol, runInspection])
 
   useEffect(() => {
+    if (enbuOnly) {
+      setMode('enbu')
+      return
+    }
     setMode(initialMode)
-  }, [initialMode])
+  }, [initialMode, enbuOnly])
 
-  return (
-    <DojoFlowPageShell>
-      <DojoFlowPageHero
-        title={
-          <span title="Inspection (検査): choose Enbu (presentation) or Menkyo (credential) structural checks">
-            Kensa
-          </span>
-        }
-      >
-        <p className="dojo-flowPage__intro">
-          Two inspection paths: presentation-shaped JSON (<strong>{tEnbu.name}</strong>,{' '}
-          <span lang="ja">{tEnbu.glyph}</span>) versus a single credential (<strong>{tMenkyo.name}</strong>,{' '}
-          <span lang="ja">{tMenkyo.glyph}</span>). Heuristics only—no cryptographic verification on this page.
-        </p>
-      </DojoFlowPageHero>
+  const copyEditorJson = useCallback(async () => {
+    if (jsonCopyTimeoutRef.current) {
+      window.clearTimeout(jsonCopyTimeoutRef.current)
+      jsonCopyTimeoutRef.current = null
+    }
+    try {
+      await navigator.clipboard.writeText(raw)
+      setJsonCopied(true)
+      jsonCopyTimeoutRef.current = window.setTimeout(() => {
+        setJsonCopied(false)
+        jsonCopyTimeoutRef.current = null
+      }, 1600)
+    } catch {
+      setJsonCopied(false)
+    }
+  }, [raw])
 
-      <div className="dojo-flowPage__body">
-        <div className="kensa dojoZenPage dojoZenPage--wide">
+  const enbuCreddeckColumn = (
+    <div className="kensa kensa--enbuCreddeck issueVerify issueVerify--issuanceCreddeck dojoZenPage dojoZenPage--wide">
+      <div className="issueVerify__issuanceRoot kensa__enbuRoot">
+        <header className="issueVerify__issuanceMasthead">
+          <p className="dojo-flowPage__eyebrow issueVerify__mastheadEyebrow">DOJO</p>
+          <h1 className="dojo-flowPage__title issueVerify__mastheadTitle">{tEnbu.name}</h1>
+          <p className="dojo-flowPage__intro issueVerify__mastheadIntro">
+            Load a presentation via file, JSON snippet, or URL—then run structural checks. Heuristics only—no
+            cryptographic verification on this page.
+          </p>
+        </header>
+
+        <div className="issueVerify__issuanceGrid">
+          <section
+            className="issueVerify__configurePanel issueVerify__panel dojo-augmented dojo-augmented--panel"
+            data-augmented-ui="tl-clip tr-clip bl-clip br-clip border"
+            aria-labelledby="dojo-enbu-config-heading"
+          >
+            <div className="issueVerify__configureHeadRow">
+              <div className="issueVerify__configureHeadText">
+                <p className="issueVerify__augIndex">
+                  {tEnbu.name} <span lang="ja">({tEnbu.glyph})</span>
+                </p>
+                <h2 id="dojo-enbu-config-heading" className="issueVerify__augTitle">
+                  Verifier template
+                </h2>
+              </div>
+              <div className="issueVerify__configureActions issueVerify__configureActions--masthead">
+                <button
+                  type="button"
+                  className="issueVerify__btn issueVerify__btn--primary"
+                  onClick={apply}
+                  disabled={inspecting}
+                >
+                  {inspecting ? 'Inspecting…' : 'Run inspection'}
+                </button>
+              </div>
+            </div>
+
+            <div className="issueVerify__configureScroll">
+              <ConfigSection label="Payload">
+                <div className="kensa__enbuIntakeConfigure">
+                  {raw.trim() ? (
+                    <div className="issueVerify__previewJson-bar kensa__enbuIntakeCopyBar">
+                      <span className="issueVerify__previewJson-label">application/json</span>
+                      <button
+                        type="button"
+                        className={`issueVerify__previewJson-copy${jsonCopied ? ' issueVerify__previewJson-copy--ok' : ''}`}
+                        onClick={copyEditorJson}
+                        aria-label={jsonCopied ? 'JSON copied' : 'Copy JSON'}
+                        title={jsonCopied ? 'Copied' : 'Copy JSON'}
+                      >
+                        {jsonCopied ? <IconCopyOk /> : <IconCopyJson />}
+                        {jsonCopied ? (
+                          <span className="issueVerify__previewJson-copyLabel">Copied</span>
+                        ) : null}
+                      </button>
+                    </div>
+                  ) : null}
+                  <KensaPayloadIntake
+                    raw={raw}
+                    onRawChange={setRaw}
+                    uploadMode={uploadMode}
+                    onUploadModeChange={setUploadMode}
+                    onFilesLoaded={loadJsonFiles}
+                    jsonPlaceholder={enbuJsonPlaceholder}
+                    onClear={clearPayload}
+                    onLoadSample={loadSample}
+                    lastNote={lastUploadNote}
+                  />
+                </div>
+              </ConfigSection>
+
+              <ConfigSection label="Artifact">
+                <div
+                  className="issuanceCfg__didSeg issuanceCfg__didSeg--render"
+                  role="radiogroup"
+                  aria-label="Enbu artifact type"
+                >
+                  <span className="issuanceCfg__didSegGlow" aria-hidden />
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={enbuArtifact === 'response'}
+                    className={`issuanceCfg__didSegBtn${enbuArtifact === 'response' ? ' issuanceCfg__didSegBtn--selected' : ''}`}
+                    onClick={() => setEnbuArtifact('response')}
+                    title="Inspect a holder response presentation"
+                  >
+                    <span className="issuanceCfg__didSegMono">Enbu response</span>
+                  </button>
+                  <button
+                    type="button"
+                    role="radio"
+                    aria-checked={enbuArtifact === 'request'}
+                    className={`issuanceCfg__didSegBtn${enbuArtifact === 'request' ? ' issuanceCfg__didSegBtn--selected' : ''}`}
+                    onClick={() => setEnbuArtifact('request')}
+                    title="Inspect a verifier presentation request"
+                  >
+                    <span className="issuanceCfg__didSegMono">Shōkan request</span>
+                  </button>
+                </div>
+              </ConfigSection>
+
+              {enbuArtifact === 'request' ? (
+                <ConfigSection
+                  label="Request protocol"
+                  hint={<span>{selectedProtocol.hint}</span>}
+                >
+                  <div
+                    className="issuanceCfg__didSeg issuanceCfg__didSeg--render"
+                    role="radiogroup"
+                    aria-label="Presentation request protocol"
+                  >
+                    <span className="issuanceCfg__didSegGlow" aria-hidden />
+                    {REQUEST_PROTOCOLS.map((protocol) => (
+                      <button
+                        key={protocol.id}
+                        type="button"
+                        role="radio"
+                        aria-checked={requestProtocol === protocol.id}
+                        className={`issuanceCfg__didSegBtn${
+                          requestProtocol === protocol.id ? ' issuanceCfg__didSegBtn--selected' : ''
+                        }`}
+                        onClick={() => setRequestProtocol(protocol.id)}
+                        title={protocol.hint}
+                      >
+                        <span className="issuanceCfg__didSegMono">{protocol.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                </ConfigSection>
+              ) : null}
+
+            </div>
+          </section>
+
+          <section className="issueVerify__previewColumn kensa__enbuPreviewColumn" aria-label="Enbu inspection output">
+            <div className="issueVerify__previewPane kensa__enbuWorkspace">
+              <section className="kensa__enbuInspectCard kensa__enbuInspectCard--fill" aria-live="polite">
+                <p className="issueVerify__previewJson-label kensa__enbuInspectLabel">Inspection output</p>
+                {parseError ? (
+                  <div className="kensa__msg kensa__msg--error" role="alert">
+                    {parseError}
+                  </div>
+                ) : inspectResult ? (
+                  <div className={`kensa__msg kensa__msg--${inspectResult.level}`} role="status">
+                    {inspectResult.lines.map((line, i) => (
+                      <p key={i}>{line}</p>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="kensa__emptyResult">
+                    Run inspection to populate structured findings for the selected path.
+                  </p>
+                )}
+              </section>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  )
+
+  const kensaColumn = (
+    <div className={`kensa dojoZenPage dojoZenPage--wide${embedded ? ' kensa--embeddedDojo' : ''}`}>
+        {!enbuOnly ? (
         <div className="kensa__tabs" role="tablist" aria-label="Inspection mode">
         <button
           type="button"
@@ -351,6 +594,7 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
           </span>
         </button>
       </div>
+        ) : null}
 
       <section
         className="kensa__panel dojo-augmented dojo-augmented--panel"
@@ -503,12 +747,7 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
               <button
                 type="button"
                 className="kensa__btn"
-                onClick={() => {
-                  setRaw('')
-                  setApplied('')
-                  setParseError(null)
-                  setLastUploadNote(null)
-                }}
+                onClick={clearPayload}
                 title="Clear editor and inspection result"
               >
                 Clear
@@ -525,9 +764,10 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
                 type="button"
                 className="kensa__btn"
                 onClick={apply}
+                disabled={inspecting}
                 title="Parse JSON and run VP vs VC shape heuristics for the selected tab (no signature verification)"
               >
-                Run inspection
+                {inspecting ? 'Inspecting…' : 'Run inspection'}
               </button>
             </div>
             {lastUploadNote ? <p className="kensa__uploadNote">{lastUploadNote}</p> : null}
@@ -536,13 +776,13 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
 
           <section className="kensa__resultCard" aria-live="polite">
             <p className="kensa__label">Inspection output</p>
-            {result && !parseError ? (
+            {inspectResult && !parseError ? (
               <div
-                className={`kensa__msg kensa__msg--${result.level}`}
+                className={`kensa__msg kensa__msg--${inspectResult.level}`}
                 role="status"
                 aria-live="polite"
               >
-                {result.lines.map((line, i) => (
+                {inspectResult.lines.map((line, i) => (
                   <p key={i}>{line}</p>
                 ))}
               </div>
@@ -554,8 +794,34 @@ export default function KensaPage({ initialMode = 'enbu' }: { initialMode?: Insp
           </section>
         </div>
       </section>
-        </div>
-      </div>
+    </div>
+  )
+
+  if (embedded && enbuOnly) {
+    return enbuCreddeckColumn
+  }
+
+  if (embedded) {
+    return kensaColumn
+  }
+
+  return (
+    <DojoFlowPageShell>
+      <DojoFlowPageHero
+        title={
+          <span title="Inspection (検査): choose Enbu (presentation) or Menkyo (credential) structural checks">
+            Kensa
+          </span>
+        }
+      >
+        <p className="dojo-flowPage__intro">
+          Two inspection paths: presentation-shaped JSON (<strong>{tEnbu.name}</strong>,{' '}
+          <span lang="ja">{tEnbu.glyph}</span>) versus a single credential (<strong>{tMenkyo.name}</strong>,{' '}
+          <span lang="ja">{tMenkyo.glyph}</span>). Heuristics only—no cryptographic verification on this page.
+        </p>
+      </DojoFlowPageHero>
+
+      <div className="dojo-flowPage__body">{kensaColumn}</div>
     </DojoFlowPageShell>
   )
 }
